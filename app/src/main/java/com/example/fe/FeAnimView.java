@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
@@ -24,6 +23,7 @@ public class FeAnimView extends View {
 
     //帧列表
     private int [] framearray;
+
     //帧计数
     private  int frameCount = 0, frameMax = 0;
 
@@ -57,11 +57,13 @@ public class FeAnimView extends View {
 
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        //
+        //加载图片
         Bitmap bitmap = BitmapFactory.decodeResource(act.getResources(), framearray[frameCount]);
-        //
-        //
+        //颜色替换
+        ;
+        //绘图
         canvas.drawBitmap(bitmap, null, distRect, paint);
     }
+
 }
 

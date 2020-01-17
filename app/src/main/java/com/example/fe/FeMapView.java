@@ -1,6 +1,5 @@
 package com.example.fe;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
