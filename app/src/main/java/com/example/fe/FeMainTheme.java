@@ -99,7 +99,21 @@ public class FeMainTheme {
     public void loadMenu(){
         if(linearLayout == null)
         {
+            TextView t1 = new TextView(feEvent.act);t1.setText("清单1");t1.setTextSize(16);
+            TextView t2 = new TextView(feEvent.act);t2.setText("清单2");t2.setTextSize(16);
+            TextView t3 = new TextView(feEvent.act);t3.setText("清单3");t3.setTextSize(16);
+            //
             linearLayout = new LinearLayout(feEvent.act);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+//            linearLayout.setBackgroundColor(0xFF00FF00);
+            //
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0,0, 0, 20);
+            //
+            linearLayout.addView(t1, layoutParams);
+            linearLayout.addView(t2, layoutParams);
+            linearLayout.addView(t3, layoutParams);
+            //
             linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
             linearLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
