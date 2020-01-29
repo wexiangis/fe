@@ -1,5 +1,6 @@
 package com.example.fe;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -9,20 +10,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class FeMainTheme {
+public class FeMainTheme extends RelativeLayout {
 
+    //
     private FeEvent feEvent;
     private int screenX, screenY;
 
     //
     private boolean showMenu = false;
 
-    //主界面涉及的View
     private FeAnimView cover = null;
+
     private TextView tipsText = null;
-    RelativeLayout.LayoutParams tipsTextParam = null;
+    private RelativeLayout.LayoutParams tipsTextParam = null;
+
+    private TextView tv1 = null, tv2 = null, tv3 = null;
     private LinearLayout linearLayout = null;
-    RelativeLayout.LayoutParams linearLayoutParam = null;
+    private RelativeLayout.LayoutParams linearLayoutParam = null;
 
     //主界面涉及的View的触屏事件回掉函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
@@ -42,6 +46,9 @@ public class FeMainTheme {
                     //
                     showMenu = !showMenu;
                 }
+                else if(v == tv1){
+                    ;
+                }
                 else{
                     ;//菜单按键
                 }
@@ -50,16 +57,18 @@ public class FeMainTheme {
         }
     };
 
-    public FeMainTheme(FeEvent event)
+    public FeMainTheme(Context context, FeEvent event)
     {
+        super(context);
         feEvent = event;
         //获取屏幕参数
         DisplayMetrics dm = new DisplayMetrics();
         feEvent.act.getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenX = dm.widthPixels;
         screenY = dm.heightPixels;
-        //
+        //加载背景动画
         loadCover();
+        //加载按任意键提示
         loadTip();
     }
 
@@ -72,7 +81,7 @@ public class FeMainTheme {
                 R.drawable.cover2,
                 R.drawable.cover3}, 500, new Rect(0, 0, screenX, screenY));
         cover.setOnTouchListener(onTouchListener);
-        feEvent.layout.addView(cover);
+        this.addView(cover);
     }
 
     public void loadTip(){
@@ -86,22 +95,24 @@ public class FeMainTheme {
             tipsTextParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             tipsTextParam.setMargins(0, 0, 0, 100);
         }
-        feEvent.layout.addView(tipsText, tipsTextParam);
+        this.addView(tipsText, tipsTextParam);
     }
 
     public void removeTips()
     {
         if(tipsText == null)
             return;
-        feEvent.layout.removeView(tipsText);
+        this.removeView(tipsText);
     }
 
     public void loadMenu(){
         if(linearLayout == null)
         {
-            TextView t1 = new TextView(feEvent.act);t1.setText("清单1");t1.setTextSize(16);
-            TextView t2 = new TextView(feEvent.act);t2.setText("清单2");t2.setTextSize(16);
-            TextView t3 = new TextView(feEvent.act);t3.setText("清单3");t3.setTextSize(16);
+            tv1 = new TextView(feEvent.act);tv1.setText("开 始");tv1.setTextSize(16);
+            tv1.setOnTouchListener(onTouchListener);
+            //
+            tv2 = new TextView(feEvent.act);tv2.setText("清单2");tv2.setTextSize(16);
+            tv3 = new TextView(feEvent.act);tv3.setText("清单3");tv3.setTextSize(16);
             //
             linearLayout = new LinearLayout(feEvent.act);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -110,23 +121,23 @@ public class FeMainTheme {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(0,0, 0, 20);
             //
-            linearLayout.addView(t1, layoutParams);
-            linearLayout.addView(t2, layoutParams);
-            linearLayout.addView(t3, layoutParams);
+            linearLayout.addView(tv1, layoutParams);
+            linearLayout.addView(tv2, layoutParams);
+            linearLayout.addView(tv3, layoutParams);
             //
             linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
             linearLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             linearLayoutParam.setMargins(0, 0, 0, 100);
         }
-        feEvent.layout.addView(linearLayout, linearLayoutParam);
+        this.addView(linearLayout, linearLayoutParam);
     }
 
     public void removeMenu()
     {
         if(linearLayout == null)
             return;
-        feEvent.layout.removeView(linearLayout);
+        this.removeView(linearLayout);
     }
 
 }

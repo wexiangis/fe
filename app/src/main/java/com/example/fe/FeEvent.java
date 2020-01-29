@@ -1,29 +1,23 @@
 package com.example.fe;
 
 import android.app.Activity;
-import android.widget.RelativeLayout;
 
 public class FeEvent {
 
     public Activity act;
-    public RelativeLayout layout;
     public FeSave fedata;
 
     public FeEvent(Activity activity, FeSave feSave)
     {
         act = activity;
         fedata = feSave;
-        //布局准备
-        layout = new RelativeLayout(activity);
-        //开始显示
-        act.setContentView(layout);
         //加载主界面
         loadMainTheme();
     }
 
     //加载主界面
     public void loadMainTheme(){
-        FeMainTheme mainTheme = new FeMainTheme(this);
+        act.setContentView(new FeMainTheme(act, this));
     }
 
     //加载章节片头
