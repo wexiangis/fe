@@ -11,7 +11,10 @@ import android.view.View;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FeAnimView extends View {
+/*
+帧动画
+ */
+public class FeAnimFrame extends View {
 
     private Context act;
 
@@ -41,7 +44,7 @@ public class FeAnimView extends View {
         }
     };
 
-    public FeAnimView(Context context, int[] frameArray, int intervalMs, Rect paintRect)
+    public FeAnimFrame(Context context, int[] frameArray, int intervalMs, Rect paintRect)
     {
         super(context);
         act = context;

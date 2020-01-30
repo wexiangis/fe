@@ -19,7 +19,7 @@ public class FeMainTheme extends RelativeLayout {
     //
     private boolean showMenu = false;
 
-    private FeAnimView cover = null;
+    private FeAnimFrame cover = null;
 
     private TextView tipsText = null;
     private RelativeLayout.LayoutParams tipsTextParam = null;
@@ -76,12 +76,16 @@ public class FeMainTheme extends RelativeLayout {
         if(cover != null)
             return;
         //主界面封面背景
-        cover = new FeAnimView(feEvent.act, new int [] {
+        cover = new FeAnimFrame(feEvent.act, new int [] {
                 R.drawable.cover,
                 R.drawable.cover2,
                 R.drawable.cover3}, 500, new Rect(0, 0, screenX, screenY));
         cover.setOnTouchListener(onTouchListener);
         this.addView(cover);
+        //
+//        FeAnimFilm faf = new FeAnimFilm(feEvent.act, R.drawable.mas_001, 16, 16, 0, 0, 150, new int[]{3, 1, 3}, 0);
+        FeAnimFilm faf = new FeAnimFilm(feEvent.act, R.drawable.ma_001, 32, 32, 0, 0, 150, new int[]{1}, 0);
+        this.addView(faf);
     }
 
     public void loadTip(){
@@ -94,8 +98,10 @@ public class FeMainTheme extends RelativeLayout {
             tipsTextParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
             tipsTextParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             tipsTextParam.setMargins(0, 0, 0, 100);
+            //
+            tipsText.setLayoutParams(tipsTextParam);
         }
-        this.addView(tipsText, tipsTextParam);
+        this.addView(tipsText);
     }
 
     public void removeTips()
@@ -129,8 +135,10 @@ public class FeMainTheme extends RelativeLayout {
             linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
             linearLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             linearLayoutParam.setMargins(0, 0, 0, 100);
+            //
+            linearLayout.setLayoutParams(linearLayoutParam);
         }
-        this.addView(linearLayout, linearLayoutParam);
+        this.addView(linearLayout);
     }
 
     public void removeMenu()
