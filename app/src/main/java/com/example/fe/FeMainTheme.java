@@ -21,6 +21,8 @@ public class FeMainTheme extends RelativeLayout {
 
     private FeAnimFrame cover = null;
 
+    private FeAnimFilm testAnim = null;
+
     private TextView tipsText = null;
     private RelativeLayout.LayoutParams tipsTextParam = null;
 
@@ -45,6 +47,7 @@ public class FeMainTheme extends RelativeLayout {
                     }
                     //
                     showMenu = !showMenu;
+                    testAnim.move(10, 0);
                 }
                 else if(v == tv1){
                     ;
@@ -83,9 +86,9 @@ public class FeMainTheme extends RelativeLayout {
         cover.setOnTouchListener(onTouchListener);
         this.addView(cover);
         //
-//        FeAnimFilm faf = new FeAnimFilm(feEvent.act, R.drawable.mas_001, 16, 16, 0, 0, 150, new int[]{3, 1, 3}, 0);
-        FeAnimFilm faf = new FeAnimFilm(feEvent.act, R.drawable.ma_001, 32, 32, 0, 0, 150, new int[]{1}, 0);
-        this.addView(faf);
+        testAnim = new FeAnimFilm(feEvent.act, R.drawable.mas_001, 16, 16, 0, 0, 0, 200, 200, 200, 150, new int[]{3, 1, 3}, 0);
+//        testAnim = new FeAnimFilm(feEvent.act, R.drawable.ma_001, 32, 32, 4, 4, 200, 400, 200, 200,150, new int[]{1}, 1);
+        this.addView(testAnim);
     }
 
     public void loadTip(){

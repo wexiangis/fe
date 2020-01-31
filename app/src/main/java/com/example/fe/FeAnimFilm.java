@@ -4,9 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.RelativeLayout;
 
 import java.util.Timer;
@@ -24,7 +27,7 @@ public class FeAnimFilm extends View {
 
     //传参备份
     private int _frameHeight, _frameSkip, _frameNum;
-    private int[] _frameInterval;
+    private int[] _frameInterval, _alignXY_sizeXY;
 
     //画图
     private Paint paint;
@@ -36,7 +39,7 @@ public class FeAnimFilm extends View {
     private Rect bitmapBody, bitmapDist;
 
     //动画输出位置控制
-    RelativeLayout.LayoutParams layoutParams;
+    private RelativeLayout.LayoutParams layoutParams;
 
     //帧计数
     private int timerCount = 0, intervalCount = 0, frameCount = 0;
@@ -108,14 +111,14 @@ public class FeAnimFilm extends View {
     intervalMs: 帧动画间隔延时
     frameInterval: 对每帧动画的延时进行加权,当frameInterval[x]!=0时,第n帧动画实际延时为frameInterval[n]*intervalMs
      */
-    public FeAnimFilm(Context context, int id, int frameWidth, int frameHeight, int frameNum, int frameSkip, int intervalMs, int[] frameInterval, int circle_mode)
+    public FeAnimFilm(Context context, int id, int frameWidth, int frameHeight, int frameNum, int frameSkip, int alignX, int alignY, int width, int height, int intervalMs, int[] frameInterval, int circle_mode)
     {
         super(context);
         act = context;
-        //
+        //图片加载和颜色变换
         bitmap = BitmapFactory.decodeResource(act.getResources(), id);
         bitmap = replaceBitmapColor(bitmap, 1);
-        //
+        //参数备份
         _frameHeight = (int)((double)bitmap.getWidth()/frameWidth*frameHeight);
         _frameSkip = frameSkip;
         _frameNum = frameNum;
@@ -123,22 +126,44 @@ public class FeAnimFilm extends View {
             _frameNum = bitmap.getHeight()/_frameHeight;
         _frameInterval = frameInterval;
         _circle_mode = circle_mode;
-        //
+        //输出宽高备份
+        _alignXY_sizeXY = new int[]{alignX, alignY, width, height};
+        bitmapDist = new Rect(0,0,width,height);
+        //自己添加相对布局参数
+        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        layoutParams.setMargins(alignX,alignY,0,0);
+        this.setLayoutParams(layoutParams);
+        //图片扣取位置计算
         bitmapBody = new Rect(0,0,0,0);
-        bitmapDist = new Rect(0,0,500,500);
         bitmapBody.left = 0;
         bitmapBody.top = _frameHeight*(_frameSkip+frameCount);
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + _frameHeight;
-        //
+        //画笔初始化
         paint = new Paint();
-        //
+        paint.setColor(Color.GREEN);
+        //时钟心跳启动
         timer.schedule(timerTask, intervalMs, intervalMs);//ms
     }
 
-    public void onDraw(Canvas canvas){
+    public void move(int x, int y){
+        _alignXY_sizeXY[0] += x;
+        _alignXY_sizeXY[1] += y;
+        layoutParams.setMargins(_alignXY_sizeXY[0],_alignXY_sizeXY[1],0,0);
+        this.setLayoutParams(layoutParams);
+    }
+
+    protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+        //相对布局位置偏移
+        bitmapDist.left = (int)this.getTranslationX();
+        bitmapDist.top = (int)this.getTranslationY();
+        bitmapDist.right = bitmapDist.left + _alignXY_sizeXY[2];
+        bitmapDist.bottom = bitmapDist.top + _alignXY_sizeXY[3];
         //绘图
+        canvas.drawRect(bitmapDist, paint);
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 
