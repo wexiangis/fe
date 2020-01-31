@@ -22,6 +22,7 @@ public class FeMainTheme extends RelativeLayout {
     private FeAnimFrame cover = null;
 
     private FeAnimFilm testAnim = null;
+    private FeAnimFrame testAnim2 = null;
 
     private TextView tipsText = null;
     private RelativeLayout.LayoutParams tipsTextParam = null;
@@ -86,8 +87,8 @@ public class FeMainTheme extends RelativeLayout {
         cover.setOnTouchListener(onTouchListener);
         this.addView(cover);
         //
-        testAnim = new FeAnimFilm(feEvent.act, R.drawable.mas_001, 16, 16, 0, 0, 0, 200, 200, 200, 150, new int[]{3, 1, 3}, 0);
-//        testAnim = new FeAnimFilm(feEvent.act, R.drawable.ma_001, 32, 32, 4, 4, 200, 400, 200, 200,150, new int[]{1}, 1);
+        testAnim = new FeAnimFilm(feEvent.act, R.drawable.mas_001, 16, 16, 0, 0, 0, 200, 56, 56, 150, new int[]{3, 1, 3}, 0, 0);
+//        testAnim = new FeAnimFilm(feEvent.act, R.drawable.ma_001, 32, 32, 4, 4, 200, 400, 200, 200,150, new int[]{1}, 1, 0);
         this.addView(testAnim);
     }
 

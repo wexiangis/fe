@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.RelativeLayout;
 
 import java.util.Timer;
@@ -23,23 +22,23 @@ public class FeAnimFilm extends View {
     private Context act;
 
     //循环模式  //模式0: 0-1-2-0-1-2, 模式1: 0-1-2-1-0-1-2
-    private int _circle_mode = 0;
+    private int _circleMode = 0;
 
     //传参备份
-    private int _frameHeight, _frameSkip, _frameNum;
-    private int[] _frameInterval, _alignXY_sizeXY;
+    private int _frameHeight = 0, _frameSkip = 0, _frameNum = 0, _id = 0, _colorMode = 0;
+    private int[] _frameInterval = null, _alignXY_sizeXY = null;
 
     //画图
-    private Paint paint;
+    private Paint paint = null;
 
     //原始图片
-    private Bitmap bitmap;
+    private Bitmap bitmap = null;
 
     //扣取图片位置
-    private Rect bitmapBody, bitmapDist;
+    private Rect bitmapBody = null, bitmapDist = null;
 
     //动画输出位置控制
-    private RelativeLayout.LayoutParams layoutParams;
+    private RelativeLayout.LayoutParams layoutParams = null;
 
     //帧计数
     private int timerCount = 0, intervalCount = 0, frameCount = 0;
@@ -51,14 +50,14 @@ public class FeAnimFilm extends View {
     {
         @Override
         public void run() {
-            synchronized (_frameInterval) {
+            synchronized (paint) {
                 if (++timerCount >= _frameInterval[intervalCount]) {
                     //清计数
                     timerCount = 0;
                     //调用一次onDraw
                     invalidate();
                     //循环播放模式0
-                    if(_circle_mode == 0){
+                    if(_circleMode == 0){
                         //移动帧计数
                         if(frameCountDir){
                             if(--frameCount <= 0){
@@ -111,48 +110,162 @@ public class FeAnimFilm extends View {
     intervalMs: 帧动画间隔延时
     frameInterval: 对每帧动画的延时进行加权,当frameInterval[x]!=0时,第n帧动画实际延时为frameInterval[n]*intervalMs
      */
-    public FeAnimFilm(Context context, int id, int frameWidth, int frameHeight, int frameNum, int frameSkip, int alignX, int alignY, int width, int height, int intervalMs, int[] frameInterval, int circle_mode)
+    public FeAnimFilm(Context context,
+                      int id,
+                      int frameWidth, int frameHeight, int frameNum, int frameSkip,
+                      int alignX, int alignY, int width, int height,
+                      int intervalMs, int[] frameInterval,
+                      int circleMode, int colorMode)
     {
         super(context);
         act = context;
-        //图片加载和颜色变换
-        bitmap = BitmapFactory.decodeResource(act.getResources(), id);
-        bitmap = replaceBitmapColor(bitmap, 1);
-        //参数备份
-        _frameHeight = (int)((double)bitmap.getWidth()/frameWidth*frameHeight);
-        _frameSkip = frameSkip;
-        _frameNum = frameNum;
-        if(_frameNum == 0)
-            _frameNum = bitmap.getHeight()/_frameHeight;
-        _frameInterval = frameInterval;
-        _circle_mode = circle_mode;
-        //输出宽高备份
-        _alignXY_sizeXY = new int[]{alignX, alignY, width, height};
-        bitmapDist = new Rect(0,0,width,height);
-        //自己添加相对布局参数
-        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        layoutParams.setMargins(alignX,alignY,0,0);
-        this.setLayoutParams(layoutParams);
-        //图片扣取位置计算
-        bitmapBody = new Rect(0,0,0,0);
-        bitmapBody.left = 0;
-        bitmapBody.top = _frameHeight*(_frameSkip+frameCount);
-        bitmapBody.right = bitmap.getWidth();
-        bitmapBody.bottom = bitmapBody.top + _frameHeight;
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
+        //
+        this.reset(id, frameWidth, frameHeight, frameNum, frameSkip, alignX, alignY, width, height, frameInterval, circleMode, colorMode);
         //时钟心跳启动
         timer.schedule(timerTask, intervalMs, intervalMs);//ms
     }
 
+    public int getId(){
+        return _id;
+    }
+
+    public int getFrameNum(){
+        return _frameNum;
+    }
+
+    public int getFrameSkip(){
+        return _frameSkip;
+    }
+
+    public int[] getFrameInterval(){
+        return _frameInterval;
+    }
+
+    public int getCircleMode(){
+        return _circleMode;
+    }
+
+    public int getColorMode(){
+        return _colorMode;
+    }
+
+    //增量式移动位置
     public void move(int x, int y){
         _alignXY_sizeXY[0] += x;
         _alignXY_sizeXY[1] += y;
         layoutParams.setMargins(_alignXY_sizeXY[0],_alignXY_sizeXY[1],0,0);
         this.setLayoutParams(layoutParams);
+    }
+
+    //移动位置
+    public void moveTo(int alignX, int alignY){
+        _alignXY_sizeXY[0] = alignX;
+        _alignXY_sizeXY[1] = alignY;
+        layoutParams.setMargins(_alignXY_sizeXY[0],_alignXY_sizeXY[1],0,0);
+        this.setLayoutParams(layoutParams);
+    }
+
+    //设置图片参数
+    public void setColorMode(int colorMode){
+        if(_colorMode != colorMode) {
+            synchronized (paint) {
+                bitmap.recycle();
+                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(act.getResources(), _id), colorMode);
+                _colorMode = colorMode;
+            }
+        }
+    }
+
+    //设置图片参数
+    public void set(int frameNum, int frameSkip, int[] frameInterval, int circleMode, int colorMode)
+    {
+        synchronized (paint) {
+            //
+            _frameSkip = frameSkip;
+            _frameNum = frameNum;
+            _frameInterval = frameInterval;
+            _circleMode = circleMode;
+            //图片扣取位置计算
+            bitmapBody.left = 0;
+            bitmapBody.top = _frameHeight*(_frameSkip+frameCount);
+            bitmapBody.right = bitmap.getWidth();
+            bitmapBody.bottom = bitmapBody.top + _frameHeight;
+            //计数初始化
+            timerCount = 0;
+            intervalCount = 0;
+            frameCount = 0;
+            //
+            if(_colorMode != colorMode) {
+                bitmap.recycle();
+                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(act.getResources(), _id), colorMode);
+                _colorMode = colorMode;
+            }
+        }
+    }
+
+    //重置全部参数
+    public void reset(int id,
+                      int frameWidth, int frameHeight, int frameNum, int frameSkip,
+                      int alignX, int alignY, int width, int height,
+                      int[] frameInterval, int circleMode, int colorMode)
+    {
+        synchronized (paint)
+        {
+            //图片加载和颜色变换
+            if(_id != id) {
+                if (bitmap != null)
+                    bitmap.recycle();
+                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(act.getResources(), id), colorMode);
+            }else if(_colorMode != colorMode){
+                if (bitmap != null)
+                    bitmap.recycle();
+                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(act.getResources(), _id), colorMode);
+            }
+            //参数备份
+            _colorMode = colorMode;
+            _id = id;
+            _frameHeight = (int)((double)bitmap.getWidth()/frameWidth*frameHeight);
+            _frameSkip = frameSkip;
+            _frameNum = frameNum;
+            if(_frameNum == 0)
+                _frameNum = bitmap.getHeight()/_frameHeight;
+            _frameInterval = frameInterval;
+            _circleMode = circleMode;
+            //图片扣取位置计算
+            if(bitmapBody == null)
+                bitmapBody = new Rect(0,0,0,0);
+            bitmapBody.left = 0;
+            bitmapBody.top = _frameHeight*(_frameSkip+frameCount);
+            bitmapBody.right = bitmap.getWidth();
+            bitmapBody.bottom = bitmapBody.top + _frameHeight;
+            //计数初始化
+            timerCount = 0;
+            intervalCount = 0;
+            frameCount = 0;
+            intervalCountDir = false;
+            frameCountDir = false;
+            //输出宽高备份
+            if(_alignXY_sizeXY == null)
+                _alignXY_sizeXY = new int[]{alignX, alignY, width, height};
+            _alignXY_sizeXY[0] = alignX;
+            _alignXY_sizeXY[1] = alignY;
+            _alignXY_sizeXY[2] = width;
+            _alignXY_sizeXY[3] = height;
+            if(bitmapDist == null)
+                bitmapDist = new Rect(0,0,width,height);
+            bitmapDist.right = width;
+            bitmapDist.bottom = height;
+            //自己添加相对布局参数
+            if(layoutParams == null)
+                layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            layoutParams.setMargins(alignX,alignY,0,0);
+            this.setLayoutParams(layoutParams);
+        }
     }
 
     protected void onDraw(Canvas canvas){
@@ -175,7 +288,6 @@ public class FeAnimFilm extends View {
         //循环获得bitmap所有像素点
         int mBitmapWidth = mBitmap.getWidth();
         int mBitmapHeight = mBitmap.getHeight();
-        int mArrayColorLengh = mBitmapWidth * mBitmapHeight;
         int r,g,b,color,tcolor;
 
         for (int i = 0; i < mBitmapHeight; i++) {
