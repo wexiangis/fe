@@ -14,7 +14,7 @@ public class FeMainTheme extends RelativeLayout {
 
     //
     private FeEvent feEvent;
-    private int screenX, screenY;
+    private int screenWidth, screenHeight;
 
     //
     private boolean showMenu = false;
@@ -68,8 +68,8 @@ public class FeMainTheme extends RelativeLayout {
         //获取屏幕参数
         DisplayMetrics dm = new DisplayMetrics();
         feEvent.act.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screenX = dm.widthPixels;
-        screenY = dm.heightPixels;
+        screenWidth = dm.widthPixels;
+        screenHeight = dm.heightPixels;
         //加载背景动画
         loadCover();
         //加载按任意键提示
@@ -83,7 +83,7 @@ public class FeMainTheme extends RelativeLayout {
         cover = new FeAnimFrame(feEvent.act, new int [] {
                 R.drawable.cover,
                 R.drawable.cover2,
-                R.drawable.cover3}, 500, new Rect(0, 0, screenX, screenY));
+                R.drawable.cover3}, 500, new Rect(0, 0, screenWidth, screenHeight));
         cover.setOnTouchListener(onTouchListener);
         this.addView(cover);
         //

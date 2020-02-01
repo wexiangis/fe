@@ -46,6 +46,33 @@ public class FeAnimFilm extends View {
 
     //切图心跳
     private Timer timer = new Timer();
+
+    /*
+    id: drawable图片,如: R.drawable.xxx
+    frameHeight: 按这个高度把图片切块
+    frameSkip: 分块后,从上往下数,跳过几帧后作为第一帧,0从头开始
+    frameNum: 从确定的第一帧开始,选用后面的frameNum帧图片循环播放
+    intervalMs: 帧动画间隔延时
+    frameInterval: 对每帧动画的延时进行加权,当frameInterval[x]!=0时,第n帧动画实际延时为frameInterval[n]*intervalMs
+     */
+    public FeAnimFilm(Context context,
+                      int id,
+                      int frameWidth, int frameHeight, int frameNum, int frameSkip,
+                      int alignX, int alignY, int width, int height,
+                      int intervalMs, int[] frameInterval,
+                      int circleMode, int colorMode)
+    {
+        super(context);
+        act = context;
+        //画笔初始化
+        paint = new Paint();
+        paint.setColor(Color.GREEN);
+        //
+        this.reset(id, frameWidth, frameHeight, frameNum, frameSkip, alignX, alignY, width, height, frameInterval, circleMode, colorMode);
+        //时钟心跳启动
+        timer.schedule(timerTask, intervalMs, intervalMs);//ms
+    }
+
     private TimerTask timerTask = new TimerTask()
     {
         @Override
@@ -101,32 +128,6 @@ public class FeAnimFilm extends View {
             }
         }
     };
-
-    /*
-    id: drawable图片,如: R.drawable.xxx
-    frameHeight: 按这个高度把图片切块
-    frameSkip: 分块后,从上往下数,跳过几帧后作为第一帧,0从头开始
-    frameNum: 从确定的第一帧开始,选用后面的frameNum帧图片循环播放
-    intervalMs: 帧动画间隔延时
-    frameInterval: 对每帧动画的延时进行加权,当frameInterval[x]!=0时,第n帧动画实际延时为frameInterval[n]*intervalMs
-     */
-    public FeAnimFilm(Context context,
-                      int id,
-                      int frameWidth, int frameHeight, int frameNum, int frameSkip,
-                      int alignX, int alignY, int width, int height,
-                      int intervalMs, int[] frameInterval,
-                      int circleMode, int colorMode)
-    {
-        super(context);
-        act = context;
-        //画笔初始化
-        paint = new Paint();
-        paint.setColor(Color.GREEN);
-        //
-        this.reset(id, frameWidth, frameHeight, frameNum, frameSkip, alignX, alignY, width, height, frameInterval, circleMode, colorMode);
-        //时钟心跳启动
-        timer.schedule(timerTask, intervalMs, intervalMs);//ms
-    }
 
     public int getId(){
         return _id;
