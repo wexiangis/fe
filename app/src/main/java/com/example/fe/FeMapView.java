@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
@@ -23,7 +24,8 @@ public class FeMapView extends View {
     private int[] mapWidthHeight;
 
     //
-    private Bitmap bitmap = null;
+    private Bitmap bitmap = null, tBitmap = null;
+    private Matrix matrix = null;
 
     //
     private RelativeLayout.LayoutParams layoutParams = null;
@@ -56,7 +58,12 @@ public class FeMapView extends View {
         bitmapBody = new Rect(0, 0, mapWidthHeight[0], mapWidthHeight[1]);
         bitmapDist = new Rect(0, 0, mapWidthHeight[0], mapWidthHeight[1]);
         //
-        bitmap = BitmapFactory.decodeResource(act.getResources(), id);
+        tBitmap = BitmapFactory.decodeResource(act.getResources(), id);
+        matrix = new Matrix();
+        matrix.postScale(
+                (float)mapWidthHeight[0]/tBitmap.getWidth(),
+                (float)mapWidthHeight[1]/tBitmap.getHeight());//两参数分别为xy缩放比例
+        bitmap = Bitmap.createBitmap(tBitmap, 0, 0, (int)tBitmap.getWidth(), (int)tBitmap.getHeight(), matrix, true);
         //自己添加相对布局参数
         if(layoutParams == null)
             layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -66,6 +73,7 @@ public class FeMapView extends View {
         this.setLayoutParams(layoutParams);
         //
         paint = new Paint();
+        paint.setColor(Color.BLUE);
         paint2 = new Paint();
         paint2.setColor(0x800000FF);
     }
