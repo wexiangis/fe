@@ -13,6 +13,6 @@ public class MainActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //
         FeSave feSave = new FeSave();
-        FeEvent feEvent = new FeEvent(this, feSave);
+        feSave.start(this);
     }
 }

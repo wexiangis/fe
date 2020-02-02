@@ -12,66 +12,48 @@ import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 public class FeMapView extends View {
 
-    private Context act;
-
-    //
-    private int screenWidth, screenHeight;
-    private int[] mapWidthHeight;
+    private Context _context;
+    private FeMapParam feMapParam;
 
     //
     private Bitmap bitmap = null, tBitmap = null;
     private Matrix matrix = null;
 
-    //
-    private RelativeLayout.LayoutParams layoutParams = null;
-
-    //扣取图片位置
-    private Rect bitmapBody = null, bitmapDist = null;
-
-    //参数备份
-    private int _xGrid, _yGrid;
-
     //画图
     private Paint paint, paint2;
 
-    public FeMapView(Context context, int id, int xGrid, int yGrid) {
+    public FeMapView(Context context, FeMapParam mapParam, int id, int xGrid, int yGrid) {
         super(context);
-        act = context;
+        _context = context;
+        feMapParam = mapParam;
         //
-        _xGrid = xGrid;
-        _yGrid = yGrid;
+        feMapParam.xGrid = xGrid;
+        feMapParam.yGrid = yGrid;
         //获取屏幕参数
         DisplayMetrics dm = new DisplayMetrics();
-        ((Activity)act).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screenWidth = dm.widthPixels;
-        screenHeight = dm.heightPixels;
-        //
-        mapWidthHeight = mapFillRule(screenWidth, screenHeight, xGrid, yGrid);
-        xGridPiexl = mapWidthHeight[0]/xGrid;
-        yGridPiexl = mapWidthHeight[1]/yGrid;
-        //
-        bitmapBody = new Rect(0, 0, mapWidthHeight[0], mapWidthHeight[1]);
-        bitmapDist = new Rect(0, 0, mapWidthHeight[0], mapWidthHeight[1]);
-        //
-        tBitmap = BitmapFactory.decodeResource(act.getResources(), id);
+        ((Activity)_context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        feMapParam.screenWidth = dm.widthPixels;
+        feMapParam.screenHeight = dm.heightPixels;
+        //地图显示大小与屏幕适配
+        feMapParam.mapWidthHeight = mapFillRule(feMapParam.screenWidth, feMapParam.screenHeight, xGrid, yGrid);
+        xGridPiexl = feMapParam.mapWidthHeight[0]/xGrid;
+        yGridPiexl = feMapParam.mapWidthHeight[1]/yGrid;
+        //矩阵缩放
+        tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
         matrix = new Matrix();
+        //两参数分别为xy缩放比例
+//        matrix.postScale(3f, 3f);
+//        matrix.postScale(
+//                (float)feMapParam.xGridPixel/16,
+//                (float)feMapParam.yGridPixel/16);
         matrix.postScale(
-                (float)mapWidthHeight[0]/tBitmap.getWidth(),
-                (float)mapWidthHeight[1]/tBitmap.getHeight());//两参数分别为xy缩放比例
+                (float)feMapParam.mapWidthHeight[0]/tBitmap.getWidth(),
+                (float)feMapParam.mapWidthHeight[1]/tBitmap.getHeight());
         bitmap = Bitmap.createBitmap(tBitmap, 0, 0, (int)tBitmap.getWidth(), (int)tBitmap.getHeight(), matrix, true);
-        //自己添加相对布局参数
-        if(layoutParams == null)
-            layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        layoutParams.setMargins(0,0,0,0);
-        this.setLayoutParams(layoutParams);
-        //
+        //画笔
         paint = new Paint();
         paint.setColor(Color.BLUE);
         paint2 = new Paint();
@@ -81,17 +63,19 @@ public class FeMapView extends View {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //相对布局位置偏移
-        bitmapDist.left = (int)this.getTranslationX() + (int)xError;
-        bitmapDist.top = (int)this.getTranslationY() + (int)yError;
-        bitmapDist.right = bitmapDist.left + mapWidthHeight[0];
-        bitmapDist.bottom = bitmapDist.top + mapWidthHeight[1];
+        feMapParam.rect.left = (int)this.getTranslationX() + (int)xError;
+        feMapParam.rect.top = (int)this.getTranslationY() + (int)yError;
+        feMapParam.rect.right = feMapParam.rect.left + feMapParam.mapWidthHeight[0];
+        feMapParam.rect.bottom = feMapParam.rect.top + feMapParam.mapWidthHeight[1];
         //
-        canvas.drawBitmap(bitmap, null, bitmapDist, paint);
+        canvas.drawBitmap(bitmap, null, feMapParam.rect, paint);
         //select
         if(selectDrawFlag) {
             selectDrawFlag = false;
             canvas.drawRect(selectDraw, paint2);
         }
+        //
+        ((FeSectionMap)getParent()).refresh();
     }
 
     private float tDownX, tDownY, xGridPiexl = 24, yGridPiexl = 24;
@@ -115,10 +99,10 @@ public class FeMapView extends View {
                     float tUpX = event.getX();
                     float tUpY = event.getY();
                     //
-                    selectPoint[0] = (int)((tUpX - xError)/mapWidthHeight[0]*_xGrid);
-                    selectPoint[1] = (int)((tUpY - yError)/mapWidthHeight[1]*_yGrid);
-                    selectDraw.left = (int)((float)selectPoint[0]/_xGrid*mapWidthHeight[0] + xError);
-                    selectDraw.top = (int)((float)selectPoint[1]/_yGrid*mapWidthHeight[1] + yError);
+                    selectPoint[0] = (int)((tUpX - xError)/feMapParam.mapWidthHeight[0]*feMapParam.xGrid);
+                    selectPoint[1] = (int)((tUpY - yError)/feMapParam.mapWidthHeight[1]*feMapParam.yGrid);
+                    selectDraw.left = (int)((float)selectPoint[0]/feMapParam.xGrid*feMapParam.mapWidthHeight[0] + xError);
+                    selectDraw.top = (int)((float)selectPoint[1]/feMapParam.yGrid*feMapParam.mapWidthHeight[1] + yError);
                     selectDraw.right = selectDraw.left + (int)xGridPiexl;
                     selectDraw.bottom = selectDraw.top + (int)yGridPiexl;
                     //调用一次onDraw
@@ -153,11 +137,11 @@ public class FeMapView extends View {
                 }
                 //防止地图移除屏幕
                 if (xError > 0) xError = 0;
-                else if (xError + mapWidthHeight[0] < screenWidth)
-                    xError = screenWidth - mapWidthHeight[0];
+                else if (xError + feMapParam.mapWidthHeight[0] < feMapParam.screenWidth)
+                    xError = feMapParam.screenWidth - feMapParam.mapWidthHeight[0];
                 if (yError > 0) yError = 0;
-                else if (yError + mapWidthHeight[1] < screenHeight)
-                    yError = screenHeight - mapWidthHeight[1];
+                else if (yError + feMapParam.mapWidthHeight[1] < feMapParam.screenHeight)
+                    yError = feMapParam.screenHeight - feMapParam.mapWidthHeight[1];
                 //调用一次onDraw
                 if (needRefresh)
                     invalidate();
@@ -167,21 +151,24 @@ public class FeMapView extends View {
         return true;
     }
 
+    //方格显示时可以接受的最小像素值
+    final int piexlPerGrid = 96;
+
     //返回地图实际显示长和高
     public int[] mapFillRule(int screenWidth, int screenHeight, int mapXGrid, int mapYGrid){
         int[] ret = new int[] {screenWidth, screenHeight};
         //限制屏幕最大显示格数
-        int screenXGrid = 32, screenYGrid = 16;
+        int screenXGrid = screenWidth/piexlPerGrid, screenYGrid = screenHeight/piexlPerGrid;
         //比较屏幕和地图长和高比例
-        double screenXDivY = screenWidth/screenHeight;
-        double mapXDivY = mapXGrid/mapYGrid;
+        float screenXDivY = (float)screenWidth/screenHeight;
+        float mapXDivY = (float)mapXGrid/mapYGrid;
         //屏幕的长高比例大于地图,地图参照屏幕长来缩放
         if(screenXDivY > mapXDivY){
             //得到屏幕横向实际显示格数
             if(mapXGrid < screenXGrid)
                 screenXGrid = mapXGrid;
             //得到屏幕竖向实际显示格数
-            screenYGrid = (int)((double)screenXGrid/screenWidth*screenHeight);
+            screenYGrid = (int)((float)screenXGrid/screenWidth*screenHeight);
         }
         //其他时候,地图参照屏幕高来缩放
         else{
@@ -189,11 +176,14 @@ public class FeMapView extends View {
             if(mapYGrid < screenYGrid)
                 screenYGrid = mapYGrid;
             //得到屏幕横向实际显示格数
-            screenXGrid = (int)((double)screenYGrid/screenHeight*screenWidth);
+            screenXGrid = (int)((float)screenYGrid/screenHeight*screenWidth);
         }
+        //横纵向每格像素
+        feMapParam.xGridPixel = (float)screenWidth/screenXGrid;
+        feMapParam.yGridPixel = (float)screenHeight/screenYGrid;
         //得到地图实际显示大小
-        ret[0] = (int)((double)screenWidth/screenXGrid*mapXGrid);
-        ret[1] = (int)((double)screenHeight/screenYGrid*mapYGrid);
+        ret[0] = (int)(feMapParam.xGridPixel*mapXGrid);
+        ret[1] = (int)(feMapParam.yGridPixel*mapYGrid);
         //
         return ret;
     }

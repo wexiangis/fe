@@ -4,22 +4,20 @@ import android.app.Activity;
 
 public class FeEvent {
 
-    public Activity act;
-    public FeSave fedata;
+    public FeSave feSave;
 
-    public FeEvent(Activity activity, FeSave feSave)
+    public FeEvent(FeSave save)
     {
-        act = activity;
-        fedata = feSave;
+        feSave = save;
         //加载主界面
-//        loadMainTheme();
-        //
-        loadSection(0);
+        loadMainTheme();
+        //加载地图
+//        loadSection(0);
     }
 
     //加载主界面
     public void loadMainTheme(){
-        act.setContentView(new FeMainTheme(act, this));
+        feSave.activity.setContentView(new FeMainTheme(feSave.activity, feSave));
     }
 
     //加载章节片头
@@ -28,8 +26,7 @@ public class FeEvent {
 
     //加载章节大地图
     public void loadSection(int count) {
-        act.setContentView(new FeSectionMap(act, this));
-//        act.setContentView(new FeMapView(act, R.drawable.map_000_25x15, 25, 15));
+        feSave.activity.setContentView(new FeSectionMap(feSave.activity, feSave));
     }
 
     //加载章节对话
