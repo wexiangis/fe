@@ -45,13 +45,9 @@ public class FeMapView extends View {
         tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
         matrix = new Matrix();
         //两参数分别为xy缩放比例
-//        matrix.postScale(3f, 3f);
         matrix.postScale(
-                (float)feMapParam.xGridPixel/16,
-                (float)feMapParam.yGridPixel/16);
-//        matrix.postScale(
-//                (float)feMapParam.mapWidthHeight[0]/tBitmap.getWidth(),
-//                (float)feMapParam.mapWidthHeight[1]/tBitmap.getHeight());
+                (float)feMapParam.mapWidthHeight[0]/tBitmap.getWidth()/2,
+                (float)feMapParam.mapWidthHeight[1]/tBitmap.getHeight()/2);
         bitmap = Bitmap.createBitmap(tBitmap, 0, 0, (int)tBitmap.getWidth(), (int)tBitmap.getHeight(), matrix, true);
         //画笔
         paint = new Paint();
@@ -152,7 +148,7 @@ public class FeMapView extends View {
     }
 
     //方格显示时可以接受的最小像素值
-    final int piexlPerGrid = 86;
+    final int piexlPerGrid = 64;
 
     //返回地图实际显示长和高
     public int[] mapFillRule(int screenWidth, int screenHeight, int mapXGrid, int mapYGrid){
