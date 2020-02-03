@@ -58,7 +58,7 @@ public class FeAnimFilm extends View {
     public FeAnimFilm(Context context, FeMapParam mapParam,
                       int id,
                       int frameWidth, int frameHeight, int frameNum, int frameSkip,
-                      int width, int height,
+                      int offsetX, int offsetY, int width, int height,
                       int intervalMs, int[] frameInterval,
                       int circleMode, int colorMode)
     {
@@ -68,8 +68,9 @@ public class FeAnimFilm extends View {
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
+//        paint.setAntiAlias(true);
         //
-        this.reset(id, frameWidth, frameHeight, frameNum, frameSkip, width, height, frameInterval, circleMode, colorMode);
+        this.reset(id, frameWidth, frameHeight, frameNum, frameSkip, offsetX, offsetY, width, height, frameInterval, circleMode, colorMode);
         //时钟心跳启动
         timer.schedule(timerTask, intervalMs, intervalMs);//ms
     }
@@ -135,9 +136,14 @@ public class FeAnimFilm extends View {
         topMargin += y;
     }
 
-    public void moveTo(float x, float y){
-        leftMargin = x;
-        topMargin = y;
+    public void moveGrid(int x, int y){
+        leftMargin += x*feMapParam.xGridPixel;
+        topMargin += y*feMapParam.yGridPixel;
+    }
+
+    public void moveGridTo(int x, int y){
+        leftMargin = x*feMapParam.xGridPixel;
+        topMargin = y*feMapParam.yGridPixel;
     }
 
     public int getBitmapId(){
@@ -205,7 +211,7 @@ public class FeAnimFilm extends View {
     //重置全部参数
     public void reset(int id,
                       int frameWidth, int frameHeight, int frameNum, int frameSkip,
-                      int width, int height,
+                      int offsetX, int offsetY, int width, int height,
                       int[] frameInterval, int circleMode, int colorMode)
     {
         synchronized (paint)
@@ -243,9 +249,11 @@ public class FeAnimFilm extends View {
             frameCountDir = false;
             //输出宽高备份
             if(_sizeXY == null)
-                _sizeXY = new int[]{width, height};
-            _sizeXY[0] = width;
-            _sizeXY[1] = height;
+                _sizeXY = new int[]{offsetX, offsetY, width, height};
+            _sizeXY[0] = offsetX;
+            _sizeXY[1] = offsetY;
+            _sizeXY[2] = width;
+            _sizeXY[3] = height;
             if(bitmapDist == null)
                 bitmapDist = new Rect(0,0,width,height);
             bitmapDist.right = width;
@@ -256,10 +264,10 @@ public class FeAnimFilm extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //相对布局位置偏移
-        bitmapDist.left = (int)this.getTranslationX() + feMapParam.rect.left + (int)leftMargin;
-        bitmapDist.top = (int)this.getTranslationY() + feMapParam.rect.top + (int)topMargin;
-        bitmapDist.right = bitmapDist.left + _sizeXY[0];
-        bitmapDist.bottom = bitmapDist.top + _sizeXY[1];
+        bitmapDist.left = _sizeXY[0] + (int)this.getTranslationX() + feMapParam.rect.left + (int)leftMargin;
+        bitmapDist.top = _sizeXY[1] + (int)this.getTranslationY() + feMapParam.rect.top + (int)topMargin;
+        bitmapDist.right = bitmapDist.left + _sizeXY[2];
+        bitmapDist.bottom = bitmapDist.top + _sizeXY[3];
         //绘图
 //        canvas.drawRect(bitmapDist, paint);
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
