@@ -15,4 +15,19 @@ public class MainActivity extends Activity {
         FeSave feSave = new FeSave();
         feSave.start(this);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

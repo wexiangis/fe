@@ -83,8 +83,8 @@ public class FeSectionMap extends RelativeLayout {
         //
         loadMapView();
         //
-        loadView(R.drawable.ma_027, 1, 1);
-        loadView(R.drawable.ma_028, 2, 2);
+        loadView(R.drawable.ma_053, 1, 1);
+        loadView(R.drawable.ma_054, 2, 2);
         loadView(R.drawable.ma_029, 3, 1);
         loadView(R.drawable.ma_030, 4, 2);
         loadView(R.drawable.ma_031, 5, 1);
@@ -105,11 +105,11 @@ public class FeSectionMap extends RelativeLayout {
         loadView(R.drawable.ma_045, 6, 12);
         loadView(R.drawable.ma_046, 7, 11);
         loadView(R.drawable.ma_047, 8, 12);
-//        loadView(R.drawable.ma_022, 9, 11);
-//        loadView(R.drawable.ma_023, 10, 12);
-//        loadView(R.drawable.ma_024, 11, 11);
-//        loadView(R.drawable.ma_025, 12, 12);
-//        loadView(R.drawable.ma_026, 13, 11);
+        loadView(R.drawable.ma_048, 9, 11);
+        loadView(R.drawable.ma_049, 10, 12);
+        loadView(R.drawable.ma_050, 11, 11);
+        loadView(R.drawable.ma_051, 12, 12);
+        loadView(R.drawable.ma_052, 13, 11);
     }
 
 }
