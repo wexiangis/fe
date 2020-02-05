@@ -5,14 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /*
 电影胶片式播放动画
@@ -20,154 +17,71 @@ import java.util.TimerTask;
 public class FeAnimFilm extends View {
 
     private Context _context;
-    private FeMapParam feMapParam;
+    private FeMapParam _mapParam;
+    private FeHeart _animHeart;
 
+    //动画相对地图的偏移量
     private float leftMargin = 0, topMargin = 0;
 
-    //循环模式  //模式0: 0-1-2-0-1-2, 模式1: 0-1-2-1-0-1-2
-    private int _circleMode = 0;
-
     //传参备份
-    private int _frameHeight = 0, _frameSkip = 0, _frameNum = 0, _id = 0, _colorMode = 0;
-    private int[] _frameInterval = null, _sizeXY = null;
+    private int frameHeight = 56;
+    private int _id = 0, _animMode = 0, _colorMode = 0;
+
+    //
+    private final int[] frameSkipByAnimMode = new int[]{15, 12, 8, 4, 0, 0};
 
     //画图
-    private Paint paint = null;
+    private Paint paint = new Paint();
 
     //原始图片
     private Bitmap bitmap = null;
+    private Matrix matrix = new Matrix();
 
     //扣取图片位置
-    private Rect bitmapBody = null, bitmapDist = null;
-
-    //帧计数
-    private int timerCount = 0, intervalCount = 0, frameCount = 0;
-    private boolean intervalCountDir = false, frameCountDir = false;
-
-    //切图心跳
-    private Timer timer = new Timer();
+    private Rect bitmapBody = new Rect(0,0,0,0);
 
     /*
     id: drawable图片,如: R.drawable.xxx
-    frameHeight: 按这个高度把图片切块
-    frameSkip: 分块后,从上往下数,跳过几帧后作为第一帧,0从头开始
-    frameNum: 从确定的第一帧开始,选用后面的frameNum帧图片循环播放
-    intervalMs: 帧动画间隔延时
-    frameInterval: 对每帧动画的延时进行加权,当frameInterval[x]!=0时,第n帧动画实际延时为frameInterval[n]*intervalMs
-     */
-    public FeAnimFilm(Context context, FeMapParam mapParam,
-                      int id,
-                      int frameWidth, int frameHeight, int frameNum, int frameSkip,
-                      int offsetX, int offsetY, int width, int height,
-                      int intervalMs, int[] frameInterval,
-                      int circleMode, int colorMode)
+    */
+    public FeAnimFilm(Context context, FeHeart animHeart, FeMapParam mapParam, int id, int gridX, int gridY, int animMode, int colorMode)
     {
         super(context);
         _context = context;
-        feMapParam = mapParam;
+        _animHeart = animHeart;
+        _mapParam = mapParam;
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
 //        paint.setAntiAlias(true);
+        //图片加载和颜色变换
+        bitmap = replaceBitmapColor(BitmapFactory.decodeResource(context.getResources(), id), colorMode);
+        matrix.postScale(-1, 1);
+        //根据动画类型使用对应的心跳
+        setAnimMode(animMode);
+        //参数备份
+        _colorMode = colorMode;
+        _id = id;
         //
-        this.reset(id, frameWidth, frameHeight, frameNum, frameSkip, offsetX, offsetY, width, height, frameInterval, circleMode, colorMode);
-        //时钟心跳启动
-        timer.schedule(timerTask, intervalMs, intervalMs);//ms
-    }
-
-    private TimerTask timerTask = new TimerTask()
-    {
-        @Override
-        public void run() {
-            synchronized (paint) {
-                if (++timerCount >= _frameInterval[intervalCount]) {
-                    //清计数
-                    timerCount = 0;
-                    //调用一次onDraw
-                    invalidate();
-                    //循环播放模式0
-                    if(_circleMode == 0){
-                        //移动帧计数
-                        if(frameCountDir){
-                            if(--frameCount <= 0){
-                                frameCount = 0;
-                                frameCountDir = !frameCountDir;
-                            }
-                        }else{
-                            if(++frameCount >= _frameNum - 1){
-                                frameCount = _frameNum - 1;
-                                frameCountDir = !frameCountDir;
-                            }
-                        }
-                        //移动延时加权,循环使用_frameInterval数组
-                        if(intervalCountDir){
-                            if(--intervalCount <= 0){
-                                intervalCount = 0;
-                                intervalCountDir = !intervalCountDir;
-                            }
-                        }else{
-                            if(++intervalCount >= _frameInterval.length - 1){
-                                intervalCount = _frameInterval.length - 1;
-                                intervalCountDir = !intervalCountDir;
-                            }
-                        }
-                    }
-                    //循环播放模式1
-                    else {
-                        //移动帧计数
-                        if (++frameCount >= _frameNum)
-                            frameCount = 0;
-                        //移动延时加权,循环使用_frameInterval数组
-                        if (++intervalCount >= _frameInterval.length)
-                            intervalCount = 0;
-                    }
-                    //移动框图
-                    bitmapBody.left = 0;
-                    bitmapBody.top = _frameHeight*(_frameSkip+frameCount);
-                    bitmapBody.right = bitmap.getWidth();
-                    bitmapBody.bottom = bitmapBody.top + _frameHeight;
-                }
-            }
-        }
-    };
-
-    public void move(float x, float y){
-        leftMargin += x;
-        topMargin += y;
+        frameHeight = bitmap.getWidth();
+        //
+        moveGridTo(gridX, gridY);
+        //图片扣取位置计算
+        bitmapBody.left = 0;
+        bitmapBody.top = frameHeight*frameSkipByAnimMode[animMode];
+        bitmapBody.right = bitmap.getWidth();
+        bitmapBody.bottom = bitmapBody.top + frameHeight;
+        //引入心跳
+        _animHeart.addUnit(heartUnit);
     }
 
     public void moveGrid(int x, int y){
-        leftMargin += x*feMapParam.xGridPixel;
-        topMargin += y*feMapParam.yGridPixel;
+        leftMargin += x*_mapParam.xGridPixel;
+        topMargin += y*_mapParam.yGridPixel;
     }
 
     public void moveGridTo(int x, int y){
-        leftMargin = x*feMapParam.xGridPixel;
-        topMargin = y*feMapParam.yGridPixel;
-    }
-
-    public int getBitmapId(){
-        return _id;
-    }
-
-    public int getFrameNum(){
-        return _frameNum;
-    }
-
-    public int getFrameSkip(){
-        return _frameSkip;
-    }
-
-    public int[] getFrameInterval(){
-        return _frameInterval;
-    }
-
-    public int getCircleMode(){
-        return _circleMode;
-    }
-
-    public int getColorMode(){
-        return _colorMode;
+        leftMargin = x*_mapParam.xGridPixel;
+        topMargin = y*_mapParam.yGridPixel;
     }
 
     //设置图片参数
@@ -181,99 +95,62 @@ public class FeAnimFilm extends View {
         }
     }
 
-    //设置图片参数
-    public void set(int frameNum, int frameSkip, int[] frameInterval, int circleMode, int colorMode)
-    {
-        synchronized (paint) {
-            //
-            _frameSkip = frameSkip;
-            _frameNum = frameNum;
-            _frameInterval = frameInterval;
-            _circleMode = circleMode;
-            //图片扣取位置计算
-            bitmapBody.left = 0;
-            bitmapBody.top = _frameHeight*(_frameSkip+frameCount);
-            bitmapBody.right = bitmap.getWidth();
-            bitmapBody.bottom = bitmapBody.top + _frameHeight;
-            //计数初始化
-            timerCount = 0;
-            intervalCount = 0;
-            frameCount = 0;
-            //
-            if(_colorMode != colorMode) {
-                bitmap.recycle();
-                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(_context.getResources(), _id), colorMode);
-                _colorMode = colorMode;
-            }
+    public void setAnimMode(int animMode){
+        if(_animMode != animMode){
+            //镜像和恢复
+            if(animMode == 5 || _animMode == 5)
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int)bitmap.getWidth(), (int)bitmap.getHeight(), matrix, true);matrix.postScale(1, 1);
         }
+        _animMode = animMode;
+        upgradeHeartType(_animMode);
     }
 
-    //重置全部参数
-    public void reset(int id,
-                      int frameWidth, int frameHeight, int frameNum, int frameSkip,
-                      int offsetX, int offsetY, int width, int height,
-                      int[] frameInterval, int circleMode, int colorMode)
-    {
-        synchronized (paint)
-        {
-            //图片加载和颜色变换
-            if(_id != id) {
-                if (bitmap != null) bitmap.recycle();
-                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(_context.getResources(), id), colorMode);
-            }else if(_colorMode != colorMode){
-                if (bitmap != null) bitmap.recycle();
-                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(_context.getResources(), _id), colorMode);
-            }
-            //参数备份
-            _colorMode = colorMode;
-            _id = id;
-            _frameHeight = (int)((double)bitmap.getWidth()/frameWidth*frameHeight);
-            _frameSkip = frameSkip;
-            _frameNum = frameNum;
-            if(_frameNum == 0)
-                _frameNum = bitmap.getHeight()/_frameHeight;
-            _frameInterval = frameInterval;
-            _circleMode = circleMode;
-            //图片扣取位置计算
-            if(bitmapBody == null)
-                bitmapBody = new Rect(0,0,0,0);
-            bitmapBody.left = 0;
-            bitmapBody.top = _frameHeight*(_frameSkip+frameCount);
-            bitmapBody.right = bitmap.getWidth();
-            bitmapBody.bottom = bitmapBody.top + _frameHeight;
-            //计数初始化
-            timerCount = 0;
-            intervalCount = 0;
-            frameCount = 0;
-            intervalCountDir = false;
-            frameCountDir = false;
-            //输出宽高备份
-            if(_sizeXY == null)
-                _sizeXY = new int[]{offsetX, offsetY, width, height};
-            _sizeXY[0] = offsetX;
-            _sizeXY[1] = offsetY;
-            _sizeXY[2] = width;
-            _sizeXY[3] = height;
-            if(bitmapDist == null)
-                bitmapDist = new Rect(0,0,width,height);
-            bitmapDist.right = width;
-            bitmapDist.bottom = height;
-        }
+    private void upgradeHeartType(int animMode){
+        if(animMode == 0 || animMode == 1)
+            heartUnit.type = 1;
+        else
+            heartUnit.type = 2;
     }
 
+    private FeHeartUnit heartUnit = new FeHeartUnit(1, new FeHeartUnit.TimeOutTask(){
+        public void run(int count){
+            //移动框图
+            bitmapBody.left = 0;
+            bitmapBody.top = frameHeight*(frameSkipByAnimMode[_animMode] + count);
+            bitmapBody.right = bitmap.getWidth();
+            bitmapBody.bottom = bitmapBody.top + frameHeight;
+            //调用一次onDrow
+            FeAnimFilm.this.invalidate();
+        }
+    });
+
+    private Rect bitmapDist = new Rect(0,0,0,0);
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //相对布局位置偏移
-        bitmapDist.left = _sizeXY[0] + (int)this.getTranslationX() + feMapParam.rect.left + (int)leftMargin;
-        bitmapDist.top = _sizeXY[1] + (int)this.getTranslationY() + feMapParam.rect.top + (int)topMargin;
-        bitmapDist.right = bitmapDist.left + _sizeXY[2];
-        bitmapDist.bottom = bitmapDist.top + _sizeXY[3];
+        bitmapDist.left = _mapParam.xAnimOffsetPixel + (int)this.getTranslationX() + _mapParam.mapDist.left + (int)leftMargin;
+        bitmapDist.top = _mapParam.yAnimOffsetPixel + (int)this.getTranslationY() + _mapParam.mapDist.top + (int)topMargin;
+        bitmapDist.right = bitmapDist.left + _mapParam.xAnimGridPixel;
+        bitmapDist.bottom = bitmapDist.top + _mapParam.yAnimGridPixel;
         //绘图
-//        canvas.drawRect(bitmapDist, paint);
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 
-    public Bitmap replaceBitmapColor(Bitmap oldBitmap,int type){
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        switch (event.getAction()){
+//            case MotionEvent.ACTION_DOWN:
+//                if(_animMode + 1 > 5)
+//                    setAnimMode(0);
+//                else
+//                    setAnimMode(_animMode + 1);
+//                return true;
+////                break;
+//        }
+//        return super.onTouchEvent(event);
+//    }
+
+    public Bitmap replaceBitmapColor(Bitmap oldBitmap, int type){
         if(type == 0)   //使用原色
             return oldBitmap;
         //相关说明可参考 http://xys289187120.blog.51cto.com/3361352/657590/

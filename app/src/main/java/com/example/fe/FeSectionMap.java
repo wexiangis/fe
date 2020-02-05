@@ -1,79 +1,44 @@
 package com.example.fe;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.RelativeLayout;
 
 public class FeSectionMap extends RelativeLayout {
 
-    private FeSave feSave;
-
-    public FeMapView mapView = null;
-
-    public int xGridPiexl = 0, yGridPiexl = 0;
-
-    private void loadMapView(){
-        mapView = new FeMapView(feSave.activity, feSave.feMapParam, R.drawable.map_000_25x15, 25, 15);
-        this.addView(mapView);
+    public class ComLayout extends RelativeLayout{
+        public ComLayout(Context context){
+            super(context);
+        }
     }
 
-    private void loadView(int id, int lineY, int lineX){
-        //
-        xGridPiexl = (int)(feSave.feMapParam.xGridPixel*2);
-        yGridPiexl = (int)(feSave.feMapParam.yGridPixel*2);
-        int offsetX = -xGridPiexl/4;
-        int offsetY = -yGridPiexl/2;
-        //
-        FeAnimFilm anim = new FeAnimFilm(feSave.activity, feSave.feMapParam, id,
-                32, 32, 3, 12+3,
-                offsetX, offsetY, xGridPiexl, yGridPiexl,
-                150, new int[]{3, 1, 3},
-                0, 0);
-        this.addView(anim);
-        anim.moveGridTo(lineX, lineY);
-        //
-        FeAnimFilm anim2 = new FeAnimFilm(feSave.activity, feSave.feMapParam, id,
-                32, 32, 3, 12,
-                offsetX, offsetY, xGridPiexl, yGridPiexl,
-                150, new int[]{3, 1, 3},
-                0, 0);
-        this.addView(anim2);
-        anim2.moveGridTo(lineX+2, lineY);
-        //
-        FeAnimFilm anim3 = new FeAnimFilm(feSave.activity, feSave.feMapParam, id,
-                32, 32, 4, 0,
-                offsetX, offsetY, xGridPiexl, yGridPiexl,
-                150, new int[]{1},
-                1, 0);
-        this.addView(anim3);
-        anim3.moveGridTo(lineX+4, lineY);
-        //
-        FeAnimFilm anim4 = new FeAnimFilm(feSave.activity, feSave.feMapParam, id,
-                32, 32, 4, 4,
-                offsetX, offsetY, xGridPiexl, yGridPiexl,
-                150, new int[]{1},
-                1, 0);
-        this.addView(anim4);
-        anim4.moveGridTo(lineX+6, lineY);
-        //
-        FeAnimFilm anim5 = new FeAnimFilm(feSave.activity, feSave.feMapParam, id,
-                32, 32, 4, 8,
-                offsetX, offsetY, xGridPiexl, yGridPiexl,
-                150, new int[]{1},
-                1, 0);
-        this.addView(anim5);
-        anim5.moveGridTo(lineX+8, lineY);
+    private FeSave feSave;
+    private FeMapParam feMapParam= new FeMapParam();
+    public ComLayout mapLayout = null, animLayout = null;
+
+    private void loadMapView(){
+        FeMap map = new FeMap(feSave.activity, feSave.feHeart, feMapParam, R.drawable.map_000_25x15, 25, 15);
+        mapLayout.addView(map);
+    }
+
+    private void loadView(int id, int y, int x){
+        FeAnimFilm anim = new FeAnimFilm(feSave.activity, feSave.feHeart, feMapParam, id, x, y, 0, 0);
+        animLayout.addView(anim);
+        FeAnimFilm anim2 = new FeAnimFilm(feSave.activity, feSave.feHeart, feMapParam, id, x+2, y, 1, 0);
+        animLayout.addView(anim2);
+        FeAnimFilm anim3 = new FeAnimFilm(feSave.activity, feSave.feHeart, feMapParam, id, x+4, y, 2, 0);
+        animLayout.addView(anim3);
+        FeAnimFilm anim4 = new FeAnimFilm(feSave.activity, feSave.feHeart, feMapParam, id, x+6, y, 3, 0);
+        animLayout.addView(anim4);
+        FeAnimFilm anim5 = new FeAnimFilm(feSave.activity, feSave.feHeart, feMapParam, id, x+8, y, 4, 0);
+        animLayout.addView(anim5);
+        FeAnimFilm anim6 = new FeAnimFilm(feSave.activity, feSave.feHeart, feMapParam, id, x+10, y, 5, 0);
+        animLayout.addView(anim6);
     }
 
     public void refresh(){
         //遍历所有子view
-        for (int i = 1; i < this.getChildCount(); i++) {
-            View child = this.getChildAt(i);
-            if(child != null && child != mapView){
-                //调用一次onDraw
-                child.invalidate();
-            }
-        }
+        for (int i = 0; i < animLayout.getChildCount(); i++)
+            animLayout.getChildAt(i).invalidate();
     }
 
     public FeSectionMap(Context context, FeSave save){
@@ -81,35 +46,40 @@ public class FeSectionMap extends RelativeLayout {
         feSave = save;
         feSave.setFeSectionMap(this);
         //
+        mapLayout = new ComLayout(feSave.activity);
+        this.addView(mapLayout);
+        animLayout = new ComLayout(feSave.activity);
+        this.addView(animLayout);
+        //
         loadMapView();
         //
-        loadView(R.drawable.ma_053, 1, 1);
-        loadView(R.drawable.ma_054, 2, 2);
-        loadView(R.drawable.ma_029, 3, 1);
-        loadView(R.drawable.ma_030, 4, 2);
-        loadView(R.drawable.ma_031, 5, 1);
-        loadView(R.drawable.ma_032, 6, 2);
-        loadView(R.drawable.ma_033, 7, 1);
-        loadView(R.drawable.ma_034, 8, 2);
-        loadView(R.drawable.ma_035, 9, 1);
-        loadView(R.drawable.ma_036, 10, 2);
-        loadView(R.drawable.ma_037, 11, 1);
-        loadView(R.drawable.ma_038, 12, 2);
-        loadView(R.drawable.ma_039, 13, 1);
+        loadView(R.drawable.ma_053, 1, 0);
+        loadView(R.drawable.ma_054, 2, 1);
+        loadView(R.drawable.ma_029, 3, 0);
+        loadView(R.drawable.ma_030, 4, 1);
+        loadView(R.drawable.ma_031, 5, 0);
+        loadView(R.drawable.ma_032, 6, 1);
+        loadView(R.drawable.ma_033, 7, 0);
+        loadView(R.drawable.ma_034, 8, 1);
+        loadView(R.drawable.ma_035, 9, 0);
+        loadView(R.drawable.ma_036, 10, 1);
+        loadView(R.drawable.ma_037, 11, 0);
+        loadView(R.drawable.ma_038, 12, 1);
+        loadView(R.drawable.ma_039, 13, 0);
 
-        loadView(R.drawable.ma_040, 1, 11);
-        loadView(R.drawable.ma_041, 2, 12);
-        loadView(R.drawable.ma_042, 3, 11);
-        loadView(R.drawable.ma_043, 4, 12);
-        loadView(R.drawable.ma_044, 5, 11);
-        loadView(R.drawable.ma_045, 6, 12);
-        loadView(R.drawable.ma_046, 7, 11);
-        loadView(R.drawable.ma_047, 8, 12);
-        loadView(R.drawable.ma_048, 9, 11);
-        loadView(R.drawable.ma_049, 10, 12);
-        loadView(R.drawable.ma_050, 11, 11);
-        loadView(R.drawable.ma_051, 12, 12);
-        loadView(R.drawable.ma_052, 13, 11);
+        loadView(R.drawable.ma_040, 1, 12);
+        loadView(R.drawable.ma_041, 2, 13);
+        loadView(R.drawable.ma_042, 3, 12);
+        loadView(R.drawable.ma_043, 4, 13);
+        loadView(R.drawable.ma_044, 5, 12);
+        loadView(R.drawable.ma_045, 6, 13);
+        loadView(R.drawable.ma_046, 7, 12);
+        loadView(R.drawable.ma_047, 8, 13);
+        loadView(R.drawable.ma_048, 9, 12);
+        loadView(R.drawable.ma_049, 10, 13);
+        loadView(R.drawable.ma_050, 11, 12);
+        loadView(R.drawable.ma_051, 12, 13);
+        loadView(R.drawable.ma_052, 13, 12);
     }
 
 }

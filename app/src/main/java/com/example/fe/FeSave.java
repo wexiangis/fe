@@ -8,10 +8,10 @@ public class FeSave extends Application {
 
     public Activity activity = null;
     public FeEvent feEvent = null;
+    public FeHeart feHeart = null;
 
     //
     public FeSectionMap feSectionMap = null;
-    public FeMapParam feMapParam = new FeMapParam(0,0,1,1);
     public void setFeSectionMap(FeSectionMap sectionMap){
         feSectionMap = sectionMap;
     }
@@ -22,6 +22,7 @@ public class FeSave extends Application {
 
     public void start(Activity act){
         activity = act;
+        feHeart = new FeHeart();
         feEvent = new FeEvent(this);
     }
 
