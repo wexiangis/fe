@@ -129,13 +129,13 @@ public class FeMap extends View {
                     needRefresh = true;
                     touchType = 2;
                 }
-                //防止地图移除屏幕
-//                if (xError > 0) xError = 0;
-//                else if (xError + _mapParam.width < _mapParam.screenWidth)
-//                    xError = _mapParam.screenWidth - _mapParam.width;
-//                if (yError > 0) yError = 0;
-//                else if (yError + _mapParam.height < _mapParam.screenHeight)
-//                    yError = _mapParam.screenHeight - _mapParam.height;
+                //防止地图移出屏幕
+                if (xError > 0) xError = 0;
+                else if (xError + _mapParam.width < _mapParam.screenWidth)
+                    xError = _mapParam.screenWidth - _mapParam.width;
+                if (yError > 0) yError = 0;
+                else if (yError + _mapParam.height < _mapParam.screenHeight)
+                    yError = _mapParam.screenHeight - _mapParam.height;
                 //调用一次onDraw
                 if (needRefresh)
                     invalidate();
