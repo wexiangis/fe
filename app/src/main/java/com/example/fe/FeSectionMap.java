@@ -53,33 +53,33 @@ public class FeSectionMap extends RelativeLayout {
         //
         loadMapView();
         //
-        loadView(R.drawable.ma_053, 1, 0);
-//        loadView(R.drawable.ma_054, 2, 1);
-//        loadView(R.drawable.ma_029, 3, 0);
-//        loadView(R.drawable.ma_030, 4, 1);
-//        loadView(R.drawable.ma_031, 5, 0);
-//        loadView(R.drawable.ma_032, 6, 1);
-//        loadView(R.drawable.ma_033, 7, 0);
-//        loadView(R.drawable.ma_034, 8, 1);
-//        loadView(R.drawable.ma_035, 9, 0);
-//        loadView(R.drawable.ma_036, 10, 1);
-//        loadView(R.drawable.ma_037, 11, 0);
-//        loadView(R.drawable.ma_038, 12, 1);
-//        loadView(R.drawable.ma_039, 13, 0);
-//
-//        loadView(R.drawable.ma_040, 1, 12);
-//        loadView(R.drawable.ma_041, 2, 13);
-//        loadView(R.drawable.ma_042, 3, 12);
-//        loadView(R.drawable.ma_043, 4, 13);
-//        loadView(R.drawable.ma_044, 5, 12);
-//        loadView(R.drawable.ma_045, 6, 13);
-//        loadView(R.drawable.ma_046, 7, 12);
-//        loadView(R.drawable.ma_047, 8, 13);
-//        loadView(R.drawable.ma_048, 9, 12);
-//        loadView(R.drawable.ma_049, 10, 13);
-//        loadView(R.drawable.ma_050, 11, 12);
-//        loadView(R.drawable.ma_051, 12, 13);
-//        loadView(R.drawable.ma_052, 13, 12);
+        loadView(R.drawable.ma_077, 1, 0);
+        loadView(R.drawable.ma_078, 2, 1);
+        loadView(R.drawable.ma_079, 3, 0);
+        loadView(R.drawable.ma_080, 4, 1);
+        loadView(R.drawable.ma_081, 5, 0);
+        loadView(R.drawable.ma_082, 6, 1);
+        loadView(R.drawable.ma_083, 7, 0);
+        loadView(R.drawable.ma_084, 8, 1);
+        loadView(R.drawable.ma_085, 9, 0);
+        loadView(R.drawable.ma_086, 10, 1);
+        loadView(R.drawable.ma_087, 11, 0);
+        loadView(R.drawable.ma_088, 12, 1);
+        loadView(R.drawable.ma_089, 13, 0);
+
+        loadView(R.drawable.ma_090, 1, 12);
+        loadView(R.drawable.ma_091, 2, 13);
+        loadView(R.drawable.ma_092, 3, 12);
+        loadView(R.drawable.ma_093, 4, 13);
+        loadView(R.drawable.ma_094, 5, 12);
+        loadView(R.drawable.ma_095, 6, 13);
+        loadView(R.drawable.ma_096, 7, 12);
+        loadView(R.drawable.ma_097, 8, 13);
+        loadView(R.drawable.ma_098, 9, 12);
+        loadView(R.drawable.ma_099, 10, 13);
+        loadView(R.drawable.ma_100, 11, 12);
+        loadView(R.drawable.ma_101, 12, 13);
+        loadView(R.drawable.ma_102, 13, 12);
     }
 
 }
