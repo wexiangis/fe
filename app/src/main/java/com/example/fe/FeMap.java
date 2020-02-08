@@ -13,6 +13,9 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+/*
+    地图视图管理,管理地图和屏幕适配、挪动、方格选中等
+ */
 public class FeMap extends View {
 
     private Context _context;

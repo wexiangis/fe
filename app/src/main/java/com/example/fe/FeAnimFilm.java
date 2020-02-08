@@ -8,11 +8,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.view.MotionEvent;
 import android.view.View;
 
 /*
-电影胶片式播放动画
+    电影胶片式播放动画,针对地图人物动画管理而封装;
+    统一管理人物的待机、选中、上下左右移动时的动画
  */
 public class FeAnimFilm extends View {
 
@@ -107,12 +107,12 @@ public class FeAnimFilm extends View {
 
     private void upgradeHeartType(int animMode){
         if(animMode == 0 || animMode == 1)
-            heartUnit.type = 1;
+            heartUnit.type = FeHeart.TYPE_ANIM_STAY;
         else
-            heartUnit.type = 2;
+            heartUnit.type = FeHeart.TYPE_ANIM_MOVE;
     }
 
-    private FeHeartUnit heartUnit = new FeHeartUnit(1, new FeHeartUnit.TimeOutTask(){
+    private FeHeartUnit heartUnit = new FeHeartUnit(FeHeart.TYPE_ANIM_STAY, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
             //移动框图
             bitmapBody.left = 0;

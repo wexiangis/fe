@@ -2,6 +2,9 @@ package com.example.fe;
 
 import android.graphics.Rect;
 
+/*
+    加载地图后所产生的一系列关键参数,用于传递给地图上的人物动画
+ */
 public class FeMapParam {
     //屏幕实际宽高
     public int screenWidth = 1920, screenHeight = 1080;
@@ -21,6 +24,7 @@ public class FeMapParam {
     //方格显示时可以接受的最小像素值
     private int _piexlPerGrid = 64;
 
+    //地图适配屏幕
     public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int piexlPerGrid){
         //限制屏幕最大显示格数
         int screenXGrid = screenXSixe/_piexlPerGrid, screenYGrid = screenYSize/_piexlPerGrid;

@@ -10,6 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+/*
+    主界面
+ */
 public class FeMainTheme extends RelativeLayout {
 
     //

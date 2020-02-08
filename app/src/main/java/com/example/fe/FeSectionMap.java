@@ -3,6 +3,9 @@ package com.example.fe;
 import android.content.Context;
 import android.widget.RelativeLayout;
 
+/*
+    地图和地图人物动画管理
+ */
 public class FeSectionMap extends RelativeLayout {
 
     public class ComLayout extends RelativeLayout{

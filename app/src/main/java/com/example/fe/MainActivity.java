@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
         }
         //半透明系统虚拟按键
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        //
+        //初始化存档并开始
         if(feSave == null) {
             feSave = new FeSave();
             feSave.start(this);
@@ -29,16 +29,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        //
-        if(feSave != null)
+        //关闭心跳定时器
+        if(feSave != null && feSave.feHeart != null)
             feSave.feHeart.stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //
-        if(feSave != null)
+        //启动心跳定时器
+        if(feSave != null && feSave.feHeart != null)
             feSave.feHeart.start();
     }
 

@@ -1,7 +1,8 @@
 package com.example.fe;
 
-import android.app.Activity;
-
+/*
+    事件管理层
+ */
 public class FeEvent {
 
     public FeSave feSave;
