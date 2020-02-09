@@ -24,7 +24,7 @@ public class FeMap extends View {
 
     //
     private Bitmap bitmap = null, tBitmap = null;
-    private Matrix matrix = null;
+    private Matrix matrix = new Matrix();
 
     //画图
     private Paint paint, paint2;
@@ -41,11 +41,14 @@ public class FeMap extends View {
         _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 72);
         //矩阵缩放
         tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
-        matrix = new Matrix();
         //两参数分别为xy缩放比例
-        matrix.postScale(
-                (float)_mapParam.width/tBitmap.getWidth()/2,
-                (float)_mapParam.height/tBitmap.getHeight()/2);
+        float xp = (float)_mapParam.width/tBitmap.getWidth()/2;
+        if(xp > 1.5f)
+            xp = 1.5f;
+        float yp = (float)_mapParam.height/tBitmap.getHeight()/2;
+        if(yp > 1.5f)
+            yp = 1.5f;
+        matrix.postScale(xp, yp);
         bitmap = Bitmap.createBitmap(tBitmap, 0, 0, (int)tBitmap.getWidth(), (int)tBitmap.getHeight(), matrix, true);
         //释放
         tBitmap.recycle();
