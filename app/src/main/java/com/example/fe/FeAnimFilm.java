@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.MotionEvent;
 import android.view.View;
 
 /*
@@ -106,8 +107,10 @@ public class FeAnimFilm extends View {
     }
 
     private void upgradeHeartType(int animMode){
-        if(animMode == 0 || animMode == 1)
+        if(animMode == 0)
             heartUnit.type = FeHeart.TYPE_ANIM_STAY;
+        else if(animMode == 1)
+            heartUnit.type = FeHeart.TYPE_ANIM_SELECT;
         else
             heartUnit.type = FeHeart.TYPE_ANIM_MOVE;
     }
@@ -136,19 +139,14 @@ public class FeAnimFilm extends View {
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        switch (event.getAction()){
-//            case MotionEvent.ACTION_DOWN:
-//                if(_animMode + 1 > 5)
-//                    setAnimMode(0);
-//                else
-//                    setAnimMode(_animMode + 1);
-//                return true;
-////                break;
-//        }
-//        return super.onTouchEvent(event);
-//    }
+    public boolean checkHit(float x, float y){
+        int xs = bitmapDist.left - _mapParam.xAnimOffsetPixel;
+        int ys = bitmapDist.top - _mapParam.yAnimOffsetPixel;
+        if(x > xs && x < xs + _mapParam.xGridPixel &&
+            y > ys && y < ys + _mapParam.yGridPixel)
+            return true;
+        return false;
+    }
 
     public Bitmap replaceBitmapColor(Bitmap oldBitmap, int type){
         if(type == 0)   //使用原色

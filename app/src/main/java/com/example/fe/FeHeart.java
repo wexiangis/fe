@@ -43,8 +43,9 @@ public class FeHeart {
     }
 
     //根据type遍历链表,然后回掉接口函数,传参count为当前要播放第几帧
-    private void scanLink(int type, int count){
+    private boolean scanLink(int type, int count){
         FeLink<FeHeartUnit> tmp = link.next;
+        boolean hit = false;
         while (tmp != null){
             FeHeartUnit u = tmp.data;
             tmp = tmp.next;
@@ -52,33 +53,43 @@ public class FeHeart {
             if(u.useless)
                 removeUnit(u);
             //回调单元的方法
-            else if(u.type == type)
+            else if(u.type == type) {
                 u.task.run(count);
+                hit = true;
+            }
         }
+        return hit;
     }
 
     // ---------- 心跳散播 ----------
 
     //type定义
     public static final int TYPE_ANIM_STAY = 1;//人物原地待机或选中时动画,共3帧,钟摆式循环播放
-    public static final int TYPE_ANIM_MOVE = 2;//人物移动时动画,共4帧,循环播放
+    public static final int TYPE_ANIM_SELECT = 2;//人物原地待机或选中时动画,共3帧,钟摆式循环播放
+    public static final int TYPE_ANIM_MOVE = 3;//人物移动时动画,共4帧,循环播放
 
-    //type 1 TYPE_ANIM_MOVE
+    //type 1 TYPE_ANIM_STAY
     private final int[] circleType1 = new int[]{7, 3, 7};//每帧延时
     private int circleType1_timerCount = 1, circleType1_count = 0;
     private boolean circleType1_dir = false;
 
-    //type 2 TYPE_ANIM_MOVE
-    private final int[] circleType2 = new int[]{3, 3, 3, 3};//每帧延时
+    //type 2 TYPE_ANIM_SELECT
+    private final int[] circleType2 = new int[]{7, 3, 7};//每帧延时
     private int circleType2_timerCount = 1, circleType2_count = 0;
+    private boolean circleType2_dir = false;
+
+    //type 3 TYPE_ANIM_MOVE
+    private final int[] circleType3 = new int[]{3, 3, 3, 3};//每帧延时
+    private int circleType3_timerCount = 1, circleType3_count = 0;
 
     //定时器
-    private Timer timer1 = null, timer2 = null;
-    private TimerTask timerTask1 = null, timerTask2 = null;
+    private Timer[] timer = new Timer[TYPE_ANIM_MOVE];
+    private TimerTask[] timerTask = new TimerTask[TYPE_ANIM_MOVE];
 
     public void start(){
-        timer1 = new Timer();
-        timerTask1 = new TimerTask() {
+        //
+        timer[0] = new Timer();
+        timerTask[0] = new TimerTask() {
             @Override
             public void run() {
                 //type 1 TYPE_ANIM_STAY
@@ -102,42 +113,63 @@ public class FeHeart {
             }
         };
         //
-        timer2 = new Timer();
-        timerTask2 = new TimerTask() {
+        timer[1] = new Timer();
+        timerTask[1] = new TimerTask() {
             @Override
             public void run() {
-                //type 2 TYPE_ANIM_MOVE
+                //type 2 TYPE_ANIM_SELECT
                 if(++circleType2_timerCount > circleType2[circleType2_count]){
                     circleType2_timerCount = 1;
                     //
-                    if(++circleType2_count >= circleType2.length)
-                        circleType2_count = 0;
+                    if(circleType2_dir) {
+                        if (--circleType2_count <= 0) {
+                            circleType2_count = 0;
+                            circleType2_dir = !circleType2_dir;
+                        }
+                    }else{
+                        if (++circleType2_count >= circleType2.length - 1) {
+                            circleType2_count = circleType2.length - 1;
+                            circleType2_dir = !circleType2_dir;
+                        }
+                    }
                     //
-                    scanLink(TYPE_ANIM_MOVE, circleType2_count);
+                    if(!scanLink(TYPE_ANIM_SELECT, circleType2_count)) {
+                        //随时就绪
+                        circleType2_dir = false;
+                        circleType2_count = 1;
+                    }
                 }
             }
         };
         //
-        timer1.schedule(timerTask1, 200, 100);
-        timer2.schedule(timerTask2, 100, 100);
+        timer[2] = new Timer();
+        timerTask[2] = new TimerTask() {
+            @Override
+            public void run() {
+                //type 3 TYPE_ANIM_MOVE
+                if(++circleType3_timerCount > circleType3[circleType3_count]){
+                    circleType3_timerCount = 1;
+                    //
+                    if(++circleType3_count >= circleType3.length)
+                        circleType3_count = 0;
+                    //
+                    scanLink(TYPE_ANIM_MOVE, circleType3_count);
+                }
+            }
+        };
+        //
+        for (int i = 0; i < timer.length; i++)
+            timer[i].schedule(timerTask[i], 200, 100);
     }
 
     public void stop(){
-        if(timerTask1 != null) {
-            timerTask1.cancel();
-            timerTask1 = null;
-        }
-        if(timer1 != null) {
-            timer1.cancel();
-            timer1 = null;
-        }
-        if(timerTask2 != null) {
-            timerTask2.cancel();
-            timerTask2 = null;
-        }
-        if(timer2 != null) {
-            timer2.cancel();
-            timer2 = null;
+        if(timer != null){
+            for (int i = 0; i < timer.length; i++){
+                timerTask[i].cancel();
+                timerTask[i] = null;
+                timer[i].cancel();
+                timer[i] = null;
+            }
         }
     }
 

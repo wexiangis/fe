@@ -89,12 +89,16 @@ public class FeMap extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
+                ((FeSectionMap)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
+                //
                 tDownX = event.getX();
                 tDownY = event.getY();
                 touchType = 1;
             }
             break;
             case MotionEvent.ACTION_UP: {
+                ((FeSectionMap)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
+                //
                 if(touchType == 1) {
                     float tUpX = event.getX();
                     float tUpY = event.getY();
