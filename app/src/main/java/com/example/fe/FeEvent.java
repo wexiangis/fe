@@ -6,6 +6,7 @@ package com.example.fe;
 public class FeEvent {
 
     public FeSave feSave;
+    public FeSectionLayout feSectionLayout = null;
 
     public FeEvent(FeSave save)
     {
@@ -27,7 +28,8 @@ public class FeEvent {
 
     //加载章节大地图
     public void loadSection(int count) {
-        feSave.activity.setContentView(new FeSectionMap(feSave.activity, feSave));
+        feSectionLayout = new FeSectionLayout(feSave.activity, feSave);
+        feSave.activity.setContentView(feSectionLayout);
     }
 
     //加载章节对话

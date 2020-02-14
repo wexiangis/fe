@@ -75,7 +75,7 @@ public class FeMap extends View {
             canvas.drawRect(selectDraw, paint2);
         }
         //
-        ((FeSectionMap)getParent().getParent()).refresh();
+        ((FeSectionLayout)getParent().getParent()).refresh();
     }
 
     private float tDownX, tDownY;
@@ -89,7 +89,7 @@ public class FeMap extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
-                ((FeSectionMap)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
+                ((FeSectionLayout)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
                 //
                 tDownX = event.getX();
                 tDownY = event.getY();
@@ -97,7 +97,7 @@ public class FeMap extends View {
             }
             break;
             case MotionEvent.ACTION_UP: {
-                ((FeSectionMap)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
+                ((FeSectionLayout)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
                 //
                 if(touchType == 1) {
                     float tUpX = event.getX();

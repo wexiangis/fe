@@ -12,11 +12,7 @@ public class FeSave extends Application {
     public FeEvent feEvent = null;
     public FeHeart feHeart = null;
 
-    //
-    public FeSectionMap feSectionMap = null;
-    public void setFeSectionMap(FeSectionMap sectionMap){
-        feSectionMap = sectionMap;
-    }
+    public FeMapParam feMapParam = new FeMapParam();
 
     public void onCreate() {
         super.onCreate();
