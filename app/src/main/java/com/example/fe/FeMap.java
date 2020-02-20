@@ -38,7 +38,7 @@ public class FeMap extends View {
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity)_context).getWindowManager().getDefaultDisplay().getMetrics(dm);
         //初始化map参数结构体
-        _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 72);
+        _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 106);
         //矩阵缩放
         tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
         //两参数分别为xy缩放比例
@@ -68,7 +68,55 @@ public class FeMap extends View {
         _mapParam.mapDist.right = _mapParam.mapDist.left + _mapParam.width;
         _mapParam.mapDist.bottom = _mapParam.mapDist.top + _mapParam.height;
         //
-        canvas.drawBitmap(bitmap, null, _mapParam.mapDist, paint);
+        float reduceX = _mapParam.xGridPixel*3;
+        float reduceY = _mapParam.yGridPixel*3;
+        //
+//        float srcPoint[] = new float[]{
+//                0, 0,
+//                0, bitmap.getHeight(),
+//                bitmap.getWidth(), bitmap.getHeight(),
+//                bitmap.getWidth(), 0};
+//        float distPoint[] = new float[]{
+//                _mapParam.mapDist.left + reduceX, _mapParam.mapDist.top,
+//                _mapParam.mapDist.left, _mapParam.mapDist.bottom,
+//                _mapParam.mapDist.right, _mapParam.mapDist.bottom,
+//                _mapParam.mapDist.right - reduceX, _mapParam.mapDist.top};
+        //
+        float xPow = (float)bitmap.getWidth()/_mapParam.width;
+        float yPow = (float)bitmap.getHeight()/_mapParam.height;
+        //
+        float srcPoint[] = new float[]{
+                -_mapParam.mapDist.left*xPow, -_mapParam.mapDist.top*yPow,
+                -_mapParam.mapDist.left*xPow, -_mapParam.mapDist.top*yPow + _mapParam.screenHeight*yPow,
+                -_mapParam.mapDist.left*xPow + _mapParam.screenWidth*xPow, -_mapParam.mapDist.top*yPow + _mapParam.screenHeight*yPow,
+                -_mapParam.mapDist.left*xPow + _mapParam.screenWidth*xPow, -_mapParam.mapDist.top*yPow};
+        //梯形左右和上边缩进格数
+        float reduce = _mapParam.xGridPixel*xPow*3;
+        //地图靠近边界时逐渐恢复比例
+        if(reduce > bitmap.getWidth() - srcPoint[6])
+            reduce = bitmap.getWidth() - srcPoint[6];
+        if(reduce > srcPoint[0])
+            reduce = srcPoint[0];
+        if(reduce > srcPoint[1])
+            reduce = srcPoint[1];
+        //
+        srcPoint[0] -= reduce; srcPoint[1] -= reduce;
+        srcPoint[6] += reduce; srcPoint[7] -= reduce;
+//        if(srcPoint[0] < 0) srcPoint[0] = 0;
+//        if(srcPoint[6] > bitmap.getWidth()) srcPoint[6] = bitmap.getWidth();
+//        if(srcPoint[1] < 0) srcPoint[1] = 0;
+//        if(srcPoint[7] < 0) srcPoint[7] = 0;
+        //
+        float distPoint[] = new float[]{
+                0, 0,
+                0, _mapParam.screenHeight,
+                _mapParam.screenWidth, _mapParam.screenHeight,
+                _mapParam.screenWidth, 0};
+        //
+        matrix.setPolyToPoly(srcPoint, 0, distPoint, 0, 4);
+        //
+        canvas.drawBitmap(bitmap, matrix, paint);
+//        canvas.drawBitmap(bitmap, null, _mapParam.mapDist, paint);
         //select
         if(selectDrawFlag) {
             selectDrawFlag = false;

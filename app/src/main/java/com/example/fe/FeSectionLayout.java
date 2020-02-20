@@ -10,8 +10,6 @@ import android.widget.RelativeLayout;
 public class FeSectionLayout extends RelativeLayout {
 
     private FeSave feSave;
-    public FeMapLayout mapLayout = null;
-    public FeMapUnitLayout unitLayout = null;
 
     public void refresh(){
         //遍历所有子view
@@ -54,6 +52,13 @@ public class FeSectionLayout extends RelativeLayout {
         return false;
     }
 
+    public FeMapLayout mapLayout = null;
+    public FeMapUnitLayout unitLayout = null;
+    public FeMapInfoLayout mapInfoLayout = null;
+    public FeMapMenuLayout menuLayout = null;
+    public FeMapUnitMenuLayout unitMenuLayout = null;
+    public FeMapChatLayout chatLayout = null;
+
     public FeSectionLayout(Context context, FeSave save){
         super(context);
         feSave = save;
@@ -63,14 +68,22 @@ public class FeSectionLayout extends RelativeLayout {
         //地图人物动画图层
         unitLayout = new FeMapUnitLayout(feSave.activity, feSave);
         addView(unitLayout);
-        //地图提示和菜单图层
-        ;
+        //地图地形信息
+        mapInfoLayout = new FeMapInfoLayout(feSave.activity, feSave);
+        addView(mapInfoLayout);
+        // 系统菜单图层
+        menuLayout = new FeMapMenuLayout(feSave.activity, feSave);
+        addView(menuLayout);
         //人物操作菜单图层
-        ;
+        unitMenuLayout = new FeMapUnitMenuLayout(feSave.activity, feSave);
+        addView(unitMenuLayout);
         //人物对话图层
-        ;
+        chatLayout = new FeMapChatLayout(feSave.activity, feSave);
+        addView(chatLayout);
         //其它图层
         ;
+        //
+//        setBackgroundColor(0xFF00FF00);
     }
 
 }

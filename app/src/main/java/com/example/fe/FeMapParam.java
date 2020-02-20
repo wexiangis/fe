@@ -27,7 +27,7 @@ public class FeMapParam {
     //地图适配屏幕
     public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int piexlPerGrid){
         //限制屏幕最大显示格数
-        int screenXGrid = screenXSixe/_piexlPerGrid, screenYGrid = screenYSize/_piexlPerGrid;
+        int screenXGrid = screenXSixe/piexlPerGrid, screenYGrid = screenYSize/piexlPerGrid;
         //比较屏幕和地图长和高比例
         float screenXDivY = (float)screenXSixe/screenYSize;
         float mapXDivY = (float)mapXGrid/mapYGrid;
