@@ -26,6 +26,7 @@ public class FeAnimFilm extends View {
     //传参备份
     private int frameHeight = 56;
     private int _id = 0, _animMode = 0, _colorMode = 0;
+    private int _gridX = 0, _gridY = 0;
 
     //
     private final int[] frameSkipByAnimMode = new int[]{15, 12, 8, 4, 0, 0};
@@ -75,11 +76,15 @@ public class FeAnimFilm extends View {
     }
 
     public void moveGrid(int x, int y){
+        _gridX += x;
+        _gridY += y;
         leftMargin += x*_mapParam.xGridPixel;
         topMargin += y*_mapParam.yGridPixel;
     }
 
     public void moveGridTo(int x, int y){
+        _gridX = x;
+        _gridY = y;
         leftMargin = x*_mapParam.xGridPixel;
         topMargin = y*_mapParam.yGridPixel;
     }
@@ -130,10 +135,15 @@ public class FeAnimFilm extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //相对布局位置偏移
-        bitmapDist.left = _mapParam.xAnimOffsetPixel + (int)this.getTranslationX() + _mapParam.mapDist.left + (int)leftMargin;
-        bitmapDist.top = _mapParam.yAnimOffsetPixel + (int)this.getTranslationY() + _mapParam.mapDist.top + (int)topMargin;
-        bitmapDist.right = bitmapDist.left + _mapParam.xAnimGridPixel;
-        bitmapDist.bottom = bitmapDist.top + _mapParam.yAnimGridPixel;
+        _mapParam.getRectByGrid(_gridX, _gridY, bitmapDist);
+        int w = bitmapDist.width(), h = bitmapDist.height();
+        bitmapDist.left -= w/2;
+        bitmapDist.right += w/2;
+        bitmapDist.top -= h;
+//        bitmapDist.left = _mapParam.xAnimOffsetPixel + (int)this.getTranslationX() + _mapParam.mapDist.left + (int)leftMargin;
+//        bitmapDist.top = _mapParam.yAnimOffsetPixel + (int)this.getTranslationY() + _mapParam.mapDist.top + (int)topMargin;
+//        bitmapDist.right = bitmapDist.left + _mapParam.xAnimGridPixel;
+//        bitmapDist.bottom = bitmapDist.top + _mapParam.yAnimGridPixel;
         //绘图
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
