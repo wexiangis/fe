@@ -131,32 +131,23 @@ public class FeAnimFilm extends View {
         }
     });
 
+    private Rect bitmapGrid = new Rect(0,0,0,0);
     private Rect bitmapDist = new Rect(0,0,0,0);
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        //相对布局位置偏移
-        _mapParam.getRectByGrid(_gridX, _gridY, bitmapDist);
-        int w = bitmapDist.width(), h = bitmapDist.height();
-        bitmapDist.left -= w/2;
-        bitmapDist.right += w/2;
-        bitmapDist.top -= h;
-
-//        bitmapDist.left = _mapParam.xAnimOffsetPixel + (int)this.getTranslationX() + _mapParam.mapDist.left + (int)leftMargin;
-//        bitmapDist.top = _mapParam.yAnimOffsetPixel + (int)this.getTranslationY() + _mapParam.mapDist.top + (int)topMargin;
-//        bitmapDist.right = bitmapDist.left + _mapParam.xAnimGridPixel;
-//        bitmapDist.bottom = bitmapDist.top + _mapParam.yAnimGridPixel;
-
+        //跟地图要位置
+        _mapParam.getRectByGrid(_gridX, _gridY, bitmapGrid);
+        bitmapDist.left = bitmapGrid.left - bitmapGrid.width()/2;
+        bitmapDist.right = bitmapGrid.right + bitmapGrid.width()/2;
+        bitmapDist.top = bitmapGrid.bottom - bitmapGrid.width()*2;
+        bitmapDist.bottom = bitmapGrid.bottom;
         //绘图
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 
     public boolean checkHit(float x, float y){
-        int w = bitmapDist.width()/2;
-        int h = bitmapDist.height()/2;
-        int xs = bitmapDist.left + w/2;
-        int ys = bitmapDist.top + h;
-        if(x > xs && x < xs + w &&
-            y > ys && y < ys + h)
+        if(x > bitmapGrid.left && x < bitmapGrid.right &&
+            y > bitmapGrid.top && y < bitmapGrid.bottom)
             return true;
         return false;
     }
