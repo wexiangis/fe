@@ -68,22 +68,17 @@ public class FeMap extends View {
         _mapParam.mapDist.top = (int)this.getTranslationY() - (int)(_mapParam.yGridErr*_mapParam.yGridPixel);
         _mapParam.mapDist.right = _mapParam.mapDist.left + _mapParam.width;
         _mapParam.mapDist.bottom = _mapParam.mapDist.top + _mapParam.height;
-        //
+        //梯形变换
         _mapParam.getMatrix(matrix, bitmap.getWidth(), bitmap.getHeight());
-        //
+        //显示地图
         canvas.drawBitmap(bitmap, matrix, paint);
-//        canvas.drawBitmap(bitmap, null, _mapParam.mapDist, paint);
-
-        String info = String.valueOf(_mapParam.srcGridX) + " " + String.valueOf(_mapParam.srcGridY);
-        canvas.drawText(info, 100, 100, paint);
-
-        //----- 地图梯形变换 -----
 
         //select
         if(selectDrawFlag) {
             selectDrawFlag = false;
             canvas.drawRect(selectDraw, paint2);
         }
+
         //
         ((FeSectionLayout)getParent().getParent()).refresh();
     }

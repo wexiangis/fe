@@ -145,15 +145,18 @@ public class FeAnimFilm extends View {
 //        bitmapDist.top = _mapParam.yAnimOffsetPixel + (int)this.getTranslationY() + _mapParam.mapDist.top + (int)topMargin;
 //        bitmapDist.right = bitmapDist.left + _mapParam.xAnimGridPixel;
 //        bitmapDist.bottom = bitmapDist.top + _mapParam.yAnimGridPixel;
+
         //绘图
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 
     public boolean checkHit(float x, float y){
-        int xs = bitmapDist.left - _mapParam.xAnimOffsetPixel;
-        int ys = bitmapDist.top - _mapParam.yAnimOffsetPixel;
-        if(x > xs && x < xs + _mapParam.xGridPixel &&
-            y > ys && y < ys + _mapParam.yGridPixel)
+        int w = bitmapDist.width()/2;
+        int h = bitmapDist.height()/2;
+        int xs = bitmapDist.left + w/2;
+        int ys = bitmapDist.top + h;
+        if(x > xs && x < xs + w &&
+            y > ys && y < ys + h)
             return true;
         return false;
     }

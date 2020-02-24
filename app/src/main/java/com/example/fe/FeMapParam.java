@@ -61,8 +61,6 @@ public class FeMapParam {
             reduce = srcPoint[0];
         if(reduce > srcPoint[1])
             reduce = srcPoint[1];
-        //
-        reduceGrid = Math.round(reduce/xGridPixel);
         //梯形变换
         srcPoint[0] -= reduce;
         srcPoint[6] += reduce;
@@ -73,9 +71,6 @@ public class FeMapParam {
 //        if(srcPoint[6] > width) srcPoint[6] = width;
 //        if(srcPoint[1] < 0) srcPoint[1] = 0;
 //        if(srcPoint[7] < 0) srcPoint[7] = 0;
-        //
-        srcGridX = reduceGrid*2 + screenXGrid;
-        srcGridY = reduceGrid + screenYGrid;
         //
         float xPow = (float)bitmapWidth/width;
         float yPow = (float)bitmapHeight/height;
@@ -100,6 +95,12 @@ public class FeMapParam {
         //
         matrix.setPolyToPoly(srcPointBitmap, 0, distPoint, 0, 4);
 
+        //关键参数提取
+        reduceGrid = Math.round(reduce/xGridPixel);
+        srcGridX = reduceGrid*2 + screenXGrid;
+        srcGridY = reduceGrid + screenYGrid;
+        srcGridXStart = Math.round(srcPoint[0]/xGridPixel);
+        srcGridYStart = Math.round(srcPoint[1]/yGridPixel);
         //第一行的高, 总高, 横向offset, 平均宽
         srcGridLine[0][0] = yGridPixel - reduce*2/(srcGridY-1);
         srcGridLine[0][1] = srcGridLine[0][0];
@@ -107,7 +108,7 @@ public class FeMapParam {
         srcGridLine[0][3] = (srcGridLine[0][2]*2 + screenWidth)/srcGridX;
         //最后一行和第一行高的差值
         float ySErr = yGridPixel - srcGridLine[0][0];
-
+        //
         int i = 0;
         //统计每行信息
         for(i = 1; i < srcGridY; i++) {
@@ -153,10 +154,23 @@ public class FeMapParam {
 
     //输入格子求位置
     public void getRectByGrid(int xG, int yG, Rect r){
-        r.left = (int)(xG*xGridPixel + mapDist.left);
-        r.top = (int)(yG*yGridPixel + mapDist.top);
-        r.right = (int)(r.left + xGridPixel);
-        r.bottom = (int)(r.top + yGridPixel);
+        if(xG >= srcGridXStart &&
+            xG < srcGridXStart + srcGridX &&
+            yG >= srcGridYStart &&
+            yG < srcGridYStart + srcGridY){
+            int x = xG - srcGridXStart;
+            int y = yG - srcGridYStart;
+            r.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
+            r.bottom = (int)(srcGridLine[y][1]);
+            r.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
+            r.right = (int)(r.left + srcGridLine[y][3]);
+        }
+        else{
+            r.left = (int)(-xGridPixel);
+            r.right = 0;
+            r.top = (int)(-yGridPixel);
+            r.bottom = 0;
+        }
     }
 
     //地图适配屏幕
