@@ -140,6 +140,7 @@ public class FeAnimFilm extends View {
         bitmapDist.left -= w/2;
         bitmapDist.right += w/2;
         bitmapDist.top -= h;
+
 //        bitmapDist.left = _mapParam.xAnimOffsetPixel + (int)this.getTranslationX() + _mapParam.mapDist.left + (int)leftMargin;
 //        bitmapDist.top = _mapParam.yAnimOffsetPixel + (int)this.getTranslationY() + _mapParam.mapDist.top + (int)topMargin;
 //        bitmapDist.right = bitmapDist.left + _mapParam.xAnimGridPixel;

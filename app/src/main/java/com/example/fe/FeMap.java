@@ -38,7 +38,7 @@ public class FeMap extends View {
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity)_context).getWindowManager().getDefaultDisplay().getMetrics(dm);
         //初始化map参数结构体
-        _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 106);
+        _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 96);
         //矩阵缩放
         tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
         //两参数分别为xy缩放比例
@@ -73,6 +73,9 @@ public class FeMap extends View {
         //
         canvas.drawBitmap(bitmap, matrix, paint);
 //        canvas.drawBitmap(bitmap, null, _mapParam.mapDist, paint);
+
+        String info = String.valueOf(_mapParam.srcGridX) + " " + String.valueOf(_mapParam.srcGridY);
+        canvas.drawText(info, 100, 100, paint);
 
         //----- 地图梯形变换 -----
 
