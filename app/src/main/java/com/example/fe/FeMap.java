@@ -13,6 +13,9 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /*
     地图视图管理,管理地图和屏幕适配、挪动、方格选中等
  */
@@ -40,7 +43,14 @@ public class FeMap extends View {
         //初始化map参数结构体
         _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 96);
         //矩阵缩放
-        tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
+        try {
+            InputStream is = getClass().getResourceAsStream("/assets/map/map00/map.png");
+            tBitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
         //两参数分别为xy缩放比例
         float xp = (float)_mapParam.width/tBitmap.getWidth()/2;
         if(xp > 1.5f)
