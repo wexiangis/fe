@@ -32,7 +32,7 @@ public class FeMap extends View {
     //画图
     private Paint paint, paint2;
 
-    public FeMap(Context context, FeHeart animHeart, FeMapParam mapParam, int id, int xGrid, int yGrid) {
+    public FeMap(Context context, FeHeart animHeart, FeMapParam mapParam, String assetsPath, int xGrid, int yGrid) {
         super(context);
         _context = context;
         _mapParam = mapParam;
@@ -44,7 +44,7 @@ public class FeMap extends View {
         _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 96);
         //矩阵缩放
         try {
-            InputStream is = getClass().getResourceAsStream("/assets/map/map00/map.png");
+            InputStream is = getClass().getResourceAsStream(assetsPath);
             tBitmap = BitmapFactory.decodeStream(is);
             is.close();
         } catch (IOException e) {
