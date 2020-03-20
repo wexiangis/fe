@@ -18,47 +18,7 @@ import java.io.InputStream;
 public class FeMapParam {
 
     private Activity activity;
-
-    //
-    public Bitmap bitmap = null, tBitmap = null;
-    public Matrix matrix = new Matrix();
-
-    //
     public int section;
-
-    //屏幕实际宽高
-    public int screenWidth = 1920, screenHeight = 1080;
-
-    //地图实际显示区域
-    public Rect mapDist = null;
-    //地图移动格子数
-    public int xGridErr = 0, yGridErr = 0;
-
-    //地图实际显示宽高像素
-    public int width = 1920, height = 1080;
-    //地图横纵向格数
-    public int xGrid = 20, yGrid = 10;
-    //屏幕横纵向格数
-    public int screenXGrid = 20, screenYGrid = 10;
-
-    //横纵向每格像素
-    public float xGridPixel = 96, yGridPixel = 108;
-    //横纵向动画方块像素大小
-    public int xAnimGridPixel = 192, yAnimGridPixel = 216;
-    //横纵向动画初始偏移
-    public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
-
-    //方格显示时可以接受的最小像素值
-    public int piexlPerGrid = 64;
-
-    //----- 地图梯形变换 -----
-    public int reduceGrid = 0;
-    public float reduce = 0;
-    public int srcGridX = 0, srcGridY = 0, srcGridXStart = 0, srcGridYStart = 0;
-    public float[][] srcGridLine = new float[64][4];//[n][0]:行高, [n][1]:总行高, [n][2]:横向offset, [n][3]:平均宽
-    public float[] srcPoint = new float[8];
-    public float[] srcPointBitmap = new float[8];
-    public float[] distPoint = new float[8];
 
     public FeMapParam(Activity act, int feSection)
     {
@@ -83,6 +43,188 @@ public class FeMapParam {
         tBitmap.recycle();
         tBitmap = null;
     }
+
+    //----- 地图基本信息 -----
+
+    //屏幕实际宽高
+    public int screenWidth = 1920, screenHeight = 1080;
+
+    //地图实际显示区域
+    public Rect mapDist = null;
+    //地图移动格子数
+    public int xGridErr = 0, yGridErr = 0;
+
+    //地图实际显示宽高像素
+    public int width = 1920, height = 1080;
+    //地图横纵向格数
+    public int xGrid = 20, yGrid = 10;
+    //屏幕横纵向格数
+    public int screenXGrid = 20, screenYGrid = 10;
+
+    //横纵向每格像素
+    public float xGridPixel = 96, yGridPixel = 108;
+    //横纵向动画方块像素大小
+    public int xAnimGridPixel = 192, yAnimGridPixel = 216;
+    //横纵向动画初始偏移
+    public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
+
+    //地图适配屏幕
+    public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int piexlPG){
+        //比较屏幕和地图长和高比例
+        float screenXDivY = (float)screenXSixe/screenYSize;
+        float mapXDivY = (float)mapXGrid/mapYGrid;
+        //限制屏幕最大显示格数
+        screenXGrid = screenXSixe/piexlPG;
+        screenYGrid = screenYSize/piexlPG;
+        //关键参数备份
+        piexlPerGrid = piexlPG;
+        screenWidth = screenXSixe;
+        screenHeight = screenYSize;
+        xGrid = mapXGrid;
+        yGrid = mapYGrid;
+        //屏幕的长高比例大于地图,地图参照屏幕长来缩放
+        if(screenXDivY > mapXDivY){
+            //得到屏幕横向实际显示格数
+            if(mapXGrid < screenXGrid)
+                screenXGrid = mapXGrid;
+            //得到屏幕竖向实际显示格数
+            screenYGrid = (int)((float)screenXGrid/screenWidth*screenHeight);
+        }
+        //其他时候,地图参照屏幕高来缩放
+        else{
+            //得到屏幕竖向实际显示格数
+            if(mapYGrid < screenYGrid)
+                screenYGrid = mapYGrid;
+            //得到屏幕横向实际显示格数
+            screenXGrid = (int)((float)screenYGrid/screenHeight*screenWidth);
+        }
+        //横纵向每格像素
+        xGridPixel = (float)screenWidth/screenXGrid;
+        yGridPixel = (float)screenHeight/screenYGrid;
+        //关联参数
+        xAnimGridPixel = (int)(xGridPixel*2);
+        yAnimGridPixel = (int)(yGridPixel*2);
+        xAnimOffsetPixel = (int)(-xGridPixel/2);
+        yAnimOffsetPixel = (int)(-yGridPixel);
+        //得到地图实际显示大小
+        width = (int)(xGridPixel*mapXGrid);
+        height = (int)(yGridPixel*mapYGrid);
+        //和原大小进行比较后中心缩放
+        if(mapDist == null)
+            mapDist = new Rect(0, 0, width, height);
+        else{
+            if(mapDist.left + width < screenWidth)
+                mapDist.left = screenWidth - width;
+            else{
+                mapDist.left -= (width - (mapDist.right - mapDist.left))/2;
+                mapDist.left = (int)((int)((float)mapDist.left/width*xGrid)*xGridPixel);
+            }
+            mapDist.right = width - mapDist.left;
+            //
+            if(mapDist.top + height < screenHeight)
+                mapDist.top = screenHeight - height;
+            else{
+                mapDist.top -= (height - (mapDist.bottom - mapDist.top))/2;
+                mapDist.top = (int)((int)((float)mapDist.top/height*yGrid)*yGridPixel);
+            }
+            mapDist.bottom = height - mapDist.top;
+        }
+        //
+        xGridErr = yGridErr = 0;
+    }
+
+//    public boolean fileExist(String name)
+//    {
+//        try{
+//            File file = new File(name);
+//            if(!file.exists())
+//                return false;
+//        }
+//        catch (Exception e) {
+//            return false;
+//        }
+//        return true;
+//    }
+
+    //----- 地图方格信息 -----
+
+    //
+    public Bitmap bitmap = null, tBitmap = null;
+    public Matrix matrix = new Matrix();
+
+    //方格显示时可以接受的最小像素值
+    private int piexlPerGrid = 128;
+
+    //
+    class MapInfo{
+        //方格矩阵信息
+        public int w, h;
+        public byte[][] order;
+        //方格类型信息
+        public int totalType;
+        public String[] name;
+        public byte[] defend;
+        public byte[] avoid;
+        public byte[] plus;
+    }
+    private MapInfo mapInfo;
+
+    //从assets文件夹加载map
+    public void loadMap(int section)
+    {
+        String mapFolder = "/assets/map/map"+String.format("%02d",section);
+        //
+        String mapPath1 = mapFolder + "/map.png";
+        String mapPath2 = mapFolder + "/map.jpg";
+        String mapSize = mapFolder + "/size.txt";
+        String mapGrid = mapFolder + "/grid.txt";
+        String mapGridInfo = mapFolder + "/grid_info.txt";
+        // get bitmap
+        try {
+            InputStream is = getClass().getResourceAsStream(mapPath1);
+            if(is == null)
+                is = getClass().getResourceAsStream(mapPath2);
+            if(is == null)
+                tBitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.map_xxx_30x30);
+            else {
+                tBitmap = BitmapFactory.decodeStream(is);
+                is.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // get size
+        xGrid = yGrid = 30;//default
+        piexlPerGrid = 96;//default
+        try {
+            InputStream is = getClass().getResourceAsStream(mapSize);
+            if(is != null){
+                byte[] buff = new byte[64];
+                java.util.Arrays.fill(buff, (byte)'x');
+                if(is.read(buff) >= 4)
+                {
+                    String[] dat = new String(buff).split("x");
+                    if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
+                    if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
+                    if(dat.length > 2) piexlPerGrid = Integer.parseInt(dat[2]);
+                }
+                is.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // get grid
+    }
+
+    //----- 地图梯形变换 -----
+
+    public int reduceGrid = 0;
+    public float reduce = 0;
+    public int srcGridX = 0, srcGridY = 0, srcGridXStart = 0, srcGridYStart = 0;
+    public float[][] srcGridLine = new float[64][4];//[n][0]:行高, [n][1]:总行高, [n][2]:横向offset, [n][3]:平均宽
+    public float[] srcPoint = new float[8];
+    public float[] srcPointBitmap = new float[8];
+    public float[] distPoint = new float[8];
 
     //获取梯形转换矩阵,用于绘制
     public void getMatrix(){
@@ -214,130 +356,6 @@ public class FeMapParam {
             r.top = (int)(-yGridPixel);
             r.bottom = 0;
         }
-    }
-
-    //地图适配屏幕
-    public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int piexlPG){
-        //比较屏幕和地图长和高比例
-        float screenXDivY = (float)screenXSixe/screenYSize;
-        float mapXDivY = (float)mapXGrid/mapYGrid;
-        //限制屏幕最大显示格数
-        screenXGrid = screenXSixe/piexlPG;
-        screenYGrid = screenYSize/piexlPG;
-        //关键参数备份
-        piexlPerGrid = piexlPG;
-        screenWidth = screenXSixe;
-        screenHeight = screenYSize;
-        xGrid = mapXGrid;
-        yGrid = mapYGrid;
-        //屏幕的长高比例大于地图,地图参照屏幕长来缩放
-        if(screenXDivY > mapXDivY){
-            //得到屏幕横向实际显示格数
-            if(mapXGrid < screenXGrid)
-                screenXGrid = mapXGrid;
-            //得到屏幕竖向实际显示格数
-            screenYGrid = (int)((float)screenXGrid/screenWidth*screenHeight);
-        }
-        //其他时候,地图参照屏幕高来缩放
-        else{
-            //得到屏幕竖向实际显示格数
-            if(mapYGrid < screenYGrid)
-                screenYGrid = mapYGrid;
-            //得到屏幕横向实际显示格数
-            screenXGrid = (int)((float)screenYGrid/screenHeight*screenWidth);
-        }
-        //横纵向每格像素
-        xGridPixel = (float)screenWidth/screenXGrid;
-        yGridPixel = (float)screenHeight/screenYGrid;
-        //关联参数
-        xAnimGridPixel = (int)(xGridPixel*2);
-        yAnimGridPixel = (int)(yGridPixel*2);
-        xAnimOffsetPixel = (int)(-xGridPixel/2);
-        yAnimOffsetPixel = (int)(-yGridPixel);
-        //得到地图实际显示大小
-        width = (int)(xGridPixel*mapXGrid);
-        height = (int)(yGridPixel*mapYGrid);
-        //和原大小进行比较后中心缩放
-        if(mapDist == null)
-            mapDist = new Rect(0, 0, width, height);
-        else{
-            if(mapDist.left + width < screenWidth)
-                mapDist.left = screenWidth - width;
-            else{
-                mapDist.left -= (width - (mapDist.right - mapDist.left))/2;
-                mapDist.left = (int)((int)((float)mapDist.left/width*xGrid)*xGridPixel);
-            }
-            mapDist.right = width - mapDist.left;
-            //
-            if(mapDist.top + height < screenHeight)
-                mapDist.top = screenHeight - height;
-            else{
-                mapDist.top -= (height - (mapDist.bottom - mapDist.top))/2;
-                mapDist.top = (int)((int)((float)mapDist.top/height*yGrid)*yGridPixel);
-            }
-            mapDist.bottom = height - mapDist.top;
-        }
-        //
-        xGridErr = yGridErr = 0;
-    }
-
-//    public boolean fileExist(String name)
-//    {
-//        try{
-//            File file = new File(name);
-//            if(!file.exists())
-//                return false;
-//        }
-//        catch (Exception e) {
-//            return false;
-//        }
-//        return true;
-//    }
-
-    //从assets文件夹加载map
-    public void loadMap(int section)
-    {
-        String mapFolder = "/assets/map/map"+String.format("%02d",section);
-        //
-        String mapPath1 = mapFolder + "/map.png";
-        String mapPath2 = mapFolder + "/map.jpg";
-        String mapSize = mapFolder + "/size.txt";
-        String mapGrid = mapFolder + "/grid.txt";
-        // get bitmap
-        try {
-            InputStream is = getClass().getResourceAsStream(mapPath1);
-            if(is == null)
-                is = getClass().getResourceAsStream(mapPath2);
-            if(is == null)
-                tBitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.map_xxx_30x30);
-            else {
-                tBitmap = BitmapFactory.decodeStream(is);
-                is.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // get size
-        xGrid = yGrid = 30;//default
-        piexlPerGrid = 96;//default
-        try {
-            InputStream is = getClass().getResourceAsStream(mapSize);
-            if(is != null){
-                byte[] buff = new byte[64];
-                java.util.Arrays.fill(buff, (byte)'x');
-                if(is.read(buff) >= 4)
-                {
-                    String[] dat = new String(buff).split("x");
-                    if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
-                    if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
-                    if(dat.length > 2) piexlPerGrid = Integer.parseInt(dat[2]);
-                }
-                is.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // get grid
     }
 }
 
