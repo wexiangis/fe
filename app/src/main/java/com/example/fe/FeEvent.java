@@ -27,8 +27,8 @@ public class FeEvent {
     }
 
     //加载章节大地图
-    public void loadSection(int count) {
-        feSectionLayout = new FeSectionLayout(feSave.activity, feSave);
+    public void loadSection(int section) {
+        feSectionLayout = new FeSectionLayout(feSave.activity, feSave, section);
         feSave.activity.setContentView(feSectionLayout);
     }
 

@@ -1,13 +1,31 @@
 package com.example.fe;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.graphics.RectF;
+import android.util.DisplayMetrics;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /*
     加载地图后所产生的一系列关键参数,用于传递给地图上的人物动画
  */
 public class FeMapParam {
+
+    private Activity activity;
+
+    //
+    public Bitmap bitmap = null, tBitmap = null;
+    public Matrix matrix = new Matrix();
+
+    //
+    public int section;
+
     //屏幕实际宽高
     public int screenWidth = 1920, screenHeight = 1080;
 
@@ -31,7 +49,7 @@ public class FeMapParam {
     public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
 
     //方格显示时可以接受的最小像素值
-    public int _piexlPerGrid = 64;
+    public int piexlPerGrid = 64;
 
     //----- 地图梯形变换 -----
     public int reduceGrid = 0;
@@ -42,7 +60,32 @@ public class FeMapParam {
     public float[] srcPointBitmap = new float[8];
     public float[] distPoint = new float[8];
 
-    public void getMatrix(Matrix matrix, int bitmapWidth, int bitmapHeight){
+    public FeMapParam(Activity act, int feSection)
+    {
+        activity = act;
+        section = feSection;
+        //获取屏幕参数
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        //初始化map参数结构体
+        loadMap(section);
+        init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, piexlPerGrid);
+        //两参数分别为xy缩放比例
+        float xp = (float)width/tBitmap.getWidth()/2;
+        if(xp > 1.5f)
+            xp = 1.5f;
+        float yp = (float)height/tBitmap.getHeight()/2;
+        if(yp > 1.5f)
+            yp = 1.5f;
+        matrix.postScale(xp, yp);
+        bitmap = Bitmap.createBitmap(tBitmap, 0, 0, (int)tBitmap.getWidth(), (int)tBitmap.getHeight(), matrix, true);
+        //释放
+        tBitmap.recycle();
+        tBitmap = null;
+    }
+
+    //获取梯形转换矩阵,用于绘制
+    public void getMatrix(){
         //
         srcPoint[0] = -mapDist.left;
         srcPoint[1] = -mapDist.top;
@@ -72,8 +115,8 @@ public class FeMapParam {
 //        if(srcPoint[1] < 0) srcPoint[1] = 0;
 //        if(srcPoint[7] < 0) srcPoint[7] = 0;
         //
-        float xPow = (float)bitmapWidth/width;
-        float yPow = (float)bitmapHeight/height;
+        float xPow = (float)bitmap.getWidth()/width;
+        float yPow = (float)bitmap.getHeight()/height;
         //
         srcPointBitmap[0] = srcPoint[0]*xPow;
         srcPointBitmap[1] = srcPoint[1]*yPow;
@@ -174,15 +217,15 @@ public class FeMapParam {
     }
 
     //地图适配屏幕
-    public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int piexlPerGrid){
+    public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int piexlPG){
         //比较屏幕和地图长和高比例
         float screenXDivY = (float)screenXSixe/screenYSize;
         float mapXDivY = (float)mapXGrid/mapYGrid;
         //限制屏幕最大显示格数
-        screenXGrid = screenXSixe/piexlPerGrid;
-        screenYGrid = screenYSize/piexlPerGrid;
+        screenXGrid = screenXSixe/piexlPG;
+        screenYGrid = screenYSize/piexlPG;
         //关键参数备份
-        _piexlPerGrid = piexlPerGrid;
+        piexlPerGrid = piexlPG;
         screenWidth = screenXSixe;
         screenHeight = screenYSize;
         xGrid = mapXGrid;
@@ -236,6 +279,65 @@ public class FeMapParam {
         }
         //
         xGridErr = yGridErr = 0;
+    }
+
+//    public boolean fileExist(String name)
+//    {
+//        try{
+//            File file = new File(name);
+//            if(!file.exists())
+//                return false;
+//        }
+//        catch (Exception e) {
+//            return false;
+//        }
+//        return true;
+//    }
+
+    //从assets文件夹加载map
+    public void loadMap(int section)
+    {
+        String mapFolder = "/assets/map/map"+String.format("%02d",section);
+        //
+        String mapPath1 = mapFolder + "/map.png";
+        String mapPath2 = mapFolder + "/map.jpg";
+        String mapSize = mapFolder + "/size.txt";
+        String mapGrid = mapFolder + "/grid.txt";
+        // get bitmap
+        try {
+            InputStream is = getClass().getResourceAsStream(mapPath1);
+            if(is == null)
+                is = getClass().getResourceAsStream(mapPath2);
+            if(is == null)
+                tBitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.map_xxx_30x30);
+            else {
+                tBitmap = BitmapFactory.decodeStream(is);
+                is.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // get size
+        xGrid = yGrid = 30;//default
+        piexlPerGrid = 96;//default
+        try {
+            InputStream is = getClass().getResourceAsStream(mapSize);
+            if(is != null){
+                byte[] buff = new byte[64];
+                java.util.Arrays.fill(buff, (byte)'x');
+                if(is.read(buff) >= 4)
+                {
+                    String[] dat = new String(buff).split("x");
+                    if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
+                    if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
+                    if(dat.length > 2) piexlPerGrid = Integer.parseInt(dat[2]);
+                }
+                is.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // get grid
     }
 }
 

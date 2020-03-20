@@ -17,8 +17,8 @@ import android.view.View;
 public class FeAnimFilm extends View {
 
     private Context _context;
-    private FeMapParam _mapParam;
-    private FeHeart _animHeart;
+    private FeMapParam mapParam;
+    private FeHeart animHeart;
 
     //动画相对地图的偏移量
     private float leftMargin = 0, topMargin = 0;
@@ -44,12 +44,12 @@ public class FeAnimFilm extends View {
     /*
     id: drawable图片,如: R.drawable.xxx
     */
-    public FeAnimFilm(Context context, FeHeart animHeart, FeMapParam mapParam, int id, int gridX, int gridY, int animMode, int colorMode)
+    public FeAnimFilm(Context context, FeHeart feHeart, FeMapParam feMapParam, int id, int gridX, int gridY, int animMode, int colorMode)
     {
         super(context);
         _context = context;
-        _animHeart = animHeart;
-        _mapParam = mapParam;
+        animHeart = feHeart;
+        mapParam = feMapParam;
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
@@ -72,21 +72,21 @@ public class FeAnimFilm extends View {
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
-        _animHeart.addUnit(heartUnit);
+        animHeart.addUnit(heartUnit);
     }
 
     public void moveGrid(int x, int y){
         _gridX += x;
         _gridY += y;
-        leftMargin += x*_mapParam.xGridPixel;
-        topMargin += y*_mapParam.yGridPixel;
+        leftMargin += x*mapParam.xGridPixel;
+        topMargin += y*mapParam.yGridPixel;
     }
 
     public void moveGridTo(int x, int y){
         _gridX = x;
         _gridY = y;
-        leftMargin = x*_mapParam.xGridPixel;
-        topMargin = y*_mapParam.yGridPixel;
+        leftMargin = x*mapParam.xGridPixel;
+        topMargin = y*mapParam.yGridPixel;
     }
 
     //设置图片参数
@@ -136,7 +136,7 @@ public class FeAnimFilm extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //跟地图要位置
-        _mapParam.getRectByGrid(_gridX, _gridY, bitmapGrid);
+        mapParam.getRectByGrid(_gridX, _gridY, bitmapGrid);
         bitmapDist.left = bitmapGrid.left - bitmapGrid.width()/2;
         bitmapDist.right = bitmapGrid.right + bitmapGrid.width()/2;
         bitmapDist.top = bitmapGrid.bottom - bitmapGrid.width()*2;

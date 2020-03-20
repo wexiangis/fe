@@ -22,47 +22,17 @@ import java.io.InputStream;
 public class FeMap extends View {
 
     private Context _context;
-    private FeMapParam _mapParam;
-    private FeHeart _animHeart;
-
-    //
-    private Bitmap bitmap = null, tBitmap = null;
-    private Matrix matrix = new Matrix();
+    private FeMapParam mapParam;
+//    private FeHeart _animHeart;
 
     //画图
     private Paint paint, paint2;
 
-    public FeMap(Context context, FeHeart animHeart, FeMapParam mapParam, String assetsPath, int xGrid, int yGrid) {
+    public FeMap(Context context, FeHeart animHeart, FeMapParam feMapParam) {
         super(context);
         _context = context;
-        _mapParam = mapParam;
-        _animHeart = animHeart;
-        //获取屏幕参数
-        DisplayMetrics dm = new DisplayMetrics();
-        ((Activity)_context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        //初始化map参数结构体
-        _mapParam.init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, 96);
-        //矩阵缩放
-        try {
-            InputStream is = getClass().getResourceAsStream(assetsPath);
-            tBitmap = BitmapFactory.decodeStream(is);
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        tBitmap = BitmapFactory.decodeResource(_context.getResources(), id);
-        //两参数分别为xy缩放比例
-        float xp = (float)_mapParam.width/tBitmap.getWidth()/2;
-        if(xp > 1.5f)
-            xp = 1.5f;
-        float yp = (float)_mapParam.height/tBitmap.getHeight()/2;
-        if(yp > 1.5f)
-            yp = 1.5f;
-        matrix.postScale(xp, yp);
-        bitmap = Bitmap.createBitmap(tBitmap, 0, 0, (int)tBitmap.getWidth(), (int)tBitmap.getHeight(), matrix, true);
-        //释放
-        tBitmap.recycle();
-        tBitmap = null;
+        mapParam = feMapParam;
+//        _animHeart = animHeart;
         //画笔
         paint = new Paint();
         paint.setColor(Color.BLUE);
@@ -74,14 +44,14 @@ public class FeMap extends View {
         super.onDraw(canvas);
 
         //相对布局位置偏移
-        _mapParam.mapDist.left = (int)this.getTranslationX() - (int)(_mapParam.xGridErr*_mapParam.xGridPixel);
-        _mapParam.mapDist.top = (int)this.getTranslationY() - (int)(_mapParam.yGridErr*_mapParam.yGridPixel);
-        _mapParam.mapDist.right = _mapParam.mapDist.left + _mapParam.width;
-        _mapParam.mapDist.bottom = _mapParam.mapDist.top + _mapParam.height;
+        mapParam.mapDist.left = (int)this.getTranslationX() - (int)(mapParam.xGridErr*mapParam.xGridPixel);
+        mapParam.mapDist.top = (int)this.getTranslationY() - (int)(mapParam.yGridErr*mapParam.yGridPixel);
+        mapParam.mapDist.right = mapParam.mapDist.left + mapParam.width;
+        mapParam.mapDist.bottom = mapParam.mapDist.top + mapParam.height;
         //梯形变换
-        _mapParam.getMatrix(matrix, bitmap.getWidth(), bitmap.getHeight());
+        mapParam.getMatrix();
         //显示地图
-        canvas.drawBitmap(bitmap, matrix, paint);
+        canvas.drawBitmap(mapParam.bitmap, mapParam.matrix, paint);
 
         //select
         if(selectDrawFlag) {
@@ -116,7 +86,7 @@ public class FeMap extends View {
                 //
                 if(touchType == 1) {
                     //输入坐标求格子位置
-                    _mapParam.getRectByLocation(event.getX(), event.getY(), selectDraw);
+                    mapParam.getRectByLocation(event.getX(), event.getY(), selectDraw);
                     //调用一次onDraw
                     selectDrawFlag = true;
                     invalidate();
@@ -132,28 +102,28 @@ public class FeMap extends View {
                 float xErr = tMoveX - tDownX;
                 float yErr = tMoveY - tDownY;
                 //
-                if (Math.abs(xErr) > _mapParam.xGridPixel) {
-                    if (xErr > 0) _mapParam.xGridErr -= 1;
-                    else _mapParam.xGridErr += 1;
+                if (Math.abs(xErr) > mapParam.xGridPixel) {
+                    if (xErr > 0) mapParam.xGridErr -= 1;
+                    else mapParam.xGridErr += 1;
                     tDownX = tMoveX;
                     needRefresh = true;
                     touchType = 2;
                 }
                 //
-                if (Math.abs(yErr) > _mapParam.yGridPixel) {
-                    if (yErr > 0) _mapParam.yGridErr -= 1;
-                    else _mapParam.yGridErr += 1;
+                if (Math.abs(yErr) > mapParam.yGridPixel) {
+                    if (yErr > 0) mapParam.yGridErr -= 1;
+                    else mapParam.yGridErr += 1;
                     tDownY = tMoveY;
                     needRefresh = true;
                     touchType = 2;
                 }
                 //防止地图移出屏幕
-                if (_mapParam.xGridErr < 0) _mapParam.xGridErr = 0;
-                else if (_mapParam.xGridErr + _mapParam.screenXGrid > _mapParam.xGrid)
-                    _mapParam.xGridErr = _mapParam.xGrid - _mapParam.screenXGrid;
-                if (_mapParam.yGridErr < 0) _mapParam.yGridErr = 0;
-                else if (_mapParam.yGridErr + _mapParam.screenYGrid > _mapParam.yGrid)
-                    _mapParam.yGridErr = _mapParam.yGrid - _mapParam.screenYGrid;
+                if (mapParam.xGridErr < 0) mapParam.xGridErr = 0;
+                else if (mapParam.xGridErr + mapParam.screenXGrid > mapParam.xGrid)
+                    mapParam.xGridErr = mapParam.xGrid - mapParam.screenXGrid;
+                if (mapParam.yGridErr < 0) mapParam.yGridErr = 0;
+                else if (mapParam.yGridErr + mapParam.screenYGrid > mapParam.yGrid)
+                    mapParam.yGridErr = mapParam.yGrid - mapParam.screenYGrid;
                 //调用一次onDraw
                 if (needRefresh)
                     invalidate();

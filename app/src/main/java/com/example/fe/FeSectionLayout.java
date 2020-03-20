@@ -59,26 +59,26 @@ public class FeSectionLayout extends RelativeLayout {
     public FeMapUnitMenuLayout unitMenuLayout = null;
     public FeMapChatLayout chatLayout = null;
 
-    public FeSectionLayout(Context context, FeSave save){
+    public FeSectionLayout(Context context, FeSave save, int section){
         super(context);
         feSave = save;
         //地图图层
-        mapLayout = new FeMapLayout(feSave.activity, feSave);
+        mapLayout = new FeMapLayout(feSave.activity, feSave, section);
         addView(mapLayout);
         //地图人物动画图层
-        unitLayout = new FeMapUnitLayout(feSave.activity, feSave);
+        unitLayout = new FeMapUnitLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(unitLayout);
         //地图地形信息
-        mapInfoLayout = new FeMapInfoLayout(feSave.activity, feSave);
+        mapInfoLayout = new FeMapInfoLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(mapInfoLayout);
         // 系统菜单图层
-        menuLayout = new FeMapMenuLayout(feSave.activity, feSave);
+        menuLayout = new FeMapMenuLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(menuLayout);
         //人物操作菜单图层
-        unitMenuLayout = new FeMapUnitMenuLayout(feSave.activity, feSave);
+        unitMenuLayout = new FeMapUnitMenuLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(unitMenuLayout);
         //人物对话图层
-        chatLayout = new FeMapChatLayout(feSave.activity, feSave);
+        chatLayout = new FeMapChatLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(chatLayout);
         //其它图层
         ;

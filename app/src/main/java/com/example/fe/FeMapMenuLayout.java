@@ -9,9 +9,11 @@ import android.widget.RelativeLayout;
 public class FeMapMenuLayout extends RelativeLayout {
 
     private FeSave feSave;
+    private FeMapParam mapParam;
 
-    public FeMapMenuLayout(Context context, FeSave save) {
+    public FeMapMenuLayout(Context context, FeSave save, FeMapParam feMapParam) {
         super(context);
         feSave = save;
+        mapParam = feMapParam;
     }
 }

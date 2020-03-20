@@ -9,19 +9,18 @@ import android.widget.RelativeLayout;
 public class FeMapLayout extends RelativeLayout {
 
     private FeSave feSave;
+    public FeMapParam mapParam;
 
-    public FeMapLayout(Context context, FeSave save) {
+    public FeMapLayout(Context context, FeSave save, int section) {
         super(context);
         feSave = save;
+        mapParam = new FeMapParam(feSave.activity, section);
         //
         loadView();
     }
 
     private void loadView(){
-//        addView(new FeMap(feSave.activity, feSave.feHeart, feSave.feMapParam, R.drawable.map_000_25x15, 25, 15));
-//        addView(new FeMap(feSave.activity, feSave.feHeart, feSave.feMapParam, R.drawable.map_001_26x25, 26, 25));
-//        addView(new FeMap(feSave.activity, feSave.feHeart, feSave.feMapParam, R.drawable.map_002_15x10, 15, 10));
-        addView(new FeMap(feSave.activity, feSave.feHeart, feSave.feMapParam, "/assets/map/map00/map.png", 30, 30));
+        addView(new FeMap(feSave.activity, feSave.feHeart, mapParam));
     }
 
 }

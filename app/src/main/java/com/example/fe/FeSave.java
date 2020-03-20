@@ -12,8 +12,6 @@ public class FeSave extends Application {
     public FeEvent feEvent = null;
     public FeHeart feHeart = null;
 
-    public FeMapParam feMapParam = new FeMapParam();
-
     public void onCreate() {
         super.onCreate();
     }

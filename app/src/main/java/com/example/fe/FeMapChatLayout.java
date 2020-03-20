@@ -9,9 +9,11 @@ import android.widget.RelativeLayout;
 public class FeMapChatLayout extends RelativeLayout {
 
     private FeSave feSave;
+    private FeMapParam mapParam;
 
-    public FeMapChatLayout(Context context, FeSave save) {
+    public FeMapChatLayout(Context context, FeSave save, FeMapParam feMapParam) {
         super(context);
         feSave = save;
+        mapParam = feMapParam;
     }
 }
