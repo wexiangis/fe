@@ -12,9 +12,9 @@ public class FeEvent {
     {
         feSave = save;
         //加载主界面
-        loadMainTheme();
+//        loadMainTheme();
         //加载地图
-//        loadSection(0);
+        loadSection(1);
     }
 
     //加载主界面
