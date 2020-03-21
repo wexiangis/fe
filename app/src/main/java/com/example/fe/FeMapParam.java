@@ -6,11 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /*
     加载地图后所产生的一系列关键参数,用于传递给地图上的人物动画
@@ -153,19 +156,27 @@ public class FeMapParam {
     public Matrix matrix = new Matrix();
 
     //方格显示时可以接受的最小像素值
-    private int piexlPerGrid = 128;
+    private int piexlPerGrid = 104;
 
     //
     class MapInfo{
         //方格矩阵信息
         public int w, h;
-        public byte[][] order;
+        public short[][] grid;
         //方格类型信息
-        public int totalType;
         public String[] name;
         public byte[] defend;
         public byte[] avoid;
         public byte[] plus;
+        public String[] info;
+        //
+        public MapInfo(int width, int height)
+        {
+            w = width;
+            h = height;
+            grid = new short[height][width];
+
+        }
     }
     private MapInfo mapInfo;
 
@@ -190,8 +201,10 @@ public class FeMapParam {
                 tBitmap = BitmapFactory.decodeStream(is);
                 is.close();
             }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("TestFile", "The File doesn't not exist.");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d("TestFile", e.getMessage());
         }
         // get size
         xGrid = yGrid = 30;//default
@@ -210,10 +223,30 @@ public class FeMapParam {
                 }
                 is.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("TestFile", "The File doesn't not exist.");
+        } catch (IOException e) {
+            Log.d("TestFile", e.getMessage());
         }
         // get grid
+        try {
+            InputStream is = getClass().getResourceAsStream(mapGrid);
+            if (is != null) {
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                String line = "";
+                //分行读取
+                while ((line = br.readLine()) != null) {
+                    ;
+                }
+                is.close();//关闭输入流
+            }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("TestFile", "The File doesn't not exist.");
+        } catch (IOException e) {
+            Log.d("TestFile", e.getMessage());
+        }
+        //grid info
     }
 
     //----- 地图梯形变换 -----
