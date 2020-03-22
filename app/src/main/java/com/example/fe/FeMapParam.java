@@ -164,10 +164,13 @@ public class FeMapParam {
         public int w, h;
         public short[][] grid;
         //方格类型信息
+        public int total;
         public String[] name;
-        public byte[] defend;
-        public byte[] avoid;
-        public byte[] plus;
+        public short[] defend;
+        public short[] avoid;
+        public short[] plus;
+        public short[] mov;
+        public short[] type;
         public String[] info;
         //
         public MapInfo(int width, int height)
@@ -175,9 +178,18 @@ public class FeMapParam {
             w = width;
             h = height;
             grid = new short[height][width];
-
+            //
+            total = 100;
+            name = new String[100];
+            defend = new short[100];
+            avoid = new short[100];
+            plus = new short[100];
+            mov = new short[100];
+            type = new short[100];
+            info = new String[100];
         }
     }
+    //
     private MapInfo mapInfo;
 
     //从assets文件夹加载map
@@ -202,9 +214,9 @@ public class FeMapParam {
                 is.close();
             }
         } catch (java.io.FileNotFoundException e) {
-            Log.d("TestFile", "The File doesn't not exist.");
+            Log.d("loadMap: get bitmap", "not found");
         } catch (IOException e) {
-            Log.d("TestFile", e.getMessage());
+            Log.d("loadMap: get bitmap", e.getMessage());
         }
         // get size
         xGrid = yGrid = 30;//default
@@ -213,10 +225,10 @@ public class FeMapParam {
             InputStream is = getClass().getResourceAsStream(mapSize);
             if(is != null){
                 byte[] buff = new byte[64];
-                java.util.Arrays.fill(buff, (byte)'x');
+                java.util.Arrays.fill(buff, (byte)',');
                 if(is.read(buff) >= 4)
                 {
-                    String[] dat = new String(buff).split("x");
+                    String[] dat = new String(buff).split(",");
                     if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
                     if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
                     if(dat.length > 2) piexlPerGrid = Integer.parseInt(dat[2]);
@@ -224,29 +236,78 @@ public class FeMapParam {
                 is.close();
             }
         } catch (java.io.FileNotFoundException e) {
-            Log.d("TestFile", "The File doesn't not exist.");
+            Log.d("loadMap: get size", "not found");
         } catch (IOException e) {
-            Log.d("TestFile", e.getMessage());
+            Log.d("loadMap: get size", e.getMessage());
         }
+        // mapInfo init
+        mapInfo = new MapInfo(xGrid, yGrid);
         // get grid
         try {
             InputStream is = getClass().getResourceAsStream(mapGrid);
             if (is != null) {
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
-                String line = "";
+                String line = null;
+                int countLine = 0;
                 //分行读取
                 while ((line = br.readLine()) != null) {
-                    ;
+                    String[] lineData = line.split(",");
+                    //
+                    for(int i = 0; i < lineData.length; i++)
+                        mapInfo.grid[countLine][i] = (short)Integer.parseInt(lineData[i]);
+                    //
+                    countLine += 1;
+                    if(countLine >= mapInfo.h)
+                        break;
                 }
                 is.close();//关闭输入流
             }
         } catch (java.io.FileNotFoundException e) {
-            Log.d("TestFile", "The File doesn't not exist.");
+            Log.d("loadMap: get grid", "not found");
         } catch (IOException e) {
-            Log.d("TestFile", e.getMessage());
+            Log.d("loadMap: get grid", e.getMessage());
         }
         //grid info
+        try {
+            InputStream is = getClass().getResourceAsStream(mapGrid);
+            if (is != null) {
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                String line = null;
+                int countLine = 0;
+                //分行读取
+                while ((line = br.readLine()) != null) {
+                    String[] lineData = line.split(",");
+                    //
+                    if(lineData.length > 1)
+                        mapInfo.name[countLine] = lineData[1];
+                    if(lineData.length > 2)
+                        mapInfo.defend[countLine] = (short)Integer.parseInt(lineData[2]);
+                    if(lineData.length > 3)
+                        mapInfo.avoid[countLine] = (short)Integer.parseInt(lineData[3]);
+                    if(lineData.length > 4)
+                        mapInfo.plus[countLine] = (short)Integer.parseInt(lineData[4]);
+                    if(lineData.length > 5)
+                        mapInfo.mov[countLine] = (short)Integer.parseInt(lineData[5]);
+                    if(lineData.length > 6)
+                        mapInfo.type[countLine] = (short)Integer.parseInt(lineData[6]);
+                    if(lineData.length > 7)
+                        mapInfo.info[countLine] = lineData[7];
+                    //
+                    countLine += 1;
+                    if(countLine >= 100)
+                        break;
+                }
+                //
+                mapInfo.total = countLine;
+                is.close();//关闭输入流
+            }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("loadMap: get grid info", "not found");
+        } catch (IOException e) {
+            Log.d("loadMap: get grid info", e.getMessage());
+        }
     }
 
     //----- 地图梯形变换 -----
@@ -258,6 +319,8 @@ public class FeMapParam {
     public float[] srcPoint = new float[8];
     public float[] srcPointBitmap = new float[8];
     public float[] distPoint = new float[8];
+
+    private int transferGrid = 4;
 
     //获取梯形转换矩阵,用于绘制
     public void getMatrix(){
@@ -271,7 +334,7 @@ public class FeMapParam {
         srcPoint[6] = -mapDist.left + screenWidth;
         srcPoint[7] = -mapDist.top;
         //梯形左右和上边缩进格数
-        reduce = xGridPixel*4;
+        reduce = xGridPixel*transferGrid;
         //地图靠近边界时逐渐恢复比例
         if(reduce > width - srcPoint[6])
             reduce = width - srcPoint[6];
