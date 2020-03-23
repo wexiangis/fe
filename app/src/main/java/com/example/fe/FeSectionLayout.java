@@ -1,7 +1,6 @@
 package com.example.fe;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /*
@@ -11,53 +10,45 @@ public class FeSectionLayout extends RelativeLayout {
 
     private FeSave feSave;
 
-    public void refresh(){
-        //遍历所有子view
-        for (int i = 0; i < unitLayout.getChildCount(); i++)
-            unitLayout.getChildAt(i).invalidate();
-    }
-
-    private int hitOrder = -1;
-    public boolean checkHit(int type, float x, float y){
-        //遍历所有子view
-        for (int i = 0; i < unitLayout.getChildCount(); i++) {
-            FeAnimFilm anim = (FeAnimFilm)unitLayout.getChildAt(i);
-            if(anim.checkHit(x, y)){
-                if(type == MotionEvent.ACTION_UP){
-                    //设置人物动画
-                    if(hitOrder == i)
-                        anim.setAnimMode(1);
-                    //
-                    else
-                        hitOrder = -1;
-                }else {
-                    //释放上一个人物动画
-                    if(hitOrder > -1){
-                        FeAnimFilm anim2 = (FeAnimFilm)unitLayout.getChildAt(hitOrder);
-                        anim2.setAnimMode(0);
-                    }
-                    //
-                    hitOrder = i;
-                }
-                return true;
-            }
-        }
-        //释放上一个人物动画
-        if(hitOrder > -1){
-            FeAnimFilm anim2 = (FeAnimFilm)unitLayout.getChildAt(hitOrder);
-            anim2.setAnimMode(0);
-        }
-        //
-        hitOrder = -1;
-        return false;
-    }
-
     public FeMapLayout mapLayout = null;
     public FeMapUnitLayout unitLayout = null;
     public FeMapInfoLayout mapInfoLayout = null;
-    public FeMapMenuLayout menuLayout = null;
     public FeMapUnitMenuLayout unitMenuLayout = null;
+    public FeMapMenuLayout menuLayout = null;
     public FeMapChatLayout chatLayout = null;
+
+    public void refresh(){
+        //更新人物动画
+        unitLayout.refresh();
+        //更新地形信息
+        mapInfoLayout.refresh();
+        //更新人物菜单
+        unitMenuLayout.refresh();
+        //更新系统菜单
+        menuLayout.refresh();
+        //更新对话
+        chatLayout.refresh();
+    }
+
+    public boolean onTouch(int type, float x, float y, boolean isMove){
+        //正在对话?
+        if(chatLayout.checkHit(type, x, y, isMove))
+            return true;
+        //系统菜单中?
+        if(menuLayout.checkHit(type, x, y, isMove))
+            return true;
+        //人物菜单中?
+        if(unitMenuLayout.checkHit(type, x, y, isMove))
+            return true;
+        //
+        if(mapInfoLayout.checkHit(type, x, y, isMove))
+            return true;
+        //选中人物?
+        if(unitLayout.checkHit(type, x, y, isMove))
+            return true;
+        //
+        return true;
+    }
 
     public FeSectionLayout(Context context, FeSave save, int section){
         super(context);
@@ -71,12 +62,12 @@ public class FeSectionLayout extends RelativeLayout {
         //地图地形信息
         mapInfoLayout = new FeMapInfoLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(mapInfoLayout);
-        // 系统菜单图层
-        menuLayout = new FeMapMenuLayout(feSave.activity, feSave, mapLayout.mapParam);
-        addView(menuLayout);
         //人物操作菜单图层
         unitMenuLayout = new FeMapUnitMenuLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(unitMenuLayout);
+        // 系统菜单图层
+        menuLayout = new FeMapMenuLayout(feSave.activity, feSave, mapLayout.mapParam);
+        addView(menuLayout);
         //人物对话图层
         chatLayout = new FeMapChatLayout(feSave.activity, feSave, mapLayout.mapParam);
         addView(chatLayout);

@@ -1,6 +1,7 @@
 package com.example.fe;
 
 import android.content.Context;
+import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /*
@@ -10,6 +11,50 @@ public class FeMapUnitLayout extends RelativeLayout {
 
     private FeSave feSave;
     private FeMapParam mapParam;
+
+    public void refresh(){
+        //遍历所有子view
+        for (int i = 0; i < getChildCount(); i++)
+            getChildAt(i).invalidate();
+    }
+
+    private int hitOrder = -1;
+    public boolean checkHit(int type, float x, float y, boolean isMove){
+        if(!isMove)
+        {
+            //遍历所有子view
+            for (int i = 0; i < getChildCount(); i++) {
+                FeAnimFilm anim = (FeAnimFilm) getChildAt(i);
+                if (anim.checkHit(x, y)) {
+                    if (type == MotionEvent.ACTION_UP) {
+                        //设置人物动画
+                        if (hitOrder == i)
+                            anim.setAnimMode(1);
+                            //
+                        else
+                            hitOrder = -1;
+                    } else {
+                        //释放上一个人物动画
+                        if (hitOrder > -1) {
+                            FeAnimFilm anim2 = (FeAnimFilm) getChildAt(hitOrder);
+                            anim2.setAnimMode(0);
+                        }
+                        //
+                        hitOrder = i;
+                    }
+                    return true;
+                }
+            }
+        }
+        //释放上一个人物动画
+        if(hitOrder > -1){
+            FeAnimFilm anim2 = (FeAnimFilm)getChildAt(hitOrder);
+            anim2.setAnimMode(0);
+        }
+        //
+        hitOrder = -1;
+        return false;
+    }
 
     public FeMapUnitLayout(Context context, FeSave save, FeMapParam feMapParam) {
         super(context);

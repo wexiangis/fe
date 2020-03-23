@@ -66,7 +66,7 @@ public class FeMap extends View {
     //触屏按下时记录坐标
     private float tDownX, tDownY;
     //分辨移动事件还是点击事件
-    private int touchType = 0;
+    private boolean isMove = false;
 
     private boolean selectDrawFlag = false;
     private Rect selectDraw = new Rect(0,0,0,0);
@@ -74,23 +74,24 @@ public class FeMap extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
-                ((FeSectionLayout)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
+                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY(), isMove);
                 //
                 tDownX = event.getX();
                 tDownY = event.getY();
-                touchType = 1;
+                isMove = false;
             }
             break;
             case MotionEvent.ACTION_UP: {
-                ((FeSectionLayout)getParent().getParent()).checkHit(event.getAction(), event.getX(), event.getY());
+                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY(), isMove);
                 //
-                if(touchType == 1) {
+                if(!isMove) {
                     //输入坐标求格子位置
                     mapParam.getRectByLocation(event.getX(), event.getY(), selectDraw);
                     //调用一次onDraw
                     selectDrawFlag = true;
                     invalidate();
                 }
+                isMove = false;
             }
             break;
             case MotionEvent.ACTION_MOVE: {
@@ -107,7 +108,7 @@ public class FeMap extends View {
                     else mapParam.xGridErr += 1;
                     tDownX = tMoveX;
                     needRefresh = true;
-                    touchType = 2;
+                    isMove = true;
                 }
                 //
                 if (Math.abs(yErr) > mapParam.yGridPixel) {
@@ -115,7 +116,7 @@ public class FeMap extends View {
                     else mapParam.yGridErr += 1;
                     tDownY = tMoveY;
                     needRefresh = true;
-                    touchType = 2;
+                    isMove = true;
                 }
                 //防止地图移出屏幕
                 if (mapParam.xGridErr < 0) mapParam.xGridErr = 0;
