@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -207,6 +208,7 @@ public class FeMapParam {
             InputStream is = getClass().getResourceAsStream(mapPath1);
             if(is == null)
                 is = getClass().getResourceAsStream(mapPath2);
+            //default
             if(is == null)
                 tBitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.map_xxx_30x30);
             else {
@@ -220,7 +222,7 @@ public class FeMapParam {
         }
         // get size
         xGrid = yGrid = 30;//default
-        piexlPerGrid = 96;//default
+        piexlPerGrid = 104;//default
         try {
             InputStream is = getClass().getResourceAsStream(mapSize);
             if(is != null){
@@ -244,12 +246,12 @@ public class FeMapParam {
         mapInfo = new MapInfo(xGrid, yGrid);
         // get grid
         try {
+            int countLine = 0;
             InputStream is = getClass().getResourceAsStream(mapGrid);
             if (is != null) {
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
                 String line = null;
-                int countLine = 0;
                 //分行读取
                 while ((line = br.readLine()) != null) {
                     String[] lineData = line.split(",");
@@ -263,6 +265,11 @@ public class FeMapParam {
                 }
                 is.close();//关闭输入流
             }
+            //default
+            if(countLine == 0){
+                for(int i = 0; i < mapInfo.h; i++)
+                    java.util.Arrays.fill(mapInfo.grid[i], (short)0);
+            }
         } catch (java.io.FileNotFoundException e) {
             Log.d("loadMap: get grid", "not found");
         } catch (IOException e) {
@@ -270,12 +277,12 @@ public class FeMapParam {
         }
         //grid info
         try {
-            InputStream is = getClass().getResourceAsStream(mapGrid);
+            int countLine = 0;
+            InputStream is = getClass().getResourceAsStream(mapGridInfo);
             if (is != null) {
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
                 String line = null;
-                int countLine = 0;
                 //分行读取
                 while ((line = br.readLine()) != null) {
                     String[] lineData = line.split(",");
@@ -303,6 +310,16 @@ public class FeMapParam {
                 mapInfo.total = countLine;
                 is.close();//关闭输入流
             }
+            //default
+            if(countLine == 0){
+                mapInfo.name[0] = "无";
+                mapInfo.defend[0] = 0;
+                mapInfo.avoid[0] = 0;
+                mapInfo.plus[0] = 0;
+                mapInfo.mov[0] = 1;
+                mapInfo.type[0] = 0;
+                mapInfo.info[0] = "";
+            }
         } catch (java.io.FileNotFoundException e) {
             Log.d("loadMap: get grid info", "not found");
         } catch (IOException e) {
@@ -312,15 +329,22 @@ public class FeMapParam {
 
     //----- 地图梯形变换 -----
 
+    //梯形缩进的格数和像素
     public int reduceGrid = 0;
     public float reduce = 0;
+    //梯形区域里的方格状态
     public int srcGridX = 0, srcGridY = 0, srcGridXStart = 0, srcGridYStart = 0;
-    public float[][] srcGridLine = new float[64][4];//[n][0]:行高, [n][1]:总行高, [n][2]:横向offset, [n][3]:平均宽
+    //[n][0]:行高, [n][1]:总行高, [n][2]:横向offset, [n][3]:平均宽
+    public float[][] srcGridLine = new float[64][4];
+    //屏幕在地图上框了一个矩形,然后拉高拉宽上边两个点,框到一个倒梯形区域
     public float[] srcPoint = new float[8];
+    //srcPoint的坐标数据按地图的实际分辨率转换之后的位置
     public float[] srcPointBitmap = new float[8];
+    //上面框到的倒梯形输出到屏幕的位置
     public float[] distPoint = new float[8];
 
-    private int transferGrid = 4;
+    //梯形变换缩进格数
+    private int transferGrid = 8;
 
     //获取梯形转换矩阵,用于绘制
     public void getMatrix(){
@@ -383,51 +407,80 @@ public class FeMapParam {
         srcGridXStart = Math.round(srcPoint[0]/xGridPixel);
         srcGridYStart = Math.round(srcPoint[1]/yGridPixel);
         //第一行的高, 总高, 横向offset, 平均宽
-        srcGridLine[0][0] = yGridPixel - reduce*2/(srcGridY-1);
+        srcGridLine[0][0] = yGridPixel - reduce*1.75f/(srcGridY-1);
         srcGridLine[0][1] = srcGridLine[0][0];
         srcGridLine[0][2] = srcGridLine[0][1]/screenHeight*reduce;
         srcGridLine[0][3] = (srcGridLine[0][2]*2 + screenWidth)/srcGridX;
         //最后一行和第一行高的差值
         float ySErr = yGridPixel - srcGridLine[0][0];
-        //
-        int i = 0;
         //统计每行信息
-        for(i = 1; i < srcGridY; i++) {
+        for(int i = 1; i < srcGridY; i++) {
             srcGridLine[i][0] = srcGridLine[0][0] + (float)i/srcGridY*ySErr;
             srcGridLine[i][1] = srcGridLine[i-1][1] + srcGridLine[i][0];
             srcGridLine[i][2] = srcGridLine[i][1]/screenHeight*reduce;
             srcGridLine[i][3] = (srcGridLine[i][2]*2 + screenWidth)/srcGridX;
         }
-        //把存在的误差均摊给中间格子
-        float errCorrect = (srcGridLine[srcGridY-1][1] - screenHeight)/(srcGridY-1);
-        srcGridLine[0][0] -= errCorrect;
-        srcGridLine[0][1] = srcGridLine[0][0];
-        srcGridLine[0][2] = srcGridLine[0][1]/screenHeight*reduce;
-        srcGridLine[0][3] = (srcGridLine[0][2]*2 + screenWidth)/srcGridX;
-        for(i = 1; i < srcGridY-1; i++) {
-            srcGridLine[i][0] -= errCorrect;
-            srcGridLine[i][1] = srcGridLine[i-1][1] + srcGridLine[i][0];
-            srcGridLine[i][2] = srcGridLine[i][1]/screenHeight*reduce;
-            srcGridLine[i][3] = (srcGridLine[i][2]*2 + screenWidth)/srcGridX;
+        //把存在的误差均摊给中间格子,这里重复矫正2次
+        for(int k = 0; k < 2; k++) {
+            float errCorrect = (srcGridLine[srcGridY - 1][1] - screenHeight) / (srcGridY - 2);
+//        srcGridLine[0][0] -= errCorrect;
+//        srcGridLine[0][1] = srcGridLine[0][0];
+//        srcGridLine[0][2] = srcGridLine[0][1]/screenHeight*reduce;
+//        srcGridLine[0][3] = (srcGridLine[0][2]*2 + screenWidth)/srcGridX;
+            //
+            int i;
+            for (i = 1; i < srcGridY - 1; i++) {
+                srcGridLine[i][0] -= errCorrect;
+                srcGridLine[i][1] = srcGridLine[i - 1][1] + srcGridLine[i][0];
+                srcGridLine[i][2] = srcGridLine[i][1] / screenHeight * reduce;
+                srcGridLine[i][3] = (srcGridLine[i][2] * 2 + screenWidth) / srcGridX;
+            }
+            //
+            srcGridLine[i][0] = yGridPixel;
+            srcGridLine[i][1] = srcGridLine[i - 1][1] + srcGridLine[i][0];
+            srcGridLine[i][2] = reduce;
+            srcGridLine[i][3] = xGridPixel;
         }
-        //
-        srcGridLine[i][0] = yGridPixel;
-        srcGridLine[i][1] = srcGridLine[i-1][1] + srcGridLine[i][0];
-        srcGridLine[i][2] = reduce;
-        srcGridLine[i][3] = xGridPixel;
     }
 
     //----- 地图梯形变换 -----
 
+    //选中方格
+    public boolean select = false;
+    //方格梯形
+    public Path selectPath = new Path();
+    //方格
+    public Rect selectRect = new Rect(0,0,0,0);
+    //放个横纵格数
+    public int[] selectPoint = new int[2];
+
     //输入坐标求格子位置
-    public void getRectByLocation(float x, float y, Rect r) {
+    public void getRectByLocation(float x, float y) {
         for(int i = 0; i < srcGridY; i++){
             if(y < srcGridLine[i][1]){
-                r.top = (int)(srcGridLine[i][1] - srcGridLine[i][0]);
-                r.bottom = (int)(srcGridLine[i][1]);
-                r.left = (int)((x + srcGridLine[i][2])/srcGridLine[i][3]);
-                r.left = (int)(r.left*srcGridLine[i][3] - srcGridLine[i][2]);
-                r.right = (int)(r.left + srcGridLine[i][3]);
+                selectPoint[1] = i + srcGridYStart;
+                selectRect.top = (int)(srcGridLine[i][1] - srcGridLine[i][0]);
+                selectRect.bottom = (int)(srcGridLine[i][1]);
+                int xCount = (int)((x + srcGridLine[i][2])/srcGridLine[i][3]);
+                selectPoint[0] = xCount + srcGridXStart;
+                selectRect.left = (int)(xCount * srcGridLine[i][3] - srcGridLine[i][2]);
+                selectRect.right = (int)(selectRect.left + srcGridLine[i][3]);
+                //
+                selectPath.reset();
+                if(i == 0){
+                    selectPath.moveTo(xCount * screenWidth / srcGridX, 0);
+                    selectPath.lineTo((xCount + 1) * screenWidth / srcGridX, 0);
+                }else{
+                    selectPath.moveTo(
+                            (int)(xCount * srcGridLine[i-1][3] - srcGridLine[i-1][2]),
+                            (int)(srcGridLine[i-1][1]));
+                    selectPath.lineTo(
+                            (int)((xCount + 1) * srcGridLine[i-1][3] - srcGridLine[i-1][2]),
+                            (int)(srcGridLine[i-1][1]));
+                }
+                selectPath.lineTo(selectRect.right, selectRect.bottom);
+                selectPath.lineTo(selectRect.left, selectRect.bottom);
+                selectPath.close();
                 break;
             }
         }

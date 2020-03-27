@@ -54,9 +54,10 @@ public class FeMap extends View {
         canvas.drawBitmap(mapParam.bitmap, mapParam.matrix, paint);
 
         //select
-        if(selectDrawFlag) {
-            selectDrawFlag = false;
-            canvas.drawRect(selectDraw, paint2);
+        if(mapParam.select) {
+            mapParam.select = false;
+//            canvas.drawRect(mapParam.selectRect, paint2);
+            canvas.drawPath(mapParam.selectPath, paint2);
         }
 
         //
@@ -67,9 +68,6 @@ public class FeMap extends View {
     private float tDownX, tDownY;
     //分辨移动事件还是点击事件
     private boolean isMove = false;
-
-    private boolean selectDrawFlag = false;
-    private Rect selectDraw = new Rect(0,0,0,0);
 
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()){
@@ -86,9 +84,9 @@ public class FeMap extends View {
                 //
                 if(!isMove) {
                     //输入坐标求格子位置
-                    mapParam.getRectByLocation(event.getX(), event.getY(), selectDraw);
+                    mapParam.getRectByLocation(event.getX(), event.getY());
                     //调用一次onDraw
-                    selectDrawFlag = true;
+                    mapParam.select = true;
                     invalidate();
                 }
                 isMove = false;

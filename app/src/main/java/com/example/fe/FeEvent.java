@@ -14,7 +14,7 @@ public class FeEvent {
         //加载主界面
 //        loadMainTheme();
         //加载地图
-        loadSection(0);
+        loadSection(99);
     }
 
     //加载主界面
