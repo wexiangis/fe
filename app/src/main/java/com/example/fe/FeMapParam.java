@@ -407,39 +407,39 @@ public class FeMapParam {
         srcGridXStart = Math.round(srcPoint[0]/xGridPixel);
         srcGridYStart = Math.round(srcPoint[1]/yGridPixel);
         //第一行的高, 总高, 横向offset, 平均宽
-        srcGridLine[0][0] = yGridPixel - reduce*1.75f/(srcGridY-1);
+        srcGridLine[0][0] = yGridPixel - reduce*1.5f/srcGridY - reduceGrid*3.0f;
         srcGridLine[0][1] = srcGridLine[0][0];
         srcGridLine[0][2] = srcGridLine[0][1]/screenHeight*reduce;
         srcGridLine[0][3] = (srcGridLine[0][2]*2 + screenWidth)/srcGridX;
+        //最后一行的高, 总高, 横向offset, 平均宽
+        srcGridLine[srcGridY-1][0] = yGridPixel + reduceGrid;
+        srcGridLine[srcGridY-1][1] = screenHeight;
+        srcGridLine[srcGridY-1][2] = srcGridLine[srcGridY-1][1]/screenHeight*reduce;
+        srcGridLine[srcGridY-1][3] = (srcGridLine[srcGridY-1][2]*2 + screenWidth)/srcGridX;
         //最后一行和第一行高的差值
-        float ySErr = yGridPixel - srcGridLine[0][0];
+        float ySErr = srcGridLine[srcGridY-1][0]*srcGridY - screenHeight;
+        float n = 0;//分母
+        float[] m = new float[srcGridY];//分子
+        //把分子数组累加到分母n
+        float basePoint = 10000;
+        float basePointCount = 0;
+        float basePointPlusBase = 0.99f;
+        for(int i = 0; i < srcGridY; i++) {
+            basePointCount += basePoint;
+            m[i] = basePointCount;
+            n += m[i];
+            //
+            if(reduceGrid > 0) {
+                basePoint *= basePointPlusBase;
+                basePointPlusBase *= 0.99f;
+            }
+        }
         //统计每行信息
-        for(int i = 1; i < srcGridY; i++) {
-            srcGridLine[i][0] = srcGridLine[0][0] + (float)i/srcGridY*ySErr;
-            srcGridLine[i][1] = srcGridLine[i-1][1] + srcGridLine[i][0];
+        for(int i = srcGridY-2; i >= 0; i--) {
+            srcGridLine[i][0] = srcGridLine[srcGridY-1][0] - m[srcGridY-1-i]/n*ySErr;
+            srcGridLine[i][1] = srcGridLine[i+1][1] - srcGridLine[i+1][0];
             srcGridLine[i][2] = srcGridLine[i][1]/screenHeight*reduce;
             srcGridLine[i][3] = (srcGridLine[i][2]*2 + screenWidth)/srcGridX;
-        }
-        //把存在的误差均摊给中间格子,这里重复矫正2次
-        for(int k = 0; k < 2; k++) {
-            float errCorrect = (srcGridLine[srcGridY - 1][1] - screenHeight) / (srcGridY - 2);
-//        srcGridLine[0][0] -= errCorrect;
-//        srcGridLine[0][1] = srcGridLine[0][0];
-//        srcGridLine[0][2] = srcGridLine[0][1]/screenHeight*reduce;
-//        srcGridLine[0][3] = (srcGridLine[0][2]*2 + screenWidth)/srcGridX;
-            //
-            int i;
-            for (i = 1; i < srcGridY - 1; i++) {
-                srcGridLine[i][0] -= errCorrect;
-                srcGridLine[i][1] = srcGridLine[i - 1][1] + srcGridLine[i][0];
-                srcGridLine[i][2] = srcGridLine[i][1] / screenHeight * reduce;
-                srcGridLine[i][3] = (srcGridLine[i][2] * 2 + screenWidth) / srcGridX;
-            }
-            //
-            srcGridLine[i][0] = yGridPixel;
-            srcGridLine[i][1] = srcGridLine[i - 1][1] + srcGridLine[i][0];
-            srcGridLine[i][2] = reduce;
-            srcGridLine[i][3] = xGridPixel;
         }
     }
 
@@ -472,11 +472,11 @@ public class FeMapParam {
                     selectPath.lineTo((xCount + 1) * screenWidth / srcGridX, 0);
                 }else{
                     selectPath.moveTo(
-                            (int)(xCount * srcGridLine[i-1][3] - srcGridLine[i-1][2]),
-                            (int)(srcGridLine[i-1][1]));
+                            xCount * srcGridLine[i-1][3] - srcGridLine[i-1][2],
+                            srcGridLine[i-1][1]);
                     selectPath.lineTo(
-                            (int)((xCount + 1) * srcGridLine[i-1][3] - srcGridLine[i-1][2]),
-                            (int)(srcGridLine[i-1][1]));
+                            (xCount + 1) * srcGridLine[i-1][3] - srcGridLine[i-1][2],
+                            srcGridLine[i-1][1]);
                 }
                 selectPath.lineTo(selectRect.right, selectRect.bottom);
                 selectPath.lineTo(selectRect.left, selectRect.bottom);

@@ -36,6 +36,7 @@ public class FeMap extends View {
         //画笔
         paint = new Paint();
         paint.setColor(Color.BLUE);
+        paint.setTextSize(50);
         paint2 = new Paint();
         paint2.setColor(0x800000FF);
     }
@@ -58,6 +59,10 @@ public class FeMap extends View {
             mapParam.select = false;
 //            canvas.drawRect(mapParam.selectRect, paint2);
             canvas.drawPath(mapParam.selectPath, paint2);
+//            canvas.drawText(
+//                    String.valueOf(
+//                    mapParam.selectRect.bottom - mapParam.selectRect.top),
+//                    50, 50, paint);
         }
 
         //
