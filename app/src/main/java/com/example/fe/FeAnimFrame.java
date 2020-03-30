@@ -62,8 +62,6 @@ public class FeAnimFrame extends View {
         super.onDraw(canvas);
         //加载图片
         Bitmap bitmap = BitmapFactory.decodeResource(act.getResources(), framearray[frameCount]);
-        //颜色替换
-        ;
         //绘图
         canvas.drawBitmap(bitmap, null, distRect, paint);
     }

@@ -1,5 +1,8 @@
 package com.example.fe;
 
+import android.system.ErrnoException;
+import android.util.Log;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,17 +49,22 @@ public class FeHeart {
     private boolean scanLink(int type, int count){
         FeLink<FeHeartUnit> tmp = link.next;
         boolean hit = false;
-        while (tmp != null){
-            FeHeartUnit u = tmp.data;
-            tmp = tmp.next;
-            //移除单元
-            if(u.useless)
-                removeUnit(u);
-            //回调单元的方法
-            else if(u.type == type) {
-                u.task.run(count);
-                hit = true;
+        try {
+            while (tmp != null) {
+                FeHeartUnit u = tmp.data;
+                tmp = tmp.next;
+                //移除单元
+                if (u.useless)
+                    removeUnit(u);
+                    //回调单元的方法
+                else if (u.type == type) {
+                    u.task.run(count);
+                    hit = true;
+                }
             }
+        }catch (java.lang.RuntimeException e){
+            Log.e("Heart: scanLink()", "runtime error");
+            return false;
         }
         return hit;
     }
@@ -67,6 +75,8 @@ public class FeHeart {
     public static final int TYPE_ANIM_STAY = 1;//人物原地待机或选中时动画,共3帧,钟摆式循环播放
     public static final int TYPE_ANIM_SELECT = 2;//人物原地待机或选中时动画,共3帧,钟摆式循环播放
     public static final int TYPE_ANIM_MOVE = 3;//人物移动时动画,共4帧,循环播放
+    public static final int TYPE_FRAME_HEART = 4;//帧动画心跳,不限帧数,周期100ms
+    public static final int TYPE_TOTAL = 4;
 
     //type 1 TYPE_ANIM_STAY
     private final int[] circleType1 = new int[]{7, 3, 7};//每帧延时
@@ -82,9 +92,12 @@ public class FeHeart {
     private final int[] circleType3 = new int[]{3, 3, 3, 3};//每帧延时
     private int circleType3_timerCount = 1, circleType3_count = 0;
 
+    //type 4 TYPE_FRAME_HEART
+    private int circleType4_count = 0;
+
     //定时器
-    private Timer[] timer = new Timer[TYPE_ANIM_MOVE];
-    private TimerTask[] timerTask = new TimerTask[TYPE_ANIM_MOVE];
+    private Timer[] timer = new Timer[TYPE_TOTAL];
+    private TimerTask[] timerTask = new TimerTask[TYPE_TOTAL];
 
     public void start(){
         //
@@ -155,6 +168,16 @@ public class FeHeart {
                     //
                     scanLink(TYPE_ANIM_MOVE, circleType3_count);
                 }
+            }
+        };
+        //
+        timer[3] = new Timer();
+        timerTask[3] = new TimerTask() {
+            @Override
+            public void run() {
+                //type 4 TYPE_FRAME_HEART
+                circleType4_count += 1;
+                scanLink(TYPE_FRAME_HEART, circleType4_count);
             }
         };
         //

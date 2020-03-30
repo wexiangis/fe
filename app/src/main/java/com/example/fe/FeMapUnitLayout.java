@@ -24,7 +24,7 @@ public class FeMapUnitLayout extends RelativeLayout {
         {
             //遍历所有子view
             for (int i = 0; i < getChildCount(); i++) {
-                FeAnimFilm anim = (FeAnimFilm) getChildAt(i);
+                FeMapUnitView anim = (FeMapUnitView) getChildAt(i);
                 if (anim.checkHit(x, y)) {
                     if (type == MotionEvent.ACTION_UP) {
                         //设置人物动画
@@ -36,19 +36,21 @@ public class FeMapUnitLayout extends RelativeLayout {
                     } else {
                         //释放上一个人物动画
                         if (hitOrder > -1) {
-                            FeAnimFilm anim2 = (FeAnimFilm) getChildAt(hitOrder);
+                            FeMapUnitView anim2 = (FeMapUnitView) getChildAt(hitOrder);
                             anim2.setAnimMode(0);
                         }
                         //
                         hitOrder = i;
                     }
+                    //
+                    mapParam.isSelectUnit = true;
                     return true;
                 }
             }
         }
         //释放上一个人物动画
         if(hitOrder > -1){
-            FeAnimFilm anim2 = (FeAnimFilm)getChildAt(hitOrder);
+            FeMapUnitView anim2 = (FeMapUnitView)getChildAt(hitOrder);
             anim2.setAnimMode(0);
         }
         //
@@ -61,7 +63,7 @@ public class FeMapUnitLayout extends RelativeLayout {
         feSave = save;
         mapParam = feMapParam;
 
-//        loadView(R.drawable.ma_001, 1, 0);
+        loadView(R.drawable.ma_001, 1, 0);
 //        loadView(R.drawable.ma_002, 2, 1);
 //        loadView(R.drawable.ma_003, 3, 0);
 //        loadView(R.drawable.ma_004, 4, 1);
@@ -78,7 +80,7 @@ public class FeMapUnitLayout extends RelativeLayout {
 //
 //        loadView(R.drawable.ma_015, 1, 12);
 //        loadView(R.drawable.ma_016, 2, 13);
-//        loadView(R.drawable.ma_017, 3, 12);
+        loadView(R.drawable.ma_017, 3, 12);
 //        loadView(R.drawable.ma_018, 4, 13);
 //        loadView(R.drawable.ma_019, 5, 12);
 //        loadView(R.drawable.ma_020, 6, 13);
@@ -93,11 +95,11 @@ public class FeMapUnitLayout extends RelativeLayout {
     }
 
     private void loadView(int id, int y, int x){
-        addView(new FeAnimFilm(feSave.activity, feSave.feHeart, mapParam, id, x, y, 0, 0));
-        addView(new FeAnimFilm(feSave.activity, feSave.feHeart, mapParam, id, x+2, y, 1, 0));
-        addView(new FeAnimFilm(feSave.activity, feSave.feHeart, mapParam, id, x+4, y, 2, 0));
-        addView(new FeAnimFilm(feSave.activity, feSave.feHeart, mapParam, id, x+6, y, 3, 0));
-        addView(new FeAnimFilm(feSave.activity, feSave.feHeart, mapParam, id, x+8, y, 4, 0));
-        addView(new FeAnimFilm(feSave.activity, feSave.feHeart, mapParam, id, x+10, y, 5, 0));
+        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x, y, 0, 0));
+        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+2, y, 1, 0));
+        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+4, y, 2, 0));
+        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+6, y, 3, 0));
+        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+8, y, 4, 0));
+        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+10, y, 5, 0));
     }
 }

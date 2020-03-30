@@ -17,6 +17,24 @@ public class FeSectionLayout extends RelativeLayout {
     public FeMapMenuLayout menuLayout = null;
     public FeMapChatLayout chatLayout = null;
 
+    public void refreshMap(){
+        mapLayout.refresh();
+    }
+    public void refreshMapUnit(){
+        unitLayout.refresh();
+    }
+    public void refreshMapInfo(){
+        mapInfoLayout.refresh();
+    }
+    public void refreshMapUnitMenu(){
+        unitMenuLayout.refresh();
+    }
+    public void refreshMapMenu(){
+        menuLayout.refresh();
+    }
+    public void refreshMapChat(){
+        chatLayout.refresh();
+    }
     public void refresh(){
         //更新人物动画
         unitLayout.refresh();
@@ -31,23 +49,23 @@ public class FeSectionLayout extends RelativeLayout {
     }
 
     public boolean onTouch(int type, float x, float y, boolean isMove){
-        //正在对话?
+        //点击:正在对话?
         if(chatLayout.checkHit(type, x, y, isMove))
             return true;
-        //系统菜单中?
+        //点击:系统菜单中?
         if(menuLayout.checkHit(type, x, y, isMove))
             return true;
-        //人物菜单中?
+        //点击:人物菜单中?
         if(unitMenuLayout.checkHit(type, x, y, isMove))
             return true;
-        //
+        //点击:地图信息
         if(mapInfoLayout.checkHit(type, x, y, isMove))
             return true;
-        //选中人物?
+        //点击:选中人物?
         if(unitLayout.checkHit(type, x, y, isMove))
             return true;
         //
-        return true;
+        return false;
     }
 
     public FeSectionLayout(Context context, FeSave save, int section){

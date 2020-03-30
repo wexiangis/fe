@@ -1,44 +1,32 @@
 package com.example.fe;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 /*
-    地图视图管理,管理地图和屏幕适配、挪动、方格选中等
+    地图绘制和全局触屏回调管理
  */
-public class FeMap extends View {
+public class FeMapView extends View {
 
     private Context _context;
     private FeMapParam mapParam;
 //    private FeHeart _animHeart;
 
     //画图
-    private Paint paint, paint2;
+    private Paint paintMap;
 
-    public FeMap(Context context, FeHeart animHeart, FeMapParam feMapParam) {
+    public FeMapView(Context context, FeHeart animHeart, FeMapParam feMapParam) {
         super(context);
         _context = context;
         mapParam = feMapParam;
 //        _animHeart = animHeart;
         //画笔
-        paint = new Paint();
-        paint.setColor(Color.BLUE);
-        paint.setTextSize(50);
-        paint2 = new Paint();
-        paint2.setColor(0x800000FF);
+        paintMap = new Paint();
+        paintMap.setColor(Color.BLUE);
     }
 
     public void onDraw(Canvas canvas){
@@ -52,20 +40,8 @@ public class FeMap extends View {
         //梯形变换
         mapParam.getMatrix();
         //显示地图
-        canvas.drawBitmap(mapParam.bitmap, mapParam.matrix, paint);
-
-        //select
-        if(mapParam.select) {
-            mapParam.select = false;
-//            canvas.drawRect(mapParam.selectRect, paint2);
-            canvas.drawPath(mapParam.selectPath, paint2);
-//            canvas.drawText(
-//                    String.valueOf(
-//                    mapParam.selectRect.bottom - mapParam.selectRect.top),
-//                    50, 50, paint);
-        }
-
-        //
+        canvas.drawBitmap(mapParam.bitmap, mapParam.matrix, paintMap);
+        //地图移动了,刷新其他信息
         ((FeSectionLayout)getParent().getParent()).refresh();
     }
 
@@ -73,11 +49,16 @@ public class FeMap extends View {
     private float tDownX, tDownY;
     //分辨移动事件还是点击事件
     private boolean isMove = false;
+    //touch down时,触点不在各种控件上面
+    private boolean touchOnMap = false;
 
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
-                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY(), isMove);
+                if(((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY(), isMove))
+                    touchOnMap = false;
+                else
+                    touchOnMap = true;
                 //
                 tDownX = event.getX();
                 tDownY = event.getY();
@@ -87,17 +68,22 @@ public class FeMap extends View {
             case MotionEvent.ACTION_UP: {
                 ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY(), isMove);
                 //
-                if(!isMove) {
+                if((touchOnMap || mapParam.isSelectUnit) && !isMove) {
                     //输入坐标求格子位置
                     mapParam.getRectByLocation(event.getX(), event.getY());
+                    //选中方格标志
+                    mapParam.isSelect = true;
                     //调用一次onDraw
-                    mapParam.select = true;
                     invalidate();
+                }else {
+                    //选中方格标志
+                    mapParam.isSelect = false;
                 }
                 isMove = false;
             }
             break;
-            case MotionEvent.ACTION_MOVE: {
+            case MotionEvent.ACTION_MOVE:
+                if(touchOnMap){
                 boolean needRefresh = false;
                 //
                 float tMoveX = event.getX();

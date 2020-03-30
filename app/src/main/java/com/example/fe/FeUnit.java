@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class FeUnit {
 
-    private FeAnimFilm anim = null;
+    private FeMapUnitView anim = null;
 
     public FeUnit(Context context, FeSave save){
 

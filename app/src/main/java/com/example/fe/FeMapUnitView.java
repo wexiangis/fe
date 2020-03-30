@@ -14,7 +14,7 @@ import android.view.View;
     电影胶片式播放动画,针对地图人物动画管理而封装;
     统一管理人物的待机、选中、上下左右移动时的动画
  */
-public class FeAnimFilm extends View {
+public class FeMapUnitView extends View {
 
     private Context _context;
     private FeMapParam mapParam;
@@ -28,7 +28,7 @@ public class FeAnimFilm extends View {
     private int _id = 0, _animMode = 0, _colorMode = 0;
     private int _gridX = 0, _gridY = 0;
 
-    //
+    //根据动画模式0~5,图像胶片上移帧数
     private final int[] frameSkipByAnimMode = new int[]{15, 12, 8, 4, 0, 0};
 
     //画图
@@ -44,7 +44,7 @@ public class FeAnimFilm extends View {
     /*
     id: drawable图片,如: R.drawable.xxx
     */
-    public FeAnimFilm(Context context, FeHeart feHeart, FeMapParam feMapParam, int id, int gridX, int gridY, int animMode, int colorMode)
+    public FeMapUnitView(Context context, FeHeart feHeart, FeMapParam feMapParam, int id, int gridX, int gridY, int animMode, int colorMode)
     {
         super(context);
         _context = context;
@@ -127,7 +127,7 @@ public class FeAnimFilm extends View {
             bitmapBody.right = bitmap.getWidth();
             bitmapBody.bottom = bitmapBody.top + frameHeight;
             //调用一次onDrow
-            FeAnimFilm.this.invalidate();
+            FeMapUnitView.this.invalidate();
         }
     });
 

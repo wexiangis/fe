@@ -163,7 +163,7 @@ public class FeMapParam {
     class MapInfo{
         //方格矩阵信息
         public int w, h;
-        public short[][] grid;
+        public short[][] grid;//[line][count]
         //方格类型信息
         public int total;
         public String[] name;
@@ -191,7 +191,7 @@ public class FeMapParam {
         }
     }
     //
-    private MapInfo mapInfo;
+    public MapInfo mapInfo;
 
     //从assets文件夹加载map
     public void loadMap(int section)
@@ -202,7 +202,7 @@ public class FeMapParam {
         String mapPath2 = mapFolder + "/map.jpg";
         String mapSize = mapFolder + "/size.txt";
         String mapGrid = mapFolder + "/grid.txt";
-        String mapGridInfo = mapFolder + "/grid_info.txt";
+        String mapGridInfo = "/assets/map/grid_info.txt";
         // get bitmap
         try {
             InputStream is = getClass().getResourceAsStream(mapPath1);
@@ -344,7 +344,7 @@ public class FeMapParam {
     public float[] distPoint = new float[8];
 
     //梯形变换缩进格数
-    private int transferGrid = 8;
+    private int transferGrid = 4;
 
     //获取梯形转换矩阵,用于绘制
     public void getMatrix(){
@@ -446,7 +446,9 @@ public class FeMapParam {
     //----- 地图梯形变换 -----
 
     //选中方格
-    public boolean select = false;
+    public boolean isSelect = false;
+    //选中单元(第一次点击该人物)
+    public boolean isSelectUnit = false;
     //方格梯形
     public Path selectPath = new Path();
     //方格

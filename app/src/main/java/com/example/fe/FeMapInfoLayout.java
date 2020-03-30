@@ -30,5 +30,7 @@ public class FeMapInfoLayout extends RelativeLayout {
         super(context);
         feSave = save;
         mapParam = feMapParam;
+        //
+        addView(new FeMapInfoView(context, mapParam));
     }
 }
