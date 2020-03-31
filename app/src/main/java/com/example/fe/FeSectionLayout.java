@@ -48,22 +48,17 @@ public class FeSectionLayout extends RelativeLayout {
         chatLayout.refresh();
     }
 
-    public boolean onTouch(int type, float x, float y, boolean isMove){
+    public boolean onTouch(int type, float x, float y){
         //点击:正在对话?
-        if(chatLayout.checkHit(type, x, y, isMove))
-            return true;
+        chatLayout.checkHit(type, x, y);
         //点击:系统菜单中?
-        if(menuLayout.checkHit(type, x, y, isMove))
-            return true;
+        menuLayout.checkHit(type, x, y);
         //点击:人物菜单中?
-        if(unitMenuLayout.checkHit(type, x, y, isMove))
-            return true;
+        unitMenuLayout.checkHit(type, x, y);
         //点击:地图信息
-        if(mapInfoLayout.checkHit(type, x, y, isMove))
-            return true;
+        mapInfoLayout.checkHit(type, x, y);
         //点击:选中人物?
-        if(unitLayout.checkHit(type, x, y, isMove))
-            return true;
+        unitLayout.checkHit(type, x, y);
         //
         return false;
     }

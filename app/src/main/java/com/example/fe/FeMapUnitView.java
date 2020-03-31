@@ -99,6 +99,9 @@ public class FeMapUnitView extends View {
             }
         }
     }
+    public int getColorMode(){
+        return _colorMode;
+    }
 
     public void setAnimMode(int animMode){
         if(_animMode != animMode){
@@ -108,6 +111,9 @@ public class FeMapUnitView extends View {
         }
         _animMode = animMode;
         upgradeHeartType(_animMode);
+    }
+    public int getAnimMode(){
+        return _animMode;
     }
 
     private void upgradeHeartType(int animMode){

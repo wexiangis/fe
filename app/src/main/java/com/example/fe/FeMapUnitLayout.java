@@ -11,50 +11,38 @@ public class FeMapUnitLayout extends RelativeLayout {
 
     private FeSave feSave;
     private FeMapParam mapParam;
+    private int hitAnimOrder = -1;
 
     public void refresh(){
+        FeMapUnitView tmp;
         //遍历所有子view
-        for (int i = 0; i < getChildCount(); i++)
-            getChildAt(i).invalidate();
+        for (int i = 0; i < getChildCount(); i++) {
+            tmp = (FeMapUnitView)getChildAt(i);
+            if(hitAnimOrder == i &&
+                mapParam.checkSelectType(FeMapParam.SELECT_UNIT))
+                tmp.setAnimMode(1);
+            else
+                tmp.setAnimMode(0);
+            tmp.invalidate();
+        }
     }
 
-    private int hitOrder = -1;
-    public boolean checkHit(int type, float x, float y, boolean isMove){
-        if(!isMove)
+    public boolean checkHit(int type, float x, float y){
+        if(type == MotionEvent.ACTION_UP &&
+            !mapParam.checkSelectType(FeMapParam.SELECT_MOVE))
         {
             //遍历所有子view
             for (int i = 0; i < getChildCount(); i++) {
-                FeMapUnitView anim = (FeMapUnitView) getChildAt(i);
-                if (anim.checkHit(x, y)) {
-                    if (type == MotionEvent.ACTION_UP) {
-                        //设置人物动画
-                        if (hitOrder == i)
-                            anim.setAnimMode(1);
-                            //
-                        else
-                            hitOrder = -1;
-                    } else {
-                        //释放上一个人物动画
-                        if (hitOrder > -1) {
-                            FeMapUnitView anim2 = (FeMapUnitView) getChildAt(hitOrder);
-                            anim2.setAnimMode(0);
-                        }
-                        //
-                        hitOrder = i;
-                    }
-                    //
-                    mapParam.isSelectUnit = true;
+                if (((FeMapUnitView)getChildAt(i)).checkHit(x, y)) {
+                    hitAnimOrder = i;
+                    mapParam.setSelectType(FeMapParam.SELECT_UNIT);
                     return true;
                 }
             }
+            //
+            hitAnimOrder = -1;
+            mapParam.cleanSelectType(FeMapParam.SELECT_UNIT);
         }
-        //释放上一个人物动画
-        if(hitOrder > -1){
-            FeMapUnitView anim2 = (FeMapUnitView)getChildAt(hitOrder);
-            anim2.setAnimMode(0);
-        }
-        //
-        hitOrder = -1;
         return false;
     }
 

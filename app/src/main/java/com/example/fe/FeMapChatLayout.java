@@ -11,11 +11,7 @@ public class FeMapChatLayout extends RelativeLayout {
     private FeSave feSave;
     private FeMapParam mapParam;
 
-    public boolean checkHit(int type, float x, float y, boolean isMove){
-        if(!isMove)
-        {
-            ;
-        }
+    public boolean checkHit(int type, float x, float y){
         return false;
     }
 

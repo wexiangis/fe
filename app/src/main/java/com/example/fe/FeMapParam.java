@@ -443,12 +443,38 @@ public class FeMapParam {
         }
     }
 
+    //----- 选中类型记录 -----
+
+    //选中方格:
+    //  bit[0]/选中地图 bit[1]/选中人物
+    //  bit[2]/选中地图信息 bit[3]/选中人物菜单
+    //  bit[4]/选中系统菜单 bit[5]/对讲中
+    //  bit[6]/经过移动
+    private int click_type = 0;
+    //select type
+    public static byte SELECT_MAP = 0x1;
+    public static byte SELECT_UNIT = 0x2;
+    public static byte SELECT_MAPINFO = 0x4;
+    public static byte SELECT_UNIT_MENU = 0x8;
+    public static byte SELECT_SYS_MENU = 0x10;
+    public static byte SELECT_CHAT = 0x20;
+    public static byte SELECT_MOVE = 0x40;
+    //
+    public void cleanSelectType(byte type){
+        click_type &= (~type);
+    }
+    public void setSelectType(byte type){
+        click_type |= type;
+    }
+    public boolean checkSelectType(byte type){
+        if((click_type&type) == type)
+            return true;
+        else
+            return false;
+    }
+
     //----- 地图梯形变换 -----
 
-    //选中方格
-    public boolean isSelect = false;
-    //选中单元(第一次点击该人物)
-    public boolean isSelectUnit = false;
     //方格梯形
     public Path selectPath = new Path();
     //方格

@@ -49,46 +49,40 @@ public class FeMapView extends View {
     private float tDownX, tDownY;
     //分辨移动事件还是点击事件
     private boolean isMove = false;
-    //touch down时,触点不在各种控件上面
-    private boolean touchOnMap = false;
 
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
-                if(((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY(), isMove))
-                    touchOnMap = false;
-                else
-                    touchOnMap = true;
+                ((FeSectionLayout)getParent().getParent()).onTouch(MotionEvent.ACTION_DOWN, event.getX(), event.getY());
                 //
                 tDownX = event.getX();
                 tDownY = event.getY();
                 isMove = false;
+                //
+                mapParam.cleanSelectType(FeMapParam.SELECT_MOVE);
             }
             break;
             case MotionEvent.ACTION_UP: {
-                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY(), isMove);
+                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY());
                 //
-                if((touchOnMap || mapParam.isSelectUnit) && !isMove) {
+                if(!isMove) {
+                    //选中方格标志
+                    mapParam.setSelectType(FeMapParam.SELECT_MAP);
                     //输入坐标求格子位置
                     mapParam.getRectByLocation(event.getX(), event.getY());
-                    //选中方格标志
-                    mapParam.isSelect = true;
-                    //调用一次onDraw
-                    invalidate();
-                }else {
-                    //选中方格标志
-                    mapParam.isSelect = false;
-                }
+                }else
+                    mapParam.cleanSelectType(FeMapParam.SELECT_MAP);
+                //
                 isMove = false;
+                //调用一次onDraw
+                invalidate();
             }
             break;
-            case MotionEvent.ACTION_MOVE:
-                if(touchOnMap){
+            case MotionEvent.ACTION_MOVE: {
                 boolean needRefresh = false;
                 //
                 float tMoveX = event.getX();
                 float tMoveY = event.getY();
-                //
                 float xErr = tMoveX - tDownX;
                 float yErr = tMoveY - tDownY;
                 //
@@ -115,8 +109,15 @@ public class FeMapView extends View {
                 else if (mapParam.yGridErr + mapParam.screenYGrid > mapParam.yGrid)
                     mapParam.yGridErr = mapParam.yGrid - mapParam.screenYGrid;
                 //调用一次onDraw
-                if (needRefresh)
+                if (needRefresh) {
+                    //
+                    mapParam.cleanSelectType(FeMapParam.SELECT_MAP);
+                    mapParam.setSelectType(FeMapParam.SELECT_MOVE);
+                    //
+                    ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY());
+                    //
                     invalidate();
+                }
             }
             break;
         }

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.view.View;
 
 public class FeMapInfoView extends View {
@@ -17,49 +18,70 @@ public class FeMapInfoView extends View {
 
     private Rect rectSrcInfo, rectDistInfo;
     private Rect rectSrcHead, rectDistHead;
-    private Rect rectPaint;
-    private Bitmap bitmapMapInfo, bitmapUnitInfo;
-    private Paint paintBitmap, paintName, paintParam;
-    private float pixelPow, pixelPow2;
+    private Rect rectPaintInfo;
+    private Bitmap bitmapInfo, bitmapHead;
+    private Paint paintBitmap, paintInfoName, paintInfoParam;
+    private float pixelPowInfo, pixelPowHead;
+    private boolean drawInfo = false, drawHead = false;
 
     public FeMapInfoView(Context context, FeMapParam feMapParam){
         super(context);
         _context = context;
         mapParam = feMapParam;
         //
-        bitmapMapInfo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mapinfo);
-        bitmapUnitInfo = BitmapFactory.decodeResource(context.getResources(), R.drawable.header);
+        bitmapInfo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mapinfo);
+        bitmapHead = BitmapFactory.decodeResource(context.getResources(), R.drawable.header);
         //
-        pixelPow = mapParam.yGridPixel*2/bitmapMapInfo.getHeight();
-        pixelPow2 = mapParam.yGridPixel*2/bitmapUnitInfo.getHeight();
+        pixelPowInfo = mapParam.yGridPixel*2/bitmapInfo.getHeight();
+        pixelPowHead = mapParam.yGridPixel*2/bitmapHead.getHeight();
         //
-        rectSrcInfo = new Rect(0, 0, bitmapMapInfo.getWidth(), bitmapMapInfo.getHeight());
+        rectSrcInfo = new Rect(0, 0, bitmapInfo.getWidth(), bitmapInfo.getHeight());
         rectDistInfo = new Rect(
                 (int)(mapParam.xGridPixel/4),
-                mapParam.screenHeight - (int)(mapParam.yGridPixel/4 + bitmapMapInfo.getHeight()*pixelPow),
-                (int)(mapParam.xGridPixel/4 + bitmapMapInfo.getWidth()*pixelPow),
+                mapParam.screenHeight - (int)(mapParam.yGridPixel/4 + bitmapInfo.getHeight()*pixelPowInfo),
+                (int)(mapParam.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo),
                 mapParam.screenHeight - (int)(mapParam.yGridPixel/4));
-        rectSrcHead = new Rect(0, 0, bitmapUnitInfo.getWidth(), bitmapUnitInfo.getHeight());
+        rectSrcHead = new Rect(0, 0, bitmapHead.getWidth(), bitmapHead.getHeight());
         rectDistHead = new Rect(
                 (int)(mapParam.xGridPixel/4),
                 (int)(mapParam.yGridPixel/4),
-                (int)(mapParam.xGridPixel/4 + bitmapUnitInfo.getWidth()*pixelPow2),
-                (int)(mapParam.yGridPixel/4 + bitmapUnitInfo.getHeight()*pixelPow2));
+                (int)(mapParam.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead),
+                (int)(mapParam.yGridPixel/4 + bitmapHead.getHeight()*pixelPowHead));
         //
         paintBitmap = new Paint();
         paintBitmap.setColor(0xE00000FF);//半透明
-        paintName = new Paint();
-        paintName.setColor(Color.WHITE);
-        paintName.setTextSize(rectDistInfo.width()/5);
-        paintName.setTextAlign(Paint.Align.CENTER);
-        paintParam = new Paint();
-        paintParam.setTextSize(rectDistInfo.width()/7);
         //
-        rectPaint = new Rect(
+        paintInfoName = new Paint();
+        paintInfoName.setColor(Color.WHITE);
+        paintInfoName.setTextSize(rectDistInfo.width()/5);
+        paintInfoName.setTextAlign(Paint.Align.CENTER);
+//        paintInfoName.setStyle(Paint.Style.FILL_AND_STROKE);
+//        paintInfoName.setStrokeWidth(2);
+//        paintInfoName.setAntiAlias(true);
+//        paintInfoName.setStrokeCap(Paint.Cap.ROUND);
+        paintInfoName.setTypeface(Typeface.DEFAULT_BOLD);
+        //
+        paintInfoParam = new Paint();
+        paintInfoParam.setTextSize(rectDistInfo.width()/7);
+//        paintInfoParam.setStyle(Paint.Style.FILL_AND_STROKE);
+//        paintInfoParam.setStrokeWidth(2);
+//        paintInfoParam.setAntiAlias(true);
+//        paintInfoParam.setStrokeCap(Paint.Cap.ROUND);
+        paintInfoParam.setTypeface(Typeface.DEFAULT_BOLD);
+        //
+        rectPaintInfo = new Rect(
                 (int)(rectDistInfo.left + rectDistInfo.width()/5),
-                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPow*15),
+                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*15),
                 (int)(rectDistInfo.right - rectDistInfo.width()/5),
-                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPow*15 + paintParam.getTextSize()*2 + pixelPow*5));
+                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*15 + paintInfoParam.getTextSize()*2 + pixelPowInfo*5));
+    }
+
+    public boolean checkHit(float x, float y){
+        if(drawHead && rectDistHead.contains((int)x, (int)y))
+            return true;
+        if(drawInfo && rectDistInfo.contains((int)x, (int)y))
+            return true;
+        return false;
     }
 
     public void onDraw(Canvas canvas){
@@ -68,33 +90,33 @@ public class FeMapInfoView extends View {
         //图像位置自动调整
         if(mapParam.selectRect.right > mapParam.screenWidth/2){ //放到左边
             rectDistInfo.left = (int)(mapParam.xGridPixel/4);
-            rectDistInfo.right = (int)(mapParam.xGridPixel/4 + bitmapMapInfo.getWidth()*pixelPow);
+            rectDistInfo.right = (int)(mapParam.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo);
             rectDistHead.left = (int)(mapParam.xGridPixel/4);
-            rectDistHead.right = (int)(mapParam.xGridPixel/4 + bitmapUnitInfo.getWidth()*pixelPow2);
+            rectDistHead.right = (int)(mapParam.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead);
         }else{ //放到右边
-            rectDistInfo.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapMapInfo.getWidth()*pixelPow);
+            rectDistInfo.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapInfo.getWidth()*pixelPowInfo);
             rectDistInfo.right = (int)(mapParam.screenWidth - mapParam.xGridPixel/4);
-            rectDistHead.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapUnitInfo.getWidth()*pixelPow2);
+            rectDistHead.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapHead.getWidth()*pixelPowHead);
             rectDistHead.right = (int)(mapParam.screenWidth - mapParam.xGridPixel/4);
         }
-        rectPaint.left = (int)(rectDistInfo.left + rectDistInfo.width()/5);
-        rectPaint.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
+        rectPaintInfo.left = (int)(rectDistInfo.left + rectDistInfo.width()/5);
+        rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
 
         //画选中框
-        if(!mapParam.isSelectUnit && mapParam.isSelect)
+        if(mapParam.checkSelectType(FeMapParam.SELECT_MAP) &&
+            !mapParam.checkSelectType(FeMapParam.SELECT_UNIT))
             canvas.drawPath(mapParam.selectPath, paintBitmap);
         //画人物头像
-        if(mapParam.isSelectUnit){
-            mapParam.isSelectUnit = false;
-            //
-            canvas.drawBitmap(bitmapUnitInfo, rectSrcHead, rectDistHead, paintBitmap);
+        if(mapParam.checkSelectType(FeMapParam.SELECT_UNIT)){
+            drawHead = true;
+            canvas.drawBitmap(bitmapHead, rectSrcHead, rectDistHead, paintBitmap);
             //填信息
-        }
+        }else
+            drawHead = false;
         //画地图信息
-        if(mapParam.isSelect){
-            mapParam.isSelect = false;
-            //
-            canvas.drawBitmap(bitmapMapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
+        if(mapParam.checkSelectType(FeMapParam.SELECT_MAP)){
+            drawInfo = true;
+            canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息
             int mapInfoOrder = mapParam.mapInfo.grid
                     [mapParam.selectPoint[1]]
@@ -103,31 +125,32 @@ public class FeMapInfoView extends View {
             canvas.drawText(
                     mapParam.mapInfo.name[mapInfoOrder],
                     rectDistInfo.left + rectDistInfo.width()/2,
-                    rectDistInfo.top + rectDistInfo.height()/2 - pixelPow*4,
-                    paintName);
+                    rectDistInfo.top + rectDistInfo.height()/2 - pixelPowInfo*4,
+                    paintInfoName);
             //地形参数
-            paintParam.setColor(Color.BLUE);
-            paintParam.setTextAlign(Paint.Align.LEFT);
+            paintInfoParam.setColor(Color.BLUE);
+            paintInfoParam.setTextAlign(Paint.Align.LEFT);
             canvas.drawText("DEF.",
-                    rectPaint.left,
-                    rectPaint.top + paintParam.getTextSize(),
-                    paintParam);
+                    rectPaintInfo.left,
+                    rectPaintInfo.top + paintInfoParam.getTextSize(),
+                    paintInfoParam);
             canvas.drawText("AVO.",
-                    rectPaint.left,
-                    rectPaint.bottom,
-                    paintParam);
+                    rectPaintInfo.left,
+                    rectPaintInfo.bottom,
+                    paintInfoParam);
             //地形参数数据
-            paintParam.setColor(Color.BLACK);
-            paintParam.setTextAlign(Paint.Align.RIGHT);
+            paintInfoParam.setColor(Color.BLACK);
+            paintInfoParam.setTextAlign(Paint.Align.RIGHT);
             canvas.drawText(String.valueOf(mapParam.mapInfo.defend[mapInfoOrder]),
-                    rectPaint.right,
-                    rectPaint.top + paintParam.getTextSize(),
-                    paintParam);
+                    rectPaintInfo.right,
+                    rectPaintInfo.top + paintInfoParam.getTextSize(),
+                    paintInfoParam);
             canvas.drawText(String.valueOf(mapParam.mapInfo.avoid[mapInfoOrder]),
-                    rectPaint.right,
-                    rectPaint.bottom,
-                    paintParam);
-        }
+                    rectPaintInfo.right,
+                    rectPaintInfo.bottom,
+                    paintInfoParam);
+        }else
+            drawInfo = false;
     }
 
 }
