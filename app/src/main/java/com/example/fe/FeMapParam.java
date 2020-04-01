@@ -334,6 +334,8 @@ public class FeMapParam {
     public float reduce = 0;
     //梯形区域里的方格状态: 横纵向格数, 起始格子
     public int srcGridX = 0, srcGridY = 0, srcGridXStart = 0, srcGridYStart = 0;
+    //中心甜区,用于判断是否需要挪动地图来让选中人物居中
+    public Rect srcGridCenter = new Rect(0,0,0,0);
     //[n][0]:行高, [n][1]:总行高, [n][2]:横向offset, [n][3]:平均宽
     public float[][] srcGridLine = new float[64][4];
     //屏幕在地图上框了一个矩形,然后拉高拉宽上边两个点,框到一个倒梯形区域
@@ -397,7 +399,7 @@ public class FeMapParam {
         distPoint[5] = screenHeight;
         distPoint[6] = screenWidth;
         distPoint[7] = 0;
-        //
+        //梯形变换
         matrix.setPolyToPoly(srcPointBitmap, 0, distPoint, 0, 4);
 
         //关键参数提取
@@ -406,6 +408,13 @@ public class FeMapParam {
         srcGridY = reduceGrid + screenYGrid;
         srcGridXStart = Math.round(srcPoint[0]/xGridPixel);
         srcGridYStart = Math.round(srcPoint[1]/yGridPixel);
+
+        //中心甜区
+        srcGridCenter.left = srcGridXStart + reduceGrid + 2;
+        srcGridCenter.top = srcGridYStart + reduceGrid + 2;
+        srcGridCenter.right = srcGridCenter.left + (screenXGrid - 4) - 1;
+        srcGridCenter.bottom = srcGridCenter.top + (screenYGrid - 4) - 1;
+
         //第一行的高, 总高, 横向offset, 平均宽
         srcGridLine[0][0] = yGridPixel - reduce*1.5f/srcGridY - reduceGrid*3.0f;
         srcGridLine[0][1] = srcGridLine[0][0];
@@ -445,28 +454,25 @@ public class FeMapParam {
 
     //----- 选中类型记录 -----
 
-    //选中方格:
-    //  bit[0]/选中地图 bit[1]/选中人物
-    //  bit[2]/选中地图信息 bit[3]/选中人物菜单
-    //  bit[4]/选中系统菜单 bit[5]/对讲中
-    //  bit[6]/经过移动
+    //选中事件状态
     private int click_type = 0;
     //select type
-    public static byte SELECT_MAP = 0x1;
-    public static byte SELECT_UNIT = 0x2;
-    public static byte SELECT_MAPINFO = 0x4;
-    public static byte SELECT_UNIT_MENU = 0x8;
-    public static byte SELECT_SYS_MENU = 0x10;
-    public static byte SELECT_CHAT = 0x20;
-    public static byte SELECT_MOVE = 0x40;
+    public static short SELECT_MAP = 0x1;//选中地图
+    public static short SELECT_UNIT = 0x2;//选中人物
+    public static short SELECT_MAPINFO = 0x4;//选中地图信息
+    public static short SELECT_UNIT_MENU = 0x8;//选中人物菜单
+    public static short SELECT_SYS_MENU = 0x10;//选中系统菜单
+    public static short SELECT_CHAT = 0x20;//对讲中
+    public static short SELECT_MOVE = 0x40;//移动中
+    public static short SELECT_MOVE_END = 0x80;//移动结束
     //
-    public void cleanSelectType(byte type){
+    public void cleanSelectType(short type){
         click_type &= (~type);
     }
-    public void setSelectType(byte type){
+    public void setSelectType(short type){
         click_type |= type;
     }
-    public boolean checkSelectType(byte type){
+    public boolean checkSelectType(short type){
         if((click_type&type) == type)
             return true;
         else

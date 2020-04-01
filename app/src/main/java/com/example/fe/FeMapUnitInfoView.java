@@ -61,6 +61,12 @@ public class FeMapUnitInfoView extends View {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
+        //移动中不绘制
+        if(mapParam.checkSelectType(FeMapParam.SELECT_MOVE)){
+            drawHead = false;
+            return;
+        }
+
         //图像位置自动调整
         if(mapParam.selectUnit.selectRect.right > mapParam.screenWidth/2){ //放到左边
             rectDistHead.left = (int)(mapParam.xGridPixel/4);

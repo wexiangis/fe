@@ -32,8 +32,6 @@ public class FeMapView extends View {
     }
 
     public void upgradeMap(float x, float y){
-        //
-        mapParam.getRectByLocation(x, y, mapParam.selectMap);
         //相对布局位置偏移
         mapParam.mapDist.left = (int)this.getTranslationX() - (int)(mapParam.xGridErr*mapParam.xGridPixel);
         mapParam.mapDist.top = (int)this.getTranslationY() - (int)(mapParam.yGridErr*mapParam.yGridPixel);
@@ -41,6 +39,8 @@ public class FeMapView extends View {
         mapParam.mapDist.bottom = mapParam.mapDist.top + mapParam.height;
         //梯形变换
         mapParam.getMatrix();
+        //
+        mapParam.getRectByLocation(x, y, mapParam.selectMap);
     }
 
     public void onDraw(Canvas canvas){
@@ -64,6 +64,7 @@ public class FeMapView extends View {
                 isMove = false;
                 //
                 mapParam.cleanSelectType(FeMapParam.SELECT_MOVE);
+                mapParam.cleanSelectType(FeMapParam.SELECT_MOVE_END);
                 ((FeSectionLayout)getParent().getParent()).onTouch(MotionEvent.ACTION_DOWN, tDownX, tDownY);
             }
             break;
@@ -71,16 +72,41 @@ public class FeMapView extends View {
                 float tUpX = event.getX();
                 float tUpY = event.getY();
                 //选中方格标志
+                mapParam.cleanSelectType(FeMapParam.SELECT_MOVE);
                 if(!isMove)
                     mapParam.setSelectType(FeMapParam.SELECT_MAP);
-                else
+                else{
                     mapParam.cleanSelectType(FeMapParam.SELECT_MAP);
+                    mapParam.setSelectType(FeMapParam.SELECT_MOVE_END);
+                }
                 //
                 upgradeMap(tUpX, tUpY);
                 ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), tUpX, tUpY);
-                //调用一次onDraw
-//                if(isMove)
-//                    invalidate();
+                //选中人物太过靠近边界,挪动地图
+                if(mapParam.checkSelectType(FeMapParam.SELECT_UNIT) &&
+                    !mapParam.srcGridCenter.contains(
+                    mapParam.selectUnit.selectPoint[0],
+                    mapParam.selectUnit.selectPoint[1])){
+                    //
+                    if(mapParam.selectUnit.selectPoint[0] < mapParam.srcGridCenter.left)
+                        mapParam.xGridErr -= mapParam.srcGridCenter.left - mapParam.selectUnit.selectPoint[0];
+                    else if(mapParam.selectUnit.selectPoint[0] > mapParam.srcGridCenter.right)
+                        mapParam.xGridErr += mapParam.selectUnit.selectPoint[0] - mapParam.srcGridCenter.right;
+                    if(mapParam.selectUnit.selectPoint[1] < mapParam.srcGridCenter.bottom)
+                        mapParam.yGridErr -= mapParam.srcGridCenter.bottom - mapParam.selectUnit.selectPoint[1];
+                    else if(mapParam.selectUnit.selectPoint[1] > mapParam.srcGridCenter.top)
+                        mapParam.yGridErr += mapParam.selectUnit.selectPoint[1] - mapParam.srcGridCenter.top;
+                    //防止地图移出屏幕
+                    if (mapParam.xGridErr < 0) mapParam.xGridErr = 0;
+                    else if (mapParam.xGridErr + mapParam.screenXGrid > mapParam.xGrid)
+                        mapParam.xGridErr = mapParam.xGrid - mapParam.screenXGrid;
+                    if (mapParam.yGridErr < 0) mapParam.yGridErr = 0;
+                    else if (mapParam.yGridErr + mapParam.screenYGrid > mapParam.yGrid)
+                        mapParam.yGridErr = mapParam.yGrid - mapParam.screenYGrid;
+                    //
+                    upgradeMap(mapParam.selectUnit.selectRect.left+5, mapParam.selectUnit.selectRect.top+5);
+                    invalidate();
+                }
                 isMove = false;
             }
             break;

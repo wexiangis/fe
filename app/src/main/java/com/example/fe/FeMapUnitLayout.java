@@ -31,7 +31,7 @@ public class FeMapUnitLayout extends RelativeLayout {
 
     public boolean checkHit(int type, float x, float y){
         if(type == MotionEvent.ACTION_UP &&
-            !mapParam.checkSelectType(FeMapParam.SELECT_MOVE))
+            !mapParam.checkSelectType(FeMapParam.SELECT_MOVE_END))
         {
             FeMapUnitView tmp;
             //遍历所有子view
