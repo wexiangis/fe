@@ -160,7 +160,7 @@ public class FeMapParam {
     private int piexlPerGrid = 104;
 
     //
-    class MapInfo{
+    public class MapInfo{
         //方格矩阵信息
         public int w, h;
         public short[][] grid;//[line][count]
@@ -332,7 +332,7 @@ public class FeMapParam {
     //梯形缩进的格数和像素
     public int reduceGrid = 0;
     public float reduce = 0;
-    //梯形区域里的方格状态
+    //梯形区域里的方格状态: 横纵向格数, 起始格子
     public int srcGridX = 0, srcGridY = 0, srcGridXStart = 0, srcGridYStart = 0;
     //[n][0]:行高, [n][1]:总行高, [n][2]:横向offset, [n][3]:平均宽
     public float[][] srcGridLine = new float[64][4];
@@ -473,66 +473,79 @@ public class FeMapParam {
             return false;
     }
 
-    //----- 地图梯形变换 -----
+    //----- 求梯形中的某一格子 -----
 
-    //方格梯形
-    public Path selectPath = new Path();
-    //方格
-    public Rect selectRect = new Rect(0,0,0,0);
-    //放个横纵格数
-    public int[] selectPoint = new int[2];
-
-    //输入坐标求格子位置
-    public void getRectByLocation(float x, float y) {
-        for(int i = 0; i < srcGridY; i++){
-            if(y < srcGridLine[i][1]){
-                selectPoint[1] = i + srcGridYStart;
-                selectRect.top = (int)(srcGridLine[i][1] - srcGridLine[i][0]);
-                selectRect.bottom = (int)(srcGridLine[i][1]);
-                int xCount = (int)((x + srcGridLine[i][2])/srcGridLine[i][3]);
-                selectPoint[0] = xCount + srcGridXStart;
-                selectRect.left = (int)(xCount * srcGridLine[i][3] - srcGridLine[i][2]);
-                selectRect.right = (int)(selectRect.left + srcGridLine[i][3]);
-                //
-                selectPath.reset();
-                if(i == 0){
-                    selectPath.moveTo(xCount * screenWidth / srcGridX, 0);
-                    selectPath.lineTo((xCount + 1) * screenWidth / srcGridX, 0);
-                }else{
-                    selectPath.moveTo(
-                            xCount * srcGridLine[i-1][3] - srcGridLine[i-1][2],
-                            srcGridLine[i-1][1]);
-                    selectPath.lineTo(
-                            (xCount + 1) * srcGridLine[i-1][3] - srcGridLine[i-1][2],
-                            srcGridLine[i-1][1]);
-                }
-                selectPath.lineTo(selectRect.right, selectRect.bottom);
-                selectPath.lineTo(selectRect.left, selectRect.bottom);
-                selectPath.close();
-                break;
-            }
+    public class GridInMap{
+        //方格梯形
+        public Path selectPath = new Path();
+        //方格
+        public Rect selectRect = new Rect(0,0,0,0);
+        //方格横纵格数
+        public int[] selectPoint = new int[2];
+        //
+        public void clean(){
+            selectPath.reset();
         }
     }
 
+    public GridInMap selectMap = new GridInMap();
+    public GridInMap selectUnit = new GridInMap();
+
     //输入格子求位置
-    public void getRectByGrid(int xG, int yG, Rect r){
+    public void getRectByGrid(int xG, int yG, GridInMap gim){
+        gim.selectPoint[0] = xG;
+        gim.selectPoint[1] = yG;
+        //
         if(xG >= srcGridXStart &&
-            xG < srcGridXStart + srcGridX &&
-            yG >= srcGridYStart &&
-            yG < srcGridYStart + srcGridY){
+                xG < srcGridXStart + srcGridX &&
+                yG >= srcGridYStart &&
+                yG < srcGridYStart + srcGridY)
+        {
             int x = xG - srcGridXStart;
             int y = yG - srcGridYStart;
-            r.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
-            r.bottom = (int)(srcGridLine[y][1]);
-            r.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
-            r.right = (int)(r.left + srcGridLine[y][3]);
+            //
+            gim.selectRect.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
+            gim.selectRect.bottom = (int)(srcGridLine[y][1]);
+            gim.selectRect.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
+            gim.selectRect.right = (int)(gim.selectRect.left + srcGridLine[y][3]);
+            //
+            gim.selectPath.reset();
+            //
+            if(y == 0){
+                gim.selectPath.moveTo(x * screenWidth / srcGridX, 0);
+                gim.selectPath.lineTo((x + 1) * screenWidth / srcGridX, 0);
+            }else{
+                gim.selectPath.moveTo(
+                        x * srcGridLine[y-1][3] - srcGridLine[y-1][2],
+                        srcGridLine[y-1][1]);
+                gim.selectPath.lineTo(
+                        (x + 1) * srcGridLine[y-1][3] - srcGridLine[y-1][2],
+                        srcGridLine[y-1][1]);
+            }
+            gim.selectPath.lineTo(gim.selectRect.right, gim.selectRect.bottom);
+            gim.selectPath.lineTo(gim.selectRect.left, gim.selectRect.bottom);
+            gim.selectPath.close();
         }
         else{
-            r.left = (int)(-xGridPixel);
-            r.right = 0;
-            r.top = (int)(-yGridPixel);
-            r.bottom = 0;
+            gim.selectRect.left = (int)(-xGridPixel)*2;
+            gim.selectRect.right = (int)(-xGridPixel);
+            gim.selectRect.top = (int)(-yGridPixel)*2;
+            gim.selectRect.bottom = (int)(-yGridPixel);
         }
+    }
+
+    //输入坐标求格子位置
+    public void getRectByLocation(float x, float y, GridInMap gim) {
+        for(int yCount = 0; yCount < srcGridY; yCount++){
+            if(y < srcGridLine[yCount][1]){
+                gim.selectPoint[1] = yCount + srcGridYStart;
+                gim.selectPoint[0] = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
+                //
+                getRectByGrid(gim.selectPoint[0], gim.selectPoint[1], gim);
+                return;
+            }
+        }
+        getRectByGrid(-1, -1 + srcGridXStart, gim);
     }
 }
 

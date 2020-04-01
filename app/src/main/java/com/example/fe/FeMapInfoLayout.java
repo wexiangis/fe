@@ -13,6 +13,9 @@ public class FeMapInfoLayout extends RelativeLayout {
     private FeMapParam mapParam;
 
     public boolean checkHit(int type, float x, float y){
+        if(type == MotionEvent.ACTION_UP){
+            refresh();
+        }
         return false;
     }
 
@@ -28,5 +31,6 @@ public class FeMapInfoLayout extends RelativeLayout {
         mapParam = feMapParam;
         //
         addView(new FeMapInfoView(context, mapParam));
+        addView(new FeMapUnitInfoView(context, mapParam));
     }
 }

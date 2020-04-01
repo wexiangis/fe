@@ -26,7 +26,7 @@ public class FeMapUnitView extends View {
     //传参备份
     private int frameHeight = 56;
     private int _id = 0, _animMode = 0, _colorMode = 0;
-    private int _gridX = 0, _gridY = 0;
+    public int _gridX = 0, _gridY = 0;
 
     //根据动画模式0~5,图像胶片上移帧数
     private final int[] frameSkipByAnimMode = new int[]{15, 12, 8, 4, 0, 0};
@@ -73,6 +73,8 @@ public class FeMapUnitView extends View {
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
         animHeart.addUnit(heartUnit);
+        //类中类需有实例化的对象来new
+        selectUnit = mapParam.new GridInMap();
     }
 
     public void moveGrid(int x, int y){
@@ -137,23 +139,22 @@ public class FeMapUnitView extends View {
         }
     });
 
-    private Rect bitmapGrid = new Rect(0,0,0,0);
+    public FeMapParam.GridInMap selectUnit;
     private Rect bitmapDist = new Rect(0,0,0,0);
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //跟地图要位置
-        mapParam.getRectByGrid(_gridX, _gridY, bitmapGrid);
-        bitmapDist.left = bitmapGrid.left - bitmapGrid.width()/2;
-        bitmapDist.right = bitmapGrid.right + bitmapGrid.width()/2;
-        bitmapDist.top = bitmapGrid.bottom - bitmapGrid.width()*2;
-        bitmapDist.bottom = bitmapGrid.bottom;
+        mapParam.getRectByGrid(_gridX, _gridY, selectUnit);
+        bitmapDist.left = selectUnit.selectRect.left - selectUnit.selectRect.width()/2;
+        bitmapDist.right = selectUnit.selectRect.right + selectUnit.selectRect.width()/2;
+        bitmapDist.top = selectUnit.selectRect.bottom - selectUnit.selectRect.width()*2;
+        bitmapDist.bottom = selectUnit.selectRect.bottom;
         //绘图
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 
     public boolean checkHit(float x, float y){
-        if(x > bitmapGrid.left && x < bitmapGrid.right &&
-            y > bitmapGrid.top && y < bitmapGrid.bottom)
+        if(selectUnit.selectRect.contains((int)x, (int)y))
             return true;
         return false;
     }

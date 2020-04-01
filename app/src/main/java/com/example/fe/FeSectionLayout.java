@@ -55,10 +55,10 @@ public class FeSectionLayout extends RelativeLayout {
         menuLayout.checkHit(type, x, y);
         //点击:人物菜单中?
         unitMenuLayout.checkHit(type, x, y);
-        //点击:地图信息
-        mapInfoLayout.checkHit(type, x, y);
         //点击:选中人物?
         unitLayout.checkHit(type, x, y);
+        //点击:地图信息?
+        mapInfoLayout.checkHit(type, x, y);
         //
         return false;
     }

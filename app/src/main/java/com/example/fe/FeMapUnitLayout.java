@@ -19,8 +19,10 @@ public class FeMapUnitLayout extends RelativeLayout {
         for (int i = 0; i < getChildCount(); i++) {
             tmp = (FeMapUnitView)getChildAt(i);
             if(hitAnimOrder == i &&
-                mapParam.checkSelectType(FeMapParam.SELECT_UNIT))
+                mapParam.checkSelectType(FeMapParam.SELECT_UNIT)) {
                 tmp.setAnimMode(1);
+                mapParam.getRectByGrid(tmp._gridX, tmp._gridY, mapParam.selectUnit);
+            }
             else
                 tmp.setAnimMode(0);
             tmp.invalidate();
@@ -31,17 +33,21 @@ public class FeMapUnitLayout extends RelativeLayout {
         if(type == MotionEvent.ACTION_UP &&
             !mapParam.checkSelectType(FeMapParam.SELECT_MOVE))
         {
+            FeMapUnitView tmp;
             //遍历所有子view
             for (int i = 0; i < getChildCount(); i++) {
-                if (((FeMapUnitView)getChildAt(i)).checkHit(x, y)) {
+                tmp = (FeMapUnitView)getChildAt(i);
+                if (tmp.checkHit(x, y)) {
                     hitAnimOrder = i;
                     mapParam.setSelectType(FeMapParam.SELECT_UNIT);
+                    refresh();
                     return true;
                 }
             }
             //
             hitAnimOrder = -1;
             mapParam.cleanSelectType(FeMapParam.SELECT_UNIT);
+            refresh();
         }
         return false;
     }

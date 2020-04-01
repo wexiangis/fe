@@ -24,14 +24,16 @@ public class FeMapView extends View {
         _context = context;
         mapParam = feMapParam;
 //        _animHeart = animHeart;
+        //
+        upgradeMap(0, 0);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
     }
 
-    public void onDraw(Canvas canvas){
-        super.onDraw(canvas);
-
+    public void upgradeMap(float x, float y){
+        //
+        mapParam.getRectByLocation(x, y, mapParam.selectMap);
         //相对布局位置偏移
         mapParam.mapDist.left = (int)this.getTranslationX() - (int)(mapParam.xGridErr*mapParam.xGridPixel);
         mapParam.mapDist.top = (int)this.getTranslationY() - (int)(mapParam.yGridErr*mapParam.yGridPixel);
@@ -39,6 +41,10 @@ public class FeMapView extends View {
         mapParam.mapDist.bottom = mapParam.mapDist.top + mapParam.height;
         //梯形变换
         mapParam.getMatrix();
+    }
+
+    public void onDraw(Canvas canvas){
+        super.onDraw(canvas);
         //显示地图
         canvas.drawBitmap(mapParam.bitmap, mapParam.matrix, paintMap);
         //地图移动了,刷新其他信息
@@ -53,29 +59,29 @@ public class FeMapView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
-                ((FeSectionLayout)getParent().getParent()).onTouch(MotionEvent.ACTION_DOWN, event.getX(), event.getY());
-                //
                 tDownX = event.getX();
                 tDownY = event.getY();
                 isMove = false;
                 //
                 mapParam.cleanSelectType(FeMapParam.SELECT_MOVE);
+                ((FeSectionLayout)getParent().getParent()).onTouch(MotionEvent.ACTION_DOWN, tDownX, tDownY);
             }
             break;
             case MotionEvent.ACTION_UP: {
-                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY());
-                //
-                if(!isMove) {
-                    //选中方格标志
+                float tUpX = event.getX();
+                float tUpY = event.getY();
+                //选中方格标志
+                if(!isMove)
                     mapParam.setSelectType(FeMapParam.SELECT_MAP);
-                    //输入坐标求格子位置
-                    mapParam.getRectByLocation(event.getX(), event.getY());
-                }else
+                else
                     mapParam.cleanSelectType(FeMapParam.SELECT_MAP);
                 //
-                isMove = false;
+                upgradeMap(tUpX, tUpY);
+                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), tUpX, tUpY);
                 //调用一次onDraw
-                invalidate();
+//                if(isMove)
+//                    invalidate();
+                isMove = false;
             }
             break;
             case MotionEvent.ACTION_MOVE: {
@@ -110,12 +116,11 @@ public class FeMapView extends View {
                     mapParam.yGridErr = mapParam.yGrid - mapParam.screenYGrid;
                 //调用一次onDraw
                 if (needRefresh) {
-                    //
                     mapParam.cleanSelectType(FeMapParam.SELECT_MAP);
                     mapParam.setSelectType(FeMapParam.SELECT_MOVE);
                     //
-                    ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), event.getX(), event.getY());
-                    //
+                    upgradeMap(tMoveX, tMoveY);
+                    ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), tMoveX, tMoveY);
                     invalidate();
                 }
             }

@@ -1,6 +1,7 @@
 package com.example.fe;
 
 import android.content.Context;
+import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /*
@@ -12,6 +13,9 @@ public class FeMapUnitMenuLayout extends RelativeLayout {
     private FeMapParam mapParam;
 
     public boolean checkHit(int type, float x, float y){
+        if(type == MotionEvent.ACTION_UP){
+            ;
+        }
         return false;
     }
 

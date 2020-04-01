@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.View;
 
@@ -17,12 +16,11 @@ public class FeMapInfoView extends View {
     private FeMapParam mapParam;
 
     private Rect rectSrcInfo, rectDistInfo;
-    private Rect rectSrcHead, rectDistHead;
     private Rect rectPaintInfo;
-    private Bitmap bitmapInfo, bitmapHead;
+    private Bitmap bitmapInfo;
     private Paint paintBitmap, paintInfoName, paintInfoParam;
-    private float pixelPowInfo, pixelPowHead;
-    private boolean drawInfo = false, drawHead = false;
+    private float pixelPowInfo;
+    private boolean drawInfo = false;
 
     public FeMapInfoView(Context context, FeMapParam feMapParam){
         super(context);
@@ -30,10 +28,8 @@ public class FeMapInfoView extends View {
         mapParam = feMapParam;
         //
         bitmapInfo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mapinfo);
-        bitmapHead = BitmapFactory.decodeResource(context.getResources(), R.drawable.header);
         //
         pixelPowInfo = mapParam.yGridPixel*2/bitmapInfo.getHeight();
-        pixelPowHead = mapParam.yGridPixel*2/bitmapHead.getHeight();
         //
         rectSrcInfo = new Rect(0, 0, bitmapInfo.getWidth(), bitmapInfo.getHeight());
         rectDistInfo = new Rect(
@@ -41,12 +37,6 @@ public class FeMapInfoView extends View {
                 mapParam.screenHeight - (int)(mapParam.yGridPixel/4 + bitmapInfo.getHeight()*pixelPowInfo),
                 (int)(mapParam.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo),
                 mapParam.screenHeight - (int)(mapParam.yGridPixel/4));
-        rectSrcHead = new Rect(0, 0, bitmapHead.getWidth(), bitmapHead.getHeight());
-        rectDistHead = new Rect(
-                (int)(mapParam.xGridPixel/4),
-                (int)(mapParam.yGridPixel/4),
-                (int)(mapParam.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead),
-                (int)(mapParam.yGridPixel/4 + bitmapHead.getHeight()*pixelPowHead));
         //
         paintBitmap = new Paint();
         paintBitmap.setColor(0xE00000FF);//半透明
@@ -77,8 +67,6 @@ public class FeMapInfoView extends View {
     }
 
     public boolean checkHit(float x, float y){
-        if(drawHead && rectDistHead.contains((int)x, (int)y))
-            return true;
         if(drawInfo && rectDistInfo.contains((int)x, (int)y))
             return true;
         return false;
@@ -88,16 +76,12 @@ public class FeMapInfoView extends View {
         super.onDraw(canvas);
 
         //图像位置自动调整
-        if(mapParam.selectRect.right > mapParam.screenWidth/2){ //放到左边
+        if(mapParam.selectMap.selectRect.right > mapParam.screenWidth/2){ //放到左边
             rectDistInfo.left = (int)(mapParam.xGridPixel/4);
             rectDistInfo.right = (int)(mapParam.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo);
-            rectDistHead.left = (int)(mapParam.xGridPixel/4);
-            rectDistHead.right = (int)(mapParam.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead);
         }else{ //放到右边
             rectDistInfo.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapInfo.getWidth()*pixelPowInfo);
             rectDistInfo.right = (int)(mapParam.screenWidth - mapParam.xGridPixel/4);
-            rectDistHead.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapHead.getWidth()*pixelPowHead);
-            rectDistHead.right = (int)(mapParam.screenWidth - mapParam.xGridPixel/4);
         }
         rectPaintInfo.left = (int)(rectDistInfo.left + rectDistInfo.width()/5);
         rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
@@ -105,22 +89,15 @@ public class FeMapInfoView extends View {
         //画选中框
         if(mapParam.checkSelectType(FeMapParam.SELECT_MAP) &&
             !mapParam.checkSelectType(FeMapParam.SELECT_UNIT))
-            canvas.drawPath(mapParam.selectPath, paintBitmap);
-        //画人物头像
-        if(mapParam.checkSelectType(FeMapParam.SELECT_UNIT)){
-            drawHead = true;
-            canvas.drawBitmap(bitmapHead, rectSrcHead, rectDistHead, paintBitmap);
-            //填信息
-        }else
-            drawHead = false;
+            canvas.drawPath(mapParam.selectMap.selectPath, paintBitmap);
         //画地图信息
         if(mapParam.checkSelectType(FeMapParam.SELECT_MAP)){
             drawInfo = true;
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息
             int mapInfoOrder = mapParam.mapInfo.grid
-                    [mapParam.selectPoint[1]]
-                    [mapParam.selectPoint[0]];
+                    [mapParam.selectMap.selectPoint[1]]
+                    [mapParam.selectMap.selectPoint[0]];
             //填地形信息
             canvas.drawText(
                     mapParam.mapInfo.name[mapInfoOrder],
