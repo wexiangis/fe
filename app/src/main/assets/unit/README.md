@@ -132,5 +132,9 @@
 
 * 格式: 名称即为序号,从000.png到999.png
 
+## special/xxx.png : 特技图标文件
+
+* 格式: 名称即为序号,从000.png到999.png
+
 # 文件结构总览
 ![avatar](total.png)
