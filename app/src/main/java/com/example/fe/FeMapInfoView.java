@@ -8,7 +8,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class FeMapInfoView extends View {
 
@@ -22,12 +26,30 @@ public class FeMapInfoView extends View {
     private float pixelPowInfo;
     private boolean drawInfo = false;
 
+    //
+    public Bitmap getAssetsBitmap(String path)
+    {
+        Bitmap ret = null;
+        try {
+            InputStream is = getClass().getResourceAsStream(path);
+            if(is != null){
+                ret = BitmapFactory.decodeStream(is);
+                is.close();
+            }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("getAssetsBitmap: ", "not found");
+        } catch (IOException e) {
+            Log.d("getAssetsBitmap: ", e.getMessage());
+        }
+        return ret;
+    }
+
     public FeMapInfoView(Context context, FeMapParam feMapParam){
         super(context);
         _context = context;
         mapParam = feMapParam;
         //
-        bitmapInfo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mapinfo);
+        bitmapInfo = getAssetsBitmap("/assets/menu/map/mapinfo.png");
         //
         pixelPowInfo = mapParam.yGridPixel*2/bitmapInfo.getHeight();
         //

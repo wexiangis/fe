@@ -57,8 +57,8 @@ public class FeMapUnitLayout extends RelativeLayout {
         feSave = save;
         mapParam = feMapParam;
 
-        loadView(R.drawable.ma_001, 1, 0);
-//        loadView(R.drawable.ma_002, 2, 1);
+        loadView(0, 1, 0);
+        loadView(5, 2, 1);
 //        loadView(R.drawable.ma_003, 3, 0);
 //        loadView(R.drawable.ma_004, 4, 1);
 //        loadView(R.drawable.ma_005, 5, 0);
@@ -74,7 +74,7 @@ public class FeMapUnitLayout extends RelativeLayout {
 //
 //        loadView(R.drawable.ma_015, 1, 12);
 //        loadView(R.drawable.ma_016, 2, 13);
-        loadView(R.drawable.ma_017, 3, 12);
+//        loadView(R.drawable.ma_017, 3, 12);
 //        loadView(R.drawable.ma_018, 4, 13);
 //        loadView(R.drawable.ma_019, 5, 12);
 //        loadView(R.drawable.ma_020, 6, 13);

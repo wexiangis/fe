@@ -8,7 +8,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class FeMapUnitInfoView extends View {
 
@@ -21,12 +25,30 @@ public class FeMapUnitInfoView extends View {
     private float pixelPowHead;
     private boolean drawHead = false;
 
+    //
+    public Bitmap getAssetsBitmap(String path)
+    {
+        Bitmap ret = null;
+        try {
+            InputStream is = getClass().getResourceAsStream(path);
+            if(is != null){
+                ret = BitmapFactory.decodeStream(is);
+                is.close();
+            }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("getAssetsBitmap: ", "not found");
+        } catch (IOException e) {
+            Log.d("getAssetsBitmap: ", e.getMessage());
+        }
+        return ret;
+    }
+
     public FeMapUnitInfoView(Context context, FeMapParam feMapParam){
         super(context);
         _context = context;
         mapParam = feMapParam;
         //
-        bitmapHead = BitmapFactory.decodeResource(context.getResources(), R.drawable.header);
+        bitmapHead = getAssetsBitmap("/assets/menu/map/header.png");
         //
         pixelPowHead = mapParam.yGridPixel*2/bitmapHead.getHeight();
         //

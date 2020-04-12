@@ -8,7 +8,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /*
     电影胶片式播放动画,针对地图人物动画管理而封装;
@@ -41,6 +45,24 @@ public class FeMapUnitView extends View {
     //扣取图片位置
     private Rect bitmapBody = new Rect(0,0,0,0);
 
+    //
+    public Bitmap getAssetsUnitAnim(int id)
+    {
+        Bitmap ret = null;
+        try {
+            InputStream is = getClass().getResourceAsStream("/assets/unit/anim/"+String.format("%03d.png",id));
+            if(is != null){
+                ret = BitmapFactory.decodeStream(is);
+                is.close();
+            }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("getAssetsBitmap: ", "not found");
+        } catch (IOException e) {
+            Log.d("getAssetsBitmap: ", e.getMessage());
+        }
+        return ret;
+    }
+
     /*
     id: drawable图片,如: R.drawable.xxx
     */
@@ -55,7 +77,7 @@ public class FeMapUnitView extends View {
         paint.setColor(Color.GREEN);
 //        paint.setAntiAlias(true);
         //图片加载和颜色变换
-        bitmap = replaceBitmapColor(BitmapFactory.decodeResource(context.getResources(), id), colorMode);
+        bitmap = replaceBitmapColor(getAssetsUnitAnim(id), colorMode);
         matrix.postScale(-1, 1);
         //根据动画类型使用对应的心跳
         setAnimMode(animMode);
