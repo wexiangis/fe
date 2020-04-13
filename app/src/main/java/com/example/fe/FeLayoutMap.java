@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     加载和管理地图及地形动画
  */
-public class FeMapLayout extends RelativeLayout {
+public class FeLayoutMap extends RelativeLayout {
 
     private FeSave feSave;
     public FeMapParam mapParam;
@@ -17,7 +17,7 @@ public class FeMapLayout extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeMapLayout(Context context, FeSave save, int section) {
+    public FeLayoutMap(Context context, FeSave save, int section) {
         super(context);
         feSave = save;
         //初始化和地图相关的所有参数
@@ -27,7 +27,7 @@ public class FeMapLayout extends RelativeLayout {
     }
 
     private void loadView(){
-        addView(new FeMapView(feSave.activity, feSave.feHeart, mapParam));
+        addView(new FeViewMap(feSave.activity, feSave.feHeart, mapParam));
     }
 
 }

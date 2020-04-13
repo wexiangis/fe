@@ -14,13 +14,13 @@ import android.view.View;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FeMapInfoView extends View {
+public class FeViewMapInfo extends View {
 
     private Context _context;
     private FeMapParam mapParam;
 
-    private Rect rectSrcInfo, rectDistInfo;
-    private Rect rectPaintInfo;
+    private Rect rectSrcInfo, rectDistInfo;//图片源位置和输出位置
+    private Rect rectPaintInfo;//打印信息的大致输出范围
     private Bitmap bitmapInfo;
     private Paint paintBitmap, paintInfoName, paintInfoParam;
     private float pixelPowInfo;
@@ -44,7 +44,7 @@ public class FeMapInfoView extends View {
         return ret;
     }
 
-    public FeMapInfoView(Context context, FeMapParam feMapParam){
+    public FeViewMapInfo(Context context, FeMapParam feMapParam){
         super(context);
         _context = context;
         mapParam = feMapParam;
@@ -83,9 +83,9 @@ public class FeMapInfoView extends View {
         //
         rectPaintInfo = new Rect(
                 (int)(rectDistInfo.left + rectDistInfo.width()/5),
-                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*15),
+                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*4),
                 (int)(rectDistInfo.right - rectDistInfo.width()/5),
-                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*15 + paintInfoParam.getTextSize()*2 + pixelPowInfo*5));
+                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*4 + paintInfoParam.getTextSize()*2 + pixelPowInfo*2));
     }
 
     public boolean checkHit(float x, float y){
@@ -130,7 +130,7 @@ public class FeMapInfoView extends View {
             canvas.drawText(
                     mapParam.mapInfo.name[mapInfoOrder],
                     rectDistInfo.left + rectDistInfo.width()/2,
-                    rectDistInfo.top + rectDistInfo.height()/2 - pixelPowInfo*4,
+                    rectDistInfo.top + rectDistInfo.height()/2 - pixelPowInfo*1,
                     paintInfoName);
             //地形参数
             paintInfoParam.setColor(Color.BLUE);

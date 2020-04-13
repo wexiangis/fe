@@ -7,17 +7,17 @@ import android.widget.RelativeLayout;
 /*
     地图中的人物动画管理
  */
-public class FeMapUnitLayout extends RelativeLayout {
+public class FeLayoutUnit extends RelativeLayout {
 
     private FeSave feSave;
     private FeMapParam mapParam;
     private int hitAnimOrder = -1;
 
     public void refresh(){
-        FeMapUnitView tmp;
+        FeViewUnit tmp;
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++) {
-            tmp = (FeMapUnitView)getChildAt(i);
+            tmp = (FeViewUnit)getChildAt(i);
             if(hitAnimOrder == i &&
                 mapParam.checkSelectType(FeMapParam.SELECT_UNIT)) {
                 tmp.setAnimMode(1);
@@ -33,10 +33,10 @@ public class FeMapUnitLayout extends RelativeLayout {
         if(type == MotionEvent.ACTION_UP &&
             !mapParam.checkSelectType(FeMapParam.SELECT_MOVE_END))
         {
-            FeMapUnitView tmp;
+            FeViewUnit tmp;
             //遍历所有子view
             for (int i = 0; i < getChildCount(); i++) {
-                tmp = (FeMapUnitView)getChildAt(i);
+                tmp = (FeViewUnit)getChildAt(i);
                 if (tmp.checkHit(x, y)) {
                     hitAnimOrder = i;
                     mapParam.setSelectType(FeMapParam.SELECT_UNIT);
@@ -52,13 +52,13 @@ public class FeMapUnitLayout extends RelativeLayout {
         return false;
     }
 
-    public FeMapUnitLayout(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutUnit(Context context, FeSave save, FeMapParam feMapParam) {
         super(context);
         feSave = save;
         mapParam = feMapParam;
 
-        loadView(0, 1, 0);
-        loadView(5, 2, 1);
+//        loadView(0, 1, 0);
+//        loadView(1, 2, 1);
 //        loadView(R.drawable.ma_003, 3, 0);
 //        loadView(R.drawable.ma_004, 4, 1);
 //        loadView(R.drawable.ma_005, 5, 0);
@@ -89,11 +89,11 @@ public class FeMapUnitLayout extends RelativeLayout {
     }
 
     private void loadView(int id, int y, int x){
-        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x, y, 0, 0));
-        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+2, y, 1, 0));
-        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+4, y, 2, 0));
-        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+6, y, 3, 0));
-        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+8, y, 4, 0));
-        addView(new FeMapUnitView(feSave.activity, feSave.feHeart, mapParam, id, x+10, y, 5, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x, y, 0, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+2, y, 1, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+4, y, 2, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+6, y, 3, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+8, y, 4, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+10, y, 5, 0));
     }
 }

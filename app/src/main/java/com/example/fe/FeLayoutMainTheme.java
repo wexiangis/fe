@@ -13,7 +13,7 @@ import android.widget.TextView;
 /*
     主界面
  */
-public class FeMainTheme extends RelativeLayout {
+public class FeLayoutMainTheme extends RelativeLayout {
 
     //
     private FeSave feSave;
@@ -61,7 +61,7 @@ public class FeMainTheme extends RelativeLayout {
         }
     };
 
-    public FeMainTheme(Context context, FeSave save)
+    public FeLayoutMainTheme(Context context, FeSave save)
     {
         super(context);
         feSave = save;

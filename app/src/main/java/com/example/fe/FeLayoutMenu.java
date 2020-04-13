@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     地图上的系统菜单
  */
-public class FeMapMenuLayout extends RelativeLayout {
+public class FeLayoutMenu extends RelativeLayout {
 
     private FeSave feSave;
     private FeMapParam mapParam;
@@ -21,7 +21,7 @@ public class FeMapMenuLayout extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeMapMenuLayout(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutMenu(Context context, FeSave save, FeMapParam feMapParam) {
         super(context);
         feSave = save;
         mapParam = feMapParam;

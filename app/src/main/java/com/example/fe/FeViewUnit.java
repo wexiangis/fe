@@ -18,7 +18,7 @@ import java.io.InputStream;
     电影胶片式播放动画,针对地图人物动画管理而封装;
     统一管理人物的待机、选中、上下左右移动时的动画
  */
-public class FeMapUnitView extends View {
+public class FeViewUnit extends View {
 
     private Context _context;
     private FeMapParam mapParam;
@@ -66,7 +66,7 @@ public class FeMapUnitView extends View {
     /*
     id: drawable图片,如: R.drawable.xxx
     */
-    public FeMapUnitView(Context context, FeHeart feHeart, FeMapParam feMapParam, int id, int gridX, int gridY, int animMode, int colorMode)
+    public FeViewUnit(Context context, FeHeart feHeart, FeMapParam feMapParam, int id, int gridX, int gridY, int animMode, int colorMode)
     {
         super(context);
         _context = context;
@@ -157,7 +157,7 @@ public class FeMapUnitView extends View {
             bitmapBody.right = bitmap.getWidth();
             bitmapBody.bottom = bitmapBody.top + frameHeight;
             //调用一次onDrow
-            FeMapUnitView.this.invalidate();
+            FeViewUnit.this.invalidate();
         }
     });
 

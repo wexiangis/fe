@@ -14,7 +14,7 @@ import android.view.View;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FeMapUnitInfoView extends View {
+public class FeViewUnitInfo extends View {
 
     private Context _context;
     private FeMapParam mapParam;
@@ -43,7 +43,7 @@ public class FeMapUnitInfoView extends View {
         return ret;
     }
 
-    public FeMapUnitInfoView(Context context, FeMapParam feMapParam){
+    public FeViewUnitInfo(Context context, FeMapParam feMapParam){
         super(context);
         _context = context;
         mapParam = feMapParam;

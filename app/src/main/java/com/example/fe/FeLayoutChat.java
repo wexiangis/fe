@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     地图上的对话
  */
-public class FeMapChatLayout extends RelativeLayout {
+public class FeLayoutChat extends RelativeLayout {
 
     private FeSave feSave;
     private FeMapParam mapParam;
@@ -21,7 +21,7 @@ public class FeMapChatLayout extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeMapChatLayout(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutChat(Context context, FeSave save, FeMapParam feMapParam) {
         super(context);
         feSave = save;
         mapParam = feMapParam;

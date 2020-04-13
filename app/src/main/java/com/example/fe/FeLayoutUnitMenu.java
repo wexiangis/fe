@@ -5,16 +5,16 @@ import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /*
-    显示地图光标处的地形信息
+    地图上的人物菜单
  */
-public class FeMapInfoLayout extends RelativeLayout {
+public class FeLayoutUnitMenu extends RelativeLayout {
 
     private FeSave feSave;
     private FeMapParam mapParam;
 
     public boolean checkHit(int type, float x, float y){
         if(type == MotionEvent.ACTION_UP){
-            refresh();
+            ;
         }
         return false;
     }
@@ -25,12 +25,9 @@ public class FeMapInfoLayout extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeMapInfoLayout(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutUnitMenu(Context context, FeSave save, FeMapParam feMapParam) {
         super(context);
         feSave = save;
         mapParam = feMapParam;
-        //
-        addView(new FeMapInfoView(context, mapParam));
-        addView(new FeMapUnitInfoView(context, mapParam));
     }
 }

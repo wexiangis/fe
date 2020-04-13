@@ -10,26 +10,39 @@ import android.view.View;
 /*
     地图绘制和全局触屏回调管理
  */
-public class FeMapView extends View {
+public class FeViewMap extends View {
 
     private Context _context;
     private FeMapParam mapParam;
-//    private FeHeart _animHeart;
+    private FeHeart animHeart;
 
     //画图
     private Paint paintMap;
 
-    public FeMapView(Context context, FeHeart animHeart, FeMapParam feMapParam) {
+    public FeViewMap(Context context, FeHeart feHeart, FeMapParam feMapParam) {
         super(context);
         _context = context;
         mapParam = feMapParam;
-//        _animHeart = animHeart;
+        animHeart = feHeart;
         //
         upgradeMap(0, 0);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
+        //引入心跳
+        animHeart.addUnit(heartMapMov);
     }
+
+    private int hearCount = 0;
+    private FeHeartUnit heartMapMov = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
+        public void run(int count){
+            //周期200ms
+            if(++hearCount > 2){
+                hearCount = 1;
+                //需要挪图? //按格挪图
+            }
+        }
+    });
 
     public void upgradeMap(float x, float y){
         //相对布局位置偏移
@@ -48,7 +61,7 @@ public class FeMapView extends View {
         //显示地图
         canvas.drawBitmap(mapParam.bitmap, mapParam.matrix, paintMap);
         //地图移动了,刷新其他信息
-        ((FeSectionLayout)getParent().getParent()).refresh();
+        ((FeLayoutSection)getParent().getParent()).refresh();
     }
 
     //触屏按下时记录坐标
@@ -65,7 +78,7 @@ public class FeMapView extends View {
                 //
                 mapParam.cleanSelectType(FeMapParam.SELECT_MOVE);
                 mapParam.cleanSelectType(FeMapParam.SELECT_MOVE_END);
-                ((FeSectionLayout)getParent().getParent()).onTouch(MotionEvent.ACTION_DOWN, tDownX, tDownY);
+                ((FeLayoutSection)getParent().getParent()).onTouch(MotionEvent.ACTION_DOWN, tDownX, tDownY);
             }
             break;
             case MotionEvent.ACTION_UP: {
@@ -81,7 +94,7 @@ public class FeMapView extends View {
                 }
                 //
                 upgradeMap(tUpX, tUpY);
-                ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), tUpX, tUpY);
+                ((FeLayoutSection)getParent().getParent()).onTouch(event.getAction(), tUpX, tUpY);
                 //选中人物太过靠近边界,挪动地图
                 if(mapParam.checkSelectType(FeMapParam.SELECT_UNIT) &&
                     !mapParam.srcGridCenter.contains(
@@ -146,7 +159,7 @@ public class FeMapView extends View {
                     mapParam.setSelectType(FeMapParam.SELECT_MOVE);
                     //
                     upgradeMap(tMoveX, tMoveY);
-                    ((FeSectionLayout)getParent().getParent()).onTouch(event.getAction(), tMoveX, tMoveY);
+                    ((FeLayoutSection)getParent().getParent()).onTouch(event.getAction(), tMoveX, tMoveY);
                     invalidate();
                 }
             }
