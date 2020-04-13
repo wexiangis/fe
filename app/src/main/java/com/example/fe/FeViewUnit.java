@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.View;
@@ -76,6 +77,7 @@ public class FeViewUnit extends View {
         paint = new Paint();
         paint.setColor(Color.GREEN);
 //        paint.setAntiAlias(true);
+//        paint.setBitmapFilter(true);
         //图片加载和颜色变换
         bitmap = replaceBitmapColor(getAssetsUnitAnim(id), colorMode);
         matrix.postScale(-1, 1);
@@ -172,6 +174,7 @@ public class FeViewUnit extends View {
         bitmapDist.top = selectUnit.selectRect.bottom - selectUnit.selectRect.width()*2;
         bitmapDist.bottom = selectUnit.selectRect.bottom;
         //绘图
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 

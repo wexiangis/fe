@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -107,6 +108,7 @@ public class FeViewUnitInfo extends View {
             drawHead = false;
         }else {
             drawHead = true;
+            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
             canvas.drawBitmap(bitmapHead, rectSrcHead, rectDistHead, paintBitmap);
             //填信息
         }

@@ -105,10 +105,10 @@ public class FeViewMap extends View {
                         mapParam.xGridErr -= mapParam.srcGridCenter.left - mapParam.selectUnit.selectPoint[0];
                     else if(mapParam.selectUnit.selectPoint[0] > mapParam.srcGridCenter.right)
                         mapParam.xGridErr += mapParam.selectUnit.selectPoint[0] - mapParam.srcGridCenter.right;
-                    if(mapParam.selectUnit.selectPoint[1] < mapParam.srcGridCenter.bottom)
-                        mapParam.yGridErr -= mapParam.srcGridCenter.bottom - mapParam.selectUnit.selectPoint[1];
-                    else if(mapParam.selectUnit.selectPoint[1] > mapParam.srcGridCenter.top)
-                        mapParam.yGridErr += mapParam.selectUnit.selectPoint[1] - mapParam.srcGridCenter.top;
+                    if(mapParam.selectUnit.selectPoint[1] < mapParam.srcGridCenter.top)
+                        mapParam.yGridErr -= mapParam.srcGridCenter.top - mapParam.selectUnit.selectPoint[1];
+                    else if(mapParam.selectUnit.selectPoint[1] > mapParam.srcGridCenter.bottom)
+                        mapParam.yGridErr += mapParam.selectUnit.selectPoint[1] - mapParam.srcGridCenter.bottom;
                     //防止地图移出屏幕
                     if (mapParam.xGridErr < 0) mapParam.xGridErr = 0;
                     else if (mapParam.xGridErr + mapParam.screenXGrid > mapParam.xGrid)

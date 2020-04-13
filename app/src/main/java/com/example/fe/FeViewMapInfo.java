@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -102,6 +103,8 @@ public class FeViewMapInfo extends View {
             drawInfo = false;
             return;
         }
+
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
 
         //图像位置自动调整
         if(mapParam.selectMap.selectRect.right > mapParam.screenWidth/2){ //放到左边

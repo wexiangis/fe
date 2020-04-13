@@ -57,35 +57,35 @@ public class FeLayoutUnit extends RelativeLayout {
         feSave = save;
         mapParam = feMapParam;
 
-//        loadView(0, 1, 0);
-//        loadView(1, 2, 1);
-//        loadView(R.drawable.ma_003, 3, 0);
-//        loadView(R.drawable.ma_004, 4, 1);
-//        loadView(R.drawable.ma_005, 5, 0);
-//        loadView(R.drawable.ma_006, 6, 1);
-//        loadView(R.drawable.ma_007, 7, 0);
-//        loadView(R.drawable.ma_008, 8, 1);
-//        loadView(R.drawable.ma_009, 9, 0);
-//        loadView(R.drawable.ma_010, 10, 1);
-//        loadView(R.drawable.ma_011, 11, 0);
-//        loadView(R.drawable.ma_012, 12, 1);
-//        loadView(R.drawable.ma_013, 13, 0);
-//        loadView(R.drawable.ma_014, 14, 1);
-//
-//        loadView(R.drawable.ma_015, 1, 12);
-//        loadView(R.drawable.ma_016, 2, 13);
-//        loadView(R.drawable.ma_017, 3, 12);
-//        loadView(R.drawable.ma_018, 4, 13);
-//        loadView(R.drawable.ma_019, 5, 12);
-//        loadView(R.drawable.ma_020, 6, 13);
-//        loadView(R.drawable.ma_021, 7, 12);
-//        loadView(R.drawable.ma_022, 8, 13);
-//        loadView(R.drawable.ma_023, 9, 12);
-//        loadView(R.drawable.ma_024, 10, 13);
-//        loadView(R.drawable.ma_025, 11, 12);
-//        loadView(R.drawable.ma_026, 12, 13);
-//        loadView(R.drawable.ma_027, 13, 12);
-//        loadView(R.drawable.ma_028, 14, 13);
+        loadView(0, 1, 0);
+        loadView(1, 2, 1);
+//        loadView(3, 3, 0);
+//        loadView(4, 4, 1);
+//        loadView(5, 5, 0);
+//        loadView(6, 6, 1);
+//        loadView(7, 7, 0);
+        loadView(8, 8, 1);
+        loadView(9, 9, 0);
+//        loadView(10, 10, 1);
+//        loadView(11, 11, 0);
+//        loadView(12, 12, 1);
+//        loadView(13, 13, 0);
+//        loadView(14, 14, 1);
+
+//        loadView(15, 1, 12);
+//        loadView(16, 2, 13);
+//        loadView(17, 3, 12);
+//        loadView(18, 4, 13);
+//        loadView(19, 5, 12);
+        loadView(20, 6, 13);
+        loadView(21, 7, 12);
+//        loadView(22, 8, 13);
+//        loadView(23, 9, 12);
+//        loadView(24, 10, 13);
+//        loadView(25, 11, 12);
+//        loadView(26, 12, 13);
+        loadView(27, 13, 12);
+        loadView(28, 14, 13);
     }
 
     private void loadView(int id, int y, int x){
