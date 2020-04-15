@@ -70,19 +70,19 @@ public class FeLayoutSection extends RelativeLayout {
         mapLayout = new FeLayoutMap(feSave.activity, feSave, section);
         addView(mapLayout);
         //地图人物动画图层
-        unitLayout = new FeLayoutUnit(feSave.activity, feSave, mapLayout.mapParam);
+        unitLayout = new FeLayoutUnit(feSave.activity, feSave);
         addView(unitLayout);
         //地图地形信息
-        mapInfoLayout = new FeLayoutMapInfo(feSave.activity, feSave, mapLayout.mapParam);
+        mapInfoLayout = new FeLayoutMapInfo(feSave.activity, feSave);
         addView(mapInfoLayout);
         //人物操作菜单图层
-        unitMenuLayout = new FeLayoutUnitMenu(feSave.activity, feSave, mapLayout.mapParam);
+        unitMenuLayout = new FeLayoutUnitMenu(feSave.activity, feSave);
         addView(unitMenuLayout);
         // 系统菜单图层
-        menuLayout = new FeLayoutMenu(feSave.activity, feSave, mapLayout.mapParam);
+        menuLayout = new FeLayoutMenu(feSave.activity, feSave);
         addView(menuLayout);
         //人物对话图层
-        chatLayout = new FeLayoutChat(feSave.activity, feSave, mapLayout.mapParam);
+        chatLayout = new FeLayoutChat(feSave.activity, feSave);
         addView(chatLayout);
         //其它图层
         ;

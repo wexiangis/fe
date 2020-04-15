@@ -1,12 +1,11 @@
 package com.example.fe;
 
 /*
-    事件管理层
+    事件管理层: 用于切换 主界面,章节内容,存档界面,等等等
  */
 public class FeEvent {
 
     public FeSave feSave;
-    public FeLayoutSection feLayoutSection = null;
 
     public FeEvent(FeSave save)
     {
@@ -28,8 +27,8 @@ public class FeEvent {
 
     //加载章节大地图
     public void loadSection(int section) {
-        feLayoutSection = new FeLayoutSection(feSave.activity, feSave, section);
-        feSave.activity.setContentView(feLayoutSection);
+        feSave.feLayoutSection = new FeLayoutSection(feSave.activity, feSave, section);
+        feSave.activity.setContentView(feSave.feLayoutSection);
     }
 
     //加载章节对话

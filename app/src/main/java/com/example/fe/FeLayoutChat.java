@@ -21,9 +21,9 @@ public class FeLayoutChat extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutChat(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutChat(Context context, FeSave save) {
         super(context);
         feSave = save;
-        mapParam = feMapParam;
+        mapParam = feSave.feMapParam;
     }
 }

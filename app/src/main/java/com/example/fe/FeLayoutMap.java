@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 public class FeLayoutMap extends RelativeLayout {
 
     private FeSave feSave;
-    public FeMapParam mapParam;
 
     public void refresh(){
         //遍历所有子view
@@ -21,13 +20,13 @@ public class FeLayoutMap extends RelativeLayout {
         super(context);
         feSave = save;
         //初始化和地图相关的所有参数
-        mapParam = new FeMapParam(feSave.activity, section);
+        feSave.feMapParam = new FeMapParam(feSave.activity, section);
         //
         loadView();
     }
 
     private void loadView(){
-        addView(new FeViewMap(feSave.activity, feSave.feHeart, mapParam));
+        addView(new FeViewMap(feSave.activity, feSave.feHeart, feSave.feMapParam));
     }
 
 }

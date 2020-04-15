@@ -12,7 +12,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //按应用图标回到应用时的特殊处理
+        //点击应用图标,回到应用时的特殊处理
         if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        //关闭心跳定时器
+        //关闭全局动画心跳定时器
         if(feSave != null && feSave.feHeart != null)
             feSave.feHeart.stop();
     }
@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        //启动心跳定时器
+        //启动全局动画心跳定时器
         if(feSave != null && feSave.feHeart != null)
             feSave.feHeart.start();
     }

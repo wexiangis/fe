@@ -52,10 +52,10 @@ public class FeLayoutUnit extends RelativeLayout {
         return false;
     }
 
-    public FeLayoutUnit(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutUnit(Context context, FeSave save) {
         super(context);
         feSave = save;
-        mapParam = feMapParam;
+        mapParam = feSave.feMapParam;
 
         loadView(0, 1, 0);
         loadView(1, 2, 1);

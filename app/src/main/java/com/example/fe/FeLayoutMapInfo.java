@@ -25,10 +25,10 @@ public class FeLayoutMapInfo extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMapInfo(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutMapInfo(Context context, FeSave save) {
         super(context);
         feSave = save;
-        mapParam = feMapParam;
+        mapParam = feSave.feMapParam;
         //
         addView(new FeViewMapInfo(context, mapParam));
         addView(new FeViewUnitInfo(context, mapParam));

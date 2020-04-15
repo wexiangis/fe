@@ -25,9 +25,9 @@ public class FeLayoutUnitMenu extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutUnitMenu(Context context, FeSave save, FeMapParam feMapParam) {
+    public FeLayoutUnitMenu(Context context, FeSave save) {
         super(context);
         feSave = save;
-        mapParam = feMapParam;
+        mapParam = feSave.feMapParam;
     }
 }
