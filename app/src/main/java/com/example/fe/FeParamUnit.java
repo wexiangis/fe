@@ -3,11 +3,11 @@ package com.example.fe;
 import android.app.Activity;
 import android.graphics.Bitmap;
 
-public class FeUnitParam {
+public class FeParamUnit {
 
     private Activity activity;
 
-    public FeUnitParam(Activity act){
+    public FeParamUnit(Activity act){
         activity = act;
         //初始化assets/unit文件夹中的信息
     }

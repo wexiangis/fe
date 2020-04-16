@@ -18,7 +18,7 @@ import java.io.InputStream;
 public class FeViewMapInfo extends View {
 
     private Context _context;
-    private FeMapParam mapParam;
+    private FeParamMap paramMap;
 
     private Rect rectSrcInfo, rectDistInfo;//图片源位置和输出位置
     private Rect rectPaintInfo;//打印信息的大致输出范围
@@ -45,21 +45,21 @@ public class FeViewMapInfo extends View {
         return ret;
     }
 
-    public FeViewMapInfo(Context context, FeMapParam feMapParam){
+    public FeViewMapInfo(Context context, FeParamMap feParamMap){
         super(context);
         _context = context;
-        mapParam = feMapParam;
+        paramMap = feParamMap;
         //
         bitmapInfo = getAssetsBitmap("/assets/menu/map/mapinfo.png");
         //
-        pixelPowInfo = mapParam.yGridPixel*2/bitmapInfo.getHeight();
+        pixelPowInfo = paramMap.yGridPixel*2/bitmapInfo.getHeight();
         //
         rectSrcInfo = new Rect(0, 0, bitmapInfo.getWidth(), bitmapInfo.getHeight());
         rectDistInfo = new Rect(
-                (int)(mapParam.xGridPixel/4),
-                mapParam.screenHeight - (int)(mapParam.yGridPixel/4 + bitmapInfo.getHeight()*pixelPowInfo),
-                (int)(mapParam.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo),
-                mapParam.screenHeight - (int)(mapParam.yGridPixel/4));
+                (int)(paramMap.xGridPixel/4),
+                paramMap.screenHeight - (int)(paramMap.yGridPixel/4 + bitmapInfo.getHeight()*pixelPowInfo),
+                (int)(paramMap.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo),
+                paramMap.screenHeight - (int)(paramMap.yGridPixel/4));
         //
         paintBitmap = new Paint();
         paintBitmap.setColor(0xE00000FF);//半透明
@@ -99,7 +99,7 @@ public class FeViewMapInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(mapParam.checkSelectType(FeMapParam.SELECT_MOVE)){
+        if(paramMap.checkSelectType(FeParamMap.SELECT_MOVE)){
             drawInfo = false;
             return;
         }
@@ -107,31 +107,31 @@ public class FeViewMapInfo extends View {
         canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
 
         //图像位置自动调整
-        if(mapParam.selectMap.selectRect.right > mapParam.screenWidth/2){ //放到左边
-            rectDistInfo.left = (int)(mapParam.xGridPixel/4);
-            rectDistInfo.right = (int)(mapParam.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo);
+        if(paramMap.selectMap.selectRect.right > paramMap.screenWidth/2){ //放到左边
+            rectDistInfo.left = (int)(paramMap.xGridPixel/4);
+            rectDistInfo.right = (int)(paramMap.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo);
         }else{ //放到右边
-            rectDistInfo.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapInfo.getWidth()*pixelPowInfo);
-            rectDistInfo.right = (int)(mapParam.screenWidth - mapParam.xGridPixel/4);
+            rectDistInfo.left = (int)(paramMap.screenWidth - paramMap.xGridPixel/4 - bitmapInfo.getWidth()*pixelPowInfo);
+            rectDistInfo.right = (int)(paramMap.screenWidth - paramMap.xGridPixel/4);
         }
         rectPaintInfo.left = (int)(rectDistInfo.left + rectDistInfo.width()/5);
         rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
 
         //画选中框
-        if(mapParam.checkSelectType(FeMapParam.SELECT_MAP) &&
-            !mapParam.checkSelectType(FeMapParam.SELECT_UNIT))
-            canvas.drawPath(mapParam.selectMap.selectPath, paintBitmap);
+        if(paramMap.checkSelectType(FeParamMap.SELECT_MAP) &&
+            !paramMap.checkSelectType(FeParamMap.SELECT_UNIT))
+            canvas.drawPath(paramMap.selectMap.selectPath, paintBitmap);
         //画地图信息
-        if(mapParam.checkSelectType(FeMapParam.SELECT_MAP)){
+        if(paramMap.checkSelectType(FeParamMap.SELECT_MAP)){
             drawInfo = true;
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息
-            int mapInfoOrder = mapParam.mapInfo.grid
-                    [mapParam.selectMap.selectPoint[1]]
-                    [mapParam.selectMap.selectPoint[0]];
+            int mapInfoOrder = paramMap.mapInfo.grid
+                    [paramMap.selectMap.selectPoint[1]]
+                    [paramMap.selectMap.selectPoint[0]];
             //填地形信息
             canvas.drawText(
-                    mapParam.mapInfo.name[mapInfoOrder],
+                    paramMap.mapInfo.name[mapInfoOrder],
                     rectDistInfo.left + rectDistInfo.width()/2,
                     rectDistInfo.top + rectDistInfo.height()/2 - pixelPowInfo*1,
                     paintInfoName);
@@ -149,11 +149,11 @@ public class FeViewMapInfo extends View {
             //地形参数数据
             paintInfoParam.setColor(Color.BLACK);
             paintInfoParam.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(String.valueOf(mapParam.mapInfo.defend[mapInfoOrder]),
+            canvas.drawText(String.valueOf(paramMap.mapInfo.defend[mapInfoOrder]),
                     rectPaintInfo.right,
                     rectPaintInfo.top + paintInfoParam.getTextSize(),
                     paintInfoParam);
-            canvas.drawText(String.valueOf(mapParam.mapInfo.avoid[mapInfoOrder]),
+            canvas.drawText(String.valueOf(paramMap.mapInfo.avoid[mapInfoOrder]),
                     rectPaintInfo.right,
                     rectPaintInfo.bottom,
                     paintInfoParam);

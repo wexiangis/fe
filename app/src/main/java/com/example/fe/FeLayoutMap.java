@@ -20,13 +20,13 @@ public class FeLayoutMap extends RelativeLayout {
         super(context);
         feSave = save;
         //初始化和地图相关的所有参数
-        feSave.feMapParam = new FeMapParam(feSave.activity, section);
+        feSave.feParamMap = new FeParamMap(feSave.activity, section);
         //
         loadView();
     }
 
     private void loadView(){
-        addView(new FeViewMap(feSave.activity, feSave.feHeart, feSave.feMapParam));
+        addView(new FeViewMap(feSave.activity, feSave.feHeart, feSave.feParamMap));
     }
 
 }

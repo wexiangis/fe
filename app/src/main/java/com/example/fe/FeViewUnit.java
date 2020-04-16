@@ -22,7 +22,7 @@ import java.io.InputStream;
 public class FeViewUnit extends View {
 
     private Context _context;
-    private FeMapParam mapParam;
+    private FeParamMap paramMap;
     private FeHeart animHeart;
 
     //动画相对地图的偏移量
@@ -67,12 +67,12 @@ public class FeViewUnit extends View {
     /*
     id: drawable图片,如: R.drawable.xxx
     */
-    public FeViewUnit(Context context, FeHeart feHeart, FeMapParam feMapParam, int id, int gridX, int gridY, int animMode, int colorMode)
+    public FeViewUnit(Context context, FeHeart feHeart, FeParamMap feParamMap, int id, int gridX, int gridY, int animMode, int colorMode)
     {
         super(context);
         _context = context;
         animHeart = feHeart;
-        mapParam = feMapParam;
+        paramMap = feParamMap;
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
@@ -98,21 +98,21 @@ public class FeViewUnit extends View {
         //引入心跳
         animHeart.addUnit(heartUnit);
         //类中类需有实例化的对象来new
-        selectUnit = mapParam.new GridInMap();
+        selectUnit = paramMap.new GridInMap();
     }
 
     public void moveGrid(int x, int y){
         _gridX += x;
         _gridY += y;
-        leftMargin += x*mapParam.xGridPixel;
-        topMargin += y*mapParam.yGridPixel;
+        leftMargin += x*paramMap.xGridPixel;
+        topMargin += y*paramMap.yGridPixel;
     }
 
     public void moveGridTo(int x, int y){
         _gridX = x;
         _gridY = y;
-        leftMargin = x*mapParam.xGridPixel;
-        topMargin = y*mapParam.yGridPixel;
+        leftMargin = x*paramMap.xGridPixel;
+        topMargin = y*paramMap.yGridPixel;
     }
 
     //设置图片参数
@@ -163,12 +163,12 @@ public class FeViewUnit extends View {
         }
     });
 
-    public FeMapParam.GridInMap selectUnit;
+    public FeParamMap.GridInMap selectUnit;
     private Rect bitmapDist = new Rect(0,0,0,0);
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //跟地图要位置
-        mapParam.getRectByGrid(_gridX, _gridY, selectUnit);
+        paramMap.getRectByGrid(_gridX, _gridY, selectUnit);
         bitmapDist.left = selectUnit.selectRect.left - selectUnit.selectRect.width()/2;
         bitmapDist.right = selectUnit.selectRect.right + selectUnit.selectRect.width()/2;
         bitmapDist.top = selectUnit.selectRect.bottom - selectUnit.selectRect.width()*2;

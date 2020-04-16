@@ -8,21 +8,24 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+
 /*
     加载地图后所产生的一系列关键参数,用于传递给地图上的人物动画
  */
-public class FeMapParam {
+public class FeParamMap {
 
     private Activity activity;
     public int section;
 
-    public FeMapParam(Activity act, int feSection)
+    //
+    public Bitmap bitmap = null, tBitmap = null;
+
+    public FeParamMap(Activity act, int feSection)
     {
         activity = act;
         section = feSection;
@@ -151,7 +154,6 @@ public class FeMapParam {
     //----- 地图方格信息 -----
 
     //
-    public Bitmap bitmap = null, tBitmap = null;
     public Matrix matrix = new Matrix();
 
     //方格显示时可以接受的最小像素值

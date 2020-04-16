@@ -18,7 +18,7 @@ import java.io.InputStream;
 public class FeViewUnitInfo extends View {
 
     private Context _context;
-    private FeMapParam mapParam;
+    private FeParamMap paramMap;
 
     private Rect rectSrcHead, rectDistHead;
     private Bitmap bitmapHead;
@@ -44,21 +44,21 @@ public class FeViewUnitInfo extends View {
         return ret;
     }
 
-    public FeViewUnitInfo(Context context, FeMapParam feMapParam){
+    public FeViewUnitInfo(Context context, FeParamMap feParamMap){
         super(context);
         _context = context;
-        mapParam = feMapParam;
+        paramMap = feParamMap;
         //
         bitmapHead = getAssetsBitmap("/assets/menu/map/header.png");
         //
-        pixelPowHead = mapParam.yGridPixel*2/bitmapHead.getHeight();
+        pixelPowHead = paramMap.yGridPixel*2/bitmapHead.getHeight();
         //
         rectSrcHead = new Rect(0, 0, bitmapHead.getWidth(), bitmapHead.getHeight());
         rectDistHead = new Rect(
-                (int)(mapParam.xGridPixel/4),
-                (int)(mapParam.yGridPixel/4),
-                (int)(mapParam.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead),
-                (int)(mapParam.yGridPixel/4 + bitmapHead.getHeight()*pixelPowHead));
+                (int)(paramMap.xGridPixel/4),
+                (int)(paramMap.yGridPixel/4),
+                (int)(paramMap.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead),
+                (int)(paramMap.yGridPixel/4 + bitmapHead.getHeight()*pixelPowHead));
         //
         paintBitmap = new Paint();
         paintBitmap.setColor(0xE00000FF);//半透明
@@ -85,26 +85,26 @@ public class FeViewUnitInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(mapParam.checkSelectType(FeMapParam.SELECT_MOVE)){
+        if(paramMap.checkSelectType(FeParamMap.SELECT_MOVE)){
             drawHead = false;
             return;
         }
 
         //图像位置自动调整
-        if(mapParam.selectUnit.selectRect.right > mapParam.screenWidth/2){ //放到左边
-            rectDistHead.left = (int)(mapParam.xGridPixel/4);
-            rectDistHead.right = (int)(mapParam.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead);
+        if(paramMap.selectUnit.selectRect.right > paramMap.screenWidth/2){ //放到左边
+            rectDistHead.left = (int)(paramMap.xGridPixel/4);
+            rectDistHead.right = (int)(paramMap.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead);
         }else{ //放到右边
-            rectDistHead.left = (int)(mapParam.screenWidth - mapParam.xGridPixel/4 - bitmapHead.getWidth()*pixelPowHead);
-            rectDistHead.right = (int)(mapParam.screenWidth - mapParam.xGridPixel/4);
+            rectDistHead.left = (int)(paramMap.screenWidth - paramMap.xGridPixel/4 - bitmapHead.getWidth()*pixelPowHead);
+            rectDistHead.right = (int)(paramMap.screenWidth - paramMap.xGridPixel/4);
         }
 
         //画人物头像
-        if(!mapParam.checkSelectType(FeMapParam.SELECT_UNIT) ||
-            mapParam.selectUnit.selectRect.left > mapParam.screenWidth ||
-            mapParam.selectUnit.selectRect.right < 0 ||
-            mapParam.selectUnit.selectRect.top > mapParam.screenHeight ||
-            mapParam.selectUnit.selectRect.bottom < 0){
+        if(!paramMap.checkSelectType(FeParamMap.SELECT_UNIT) ||
+            paramMap.selectUnit.selectRect.left > paramMap.screenWidth ||
+            paramMap.selectUnit.selectRect.right < 0 ||
+            paramMap.selectUnit.selectRect.top > paramMap.screenHeight ||
+            paramMap.selectUnit.selectRect.bottom < 0){
             drawHead = false;
         }else {
             drawHead = true;

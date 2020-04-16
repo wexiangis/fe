@@ -2,7 +2,6 @@ package com.example.fe;
 
 import android.content.Context;
 import android.view.MotionEvent;
-import android.widget.RelativeLayout;
 
 /*
     地图中的人物动画管理
@@ -10,7 +9,7 @@ import android.widget.RelativeLayout;
 public class FeLayoutUnit extends RelativeLayout {
 
     private FeSave feSave;
-    private FeMapParam mapParam;
+    private FeParamMap paramMap;
     private int hitAnimOrder = -1;
 
     public void refresh(){
@@ -19,9 +18,9 @@ public class FeLayoutUnit extends RelativeLayout {
         for (int i = 0; i < getChildCount(); i++) {
             tmp = (FeViewUnit)getChildAt(i);
             if(hitAnimOrder == i &&
-                mapParam.checkSelectType(FeMapParam.SELECT_UNIT)) {
+                paramMap.checkSelectType(FeParamMap.SELECT_UNIT)) {
                 tmp.setAnimMode(1);
-                mapParam.getRectByGrid(tmp._gridX, tmp._gridY, mapParam.selectUnit);
+                paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramMap.selectUnit);
             }
             else
                 tmp.setAnimMode(0);
@@ -31,7 +30,7 @@ public class FeLayoutUnit extends RelativeLayout {
 
     public boolean checkHit(int type, float x, float y){
         if(type == MotionEvent.ACTION_UP &&
-            !mapParam.checkSelectType(FeMapParam.SELECT_MOVE_END))
+            !paramMap.checkSelectType(FeParamMap.SELECT_MOVE_END))
         {
             FeViewUnit tmp;
             //遍历所有子view
@@ -39,14 +38,14 @@ public class FeLayoutUnit extends RelativeLayout {
                 tmp = (FeViewUnit)getChildAt(i);
                 if (tmp.checkHit(x, y)) {
                     hitAnimOrder = i;
-                    mapParam.setSelectType(FeMapParam.SELECT_UNIT);
+                    paramMap.setSelectType(FeParamMap.SELECT_UNIT);
                     refresh();
                     return true;
                 }
             }
             //
             hitAnimOrder = -1;
-            mapParam.cleanSelectType(FeMapParam.SELECT_UNIT);
+            paramMap.cleanSelectType(FeParamMap.SELECT_UNIT);
             refresh();
         }
         return false;
@@ -55,7 +54,7 @@ public class FeLayoutUnit extends RelativeLayout {
     public FeLayoutUnit(Context context, FeSave save) {
         super(context);
         feSave = save;
-        mapParam = feSave.feMapParam;
+        paramMap = feSave.feParamMap;
 
         loadView(0, 1, 0);
         loadView(1, 2, 1);
@@ -89,11 +88,11 @@ public class FeLayoutUnit extends RelativeLayout {
     }
 
     private void loadView(int id, int y, int x){
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x, y, 0, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+2, y, 1, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+4, y, 2, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+6, y, 3, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+8, y, 4, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, mapParam, id, x+10, y, 5, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x, y, 0, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+2, y, 1, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+4, y, 2, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+6, y, 3, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+8, y, 4, 0));
+        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+10, y, 5, 0));
     }
 }

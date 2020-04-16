@@ -1,7 +1,6 @@
 package com.example.fe;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
 
 /*
     地图上的系统菜单
@@ -9,7 +8,7 @@ import android.widget.RelativeLayout;
 public class FeLayoutMenu extends RelativeLayout {
 
     private FeSave feSave;
-    private FeMapParam mapParam;
+    private FeParamMap paramMap;
 
     public boolean checkHit(int type, float x, float y){
         return false;
@@ -24,6 +23,6 @@ public class FeLayoutMenu extends RelativeLayout {
     public FeLayoutMenu(Context context, FeSave save) {
         super(context);
         feSave = save;
-        mapParam = feSave.feMapParam;
+        paramMap = feSave.feParamMap;
     }
 }

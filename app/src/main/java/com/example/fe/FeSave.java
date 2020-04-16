@@ -1,7 +1,6 @@
 package com.example.fe;
 
 import android.app.Activity;
-import android.app.Application;
 
 /*
     贯穿全局的参数管理
@@ -15,8 +14,8 @@ public class FeSave extends Application {
     public FeEvent feEvent = null;
     public FeLayoutSection feLayoutSection = null;
     //参数合集
-    public FeMapParam feMapParam = null;
-    public FeUnitParam feUnitParam = null;
+    public FeParamMap feParamMap = null;
+    public FeParamUnit feParamUnit = null;
 
     public void onCreate() {
         super.onCreate();
