@@ -20,10 +20,15 @@ public class FeViewMapInfo extends View {
     private Context _context;
     private FeParamMap paramMap;
 
-    private Rect rectSrcInfo, rectDistInfo;//图片源位置和输出位置
-    private Rect rectPaintInfo;//打印信息的大致输出范围
+    //背景框图片源和输出位置
+    private Rect rectSrcInfo, rectDistInfo;
+    //打印信息的大致输出范围
+    private Rect rectPaintInfo;
+    //背景框图片
     private Bitmap bitmapInfo;
+    //背景框图片,地图类型,参数画笔
     private Paint paintBitmap, paintInfoName, paintInfoParam;
+    //
     private float pixelPowInfo;
     private boolean drawInfo = false;
 

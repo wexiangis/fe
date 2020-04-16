@@ -1,6 +1,7 @@
 package com.example.fe;
 
 import android.app.Activity;
+import android.app.Application;
 
 /*
     贯穿全局的参数管理

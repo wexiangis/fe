@@ -350,7 +350,6 @@ public class FeParamMap {
 
     //获取梯形转换矩阵,用于绘制
     public void getMatrix(){
-        //
         srcPoint[0] = -mapDist.left;
         srcPoint[1] = -mapDist.top;
         srcPoint[2] = -mapDist.left;

@@ -20,9 +20,13 @@ public class FeViewUnitInfo extends View {
     private Context _context;
     private FeParamMap paramMap;
 
-    private Rect rectSrcHead, rectDistHead;
-    private Bitmap bitmapHead;
-    private Paint paintBitmap, paintHead, paintHeadParam;
+    //头像背景框图片源位置和输出位置
+    private Rect rectSrcHeadBg, rectDistHeadBg;
+    //头像图片,头像背景框
+    private Bitmap bitmapHead, bitmapHeadBg;
+    //头像背景框,头像,参数文字画笔
+    private Paint paintHeadBg, paintHead, paintParam;
+    //
     private float pixelPowHead;
     private boolean drawHead = false;
 
@@ -49,34 +53,34 @@ public class FeViewUnitInfo extends View {
         _context = context;
         paramMap = feParamMap;
         //
-        bitmapHead = getAssetsBitmap("/assets/menu/map/header.png");
+        bitmapHeadBg = getAssetsBitmap("/assets/menu/map/header.png");
         //
-        pixelPowHead = paramMap.yGridPixel*2/bitmapHead.getHeight();
+        pixelPowHead = paramMap.yGridPixel*2/bitmapHeadBg.getHeight();
         //
-        rectSrcHead = new Rect(0, 0, bitmapHead.getWidth(), bitmapHead.getHeight());
-        rectDistHead = new Rect(
+        rectSrcHeadBg = new Rect(0, 0, bitmapHeadBg.getWidth(), bitmapHeadBg.getHeight());
+        rectDistHeadBg = new Rect(
                 (int)(paramMap.xGridPixel/4),
                 (int)(paramMap.yGridPixel/4),
-                (int)(paramMap.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead),
-                (int)(paramMap.yGridPixel/4 + bitmapHead.getHeight()*pixelPowHead));
+                (int)(paramMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead),
+                (int)(paramMap.yGridPixel/4 + bitmapHeadBg.getHeight()*pixelPowHead));
         //
-        paintBitmap = new Paint();
-        paintBitmap.setColor(0xE00000FF);//半透明
+        paintHeadBg = new Paint();
+        paintHeadBg.setColor(0xE00000FF);//半透明
         //
         paintHead = new Paint();
         paintHead.setColor(0xE00000FF);//半透明
         //
-        paintHeadParam = new Paint();
-        paintHeadParam.setTextSize(rectDistHead.height()/8);
-//        paintHeadParam.setStyle(Paint.Style.FILL_AND_STROKE);
-//        paintHeadParam.setStrokeWidth(2);
-//        paintHeadParam.setAntiAlias(true);
-//        paintHeadParam.setStrokeCap(Paint.Cap.ROUND);
-        paintHeadParam.setTypeface(Typeface.DEFAULT_BOLD);
+        paintParam = new Paint();
+        paintParam.setTextSize(rectDistHeadBg.height()/8);
+//        paintParam.setStyle(Paint.Style.FILL_AND_STROKE);
+//        paintParam.setStrokeWidth(2);
+//        paintParam.setAntiAlias(true);
+//        paintParam.setStrokeCap(Paint.Cap.ROUND);
+        paintParam.setTypeface(Typeface.DEFAULT_BOLD);
     }
 
     public boolean checkHit(float x, float y){
-        if(drawHead && rectDistHead.contains((int)x, (int)y))
+        if(drawHead && rectDistHeadBg.contains((int)x, (int)y))
             return true;
         return false;
     }
@@ -92,11 +96,11 @@ public class FeViewUnitInfo extends View {
 
         //图像位置自动调整
         if(paramMap.selectUnit.selectRect.right > paramMap.screenWidth/2){ //放到左边
-            rectDistHead.left = (int)(paramMap.xGridPixel/4);
-            rectDistHead.right = (int)(paramMap.xGridPixel/4 + bitmapHead.getWidth()*pixelPowHead);
+            rectDistHeadBg.left = (int)(paramMap.xGridPixel/4);
+            rectDistHeadBg.right = (int)(paramMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead);
         }else{ //放到右边
-            rectDistHead.left = (int)(paramMap.screenWidth - paramMap.xGridPixel/4 - bitmapHead.getWidth()*pixelPowHead);
-            rectDistHead.right = (int)(paramMap.screenWidth - paramMap.xGridPixel/4);
+            rectDistHeadBg.left = (int)(paramMap.screenWidth - paramMap.xGridPixel/4 - bitmapHeadBg.getWidth()*pixelPowHead);
+            rectDistHeadBg.right = (int)(paramMap.screenWidth - paramMap.xGridPixel/4);
         }
 
         //画人物头像
@@ -109,7 +113,7 @@ public class FeViewUnitInfo extends View {
         }else {
             drawHead = true;
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
-            canvas.drawBitmap(bitmapHead, rectSrcHead, rectDistHead, paintBitmap);
+            canvas.drawBitmap(bitmapHeadBg, rectSrcHeadBg, rectDistHeadBg, paintHeadBg);
             //填信息
         }
     }

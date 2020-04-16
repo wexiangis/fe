@@ -64,10 +64,11 @@ public class FeViewUnit extends View {
         return ret;
     }
 
-    /*
-    id: drawable图片,如: R.drawable.xxx
-    */
-    public FeViewUnit(Context context, FeHeart feHeart, FeParamMap feParamMap, int id, int gridX, int gridY, int animMode, int colorMode)
+    //
+    public FeViewUnit(Context context, 
+        FeHeart feHeart, FeParamMap feParamMap, 
+        int id, int gridX, int gridY, 
+        int animMode, int colorMode)
     {
         super(context);
         _context = context;
@@ -101,6 +102,7 @@ public class FeViewUnit extends View {
         selectUnit = paramMap.new GridInMap();
     }
 
+    //移动方格
     public void moveGrid(int x, int y){
         _gridX += x;
         _gridY += y;
@@ -108,6 +110,7 @@ public class FeViewUnit extends View {
         topMargin += y*paramMap.yGridPixel;
     }
 
+    //移动到方格
     public void moveGridTo(int x, int y){
         _gridX = x;
         _gridY = y;
@@ -115,7 +118,7 @@ public class FeViewUnit extends View {
         topMargin = y*paramMap.yGridPixel;
     }
 
-    //设置图片参数
+    //颜色模式: 0/原色 1/绿色 2/红色
     public void setColorMode(int colorMode){
         if(_colorMode != colorMode) {
             synchronized (paint) {
@@ -125,10 +128,13 @@ public class FeViewUnit extends View {
             }
         }
     }
+    
+    //读颜色模式
     public int getColorMode(){
         return _colorMode;
     }
 
+    //设置动画模式: 0/待机 1/选中 2/上 3/下 4/左 5/右
     public void setAnimMode(int animMode){
         if(_animMode != animMode){
             //镜像和恢复
@@ -138,10 +144,13 @@ public class FeViewUnit extends View {
         _animMode = animMode;
         upgradeHeartType(_animMode);
     }
+
+    //读动画模式
     public int getAnimMode(){
         return _animMode;
     }
 
+    //根据动画模式,切换心跳类型
     private void upgradeHeartType(int animMode){
         if(animMode == 0)
             heartUnit.type = FeHeart.TYPE_ANIM_STAY;
@@ -151,6 +160,7 @@ public class FeViewUnit extends View {
             heartUnit.type = FeHeart.TYPE_ANIM_MOVE;
     }
 
+    //动画心跳回调
     private FeHeartUnit heartUnit = new FeHeartUnit(FeHeart.TYPE_ANIM_STAY, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
             //移动框图
@@ -163,8 +173,11 @@ public class FeViewUnit extends View {
         }
     });
 
+    //临时参数
     public FeParamMap.GridInMap selectUnit;
     private Rect bitmapDist = new Rect(0,0,0,0);
+
+    //绘图回调
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //跟地图要位置
@@ -178,12 +191,16 @@ public class FeViewUnit extends View {
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
     }
 
+    //检查坐标是否在当前人物上
     public boolean checkHit(float x, float y){
         if(selectUnit.selectRect.contains((int)x, (int)y))
             return true;
         return false;
     }
 
+    //颜色替换工具
+    //oldBitmap: 原图
+    //type: 0/原色 1/绿色 2/红色
     public Bitmap replaceBitmapColor(Bitmap oldBitmap, int type){
         if(type == 0)   //使用原色
             return oldBitmap;
