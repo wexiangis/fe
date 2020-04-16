@@ -2,6 +2,7 @@ package com.example.fe;
 
 import android.content.Context;
 import android.view.MotionEvent;
+import android.widget.RelativeLayout;
 
 /*
     地图中的人物动画管理

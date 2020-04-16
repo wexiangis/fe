@@ -222,7 +222,7 @@ public class FeParamMap {
         }
         // get size
         xGrid = yGrid = 30;//default
-        piexlPerGrid = 104;//default
+        piexlPerGrid = 128;//default
         try {
             InputStream is = getClass().getResourceAsStream(mapSize);
             if(is != null){
@@ -409,10 +409,10 @@ public class FeParamMap {
         srcGridYStart = Math.round(srcPoint[1]/yGridPixel);
 
         //中心甜区
-        srcGridCenter.left = srcGridXStart + reduceGrid + 2;
-        srcGridCenter.top = srcGridYStart + reduceGrid + 2;
-        srcGridCenter.right = srcGridCenter.left + (screenXGrid - 4) - 1;
-        srcGridCenter.bottom = srcGridCenter.top + (screenYGrid - 4) - 1;
+        srcGridCenter.left = srcGridXStart + reduceGrid + 3;
+        srcGridCenter.top = srcGridYStart + reduceGrid + 3;
+        srcGridCenter.right = srcGridCenter.left + (screenXGrid - 6) - 1;
+        srcGridCenter.bottom = srcGridCenter.top + (screenYGrid - 6) - 1;
 
         //第一行的高, 总高, 横向offset, 平均宽
         srcGridLine[0][0] = yGridPixel - reduce*1.5f/srcGridY - reduceGrid*3.0f;

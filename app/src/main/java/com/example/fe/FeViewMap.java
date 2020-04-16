@@ -32,8 +32,8 @@ public class FeViewMap extends View {
         _context = context;
         paramMap = feParamMap;
         animHeart = feHeart;
-        //
-        upgradeSelectMap(0, 0);
+        //输入坐标求格子位置
+        paramMap.getRectByLocation(0, 0, paramMap.selectMap);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
@@ -41,65 +41,77 @@ public class FeViewMap extends View {
         animHeart.addUnit(heartMapMov);
     }
 
-    //
-    public void upgradeMap(){
-        //相对布局位置偏移
-        paramMap.mapDist.left = (int)this.getTranslationX() - (int)(paramMap.xGridErr*paramMap.xGridPixel);
-        paramMap.mapDist.top = (int)this.getTranslationY() - (int)(paramMap.yGridErr*paramMap.yGridPixel);
-        paramMap.mapDist.right = paramMap.mapDist.left + paramMap.width;
-        paramMap.mapDist.bottom = paramMap.mapDist.top + paramMap.height;
-        //梯形变换
-        paramMap.getMatrix();
+    //动态挪动地图,x>0时地图往右移,y>0时地图往下移
+    public void moveGrid(int x, int y){
+        xGridErr -= x;
+        yGridErr -= y;
     }
 
-    //
-    public void upgradeSelectMap(float x, float y){
-        upgradeMap();
-        //输入坐标求格子位置
-        paramMap.getRectByLocation(x, y, paramMap.selectMap);
+    //动态挪动地图,设置(x,y)所在格子为地图中心
+    public void moveCenter(int x, int y){
+        //先把挪动停止
+        xGridErr = xGridErr = 0;
+        //居中比较
+        xGridErr = x - paramMap.srcGridCenter.centerX();
+        yGridErr = y - paramMap.srcGridCenter.centerY();
     }
 
-    //
-    private int hearCount = 0;
+    //设置(x,y)所在格子为地图中心
+    public void setCenter(int x, int y){
+        //先把挪动停止
+        xGridErr = xGridErr = 0;
+        //居中比较
+        paramMap.xGridErr += x - paramMap.srcGridCenter.centerX();
+        paramMap.yGridErr += y - paramMap.srcGridCenter.centerY();
+        //防止把地图移出屏幕
+        if (paramMap.xGridErr < 0)
+            paramMap.xGridErr = 0;
+        else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.xGrid)
+            paramMap.xGridErr = paramMap.xGrid - paramMap.screenXGrid;
+        if (paramMap.yGridErr < 0)
+            paramMap.yGridErr = 0;
+        else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.yGrid)
+            paramMap.yGridErr = paramMap.yGrid - paramMap.screenYGrid;
+    }
+
+    //动画心跳回调
     private FeHeartUnit heartMapMov = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
-            //周期200ms
-            if(++hearCount > 2){
-                hearCount = 1;
-                //需要挪图?
-                if(xGridErr != 0 && yGridErr != 0)
-                {
-                    //每次移动一格
-                    paramMap.xGridErr += xGridErr;
-                    if(xGridErr > 0)
-                        xGridErr -= 1;
-                    else if(xGridErr < 0)
-                        xGridErr += 1;
-                    paramMap.yGridErr += yGridErr;
-                    if(yGridErr > 0)
-                        yGridErr -= 1;
-                    else if(yGridErr < 0)
-                        yGridErr += 1;
-                    //防止地图移出屏幕
-                    if (paramMap.xGridErr < 0){
-                        paramMap.xGridErr = 0;
-                        xGridErr = 0;
-                    }else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.xGrid){
-                        paramMap.xGridErr = paramMap.xGrid - paramMap.screenXGrid;
-                        xGridErr = 0;
-                    }
-                    if (paramMap.yGridErr < 0){
-                        paramMap.yGridErr = 0;
-                        yGridErr = 0;
-                    }else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.yGrid){
-                        paramMap.yGridErr = paramMap.yGrid - paramMap.screenYGrid;
-                        yGridErr = 0;
-                    }
-                    //
-                    upgradeMap();
-                    //调用一次onDrow
-                    FeViewMap.this.invalidate();
+            //需要挪图?
+            if(xGridErr != 0 || yGridErr != 0)
+            {
+                //每次移动一格
+                if(xGridErr > 0) {
+                    xGridErr -= 1;
+                    paramMap.xGridErr += 1;
+                }else if(xGridErr < 0) {
+                    xGridErr += 1;
+                    paramMap.xGridErr -= 1;
                 }
+                if(yGridErr > 0) {
+                    yGridErr -= 1;
+                    paramMap.yGridErr += 1;
+                }else if(yGridErr < 0) {
+                    yGridErr += 1;
+                    paramMap.yGridErr -= 1;
+                }
+                //防止地图移出屏幕
+                if (paramMap.xGridErr < 0){
+                    paramMap.xGridErr = 0;
+                    xGridErr = 0;
+                }else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.xGrid){
+                    paramMap.xGridErr = paramMap.xGrid - paramMap.screenXGrid;
+                    xGridErr = 0;
+                }
+                if (paramMap.yGridErr < 0){
+                    paramMap.yGridErr = 0;
+                    yGridErr = 0;
+                }else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.yGrid){
+                    paramMap.yGridErr = paramMap.yGrid - paramMap.screenYGrid;
+                    yGridErr = 0;
+                }
+                //调用一次onDraw
+                FeViewMap.this.invalidate();
             }
         }
     });
@@ -107,6 +119,13 @@ public class FeViewMap extends View {
     //
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
+        //相对布局位置偏移
+        paramMap.mapDist.left = (int)this.getTranslationX() - (int)(paramMap.xGridErr*paramMap.xGridPixel);
+        paramMap.mapDist.top = (int)this.getTranslationY() - (int)(paramMap.yGridErr*paramMap.yGridPixel);
+        paramMap.mapDist.right = paramMap.mapDist.left + paramMap.width;
+        paramMap.mapDist.bottom = paramMap.mapDist.top + paramMap.height;
+        //梯形变换
+        paramMap.getMatrix();
         //显示地图
         canvas.drawBitmap(paramMap.bitmap, paramMap.matrix, paintMap);
         //地图移动了,刷新其他信息
@@ -139,16 +158,18 @@ public class FeViewMap extends View {
                     paramMap.setSelectType(FeParamMap.SELECT_MOVE_END);
                 }
                 isMove = false;
-                //
-                upgradeSelectMap(tUpX, tUpY);
+                //输入坐标求格子位置
+                paramMap.getRectByLocation(tUpX, tUpY, paramMap.selectMap);
+                //上传onTouch事件
                 ((FeLayoutSection)getParent().getParent()).onTouch(event.getAction(), tUpX, tUpY);
-                invalidate();
                 //选中人物太过靠近边界,挪动地图
                 if(paramMap.checkSelectType(FeParamMap.SELECT_UNIT) &&
                     !paramMap.srcGridCenter.contains(
                     paramMap.selectUnit.selectPoint[0],
                     paramMap.selectUnit.selectPoint[1])){
-                    //
+//                    //挪动地图,把选中点居中
+//                    moveCenter(paramMap.selectUnit.selectPoint[0], paramMap.selectUnit.selectPoint[1]);
+                    //把需要移动的量先记到xGridErr,yGridErr, 动画心跳回调会慢慢把这些差值吃掉
                     if(paramMap.selectUnit.selectPoint[0] < paramMap.srcGridCenter.left)
                         xGridErr = paramMap.selectUnit.selectPoint[0] - paramMap.srcGridCenter.left;
                     else if(paramMap.selectUnit.selectPoint[0] > paramMap.srcGridCenter.right)
@@ -167,7 +188,7 @@ public class FeViewMap extends View {
                 float tMoveY = event.getY();
                 float xErr = tMoveX - tDownX;
                 float yErr = tMoveY - tDownY;
-                //
+                //横向移动是否满一格像素,是就移动一格
                 if (Math.abs(xErr) > paramMap.xGridPixel) {
                     if (xErr > 0) paramMap.xGridErr -= 1;
                     else paramMap.xGridErr += 1;
@@ -175,7 +196,7 @@ public class FeViewMap extends View {
                     needRefresh = true;
                     isMove = true;
                 }
-                //
+                //纵向移动是否满一格像素,是就移动一格
                 if (Math.abs(yErr) > paramMap.yGridPixel) {
                     if (yErr > 0) paramMap.yGridErr -= 1;
                     else paramMap.yGridErr += 1;
@@ -183,7 +204,7 @@ public class FeViewMap extends View {
                     needRefresh = true;
                     isMove = true;
                 }
-                //防止地图移出屏幕
+                //防止把地图移出屏幕
                 if (paramMap.xGridErr < 0)
                     paramMap.xGridErr = 0;
                 else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.xGrid)
@@ -194,11 +215,15 @@ public class FeViewMap extends View {
                     paramMap.yGridErr = paramMap.yGrid - paramMap.screenYGrid;
                 //调用一次onDraw
                 if (needRefresh) {
+                    //清触屏点击
                     paramMap.cleanSelectType(FeParamMap.SELECT_MAP);
+                    //设置触屏移动
                     paramMap.setSelectType(FeParamMap.SELECT_MOVE);
-                    //
-                    upgradeSelectMap(tMoveX, tMoveY);
+                    //输入坐标求格子位置
+                    paramMap.getRectByLocation(tMoveX, tMoveY, paramMap.selectMap);
+                    //上传onTouch事件
                     ((FeLayoutSection)getParent().getParent()).onTouch(event.getAction(), tMoveX, tMoveY);
+                    //调用一次onDraw
                     invalidate();
                 }
             }
