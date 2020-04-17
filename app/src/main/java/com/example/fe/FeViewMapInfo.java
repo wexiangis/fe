@@ -20,13 +20,16 @@ public class FeViewMapInfo extends View {
     private Context _context;
     private FeParamMap paramMap;
 
-    //背景框图片源和输出位置
-    private Rect rectSrcInfo, rectDistInfo;
-    //打印信息的大致输出范围
-    private Rect rectPaintInfo;
     //背景框图片
     private Bitmap bitmapInfo;
-    //背景框图片,地图类型,参数画笔
+
+    //背景框图片源和输出位置
+    private Rect rectSrcInfo, rectDistInfo;
+
+    //打印信息的大致输出范围
+    private Rect rectPaintInfo;
+
+    //背景框图片,地图类型,参数 画笔
     private Paint paintBitmap, paintInfoName, paintInfoParam;
     //
     private float pixelPowInfo;
@@ -50,28 +53,28 @@ public class FeViewMapInfo extends View {
         return ret;
     }
 
-    public FeViewMapInfo(Context context, FeParamMap feParamMap){
+    public FeViewMapInfo(Context context, FeParamMap feParamMap) {
         super(context);
         _context = context;
         paramMap = feParamMap;
         //
         bitmapInfo = getAssetsBitmap("/assets/menu/map/mapinfo.png");
         //
-        pixelPowInfo = paramMap.yGridPixel*2/bitmapInfo.getHeight();
+        pixelPowInfo = paramMap.yGridPixel * 2 / bitmapInfo.getHeight();
         //
         rectSrcInfo = new Rect(0, 0, bitmapInfo.getWidth(), bitmapInfo.getHeight());
         rectDistInfo = new Rect(
-                (int)(paramMap.xGridPixel/4),
-                paramMap.screenHeight - (int)(paramMap.yGridPixel/4 + bitmapInfo.getHeight()*pixelPowInfo),
-                (int)(paramMap.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo),
-                paramMap.screenHeight - (int)(paramMap.yGridPixel/4));
+                (int) (paramMap.xGridPixel / 4),
+                paramMap.screenHeight - (int) (paramMap.yGridPixel / 4 + bitmapInfo.getHeight() * pixelPowInfo),
+                (int) (paramMap.xGridPixel / 4 + bitmapInfo.getWidth() * pixelPowInfo),
+                paramMap.screenHeight - (int) (paramMap.yGridPixel / 4));
         //
         paintBitmap = new Paint();
         paintBitmap.setColor(0xE00000FF);//半透明
         //
         paintInfoName = new Paint();
         paintInfoName.setColor(Color.WHITE);
-        paintInfoName.setTextSize(rectDistInfo.width()/5);
+        paintInfoName.setTextSize(rectDistInfo.width() / 5);
         paintInfoName.setTextAlign(Paint.Align.CENTER);
 //        paintInfoName.setStyle(Paint.Style.FILL_AND_STROKE);
 //        paintInfoName.setStrokeWidth(2);
@@ -80,7 +83,7 @@ public class FeViewMapInfo extends View {
         paintInfoName.setTypeface(Typeface.DEFAULT_BOLD);
         //
         paintInfoParam = new Paint();
-        paintInfoParam.setTextSize(rectDistInfo.width()/7);
+        paintInfoParam.setTextSize(rectDistInfo.width() / 7);
 //        paintInfoParam.setStyle(Paint.Style.FILL_AND_STROKE);
 //        paintInfoParam.setStrokeWidth(2);
 //        paintInfoParam.setAntiAlias(true);
@@ -88,10 +91,10 @@ public class FeViewMapInfo extends View {
         paintInfoParam.setTypeface(Typeface.DEFAULT_BOLD);
         //
         rectPaintInfo = new Rect(
-                (int)(rectDistInfo.left + rectDistInfo.width()/5),
-                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*4),
-                (int)(rectDistInfo.right - rectDistInfo.width()/5),
-                (int)(rectDistInfo.bottom - rectDistInfo.height()/2 + pixelPowInfo*4 + paintInfoParam.getTextSize()*2 + pixelPowInfo*2));
+                (int) (rectDistInfo.left + rectDistInfo.width() / 5),
+                (int) (rectDistInfo.bottom - rectDistInfo.height() / 2 + pixelPowInfo * 4),
+                (int) (rectDistInfo.right - rectDistInfo.width() / 5),
+                (int) (rectDistInfo.bottom - rectDistInfo.height() / 2 + pixelPowInfo * 4 + paintInfoParam.getTextSize() * 2 + pixelPowInfo * 2));
     }
 
     public boolean checkHit(float x, float y){
@@ -122,10 +125,6 @@ public class FeViewMapInfo extends View {
         rectPaintInfo.left = (int)(rectDistInfo.left + rectDistInfo.width()/5);
         rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
 
-        //画选中框
-        if(paramMap.checkSelectType(FeParamMap.SELECT_MAP) &&
-            !paramMap.checkSelectType(FeParamMap.SELECT_UNIT))
-            canvas.drawPath(paramMap.selectMap.selectPath, paintBitmap);
         //画地图信息
         if(paramMap.checkSelectType(FeParamMap.SELECT_MAP)){
             drawInfo = true;

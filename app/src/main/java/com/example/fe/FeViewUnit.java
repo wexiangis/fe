@@ -103,7 +103,7 @@ public class FeViewUnit extends View {
     }
 
     //移动方格
-    public void moveGrid(int x, int y){
+    public void setGrid(int x, int y){
         _gridX += x;
         _gridY += y;
         leftMargin += x*paramMap.xGridPixel;
