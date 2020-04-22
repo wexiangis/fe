@@ -30,7 +30,7 @@ public class FeLayoutMapInfo extends RelativeLayout {
         feSave = save;
         paramMap = feSave.feParamMap;
         //
-        addView(new FeSelectView(context, feSave.feHeart, paramMap));
+        addView(new FeViewSelect(context, feSave.feHeart, paramMap));
         addView(new FeViewMapInfo(context, paramMap));
         addView(new FeViewUnitInfo(context, paramMap));
     }

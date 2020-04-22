@@ -14,7 +14,7 @@ import android.view.View;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FeSelectView extends View {
+public class FeViewSelect extends View {
 
     private Context _context;
     private FeParamMap paramMap;
@@ -47,7 +47,7 @@ public class FeSelectView extends View {
         return ret;
     }
 
-    public FeSelectView(Context context, FeHeart feHeart, FeParamMap feParamMap){
+    public FeViewSelect(Context context, FeHeart feHeart, FeParamMap feParamMap){
         super(context);
         _context = context;
         paramMap = feParamMap;
@@ -95,7 +95,7 @@ public class FeSelectView extends View {
             rectSrcSelect.bottom = rectSrcSelect.top + bitmapSelectFrameHeight;
             //调用一次onDrow
             if(needRefresh)
-                FeSelectView.this.invalidate();
+                FeViewSelect.this.invalidate();
         }
     });
 
