@@ -15,6 +15,9 @@ import android.view.View;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
+    地图上的人物头像等信息框
+ */
 public class FeViewUnitInfo extends View {
 
     private Context _context;

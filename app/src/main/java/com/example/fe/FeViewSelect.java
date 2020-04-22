@@ -14,6 +14,9 @@ import android.view.View;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
+    光标选中框
+ */
 public class FeViewSelect extends View {
 
     private Context _context;

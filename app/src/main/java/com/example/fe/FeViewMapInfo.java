@@ -15,6 +15,9 @@ import android.view.View;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
+    地图上的地图类型等信息框
+ */
 public class FeViewMapInfo extends View {
 
     private Context _context;
