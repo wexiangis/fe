@@ -16,8 +16,6 @@ import java.util.TimerTask;
  */
 public class FeAnimFrame extends View {
 
-    private Context act;
-
     //画图
     private Paint paint;
 
@@ -47,7 +45,6 @@ public class FeAnimFrame extends View {
     public FeAnimFrame(Context context, int[] frameArray, int intervalMs, Rect paintRect)
     {
         super(context);
-        act = context;
         framearray = frameArray;
         frameMax = framearray.length;
         //
@@ -61,7 +58,7 @@ public class FeAnimFrame extends View {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //加载图片
-        Bitmap bitmap = BitmapFactory.decodeResource(act.getResources(), framearray[frameCount]);
+        Bitmap bitmap = BitmapFactory.decodeResource(FeData.getActivity().getResources(), framearray[frameCount]);
         //绘图
         canvas.drawBitmap(bitmap, null, distRect, paint);
     }

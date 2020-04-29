@@ -79,7 +79,7 @@ public class FeLayoutSection extends RelativeLayout {
         menuLayout = new FeLayoutMenu(FeData.getContext());
         addView(menuLayout);
         //人物对话图层
-        chatLayout = new FeLayoutChat(FeData.getActivity());
+        chatLayout = new FeLayoutChat(FeData.getContext());
         addView(chatLayout);
         //其它图层
         ;

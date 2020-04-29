@@ -25,8 +25,8 @@ public class FeLayoutMapInfo extends RelativeLayout {
     public FeLayoutMapInfo(Context context) {
         super(context);
         //
-        addView(new FeViewSelect(context, FeData.getFeHeart(), FeData.getFeParamMap()));
-        addView(new FeViewMapInfo(context, FeData.getFeParamMap()));
-        addView(new FeViewUnitInfo(context, FeData.getFeParamMap()));
+        addView(new FeViewSelect(context));
+        addView(new FeViewMapInfo(context));
+        addView(new FeViewUnitInfo(context));
     }
 }

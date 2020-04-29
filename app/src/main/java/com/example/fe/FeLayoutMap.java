@@ -23,7 +23,7 @@ public class FeLayoutMap extends RelativeLayout {
     }
 
     private void loadView(){
-        addView(new FeViewMap(FeData.getContext(), FeData.getFeHeart(), FeData.getFeParamMap()));
+        addView(new FeViewMap(FeData.getContext()));
     }
 
 }

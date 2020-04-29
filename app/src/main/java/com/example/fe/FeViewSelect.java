@@ -19,9 +19,7 @@ import java.io.InputStream;
  */
 public class FeViewSelect extends View {
 
-    private Context _context;
     private FeParamMap paramMap;
-    private FeHeart animHeart;
 
     //选中框图片
     private Bitmap bitmapSelect;
@@ -50,11 +48,9 @@ public class FeViewSelect extends View {
         return ret;
     }
 
-    public FeViewSelect(Context context, FeHeart feHeart, FeParamMap feParamMap){
+    public FeViewSelect(Context context){
         super(context);
-        _context = context;
-        paramMap = feParamMap;
-        animHeart = feHeart;
+        paramMap = FeData.getFeParamMap();
         //
         bitmapSelect = getAssetsBitmap("/assets/menu/map/select.png");
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
@@ -64,7 +60,7 @@ public class FeViewSelect extends View {
         paintSelct = new Paint();
         paintSelct.setColor(Color.BLUE);
         //引入心跳
-        animHeart.addUnit(heartUnit);
+        FeData.getFeHeart().addUnit(heartUnit);
     }
 
     private boolean needRefresh;

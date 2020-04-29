@@ -20,7 +20,6 @@ import java.io.InputStream;
  */
 public class FeViewMapInfo extends View {
 
-    private Context _context;
     private FeParamMap paramMap;
 
     //背景框图片
@@ -56,10 +55,9 @@ public class FeViewMapInfo extends View {
         return ret;
     }
 
-    public FeViewMapInfo(Context context, FeParamMap feParamMap) {
+    public FeViewMapInfo(Context context) {
         super(context);
-        _context = context;
-        paramMap = feParamMap;
+        paramMap = FeData.getFeParamMap();
         //
         bitmapInfo = getAssetsBitmap("/assets/menu/map/mapinfo.png");
         //

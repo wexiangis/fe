@@ -20,7 +20,6 @@ import java.io.InputStream;
  */
 public class FeViewUnitInfo extends View {
 
-    private Context _context;
     private FeParamMap paramMap;
 
     //头像背景框图片源位置和输出位置
@@ -51,10 +50,9 @@ public class FeViewUnitInfo extends View {
         return ret;
     }
 
-    public FeViewUnitInfo(Context context, FeParamMap feParamMap){
+    public FeViewUnitInfo(Context context){
         super(context);
-        _context = context;
-        paramMap = feParamMap;
+        paramMap = FeData.getFeParamMap();
         //
         bitmapHeadBg = getAssetsBitmap("/assets/menu/map/header.png");
         //

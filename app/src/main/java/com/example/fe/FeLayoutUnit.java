@@ -87,11 +87,11 @@ public class FeLayoutUnit extends RelativeLayout {
     }
 
     private void loadView(int id, int y, int x){
-        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x, y, 0, 0));
-        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+2, y, 1, 0));
-        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+4, y, 2, 0));
-        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+6, y, 3, 0));
-        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+8, y, 4, 0));
-        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+10, y, 5, 0));
+        addView(new FeViewUnit(FeData.getContext(), id, x, y, 0, 0));
+        addView(new FeViewUnit(FeData.getContext(), id, x+2, y, 1, 0));
+        addView(new FeViewUnit(FeData.getContext(), id, x+4, y, 2, 0));
+        addView(new FeViewUnit(FeData.getContext(), id, x+6, y, 3, 0));
+        addView(new FeViewUnit(FeData.getContext(), id, x+8, y, 4, 0));
+        addView(new FeViewUnit(FeData.getContext(), id, x+10, y, 5, 0));
     }
 }

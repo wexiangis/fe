@@ -75,7 +75,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
         if(cover != null)
             return;
         //主界面封面背景
-        cover = new FeAnimFrame(FeData.getActivity(), new int [] {
+        cover = new FeAnimFrame(FeData.getContext(), new int [] {
                 R.drawable.cover,
                 R.drawable.cover2,
                 R.drawable.cover3}, 500, new Rect(0, 0, screenWidth, screenHeight));
@@ -86,7 +86,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
     public void loadTip(){
         if(tipsText == null){
             //按任意键继续
-            tipsText = new TextView(FeData.getActivity());
+            tipsText = new TextView(FeData.getContext());
             tipsText.setText("按任意键继续");
             tipsText.setTextSize(16);
             tipsTextParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -109,13 +109,13 @@ public class FeLayoutMainTheme extends RelativeLayout {
     public void loadMenu(){
         if(linearLayout == null)
         {
-            tv1 = new TextView(FeData.getActivity());tv1.setText("开 始");tv1.setTextSize(16);
+            tv1 = new TextView(FeData.getContext());tv1.setText("开 始");tv1.setTextSize(16);
             tv1.setOnTouchListener(onTouchListener);
             //
-            tv2 = new TextView(FeData.getActivity());tv2.setText("清单2");tv2.setTextSize(16);
-            tv3 = new TextView(FeData.getActivity());tv3.setText("清单3");tv3.setTextSize(16);
+            tv2 = new TextView(FeData.getContext());tv2.setText("清单2");tv2.setTextSize(16);
+            tv3 = new TextView(FeData.getContext());tv3.setText("清单3");tv3.setTextSize(16);
             //
-            linearLayout = new LinearLayout(FeData.getActivity());
+            linearLayout = new LinearLayout(FeData.getContext());
             linearLayout.setOrientation(LinearLayout.VERTICAL);
 //            linearLayout.setBackgroundColor(0xFF00FF00);
             //

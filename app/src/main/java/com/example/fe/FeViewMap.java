@@ -12,9 +12,7 @@ import android.view.View;
  */
 public class FeViewMap extends View {
 
-    private Context _context;
     private FeParamMap paramMap;
-    private FeHeart animHeart;
 
     //地图移动格子数
     private int xGridErr = 0, yGridErr = 0;
@@ -27,18 +25,16 @@ public class FeViewMap extends View {
     //画笔
     private Paint paintMap;
 
-    public FeViewMap(Context context, FeHeart feHeart, FeParamMap feParamMap) {
+    public FeViewMap(Context context) {
         super(context);
-        _context = context;
-        paramMap = feParamMap;
-        animHeart = feHeart;
+        paramMap = FeData.getFeParamMap();
         //输入坐标求格子位置
         paramMap.getRectByLocation(0, 0, paramMap.selectMap);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
         //引入心跳
-        animHeart.addUnit(heartMapMov);
+        FeData.getFeHeart().addUnit(heartMapMov);
     }
 
     //动态挪动地图,x>0时地图往右移,y>0时地图往下移

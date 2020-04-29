@@ -21,9 +21,7 @@ import java.io.InputStream;
  */
 public class FeViewUnit extends View {
 
-    private Context _context;
     private FeParamMap paramMap;
-    private FeHeart animHeart;
 
     //动画相对地图的偏移量
     private float leftMargin = 0, topMargin = 0;
@@ -66,14 +64,11 @@ public class FeViewUnit extends View {
 
     //
     public FeViewUnit(Context context, 
-        FeHeart feHeart, FeParamMap feParamMap, 
         int id, int gridX, int gridY, 
         int animMode, int colorMode)
     {
         super(context);
-        _context = context;
-        animHeart = feHeart;
-        paramMap = feParamMap;
+        paramMap = FeData.getFeParamMap();
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
@@ -97,7 +92,7 @@ public class FeViewUnit extends View {
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
-        animHeart.addUnit(heartUnit);
+        FeData.getFeHeart().addUnit(heartUnit);
         //类中类需有实例化的对象来new
         selectUnit = paramMap.new GridInMap();
     }
@@ -123,7 +118,7 @@ public class FeViewUnit extends View {
         if(_colorMode != colorMode) {
             synchronized (paint) {
                 bitmap.recycle();
-                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(_context.getResources(), _id), colorMode);
+                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(FeData.getContext().getResources(), _id), colorMode);
                 _colorMode = colorMode;
             }
         }
