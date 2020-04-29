@@ -1,24 +1,24 @@
 package com.example.fe;
 
+import android.app.Activity;
+
 /*
     事件管理层: 用于切换 主界面,章节内容,存档界面,等等等
  */
 public class FeEvent {
 
-    public FeSave feSave;
-
-    public FeEvent(FeSave save)
+    public FeEvent()
     {
-        feSave = save;
         //加载主界面
 //        loadMainTheme();
         //加载地图
-        loadSection(0);
+        loadSection(99);
+
     }
 
     //加载主界面
     public void loadMainTheme(){
-        feSave.activity.setContentView(new FeLayoutMainTheme(feSave.activity, feSave));
+        FeData.getActivity().setContentView(new FeLayoutMainTheme(FeData.getContext()));
     }
 
     //加载章节片头
@@ -27,8 +27,8 @@ public class FeEvent {
 
     //加载章节大地图
     public void loadSection(int section) {
-        feSave.feLayoutSection = new FeLayoutSection(feSave.activity, feSave, section);
-        feSave.activity.setContentView(feSave.feLayoutSection);
+        FeData.setFeLayoutSection(new FeLayoutSection(FeData.getContext(), section));
+        FeData.getActivity().setContentView(FeData.getFeLayoutSection());
     }
 
     //加载章节对话

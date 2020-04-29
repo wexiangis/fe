@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutUnit extends RelativeLayout {
 
-    private FeSave feSave;
     private FeParamMap paramMap;
     private int hitAnimOrder = -1;
 
@@ -52,10 +51,9 @@ public class FeLayoutUnit extends RelativeLayout {
         return false;
     }
 
-    public FeLayoutUnit(Context context, FeSave save) {
+    public FeLayoutUnit(Context context) {
         super(context);
-        feSave = save;
-        paramMap = feSave.feParamMap;
+        paramMap = FeData.getFeParamMap();
 
         loadView(0, 1, 0);
         loadView(1, 2, 1);
@@ -89,11 +87,11 @@ public class FeLayoutUnit extends RelativeLayout {
     }
 
     private void loadView(int id, int y, int x){
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x, y, 0, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+2, y, 1, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+4, y, 2, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+6, y, 3, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+8, y, 4, 0));
-        addView(new FeViewUnit(feSave.activity, feSave.feHeart, paramMap, id, x+10, y, 5, 0));
+        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x, y, 0, 0));
+        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+2, y, 1, 0));
+        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+4, y, 2, 0));
+        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+6, y, 3, 0));
+        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+8, y, 4, 0));
+        addView(new FeViewUnit(FeData.getActivity(), FeData.getFeHeart(), paramMap, id, x+10, y, 5, 0));
     }
 }

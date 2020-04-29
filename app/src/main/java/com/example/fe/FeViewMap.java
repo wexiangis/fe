@@ -17,7 +17,7 @@ public class FeViewMap extends View {
     private FeHeart animHeart;
 
     //地图移动格子数
-    public int xGridErr = 0, yGridErr = 0;
+    private int xGridErr = 0, yGridErr = 0;
 
     //触屏按下时记录坐标
     private float tDownX, tDownY;
@@ -50,7 +50,7 @@ public class FeViewMap extends View {
     //动态挪动地图,设置(x,y)所在格子为地图中心
     public void moveCenter(int x, int y){
         //先把挪动停止
-        xGridErr = xGridErr = 0;
+        xGridErr = yGridErr = 0;
         //居中比较
         xGridErr = x - paramMap.srcGridCenter.centerX();
         yGridErr = y - paramMap.srcGridCenter.centerY();
@@ -59,7 +59,7 @@ public class FeViewMap extends View {
     //设置(x,y)所在格子为地图中心
     public void setCenter(int x, int y){
         //先把挪动停止
-        xGridErr = xGridErr = 0;
+        xGridErr = yGridErr = 0;
         //居中比较
         paramMap.xGridErr += x - paramMap.srcGridCenter.centerX();
         paramMap.yGridErr += y - paramMap.srcGridCenter.centerY();

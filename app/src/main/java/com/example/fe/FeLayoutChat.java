@@ -8,9 +8,6 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutChat extends RelativeLayout {
 
-    private FeSave feSave;
-    private FeParamMap paramMap;
-
     public boolean checkHit(int type, float x, float y){
         return false;
     }
@@ -21,9 +18,7 @@ public class FeLayoutChat extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutChat(Context context, FeSave save) {
+    public FeLayoutChat(Context context) {
         super(context);
-        feSave = save;
-        paramMap = feSave.feParamMap;
     }
 }

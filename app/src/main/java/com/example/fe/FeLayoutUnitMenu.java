@@ -9,9 +9,6 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutUnitMenu extends RelativeLayout {
 
-    private FeSave feSave;
-    private FeParamMap paramMap;
-
     public boolean checkHit(int type, float x, float y){
         if(type == MotionEvent.ACTION_UP){
             ;
@@ -25,9 +22,7 @@ public class FeLayoutUnitMenu extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutUnitMenu(Context context, FeSave save) {
+    public FeLayoutUnitMenu(Context context) {
         super(context);
-        feSave = save;
-        paramMap = feSave.feParamMap;
     }
 }

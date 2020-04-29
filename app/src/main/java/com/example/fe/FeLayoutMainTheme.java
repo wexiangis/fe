@@ -15,12 +15,8 @@ import android.widget.TextView;
  */
 public class FeLayoutMainTheme extends RelativeLayout {
 
-    //
-    private FeSave feSave;
-
     private int screenWidth, screenHeight;
 
-    //
     private boolean showMenu = false;
 
     private FeAnimFrame cover = null;
@@ -51,7 +47,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
                     showMenu = !showMenu;
                 }
                 else if(v == tv1){
-                    feSave.feEvent.loadSection(0);
+                    FeData.getFeEvent().loadSection(0);
                 }
                 else{
                     ;//菜单按键
@@ -61,13 +57,12 @@ public class FeLayoutMainTheme extends RelativeLayout {
         }
     };
 
-    public FeLayoutMainTheme(Context context, FeSave save)
+    public FeLayoutMainTheme(Context context)
     {
         super(context);
-        feSave = save;
         //获取屏幕参数
         DisplayMetrics dm = new DisplayMetrics();
-        feSave.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        FeData.getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenWidth = dm.widthPixels;
         screenHeight = dm.heightPixels;
         //加载背景动画
@@ -80,7 +75,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
         if(cover != null)
             return;
         //主界面封面背景
-        cover = new FeAnimFrame(feSave.activity, new int [] {
+        cover = new FeAnimFrame(FeData.getActivity(), new int [] {
                 R.drawable.cover,
                 R.drawable.cover2,
                 R.drawable.cover3}, 500, new Rect(0, 0, screenWidth, screenHeight));
@@ -91,7 +86,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
     public void loadTip(){
         if(tipsText == null){
             //按任意键继续
-            tipsText = new TextView(feSave.activity);
+            tipsText = new TextView(FeData.getActivity());
             tipsText.setText("按任意键继续");
             tipsText.setTextSize(16);
             tipsTextParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -114,13 +109,13 @@ public class FeLayoutMainTheme extends RelativeLayout {
     public void loadMenu(){
         if(linearLayout == null)
         {
-            tv1 = new TextView(feSave.activity);tv1.setText("开 始");tv1.setTextSize(16);
+            tv1 = new TextView(FeData.getActivity());tv1.setText("开 始");tv1.setTextSize(16);
             tv1.setOnTouchListener(onTouchListener);
             //
-            tv2 = new TextView(feSave.activity);tv2.setText("清单2");tv2.setTextSize(16);
-            tv3 = new TextView(feSave.activity);tv3.setText("清单3");tv3.setTextSize(16);
+            tv2 = new TextView(FeData.getActivity());tv2.setText("清单2");tv2.setTextSize(16);
+            tv3 = new TextView(FeData.getActivity());tv3.setText("清单3");tv3.setTextSize(16);
             //
-            linearLayout = new LinearLayout(feSave.activity);
+            linearLayout = new LinearLayout(FeData.getActivity());
             linearLayout.setOrientation(LinearLayout.VERTICAL);
 //            linearLayout.setBackgroundColor(0xFF00FF00);
             //

@@ -8,9 +8,6 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutMenu extends RelativeLayout {
 
-    private FeSave feSave;
-    private FeParamMap paramMap;
-
     public boolean checkHit(int type, float x, float y){
         return false;
     }
@@ -21,9 +18,7 @@ public class FeLayoutMenu extends RelativeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMenu(Context context, FeSave save) {
+    public FeLayoutMenu(Context context) {
         super(context);
-        feSave = save;
-        paramMap = feSave.feParamMap;
     }
 }
