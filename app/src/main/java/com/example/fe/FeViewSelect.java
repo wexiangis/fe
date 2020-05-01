@@ -50,7 +50,7 @@ public class FeViewSelect extends View {
 
     public FeViewSelect(Context context){
         super(context);
-        paramMap = FeData.getFeParamMap();
+        paramMap = FeData.feParamMap;
         //
         bitmapSelect = getAssetsBitmap("/assets/menu/map/select.png");
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
@@ -60,27 +60,23 @@ public class FeViewSelect extends View {
         paintSelct = new Paint();
         paintSelct.setColor(Color.BLUE);
         //引入心跳
-        FeData.getFeHeart().addUnit(heartUnit);
+        FeData.feHeart.addUnit(heartUnit);
     }
 
     private boolean needRefresh;
-    private int heartCount = 0, heartCount2 = 0;
+    private int heartCount = 0;
     //动画心跳回调
     private FeHeartUnit heartUnit = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
-            //400ms
-//            if(++heartCount < 2)
-//                return;
-//            heartCount = 0;
             //移动框图
             rectSrcSelect.left = 0;
             rectSrcSelect.right = bitmapSelect.getWidth();
             //
             needRefresh = true;
             //记数0,1,2,3,
-            if(heartCount2 == 1)
+            if(heartCount == 1)
                 rectSrcSelect.top = bitmapSelectFrameHeight * 3;
-            else if(heartCount2 == 0 || heartCount2 == 2)
+            else if(heartCount == 0 || heartCount == 2)
                 rectSrcSelect.top = bitmapSelectFrameHeight * 2;
             else {
                 if(rectSrcSelect.top == bitmapSelectFrameHeight)
@@ -88,8 +84,8 @@ public class FeViewSelect extends View {
                 else
                     rectSrcSelect.top = bitmapSelectFrameHeight;
             }
-            if(++heartCount2 > 10)
-                heartCount2 = 0;
+            if(++heartCount > 10)
+                heartCount = 0;
             //
             rectSrcSelect.bottom = rectSrcSelect.top + bitmapSelectFrameHeight;
             //调用一次onDrow

@@ -78,17 +78,17 @@ public class FeHeart {
     public static final int TYPE_TOTAL = 4;
 
     //type 1 TYPE_ANIM_STAY
-    private final int[] circleType1 = new int[]{7, 3, 7};//每帧延时
+    private final int[] circleType1 = new int[]{5, 1, 5};//每帧延时
     private int circleType1_timerCount = 1, circleType1_count = 0;
     private boolean circleType1_dir = false;
 
     //type 2 TYPE_ANIM_SELECT
-    private final int[] circleType2 = new int[]{7, 3, 7};//每帧延时
+    private final int[] circleType2 = new int[]{5, 1, 5};//每帧延时
     private int circleType2_timerCount = 1, circleType2_count = 0;
     private boolean circleType2_dir = false;
 
     //type 3 TYPE_ANIM_MOVE
-    private final int[] circleType3 = new int[]{3, 3, 3, 3};//每帧延时
+    private final int[] circleType3 = new int[]{1, 1, 1, 1};//每帧延时
     private int circleType3_timerCount = 1, circleType3_count = 0;
 
     //type 4 TYPE_FRAME_HEART
@@ -99,7 +99,6 @@ public class FeHeart {
     private TimerTask[] timerTask = new TimerTask[TYPE_TOTAL];
 
     public void start(){
-        //
         timer[0] = new Timer();
         timerTask[0] = new TimerTask() {
             @Override
@@ -146,7 +145,7 @@ public class FeHeart {
                     }
                     //
                     if(!scanLink(TYPE_ANIM_SELECT, circleType2_count)) {
-                        //随时就绪
+                        //随时就绪,下次有人被选中时从第一帧开始播放
                         circleType2_dir = false;
                         circleType2_count = 1;
                     }
@@ -193,11 +192,5 @@ public class FeHeart {
                 timer[i] = null;
             }
         }
-    }
-
-    // ---------- 其他内容 ----------
-
-    public FeHeart(){
-        start();
     }
 }

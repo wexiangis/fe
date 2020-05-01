@@ -17,13 +17,13 @@ public class FeLayoutMap extends RelativeLayout {
     public FeLayoutMap(Context context, int section) {
         super(context);
         //初始化和地图相关的所有参数
-        FeData.setFeParamMap(new FeParamMap(FeData.getActivity(), section));
+        FeData.feParamMap = new FeParamMap(FeData.activity, section);
         //
         loadView();
     }
 
     private void loadView(){
-        addView(new FeViewMap(FeData.getContext()));
+        addView(new FeViewMap(FeData.context));
     }
 
 }

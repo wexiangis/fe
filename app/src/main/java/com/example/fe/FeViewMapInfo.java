@@ -57,7 +57,7 @@ public class FeViewMapInfo extends View {
 
     public FeViewMapInfo(Context context) {
         super(context);
-        paramMap = FeData.getFeParamMap();
+        paramMap = FeData.feParamMap;
         //
         bitmapInfo = getAssetsBitmap("/assets/menu/map/mapinfo.png");
         //

@@ -68,7 +68,7 @@ public class FeViewUnit extends View {
         int animMode, int colorMode)
     {
         super(context);
-        paramMap = FeData.getFeParamMap();
+        paramMap = FeData.feParamMap;
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
@@ -92,7 +92,7 @@ public class FeViewUnit extends View {
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
-        FeData.getFeHeart().addUnit(heartUnit);
+        FeData.feHeart.addUnit(heartUnit);
         //类中类需有实例化的对象来new
         selectUnit = paramMap.new GridInMap();
     }
@@ -118,7 +118,7 @@ public class FeViewUnit extends View {
         if(_colorMode != colorMode) {
             synchronized (paint) {
                 bitmap.recycle();
-                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(FeData.getContext().getResources(), _id), colorMode);
+                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(FeData.context.getResources(), _id), colorMode);
                 _colorMode = colorMode;
             }
         }
@@ -133,11 +133,26 @@ public class FeViewUnit extends View {
     public void setAnimMode(int animMode){
         if(_animMode != animMode){
             //镜像和恢复
-            if(animMode == 5 || _animMode == 5)
-                bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int)bitmap.getWidth(), (int)bitmap.getHeight(), matrix, true);matrix.postScale(1, 1);
+            if(animMode == 5 || _animMode == 5) {
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) bitmap.getWidth(), (int) bitmap.getHeight(), matrix, true);
+                matrix.postScale(1, 1);
+            }
+            //范围限制
+            if(animMode < 0 || animMode > 5)
+                animMode = 0;
+            //
+            _animMode = animMode;
+            upgradeHeartType(_animMode);
+            //马上重绘
+            if(animMode == 1)
+                heartUnit.task.run(2);//选中动画比较特殊,需从第2帧开始
+            else
+                heartUnit.task.run(0);
         }
-        _animMode = animMode;
-        upgradeHeartType(_animMode);
+        else {
+            _animMode = animMode;
+            upgradeHeartType(_animMode);
+        }
     }
 
     //读动画模式

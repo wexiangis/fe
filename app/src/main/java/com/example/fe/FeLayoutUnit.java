@@ -12,14 +12,20 @@ public class FeLayoutUnit extends RelativeLayout {
     private FeParamMap paramMap;
     private int hitAnimOrder = -1;
 
-    public void refresh(){
+    /*
+        who_refresh:
+            0/map refresh
+            1/select unit refresh
+     */
+    public void refresh(int who_refresh){
         FeViewUnit tmp;
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++) {
             tmp = (FeViewUnit)getChildAt(i);
             if(hitAnimOrder == i &&
                 paramMap.checkSelectType(FeParamMap.SELECT_UNIT)) {
-                tmp.setAnimMode(1);
+                if(who_refresh == 1)
+                    tmp.setAnimMode(tmp.getAnimMode()+1);
                 paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramMap.selectUnit);
             }
             else
@@ -39,21 +45,21 @@ public class FeLayoutUnit extends RelativeLayout {
                 if (tmp.checkHit(x, y)) {
                     hitAnimOrder = i;
                     paramMap.setSelectType(FeParamMap.SELECT_UNIT);
-                    refresh();
+                    refresh(1);
                     return true;
                 }
             }
             //
             hitAnimOrder = -1;
             paramMap.cleanSelectType(FeParamMap.SELECT_UNIT);
-            refresh();
+            refresh(0);
         }
         return false;
     }
 
     public FeLayoutUnit(Context context) {
         super(context);
-        paramMap = FeData.getFeParamMap();
+        paramMap = FeData.feParamMap;
 
         loadView(0, 1, 0);
         loadView(1, 2, 1);
@@ -87,11 +93,11 @@ public class FeLayoutUnit extends RelativeLayout {
     }
 
     private void loadView(int id, int y, int x){
-        addView(new FeViewUnit(FeData.getContext(), id, x, y, 0, 0));
-        addView(new FeViewUnit(FeData.getContext(), id, x+2, y, 1, 0));
-        addView(new FeViewUnit(FeData.getContext(), id, x+4, y, 2, 0));
-        addView(new FeViewUnit(FeData.getContext(), id, x+6, y, 3, 0));
-        addView(new FeViewUnit(FeData.getContext(), id, x+8, y, 4, 0));
-        addView(new FeViewUnit(FeData.getContext(), id, x+10, y, 5, 0));
+        addView(new FeViewUnit(FeData.context, id, x, y, 0, 0));
+        addView(new FeViewUnit(FeData.context, id, x+2, y, 1, 0));
+        addView(new FeViewUnit(FeData.context, id, x+4, y, 2, 0));
+        addView(new FeViewUnit(FeData.context, id, x+6, y, 3, 0));
+        addView(new FeViewUnit(FeData.context, id, x+8, y, 4, 0));
+        addView(new FeViewUnit(FeData.context, id, x+10, y, 5, 0));
     }
 }

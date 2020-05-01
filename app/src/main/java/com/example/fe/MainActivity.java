@@ -7,8 +7,6 @@ import android.view.WindowManager;
 
 public class MainActivity extends Activity {
 
-    private FeData feData = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,30 +17,20 @@ public class MainActivity extends Activity {
         }
         //半透明系统虚拟按键
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        //初始化存档并开始
-        if(feData == null) {
-            feData = new FeData();
-            feData.start(this);
-        }
-        //只更新activity
-        else
-            feData.setActivity(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //关闭全局动画心跳定时器
-        if(feData != null)
-            FeData.feHeartStop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        //关闭全局动画心跳定时器
+        FeData.start(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         //启动全局动画心跳定时器
-        if(feData != null)
-            FeData.feHeartStart();
+        FeData.stop();
     }
 
     @Override

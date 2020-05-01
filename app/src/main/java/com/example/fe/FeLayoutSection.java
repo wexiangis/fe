@@ -19,7 +19,7 @@ public class FeLayoutSection extends RelativeLayout {
         mapLayout.refresh();
     }
     public void refreshMapUnit(){
-        unitLayout.refresh();
+        unitLayout.refresh(0);
     }
     public void refreshMapInfo(){
         mapInfoLayout.refresh();
@@ -35,7 +35,7 @@ public class FeLayoutSection extends RelativeLayout {
     }
     public void refresh(){
         //更新人物动画
-        unitLayout.refresh();
+        unitLayout.refresh(0);
         //更新地形信息
         mapInfoLayout.refresh();
         //更新人物菜单
@@ -64,22 +64,22 @@ public class FeLayoutSection extends RelativeLayout {
     public FeLayoutSection(Context context, int section){
         super(context);
         //地图图层
-        mapLayout = new FeLayoutMap(FeData.getContext(), section);
+        mapLayout = new FeLayoutMap(FeData.context, section);
         addView(mapLayout);
         //地图人物动画图层
-        unitLayout = new FeLayoutUnit(FeData.getContext());
+        unitLayout = new FeLayoutUnit(FeData.context);
         addView(unitLayout);
         //地图地形信息
-        mapInfoLayout = new FeLayoutMapInfo(FeData.getContext());
+        mapInfoLayout = new FeLayoutMapInfo(FeData.context);
         addView(mapInfoLayout);
         //人物操作菜单图层
-        unitMenuLayout = new FeLayoutUnitMenu(FeData.getContext());
+        unitMenuLayout = new FeLayoutUnitMenu(FeData.context);
         addView(unitMenuLayout);
         // 系统菜单图层
-        menuLayout = new FeLayoutMenu(FeData.getContext());
+        menuLayout = new FeLayoutMenu(FeData.context);
         addView(menuLayout);
         //人物对话图层
-        chatLayout = new FeLayoutChat(FeData.getContext());
+        chatLayout = new FeLayoutChat(FeData.context);
         addView(chatLayout);
         //其它图层
         ;

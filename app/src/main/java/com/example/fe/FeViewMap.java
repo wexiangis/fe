@@ -27,14 +27,14 @@ public class FeViewMap extends View {
 
     public FeViewMap(Context context) {
         super(context);
-        paramMap = FeData.getFeParamMap();
+        paramMap = FeData.feParamMap;
         //输入坐标求格子位置
         paramMap.getRectByLocation(0, 0, paramMap.selectMap);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
         //引入心跳
-        FeData.getFeHeart().addUnit(heartMapMov);
+        FeData.feHeart.addUnit(heartMapMov);
     }
 
     //动态挪动地图,x>0时地图往右移,y>0时地图往下移

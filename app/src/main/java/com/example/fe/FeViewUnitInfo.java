@@ -52,7 +52,7 @@ public class FeViewUnitInfo extends View {
 
     public FeViewUnitInfo(Context context){
         super(context);
-        paramMap = FeData.getFeParamMap();
+        paramMap = FeData.feParamMap;
         //
         bitmapHeadBg = getAssetsBitmap("/assets/menu/map/header.png");
         //

@@ -58,7 +58,7 @@ public class FeAnimFrame extends View {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //加载图片
-        Bitmap bitmap = BitmapFactory.decodeResource(FeData.getActivity().getResources(), framearray[frameCount]);
+        Bitmap bitmap = BitmapFactory.decodeResource(FeData.activity.getResources(), framearray[frameCount]);
         //绘图
         canvas.drawBitmap(bitmap, null, distRect, paint);
     }
