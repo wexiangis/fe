@@ -22,14 +22,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        //关闭全局动画心跳定时器
         FeData.start(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //启动全局动画心跳定时器
         FeData.stop();
     }
 

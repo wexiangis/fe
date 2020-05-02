@@ -84,7 +84,7 @@ public class FeViewSelect extends View {
                 else
                     rectSrcSelect.top = bitmapSelectFrameHeight;
             }
-            if(++heartCount > 10)
+            if(++heartCount > 6)
                 heartCount = 0;
             //
             rectSrcSelect.bottom = rectSrcSelect.top + bitmapSelectFrameHeight;

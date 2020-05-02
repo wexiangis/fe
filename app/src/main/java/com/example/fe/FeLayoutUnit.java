@@ -63,41 +63,41 @@ public class FeLayoutUnit extends RelativeLayout {
 
         loadView(0, 1, 0);
         loadView(1, 2, 1);
-//        loadView(3, 3, 0);
-//        loadView(4, 4, 1);
-//        loadView(5, 5, 0);
-//        loadView(6, 6, 1);
-//        loadView(7, 7, 0);
-        loadView(8, 8, 1);
-        loadView(9, 9, 0);
-//        loadView(10, 10, 1);
-//        loadView(11, 11, 0);
-//        loadView(12, 12, 1);
-//        loadView(13, 13, 0);
-//        loadView(14, 14, 1);
+//        loadView(2, 3, 0);
+//        loadView(3, 4, 1);
+        loadView(4, 5, 0);
+        loadView(5, 6, 1);
+//        loadView(6, 7, 0);
+//        loadView(7, 8, 1);
+        loadView(8, 9, 0);
+        loadView(9, 10, 1);
+//        loadView(10, 11, 0);
+//        loadView(11, 12, 1);
+        loadView(12, 13, 0);
+        loadView(13, 14, 1);
 
-//        loadView(15, 1, 12);
-//        loadView(16, 2, 13);
-//        loadView(17, 3, 12);
-//        loadView(18, 4, 13);
-//        loadView(19, 5, 12);
-        loadView(20, 6, 13);
-        loadView(21, 7, 12);
-//        loadView(22, 8, 13);
-//        loadView(23, 9, 12);
-//        loadView(24, 10, 13);
-//        loadView(25, 11, 12);
-//        loadView(26, 12, 13);
-        loadView(27, 13, 12);
-        loadView(28, 14, 13);
+//        loadView(14, 1, 12);
+//        loadView(15, 2, 13);
+        loadView(16, 3, 12);
+        loadView(17, 4, 13);
+//        loadView(18, 5, 12);
+//        loadView(19, 6, 13);
+        loadView(20, 7, 12);
+        loadView(21, 8, 13);
+//        loadView(22, 9, 12);
+//        loadView(23, 10, 13);
+        loadView(24, 11, 12);
+        loadView(25, 12, 13);
+//        loadView(26, 13, 12);
+//        loadView(27, 14, 13);
     }
 
     private void loadView(int id, int y, int x){
         addView(new FeViewUnit(FeData.context, id, x, y, 0, 0));
-        addView(new FeViewUnit(FeData.context, id, x+2, y, 1, 0));
-        addView(new FeViewUnit(FeData.context, id, x+4, y, 2, 0));
-        addView(new FeViewUnit(FeData.context, id, x+6, y, 3, 0));
-        addView(new FeViewUnit(FeData.context, id, x+8, y, 4, 0));
-        addView(new FeViewUnit(FeData.context, id, x+10, y, 5, 0));
+        addView(new FeViewUnit(FeData.context, id, x+2, y, 1, 1));
+        addView(new FeViewUnit(FeData.context, id, x+4, y, 2, 2));
+        addView(new FeViewUnit(FeData.context, id, x+6, y, 3, 3));
+        addView(new FeViewUnit(FeData.context, id, x+8, y, 4, 4));
+        addView(new FeViewUnit(FeData.context, id, x+10, y, 5, 5));
     }
 }

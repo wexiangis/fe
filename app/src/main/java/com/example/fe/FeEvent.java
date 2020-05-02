@@ -19,9 +19,9 @@ public class FeEvent {
 
     public void start(){
         //加载主界面
-        loadMainTheme();
+//        loadMainTheme();
         //加载地图
-//        loadSection(0);
+        loadSection(0);
     }
 
     //加载主界面
