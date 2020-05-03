@@ -99,5 +99,6 @@ public class FeLayoutUnit extends RelativeLayout {
         addView(new FeViewUnit(FeData.context, id, x+6, y, 3, 3));
         addView(new FeViewUnit(FeData.context, id, x+8, y, 4, 4));
         addView(new FeViewUnit(FeData.context, id, x+10, y, 5, 5));
+        addView(new FeViewUnit(FeData.context, id, x+12, y, 6, 6));
     }
 }

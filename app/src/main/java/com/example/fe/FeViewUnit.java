@@ -88,7 +88,7 @@ public class FeViewUnit extends View {
         moveGridTo(gridX, gridY);
         //图片扣取位置计算
         bitmapBody.left = 0;
-        bitmapBody.top = frameHeight*frameSkipByAnimMode[animMode];
+        bitmapBody.top = frameHeight*frameSkipByAnimMode[_animMode];
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
@@ -145,7 +145,7 @@ public class FeViewUnit extends View {
             upgradeHeartType(_animMode);
             //马上重绘
             if(animMode == 1)
-                heartUnit.task.run(2);//选中动画比较特殊,需从第2帧开始
+                ;//heartUnit.task.run(2);//选中动画比较特殊,需从第2帧开始
             else
                 heartUnit.task.run(0);
         }
@@ -255,6 +255,11 @@ public class FeViewUnit extends View {
                         tcolor |= (int) (b * 0.8) << 16;
                         tcolor |= (int) (r * 0.5) << 8;
                         tcolor |= (int) (g * 1.0) << 0;
+                        mBitmap.setPixel(j, i, tcolor);
+                    }else if (type == 6) {    //蓝色 换 红紫色
+                        tcolor |= (int) (r * 0.8) << 16;
+                        tcolor |= (int) (b * 0.8) << 8;
+                        tcolor |= (int) (b * 0.8) << 0;
                         mBitmap.setPixel(j, i, tcolor);
                     }
                 }
