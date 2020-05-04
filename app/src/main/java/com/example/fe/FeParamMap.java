@@ -263,6 +263,8 @@ public class FeParamMap {
                     if(countLine >= mapInfo.h)
                         break;
                 }
+                br.close();
+                isr.close();
                 is.close();//关闭输入流
             }
             //default
@@ -308,6 +310,8 @@ public class FeParamMap {
                 }
                 //
                 mapInfo.total = countLine;
+                br.close();
+                isr.close();
                 is.close();//关闭输入流
             }
             //default

@@ -1,7 +1,16 @@
 package com.example.fe;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+/*
+    assets资源管理器
+ */
 public class FeAssets {
 
     //----- map -----
@@ -282,15 +291,120 @@ public class FeAssets {
 
     //特技列表
     class Special{
-        public String name;
-        public String summary;
-        public int picture;
-        // 链表信息
-        public int line;
-        public Special next = null;
-        public Special(String n, String s){
-            name = n; summary = s;
+        //路径, 分隔符
+        public final String PATH = "/assets/unit/special.txt";
+        public final String SPLIT = ";";
+        //数据
+        public Data data;
+        public class Data{
+            public String name;
+            public String summary;
+            public int picture;
+            // 链表信息
+            public int line;
+            public Data next = null;
+            public Data(String name, String summary, int picture){
+                this.name = name;
+                this.summary = summary;
+                this.picture = picture;
+            }
+        }
+        //获取某一行数据格式: 数据 = 对象.getData(line).数据名称;
+        public Data getData(int line){
+            Data dat = data;
+            while (dat != null && dat.line != line)
+                dat = dat.next;
+            return dat == null ? data : dat;
+        }
+        //
+        public void load(){
+            FeFileRead ffr = new FeFileRead(PATH);
+            Data datNow = null, datNew = null;
+            while(ffr.readLine(SPLIT)){
+                //获取数据
+                datNew = new Data(
+                        ffr.getString(0),
+                        ffr.getString(1),
+                        ffr.getInt(2));
+                //链表
+                if(datNow == null)
+                    datNow = data = datNew;
+                else
+                    datNow = datNow.next = datNew;
+            }
+            ffr.exit();
+        }
+        public void save(){
+            ;
         }
     }
     public Special special = null;
 }
+
+/*
+    按行读文件工具
+ */
+class FeFileRead {
+    private String _path;
+
+    private InputStream is;
+    private InputStreamReader isr;
+    private BufferedReader br;
+
+    private String[] content;
+    private int line = -1;
+
+    public int getLine(){
+        if(line < 0)
+            return 0;
+        return line;
+    }
+
+    public int getInt(int count){
+        if(content != null && content.length > count)
+            return Integer.valueOf(content[count]);
+        return -1;
+    }
+
+    public String getString(int count){
+        if(content != null && content.length > count)
+            return content[count];
+        return "";
+    }
+
+    public boolean readLine(String spl){
+        try{
+            if(br == null)
+                return false;
+            content = br.readLine().split(spl);
+            line += 1;
+            return true;
+        } catch (IOException e) {
+            Log.d("FeFileRead: readLine " + _path, e.getMessage());
+        }
+        return false;
+    }
+
+    public FeFileRead(String path){
+        _path = path;
+        is = getClass().getResourceAsStream(_path);
+        if(is != null) {
+            isr = new InputStreamReader(is);
+            br = new BufferedReader(isr);
+        }
+    }
+
+    public void exit(){
+        try {
+            if (br != null)
+                br.close();
+            if (isr != null)
+                isr.close();
+            if (is != null)
+                is.close();
+        } catch (IOException e) {
+            Log.d("FeFileRead: exit " + _path, e.getMessage());
+        }
+    }
+}
+
