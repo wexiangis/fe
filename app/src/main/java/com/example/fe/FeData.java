@@ -20,6 +20,7 @@ public class FeData extends Application {
     //参数合集
     public static FeParamMap feParamMap = null;
     public static FeParamUnit feParamUnit = null;
+    public static FeAssets feAssets = null;
 
     public static void start(Activity act){
         //保留activity
