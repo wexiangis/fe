@@ -292,7 +292,7 @@ public class FeAssets {
     //特技列表
     class Special{
         //路径, 分隔符
-        public final String PATH = "/assets/unit/special.txt";
+        public final String[] PATH = new String[]{"/unit/", "special.txt"};
         public final String SPLIT = ";";
         //数据
         public Data data;
@@ -318,7 +318,7 @@ public class FeAssets {
         }
         //
         public void load(){
-            FeFileRead ffr = new FeFileRead(PATH);
+            FeFileRead ffr = new FeFileRead(PATH[0], PATH[1]);
             Data datNow = null, datNew = null;
             while(ffr.readLine(SPLIT)){
                 //获取数据

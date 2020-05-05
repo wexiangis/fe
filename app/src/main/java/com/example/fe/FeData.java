@@ -3,10 +3,6 @@ package com.example.fe;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.os.Environment;
-import android.util.Log;
-
-import java.io.File;
 
 /*
     贯穿全局的参数管理
@@ -25,27 +21,12 @@ public class FeData extends Application {
     public static FeParamMap feParamMap = null;
     public static FeParamUnit feParamUnit = null;
     public static FeAssets feAssets = null;
-    //文档路径管理
-    public static String feRootPath;
-    public static void checkRootPath(){
-//        feRootPath = getExternalFilesDir(null).toString() + "/FE";
-        feRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
-        File file = new File(feRootPath);
-        if(!file.exists() || !file.isDirectory()){
-            if(file.exists())
-                file.delete();
-            if(!file.mkdir())
-                Log.d("FeData", "mkdir [" + file.getPath() + "] failed !!");
-        }
-    }
 
     public static void start(Activity act){
         //保留activity
         activity = act;
         //获取application的context
         context = activity.getApplicationContext();
-        //根目录检查
-        checkRootPath();
         //全局动画心跳
         if(feHeart == null)
             feHeart = new FeHeart();
