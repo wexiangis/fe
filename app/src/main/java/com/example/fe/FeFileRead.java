@@ -27,6 +27,10 @@ public class FeFileRead {
     private String[] content;//按分隔符处理后的行数据
     private int line = -1;//当前行数
 
+    public String[] getContent(){
+        return content;
+    }
+
     public String getLineContent(){
         return lineContent;
     }
