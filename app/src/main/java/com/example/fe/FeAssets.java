@@ -551,7 +551,11 @@ class AssetsFileStruct{
             while (dat != null)
             {
                 //重组一行数并写入, "+split"意思是结尾保留分隔符
-                ffw.write(String.join(split, dat.content) + split, true);
+                String line = dat.content[0] + split;
+                for(int i = 1; i < dat.content.length; i++)
+                    line += dat.content[i] + split;
+                ffw.write(line, true);
+//                ffw.write(String.join(split, dat.content) + split, true);
                 dat = dat.next;
             }
         }
