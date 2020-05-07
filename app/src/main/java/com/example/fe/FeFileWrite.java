@@ -18,10 +18,12 @@ public class FeFileWrite {
     private FileOutputStream fos;
     private OutputStreamWriter osw;
 
-    public void write(String value){
+    public void write(String value, Boolean autoCRCL){
         try {
             if (osw != null){
                 osw.write(value);
+                if(autoCRCL)
+                    osw.write("\r\n");
                 osw.flush();
             }
         } catch (java.io.IOException e) {
@@ -66,10 +68,16 @@ public class FeFileWrite {
         }
     }
 
+    public Boolean ready(){
+        if(osw != null)
+            return true;
+        return false;
+    }
+
     public void exit(){
         try {
-            if(fos != null)
-                fos.close();
+            if(osw != null)
+                osw.close();
             if (fos != null)
                 fos.close();
         } catch (java.io.IOException e) {

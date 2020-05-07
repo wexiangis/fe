@@ -108,6 +108,12 @@ public class FeFileRead {
         }
     }
 
+    public Boolean ready(){
+        if(br != null)
+            return true;
+        return false;
+    }
+
     public void exit(){
         try {
             if (br != null)
