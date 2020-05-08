@@ -230,10 +230,11 @@ public class FeParamMap {
                 java.util.Arrays.fill(buff, (byte)',');
                 if(is.read(buff) >= 4)
                 {
-                    String[] dat = new String(buff).split(",");
+                    String[] dat = new String(buff).split(";");
                     if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
                     if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
                     if(dat.length > 2) piexlPerGrid = Integer.parseInt(dat[2]);
+                    if(dat.length > 3) transferGrid = Integer.parseInt(dat[3]);
                 }
                 is.close();
             }
@@ -254,7 +255,7 @@ public class FeParamMap {
                 String line = null;
                 //分行读取
                 while ((line = br.readLine()) != null) {
-                    String[] lineData = line.split(",");
+                    String[] lineData = line.split(";");
                     //
                     for(int i = 0; i < lineData.length; i++)
                         mapInfo.grid[countLine][i] = (short)Integer.parseInt(lineData[i]);
@@ -287,7 +288,7 @@ public class FeParamMap {
                 String line = null;
                 //分行读取
                 while ((line = br.readLine()) != null) {
-                    String[] lineData = line.split(",");
+                    String[] lineData = line.split(";");
                     //
                     if(lineData.length > 1)
                         mapInfo.name[countLine] = lineData[1];
