@@ -34,7 +34,7 @@ public class FeParamMap {
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         //初始化map参数结构体
         loadMap(section);
-        init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, piexlPerGrid);
+        init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, pixelPerGrid);
         //两参数分别为xy缩放比例
         float xp = (float)width/tBitmap.getWidth()/2;
         if(xp > 1.5f)
@@ -74,15 +74,15 @@ public class FeParamMap {
     public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
 
     //地图适配屏幕
-    public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int piexlPG){
+    public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int pixelPG){
         //比较屏幕和地图长和高比例
         float screenXDivY = (float)screenXSixe/screenYSize;
         float mapXDivY = (float)mapXGrid/mapYGrid;
         //限制屏幕最大显示格数
-        screenXGrid = screenXSixe/piexlPG;
-        screenYGrid = screenYSize/piexlPG;
+        screenXGrid = screenXSixe/pixelPG;
+        screenYGrid = screenYSize/pixelPG;
         //关键参数备份
-        piexlPerGrid = piexlPG;
+        pixelPerGrid = pixelPG;
         screenWidth = screenXSixe;
         screenHeight = screenYSize;
         xGrid = mapXGrid;
@@ -157,7 +157,7 @@ public class FeParamMap {
     public Matrix matrix = new Matrix();
 
     //方格显示时可以接受的最小像素值
-    private int piexlPerGrid = 104;
+    private int pixelPerGrid = 104;
 
     //
     public class MapInfo{
@@ -222,7 +222,7 @@ public class FeParamMap {
         }
         // get size
         xGrid = yGrid = 30;//default
-        piexlPerGrid = 128;//default
+        pixelPerGrid = 128;//default
         try {
             InputStream is = getClass().getResourceAsStream(mapSize);
             if(is != null){
@@ -233,7 +233,7 @@ public class FeParamMap {
                     String[] dat = new String(buff).split(";");
                     if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
                     if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
-                    if(dat.length > 2) piexlPerGrid = Integer.parseInt(dat[2]);
+                    if(dat.length > 2) pixelPerGrid = Integer.parseInt(dat[2]);
                     if(dat.length > 3) transferGrid = Integer.parseInt(dat[3]);
                 }
                 is.close();
