@@ -5,100 +5,205 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class FeMapRead {
+
     //关键路径
     private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
     private String assetsFilePath, sdFilePath;
-    //基本参数
-    private int xGrid = 10;
-    private int yGrid = 10;
-    private int pixelPerGrid = 104;
-    private int transferGrid = 0;
 
-    public int getXGrid() {return xGrid;}
-    public int getYGrid() {return yGrid;}
-    public int getPixelPerGrid() {return pixelPerGrid;}
-    public int getTransferGrid() {return transferGrid;}
-
-    public byte[][] getGrid(){
-        return null;
+    private class FeFileAllLine{
+        public String line;
+        public FeFileAllLine next;
+        public FeFileAllLine(String line){
+            this.line = line;
+        }
     }
 
-    public Bitmap getBitmap(){
+    private void _load_map_info_txt(FeMapInfo mapInfo, FeFileAllLine ffal, int total) {
+        mapInfo.name = new String[total];
+        mapInfo.defend = new short[total];
+        mapInfo.avoid = new short[total];
+        mapInfo.plus = new short[total];
+        mapInfo.mov = new short[total];
+        mapInfo.type = new short[total];
+        mapInfo.info = new String[total];
+        for(int i = 0; i < total && ffal != null; i++)
+        {
+            String[] lineData = ffal.line.split(";");
+            if(lineData.length > 1)  mapInfo.name[i] = lineData[1];
+            if(lineData.length > 2) mapInfo.defend[i] = (short)Integer.parseInt(lineData[2]);
+            if(lineData.length > 3) mapInfo.avoid[i] = (short)Integer.parseInt(lineData[3]);
+            if(lineData.length > 4) mapInfo.plus[i] = (short)Integer.parseInt(lineData[4]);
+            if(lineData.length > 5) mapInfo.mov[i] = (short)Integer.parseInt(lineData[5]);
+            if(lineData.length > 6) mapInfo.type[i] = (short)Integer.parseInt(lineData[6]);
+            if(lineData.length > 7) mapInfo.info[i] = lineData[7];
+            ffal = ffal.next;
+        }
+    }
+
+    private void load_map_info_txt(FeMapInfo mapInfo){
+        FeFileAllLine ffal = null, next = null;
+        int lineCount = 0;
+        String line = null;
+        //
+        File sdGridInfoPath = new File(feSdRootPath + "/map/grid_info.txt");
+        try {
+            if(sdGridInfoPath.exists()) {
+                FileInputStream fis = new FileInputStream(sdGridInfoPath.getPath());
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader br = new BufferedReader(isr);
+                //分行读取
+                while ((line = br.readLine()) != null) {
+                    if(next == null) ffal = next = new FeFileAllLine(line);
+                    else next = next.next = new FeFileAllLine(line);
+                    lineCount += 1;
+                }
+                br.close();
+                isr.close();
+                fis.close();
+            }
+            else {
+                InputStream is = getClass().getResourceAsStream("/assets/map/grid_info.txt");
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                //分行读取
+                while ((line = br.readLine()) != null) {
+                    if(next == null) ffal = next = new FeFileAllLine(line);
+                    else next = next.next = new FeFileAllLine(line);
+                    lineCount += 1;
+                }
+                br.close();
+                isr.close();
+                is.close();
+            }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("FeMapInfo", "open size.txt" + " not found");
+        } catch (java.io.IOException e) {
+            Log.d("FeMapInfo", "read size.txt" + " IOException");
+        }
+        //解析链表
+        _load_map_info_txt(mapInfo, ffal, lineCount);
+    }
+
+    private void _load_grid_txt(FeMapInfo mapInfo, String line, int count) {
+        String[] lineData = line.split(";");
+        for(int i = 0; i < mapInfo.xGrid && i < lineData.length; i++)
+            mapInfo.grid[count][i] = (short)Integer.parseInt(lineData[i]);
+    }
+
+    private void load_grid_txt(FeMapInfo mapInfo){
+        File sdGridPath = new File(sdFilePath + "grid.txt");
+        String line = null;
+        int count = 0;
+        //重新分配二维数组
+        mapInfo.grid = new short[mapInfo.yGrid][mapInfo.xGrid];
+        try {
+            if(sdGridPath.exists()) {
+                FileInputStream fis = new FileInputStream(sdGridPath.getPath());
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader br = new BufferedReader(isr);
+                //分行读取
+                while ((line = br.readLine()) != null) {
+                    _load_grid_txt(mapInfo, line, count++);
+                    if(count >= mapInfo.yGrid)
+                        break;
+                }
+                br.close();
+                isr.close();
+                fis.close();
+            }
+            else {
+                InputStream is = getClass().getResourceAsStream(assetsFilePath + "grid.txt");
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                //分行读取
+                while ((line = br.readLine()) != null) {
+                    _load_grid_txt(mapInfo, line, count++);
+                    if(count >= mapInfo.yGrid)
+                        break;
+                }
+                br.close();
+                isr.close();
+                is.close();
+            }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("FeMapInfo", "open grid.txt" + " not found");
+        } catch (java.io.IOException e) {
+            Log.d("FeMapInfo", "read grid.txt" + " IOException");
+        }
+    }
+
+    private void load_map_jpg(FeMapInfo mapInfo){
         File sdBitmapPath = new File(sdFilePath + "map.jpg");
         if(sdBitmapPath.exists())
-            return BitmapFactory.decodeFile(sdBitmapPath.getPath());
+            mapInfo.bitmap = BitmapFactory.decodeFile(sdBitmapPath.getPath());
         else{
-            Bitmap ret = null;
             try{
                 InputStream is = getClass().getResourceAsStream(assetsFilePath + "map.jpg");
                 if(is != null){
-                    ret = BitmapFactory.decodeStream(is);
+                    mapInfo.bitmap = BitmapFactory.decodeStream(is);
                     is.close();
                 }
             } catch (java.io.FileNotFoundException e) {
-                Log.d("FeMapRead", "open bitmap not found");
+                Log.d("FeMapInfo", "open bitmap not found");
             } catch (IOException e) {
-                Log.d("FeMapRead", "read bitmap IOException");
+                Log.d("FeMapInfo", "read bitmap IOException");
             }
-            return ret;
         }
     }
 
-    private void load_size_txt(){
+    private void _load_size_txt(FeMapInfo mapInfo, byte[] line){
+        String[] dat = new String(line).split(";");
+        if(dat.length > 0) mapInfo.xGrid = Integer.parseInt(dat[0]);
+        if(dat.length > 1) mapInfo.yGrid = Integer.parseInt(dat[1]);
+        if(dat.length > 2) mapInfo.pixelPerGrid = Integer.parseInt(dat[2]);
+        if(dat.length > 3) mapInfo.transferGrid = Integer.parseInt(dat[3]);
+    }
+
+    private void load_size_txt(FeMapInfo mapInfo){
         File sdSizePath = new File(sdFilePath + "size.txt");
-        if(sdSizePath.exists()){
-            try {
+        try {
+            if(sdSizePath.exists()) {
                 FileInputStream fis = new FileInputStream(sdSizePath.getPath());
-                byte[] line = new byte[100];
-                if(fis.read(line) > 0){
-                    String[] dat = line.toString().split(";");
-                    if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
-                    if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
-                    if(dat.length > 2) pixelPerGrid = Integer.parseInt(dat[2]);
-                    if(dat.length > 3) transferGrid = Integer.parseInt(dat[3]);
+                if(fis != null) {
+                    byte[] line = new byte[100];
+                    if (fis.read(line) > 0)
+                        _load_size_txt(mapInfo, line);
+                    fis.close();
                 }
-                fis.close();
-            } catch (java.io.FileNotFoundException e) {
-                Log.d("FeMapRead", "open" + sdSizePath.getPath() + " not found");
-            } catch (java.io.IOException e) {
-                Log.d("FeMapRead", "read" + sdSizePath.getPath() + " IOException");
             }
-        }
-        else {
-            try {
+            else {
                 InputStream is = getClass().getResourceAsStream(assetsFilePath + "size.txt");
                 if (is != null) {
                     byte[] line = new byte[100];
-                    if (is.read(line) >= 4) {
-                        String[] dat = new String(line).split(";");
-                        if (dat.length > 0) xGrid = Integer.parseInt(dat[0]);
-                        if (dat.length > 1) yGrid = Integer.parseInt(dat[1]);
-                        if (dat.length > 2) pixelPerGrid = Integer.parseInt(dat[2]);
-                        if (dat.length > 3) transferGrid = Integer.parseInt(dat[3]);
-                    }
+                    if (is.read(line) > 0)
+                        _load_size_txt(mapInfo, line);
                     is.close();
                 }
-            } catch (java.io.FileNotFoundException e) {
-                Log.d("FeMapRead", "open" + assetsFilePath + "size.txt" + " not found");
-            } catch (java.io.IOException e) {
-                Log.d("FeMapRead", "read" + assetsFilePath + "size.txt" + " IOException");
             }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("FeMapInfo", "open size.txt" + " not found");
+        } catch (java.io.IOException e) {
+            Log.d("FeMapInfo", "read size.txt" + " IOException");
         }
     }
 
-    public FeMapRead(int section) {
-        String mapPath = "/map"+String.format("%02d/",section);
-
+    public void getFeMapInfo(FeMapInfo mapInfo, int section) {
+        String mapPath = "/map/map"+String.format("%02d/",section);
         assetsFilePath = "/assets" + mapPath;
         sdFilePath = feSdRootPath + mapPath;
 
-        load_size_txt();
+        load_map_jpg(mapInfo);
+        load_size_txt(mapInfo);
+        load_grid_txt(mapInfo);
+        load_map_info_txt(mapInfo);
     }
 
 }

@@ -2,16 +2,10 @@ package com.example.fe;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 
 /*
@@ -22,32 +16,11 @@ public class FeParamMap {
     private Activity activity;
     public int section;
 
-    //
-    public Bitmap bitmap = null, tBitmap = null;
+    public Matrix matrix = new Matrix();
 
-    public FeParamMap(Activity act, int feSection)
-    {
-        activity = act;
-        section = feSection;
-        //获取屏幕参数
-        DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        //初始化map参数结构体
-        loadMap(section);
-        init(dm.widthPixels, dm.heightPixels, xGrid, yGrid, pixelPerGrid);
-        //两参数分别为xy缩放比例
-        float xp = (float)width/tBitmap.getWidth()/2;
-        if(xp > 1.5f)
-            xp = 1.5f;
-        float yp = (float)height/tBitmap.getHeight()/2;
-        if(yp > 1.5f)
-            yp = 1.5f;
-        matrix.postScale(xp, yp);
-        bitmap = Bitmap.createBitmap(tBitmap, 0, 0, (int)tBitmap.getWidth(), (int)tBitmap.getHeight(), matrix, true);
-        //释放
-        tBitmap.recycle();
-        tBitmap = null;
-    }
+    public FeMapInfo map;
+
+    public Bitmap bitmap = null;
 
     //----- 地图基本信息 -----
 
@@ -61,8 +34,6 @@ public class FeParamMap {
 
     //地图实际显示宽高像素
     public int width = 1920, height = 1080;
-    //地图横纵向格数
-    public int xGrid = 20, yGrid = 10;
     //屏幕横纵向格数
     public int screenXGrid = 20, screenYGrid = 10;
 
@@ -73,6 +44,29 @@ public class FeParamMap {
     //横纵向动画初始偏移
     public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
 
+    public FeParamMap(Activity act, int feSection)
+    {
+        activity = act;
+        section = feSection;
+        //获取屏幕参数
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        //初始化map参数结构体
+        map = new FeMapInfo(section);
+        new FeMapRead().getFeMapInfo(map, section);
+        init(dm.widthPixels, dm.heightPixels, map.xGrid, map.yGrid, map.pixelPerGrid);
+        //两参数分别为xy缩放比例
+        float xp = (float)width/map.bitmap.getWidth()/2;
+        if(xp > 1.5f)
+            xp = 1.5f;
+        float yp = (float)height/map.bitmap.getHeight()/2;
+        if(yp > 1.5f)
+            yp = 1.5f;
+        matrix.postScale(xp, yp);
+        bitmap = Bitmap.createBitmap(map.bitmap, 0, 0,
+                (int)map.bitmap.getWidth(), (int)map.bitmap.getHeight(), matrix, true);
+    }
+
     //地图适配屏幕
     public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int pixelPG){
         //比较屏幕和地图长和高比例
@@ -82,11 +76,11 @@ public class FeParamMap {
         screenXGrid = screenXSixe/pixelPG;
         screenYGrid = screenYSize/pixelPG;
         //关键参数备份
-        pixelPerGrid = pixelPG;
+        map.pixelPerGrid = pixelPG;
         screenWidth = screenXSixe;
         screenHeight = screenYSize;
-        xGrid = mapXGrid;
-        yGrid = mapYGrid;
+        map.xGrid = mapXGrid;
+        map.yGrid = mapYGrid;
         //屏幕的长高比例大于地图,地图参照屏幕长来缩放
         if(screenXDivY > mapXDivY){
             //得到屏幕横向实际显示格数
@@ -122,7 +116,7 @@ public class FeParamMap {
                 mapDist.left = screenWidth - width;
             else{
                 mapDist.left -= (width - (mapDist.right - mapDist.left))/2;
-                mapDist.left = (int)((int)((float)mapDist.left/width*xGrid)*xGridPixel);
+                mapDist.left = (int)((int)((float)mapDist.left/width*map.xGrid)*xGridPixel);
             }
             mapDist.right = width - mapDist.left;
             //
@@ -130,206 +124,12 @@ public class FeParamMap {
                 mapDist.top = screenHeight - height;
             else{
                 mapDist.top -= (height - (mapDist.bottom - mapDist.top))/2;
-                mapDist.top = (int)((int)((float)mapDist.top/height*yGrid)*yGridPixel);
+                mapDist.top = (int)((int)((float)mapDist.top/height*map.yGrid)*yGridPixel);
             }
             mapDist.bottom = height - mapDist.top;
         }
         //
         xGridErr = yGridErr = 0;
-    }
-
-//    public boolean fileExist(String name)
-//    {
-//        try{
-//            File file = new File(name);
-//            if(!file.exists())
-//                return false;
-//        }
-//        catch (Exception e) {
-//            return false;
-//        }
-//        return true;
-//    }
-
-    //----- 地图方格信息 -----
-
-    //
-    public Matrix matrix = new Matrix();
-
-    //方格显示时可以接受的最小像素值
-    private int pixelPerGrid = 104;
-
-    //
-    public class MapInfo{
-        //方格矩阵信息
-        public int w, h;
-        public short[][] grid;//[line][count]
-        //方格类型信息
-        public int total;
-        public String[] name;
-        public short[] defend;
-        public short[] avoid;
-        public short[] plus;
-        public short[] mov;
-        public short[] type;
-        public String[] info;
-        //
-        public MapInfo(int width, int height)
-        {
-            w = width;
-            h = height;
-            grid = new short[height][width];
-            //
-            total = 100;
-            name = new String[100];
-            defend = new short[100];
-            avoid = new short[100];
-            plus = new short[100];
-            mov = new short[100];
-            type = new short[100];
-            info = new String[100];
-        }
-    }
-    //
-    public MapInfo mapInfo;
-
-    //从assets文件夹加载map
-    public void loadMap(int section)
-    {
-        String mapFolder = "/assets/map/map"+String.format("%02d",section);
-        //
-        String mapPath1 = mapFolder + "/map.png";
-        String mapPath2 = mapFolder + "/map.jpg";
-        String mapSize = mapFolder + "/size.txt";
-        String mapGrid = mapFolder + "/grid.txt";
-        String mapGridInfo = "/assets/map/grid_info.txt";
-        // get bitmap
-        try {
-            InputStream is = getClass().getResourceAsStream(mapPath1);
-            if(is == null)
-                is = getClass().getResourceAsStream(mapPath2);
-            //default
-            if(is == null)
-                tBitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.map_xxx_30x30);
-            else {
-                tBitmap = BitmapFactory.decodeStream(is);
-                is.close();
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("loadMap: get bitmap", "not found");
-        } catch (IOException e) {
-            Log.d("loadMap: get bitmap", e.getMessage());
-        }
-        // get size
-        xGrid = yGrid = 30;//default
-        pixelPerGrid = 128;//default
-        try {
-            InputStream is = getClass().getResourceAsStream(mapSize);
-            if(is != null){
-                byte[] buff = new byte[64];
-                java.util.Arrays.fill(buff, (byte)',');
-                if(is.read(buff) >= 4)
-                {
-                    String[] dat = new String(buff).split(";");
-                    if(dat.length > 0) xGrid = Integer.parseInt(dat[0]);
-                    if(dat.length > 1) yGrid = Integer.parseInt(dat[1]);
-                    if(dat.length > 2) pixelPerGrid = Integer.parseInt(dat[2]);
-                    if(dat.length > 3) transferGrid = Integer.parseInt(dat[3]);
-                }
-                is.close();
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("loadMap: get size", "not found");
-        } catch (IOException e) {
-            Log.d("loadMap: get size", e.getMessage());
-        }
-        // mapInfo init
-        mapInfo = new MapInfo(xGrid, yGrid);
-        // get grid
-        try {
-            int countLine = 0;
-            InputStream is = getClass().getResourceAsStream(mapGrid);
-            if (is != null) {
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String line = null;
-                //分行读取
-                while ((line = br.readLine()) != null) {
-                    String[] lineData = line.split(";");
-                    //
-                    for(int i = 0; i < lineData.length; i++)
-                        mapInfo.grid[countLine][i] = (short)Integer.parseInt(lineData[i]);
-                    //
-                    countLine += 1;
-                    if(countLine >= mapInfo.h)
-                        break;
-                }
-                br.close();
-                isr.close();
-                is.close();//关闭输入流
-            }
-            //default
-            if(countLine == 0){
-                for(int i = 0; i < mapInfo.h; i++)
-                    java.util.Arrays.fill(mapInfo.grid[i], (short)0);
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("loadMap: get grid", "not found");
-        } catch (IOException e) {
-            Log.d("loadMap: get grid", e.getMessage());
-        }
-        //grid info
-        try {
-            int countLine = 0;
-            InputStream is = getClass().getResourceAsStream(mapGridInfo);
-            if (is != null) {
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String line = null;
-                //分行读取
-                while ((line = br.readLine()) != null) {
-                    String[] lineData = line.split(";");
-                    //
-                    if(lineData.length > 1)
-                        mapInfo.name[countLine] = lineData[1];
-                    if(lineData.length > 2)
-                        mapInfo.defend[countLine] = (short)Integer.parseInt(lineData[2]);
-                    if(lineData.length > 3)
-                        mapInfo.avoid[countLine] = (short)Integer.parseInt(lineData[3]);
-                    if(lineData.length > 4)
-                        mapInfo.plus[countLine] = (short)Integer.parseInt(lineData[4]);
-                    if(lineData.length > 5)
-                        mapInfo.mov[countLine] = (short)Integer.parseInt(lineData[5]);
-                    if(lineData.length > 6)
-                        mapInfo.type[countLine] = (short)Integer.parseInt(lineData[6]);
-                    if(lineData.length > 7)
-                        mapInfo.info[countLine] = lineData[7];
-                    //
-                    countLine += 1;
-                    if(countLine >= 100)
-                        break;
-                }
-                //
-                mapInfo.total = countLine;
-                br.close();
-                isr.close();
-                is.close();//关闭输入流
-            }
-            //default
-            if(countLine == 0){
-                mapInfo.name[0] = "无";
-                mapInfo.defend[0] = 0;
-                mapInfo.avoid[0] = 0;
-                mapInfo.plus[0] = 0;
-                mapInfo.mov[0] = 1;
-                mapInfo.type[0] = 0;
-                mapInfo.info[0] = "";
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("loadMap: get grid info", "not found");
-        } catch (IOException e) {
-            Log.d("loadMap: get grid info", e.getMessage());
-        }
     }
 
     //----- 地图梯形变换 -----

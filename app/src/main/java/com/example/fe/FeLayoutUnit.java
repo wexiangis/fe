@@ -61,20 +61,20 @@ public class FeLayoutUnit extends RelativeLayout {
         super(context);
         paramMap = FeData.feParamMap;
 
-        loadView(0, 1, 0);
-        loadView(1, 2, 1);
+//        loadView(0, 1, 0);
+//        loadView(1, 2, 1);
 //        loadView(2, 3, 0);
 //        loadView(3, 4, 1);
-        loadView(4, 5, 0);
-        loadView(5, 6, 1);
+//        loadView(4, 5, 0);
+//        loadView(5, 6, 1);
 //        loadView(6, 7, 0);
 //        loadView(7, 8, 1);
         loadView(8, 9, 0);
         loadView(9, 10, 1);
 //        loadView(10, 11, 0);
 //        loadView(11, 12, 1);
-        loadView(12, 13, 0);
-        loadView(13, 14, 1);
+//        loadView(12, 13, 0);
+//        loadView(13, 14, 1);
 
 //        loadView(14, 1, 12);
 //        loadView(15, 2, 13);
@@ -82,12 +82,12 @@ public class FeLayoutUnit extends RelativeLayout {
         loadView(17, 4, 13);
 //        loadView(18, 5, 12);
 //        loadView(19, 6, 13);
-        loadView(20, 7, 12);
-        loadView(21, 8, 13);
+//        loadView(20, 7, 12);
+//        loadView(21, 8, 13);
 //        loadView(22, 9, 12);
 //        loadView(23, 10, 13);
-        loadView(24, 11, 12);
-        loadView(25, 12, 13);
+//        loadView(24, 11, 12);
+//        loadView(25, 12, 13);
 //        loadView(26, 13, 12);
 //        loadView(27, 14, 13);
     }

@@ -62,12 +62,12 @@ public class FeViewMap extends View {
         //防止把地图移出屏幕
         if (paramMap.xGridErr < 0)
             paramMap.xGridErr = 0;
-        else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.xGrid)
-            paramMap.xGridErr = paramMap.xGrid - paramMap.screenXGrid;
+        else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.map.xGrid)
+            paramMap.xGridErr = paramMap.map.xGrid - paramMap.screenXGrid;
         if (paramMap.yGridErr < 0)
             paramMap.yGridErr = 0;
-        else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.yGrid)
-            paramMap.yGridErr = paramMap.yGrid - paramMap.screenYGrid;
+        else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.map.yGrid)
+            paramMap.yGridErr = paramMap.map.yGrid - paramMap.screenYGrid;
     }
 
     //动画心跳回调
@@ -95,15 +95,15 @@ public class FeViewMap extends View {
                 if (paramMap.xGridErr < 0){
                     paramMap.xGridErr = 0;
                     xGridErr = 0;
-                }else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.xGrid){
-                    paramMap.xGridErr = paramMap.xGrid - paramMap.screenXGrid;
+                }else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.map.xGrid){
+                    paramMap.xGridErr = paramMap.map.xGrid - paramMap.screenXGrid;
                     xGridErr = 0;
                 }
                 if (paramMap.yGridErr < 0){
                     paramMap.yGridErr = 0;
                     yGridErr = 0;
-                }else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.yGrid){
-                    paramMap.yGridErr = paramMap.yGrid - paramMap.screenYGrid;
+                }else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.map.yGrid){
+                    paramMap.yGridErr = paramMap.map.yGrid - paramMap.screenYGrid;
                     yGridErr = 0;
                 }
                 //调用一次onDraw
@@ -203,12 +203,12 @@ public class FeViewMap extends View {
                 //防止把地图移出屏幕
                 if (paramMap.xGridErr < 0)
                     paramMap.xGridErr = 0;
-                else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.xGrid)
-                    paramMap.xGridErr = paramMap.xGrid - paramMap.screenXGrid;
+                else if (paramMap.xGridErr + paramMap.screenXGrid > paramMap.map.xGrid)
+                    paramMap.xGridErr = paramMap.map.xGrid - paramMap.screenXGrid;
                 if (paramMap.yGridErr < 0)
                     paramMap.yGridErr = 0;
-                else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.yGrid)
-                    paramMap.yGridErr = paramMap.yGrid - paramMap.screenYGrid;
+                else if (paramMap.yGridErr + paramMap.screenYGrid > paramMap.map.yGrid)
+                    paramMap.yGridErr = paramMap.map.yGrid - paramMap.screenYGrid;
                 //调用一次onDraw
                 if (needRefresh) {
                     //清触屏点击

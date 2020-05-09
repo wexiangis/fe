@@ -131,12 +131,12 @@ public class FeViewMapInfo extends View {
             drawInfo = true;
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息
-            int mapInfoOrder = paramMap.mapInfo.grid
+            int mapInfoOrder = paramMap.map.grid
                     [paramMap.selectMap.selectPoint[1]]
                     [paramMap.selectMap.selectPoint[0]];
             //填地形信息
             canvas.drawText(
-                    paramMap.mapInfo.name[mapInfoOrder],
+                    paramMap.map.name[mapInfoOrder],
                     rectDistInfo.left + rectDistInfo.width()/2,
                     rectDistInfo.top + rectDistInfo.height()/2 - pixelPowInfo*1,
                     paintInfoName);
@@ -154,11 +154,11 @@ public class FeViewMapInfo extends View {
             //地形参数数据
             paintInfoParam.setColor(Color.BLACK);
             paintInfoParam.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(String.valueOf(paramMap.mapInfo.defend[mapInfoOrder]),
+            canvas.drawText(String.valueOf(paramMap.map.defend[mapInfoOrder]),
                     rectPaintInfo.right,
                     rectPaintInfo.top + paintInfoParam.getTextSize(),
                     paintInfoParam);
-            canvas.drawText(String.valueOf(paramMap.mapInfo.avoid[mapInfoOrder]),
+            canvas.drawText(String.valueOf(paramMap.map.avoid[mapInfoOrder]),
                     rectPaintInfo.right,
                     rectPaintInfo.bottom,
                     paintInfoParam);
