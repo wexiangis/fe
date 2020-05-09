@@ -84,9 +84,9 @@ public class FeMapRead {
                 is.close();
             }
         } catch (java.io.FileNotFoundException e) {
-            Log.d("FeMapInfo", "open size.txt" + " not found");
+            Log.d("FeMapInfo.load_map_info", "not found : grid_info.txt");
         } catch (java.io.IOException e) {
-            Log.d("FeMapInfo", "read size.txt" + " IOException");
+            Log.d("FeMapInfo.load_map_info", "IOException : grid_info.txt");
         }
         //解析链表
         _load_map_info_txt(mapInfo, ffal, lineCount);
@@ -134,9 +134,9 @@ public class FeMapRead {
                 is.close();
             }
         } catch (java.io.FileNotFoundException e) {
-            Log.d("FeMapInfo", "open grid.txt" + " not found");
+            Log.d("FeMapInfo.load_grid_txt", "not found : grid.txt");
         } catch (java.io.IOException e) {
-            Log.d("FeMapInfo", "read grid.txt" + " IOException");
+            Log.d("FeMapInfo.load_grid_txt", "IOException : grid.txt");
         }
     }
 
@@ -152,9 +152,9 @@ public class FeMapRead {
                     is.close();
                 }
             } catch (java.io.FileNotFoundException e) {
-                Log.d("FeMapInfo", "open bitmap not found");
+                Log.d("FeMapInfo.load_map_jpg", "not found : map.jpg");
             } catch (IOException e) {
-                Log.d("FeMapInfo", "read bitmap IOException");
+                Log.d("FeMapInfo.load_map_jpg", "IOException : map.jpg");
             }
         }
     }
@@ -172,26 +172,22 @@ public class FeMapRead {
         try {
             if(sdSizePath.exists()) {
                 FileInputStream fis = new FileInputStream(sdSizePath.getPath());
-                if(fis != null) {
-                    byte[] line = new byte[100];
-                    if (fis.read(line) > 0)
-                        _load_size_txt(mapInfo, line);
-                    fis.close();
-                }
+                byte[] line = new byte[100];
+                if (fis.read(line) > 0)
+                    _load_size_txt(mapInfo, line);
+                fis.close();
             }
             else {
                 InputStream is = getClass().getResourceAsStream(assetsFilePath + "size.txt");
-                if (is != null) {
-                    byte[] line = new byte[100];
-                    if (is.read(line) > 0)
-                        _load_size_txt(mapInfo, line);
-                    is.close();
-                }
+                byte[] line = new byte[100];
+                if (is.read(line) > 0)
+                    _load_size_txt(mapInfo, line);
+                is.close();
             }
         } catch (java.io.FileNotFoundException e) {
-            Log.d("FeMapInfo", "open size.txt" + " not found");
+            Log.d("FeMapInfo.load_size_txt", "not found : size.txt");
         } catch (java.io.IOException e) {
-            Log.d("FeMapInfo", "read size.txt" + " IOException");
+            Log.d("FeMapInfo.load_size_txt", "IOException : size.txt");
         }
     }
 

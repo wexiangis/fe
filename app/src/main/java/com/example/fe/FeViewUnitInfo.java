@@ -116,6 +116,16 @@ public class FeViewUnitInfo extends View {
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
             canvas.drawBitmap(bitmapHeadBg, rectSrcHeadBg, rectDistHeadBg, paintHeadBg);
             //填信息
+            canvas.drawText(
+                FeData.feAssets.getUnitName(0),
+                rectDistHeadBg.left + rectDistHeadBg.width()/4,
+                rectDistHeadBg.top + rectDistHeadBg.height()/4,
+                paintParam);
+            canvas.drawText(
+                    FeData.feAssets.getUnitNameSummary(0),
+                    rectDistHeadBg.left + rectDistHeadBg.width()/4,
+                    rectDistHeadBg.top + rectDistHeadBg.height()/2,
+                    paintParam);
         }
     }
 

@@ -7,22 +7,39 @@ import android.graphics.Bitmap;
  */
 public class FeAssets {
 
-    //----- map -----
-    class Map{
-        public Bitmap getBitmap(int section){
-            return null;
-        }
-        public int getWidth(int section){
-            return 100;
-        }
-        public int getHeight(int section){
-            return 100;
-        }
-        public int getPixel(int section){
-            return 100;
-        }
+    //----- api -----
+
+    public String getUnitName(int count){
+        return name.getName(unit.getName(count));
     }
-    public Map map;
+    public String getUnitNameSummary(int count){
+        return name.getSummary(unit.getName(count));
+    }
+
+    //----- all -----
+
+    // unit
+    public Unit unit = new Unit();
+    public Name name = new Name();
+    public Item item = new Item();
+    // unit addition
+    public Addition addition = new Addition();
+    public A_Ability a_ability = new A_Ability();
+    public A_Grow a_grow = new A_Grow();
+    public A_Skill a_skill = new A_Skill();
+    public A_Special a_special = new A_Special();
+    // unit profession
+    public Profession profession = new Profession();
+    public P_Name p_name = new P_Name();
+    public P_Ability p_ability = new P_Ability();
+    public P_Upgrade p_upgrade = new P_Upgrade();
+    public P_Grow p_grow = new P_Grow();
+    public P_Skill p_skill = new P_Skill();
+    public P_Special p_special = new P_Special();
+    public P_Types p_types = new P_Types();
+    // unit else
+    public Items items = new Items();
+    public Special special = new Special();
 
     //----- unit -----
 
@@ -48,7 +65,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public Unit unit;
 
     //人物名称列表
     class Name extends AssetsFileStruct{
@@ -64,7 +80,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public Name name;
 
     //人物物品列表
     class Item extends AssetsFileStruct{
@@ -88,7 +103,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public Item item;
 
     //----- unit addition -----
 
@@ -110,7 +124,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public Addition addition;
 
     //人物能力加成列表
     class A_Ability extends AssetsFileStruct{
@@ -142,7 +155,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public A_Ability a_ability;
 
     //人物成长率加成列表
     class A_Grow extends AssetsFileStruct{
@@ -174,7 +186,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public A_Grow a_grow;
 
     //人物技能加成列表
     class A_Skill extends AssetsFileStruct{
@@ -202,7 +213,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public A_Skill a_skill;
 
     //人物特技列表
     class A_Special extends AssetsFileStruct{
@@ -222,7 +232,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public A_Special a_special;
 
     //----- unit profession -----
 
@@ -252,7 +261,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public Profession profession;
 
     //职业名称列表
     class P_Name extends AssetsFileStruct{
@@ -268,7 +276,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public P_Name p_name;
 
     //职业能力列表
     class P_Ability extends AssetsFileStruct{
@@ -300,7 +307,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public P_Ability p_ability;
 
     //职业升级加点列表
     class P_Upgrade extends AssetsFileStruct{
@@ -332,7 +338,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public P_Upgrade p_upgrade;
 
     //职业成长率列表
     class P_Grow extends AssetsFileStruct{
@@ -364,7 +369,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public P_Grow p_grow;
 
     //职业技能列表
     class P_Skill extends AssetsFileStruct{
@@ -392,7 +396,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public P_Skill p_skill;
 
     //职业特技列表
     class P_Special extends AssetsFileStruct{
@@ -412,7 +415,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public P_Special p_special;
 
     //职业类型列表
     class P_Types extends AssetsFileStruct{
@@ -430,7 +432,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public P_Types p_types;
 
     //----- unit else -----
 
@@ -464,7 +465,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public Items items = null;
 
     //特技列表
     class Special extends AssetsFileStruct{
@@ -482,7 +482,6 @@ public class FeAssets {
             loadFile();
         }
     }
-    public Special special = null;
 }
 
 //通用文件管理
@@ -555,7 +554,10 @@ class AssetsFileStruct{
                 for(int i = 1; i < dat.content.length; i++)
                     line += dat.content[i] + split;
                 ffw.write(line, true);
-//                ffw.write(String.join(split, dat.content) + split, true);
+
+                //避免String.join()的使用,其要求API24以上
+                // ffw.write(String.join(split, dat.content) + split, true);
+
                 dat = dat.next;
             }
         }

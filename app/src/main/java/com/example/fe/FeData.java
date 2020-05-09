@@ -47,5 +47,8 @@ public class FeData extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //
+        feAssets = new FeAssets();
+//        feAssets.p_skill.saveFile();
     }
 }

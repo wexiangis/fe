@@ -58,11 +58,13 @@ public class FeFileRead {
             if(br == null)
                 return false;
             lineContent = br.readLine();
+            if(lineContent == null)
+                return false;
             content = lineContent.split(spl);
             line += 1;
             return true;
         } catch (IOException e) {
-            Log.d("FeFileRead: readLine " + filePath, e.getMessage());
+            Log.d("FeFileRead.readLine", "IOException : " + filePath);
         }
         return false;
     }
@@ -79,32 +81,28 @@ public class FeFileRead {
         if(!sdFileFolderPath.exists())
             sdFileFolderPath.mkdirs();
         //存在sd卡(内置存储)配置则优先使用该配置
-        if(sdFilePath.exists())
-            filePath = sdFilePath.getPath();
-        else
-            filePath = assetsFilePath.getPath();
-        //inputStream
-        if (filePath.indexOf("/assets") == 0)
-            is = getClass().getResourceAsStream(filePath);
-        else {
-            try {
+        try{
+            if(sdFilePath.exists()) {
+                filePath = sdFilePath.getPath();
                 fis = new FileInputStream(filePath);
-            } catch (java.io.FileNotFoundException e) {
-                Log.d("FeFileRead: open " + filePath, "not found");
             }
-        }
-        //reader
-        if (is != null) {
-            isr = new InputStreamReader(is);
-            br = new BufferedReader(isr);
-        } else if (is != null) {
-            try {
+            else {
+                filePath = assetsFilePath.getPath();
+                is = getClass().getResourceAsStream(filePath);
+            }
+            //reader
+            if (is != null) {
+                isr = new InputStreamReader(is);
+                br = new BufferedReader(isr);
+            }
+            else {
                 isr = new InputStreamReader(fis, "UTF-8");
-                if(isr != null)
-                    br = new BufferedReader(isr);
-            }catch (java.io.UnsupportedEncodingException e) {
-                Log.d("FeFileRead: open " + filePath, e.getMessage());
+                br = new BufferedReader(isr);
             }
+        } catch (java.io.FileNotFoundException e) {
+            Log.d("FeFileRead.FeFileRead", "not found : " + filePath);
+        } catch (java.io.IOException e) {
+            Log.d("FeFileRead.FeFileRead", "IOException : " + filePath);
         }
     }
 
@@ -125,7 +123,7 @@ public class FeFileRead {
             if(fis != null)
                 fis.close();
         } catch (IOException e) {
-            Log.d("FeFileRead: exit " + filePath, e.getMessage());
+            Log.d("FeFileRead.exit", "IOException : " + filePath);
         }
     }
 }
