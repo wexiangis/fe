@@ -1,6 +1,5 @@
 package com.example.fe;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
@@ -12,7 +11,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class FeMapRead {
+public class FeDataMap {
+
+    private FeMapReader mapReader;
+
+    public FeMapInfo getMap(int section){
+        FeMapInfo mapInfo = new FeMapInfo(section);
+        mapReader.getFeMapInfo(mapInfo, section);
+        return mapInfo;
+    }
+
+    public FeDataMap(){
+        mapReader = new FeMapReader();
+    }
+}
+
+class FeMapReader {
 
     //关键路径
     private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
@@ -192,7 +206,7 @@ public class FeMapRead {
     }
 
     public void getFeMapInfo(FeMapInfo mapInfo, int section) {
-        String mapPath = "/map/map"+String.format("%02d/",section);
+        String mapPath = "/map/map" + String.format("%02d/",section);
         assetsFilePath = "/assets" + mapPath;
         sdFilePath = feSdRootPath + mapPath;
 

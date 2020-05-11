@@ -49,6 +49,5 @@ public class FeData extends Application {
         super.onCreate();
         //
         feAssets = new FeAssets();
-//        feAssets.p_skill.saveFile();
     }
 }

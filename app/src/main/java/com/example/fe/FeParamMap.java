@@ -52,8 +52,7 @@ public class FeParamMap {
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         //初始化map参数结构体
-        map = new FeMapInfo(section);
-        new FeMapRead().getFeMapInfo(map, section);
+        map = FeData.feAssets.map.getMap(section);
         init(dm.widthPixels, dm.heightPixels, map.xGrid, map.yGrid, map.pixelPerGrid);
         //两参数分别为xy缩放比例
         float xp = (float)width/map.bitmap.getWidth()/2;
