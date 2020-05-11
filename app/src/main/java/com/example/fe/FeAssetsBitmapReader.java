@@ -11,8 +11,11 @@ import java.io.InputStream;
 
 /*
     通用的根据文件夹和id获取图片方法
+    example:
+        FeAssetsBitmapReader bitmapReader = new FeAssetsBitmapReader();
+        bitmapReader.load_xxx()
  */
-class FeAssetsBitmapStruct{
+class FeAssetsBitmapReader {
 
     //关键路径
     private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
@@ -37,7 +40,7 @@ class FeAssetsBitmapStruct{
         return ret;
     }
 
-    private Bitmap load_png_or_jpg(String folder, String realName) {
+    public Bitmap load_bitmap(String folder, String realName) {
         File assetsFilePath = new File("/assets" + folder + realName);
         File sdFileFolderPath = new File(feSdRootPath + folder);
         File sdFilePath = new File(feSdRootPath + folder + realName);
@@ -55,13 +58,13 @@ class FeAssetsBitmapStruct{
         folder: 示例 "/unit/head/" 前后都带斜杠
         id: 从0数起
      */
-    public Bitmap load_png(String folder, int id) {
+    public Bitmap load_png_byId(String folder, int id) {
         String realName = String.format("%03d.png",id);
-        return load_png_or_jpg(folder, realName);
+        return load_bitmap(folder, realName);
     }
 
-    public Bitmap load_jpg(String folder, int id) {
+    public Bitmap load_jpg_byId(String folder, int id) {
         String realName = String.format("%03d.jpg",id);
-        return load_png_or_jpg(folder, realName);
+        return load_bitmap(folder, realName);
     }
 }

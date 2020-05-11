@@ -1,9 +1,9 @@
 package com.example.fe;
 
 /*
-    通用行文件管理
+    通用行文件管理工具, 继承使用
  */
-public class FeAssetsFileStruct{
+public class FeAssetsFileReader {
     //文件路径和分隔符
     public String[] folderAndName;
     public String split;

@@ -30,29 +30,11 @@ public class FeViewSelect extends View {
     //
     private Paint paintSelct;
 
-    //
-    public Bitmap getAssetsBitmap(String path)
-    {
-        Bitmap ret = null;
-        try {
-            InputStream is = getClass().getResourceAsStream(path);
-            if(is != null){
-                ret = BitmapFactory.decodeStream(is);
-                is.close();
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("getAssetsBitmap: ", "not found");
-        } catch (IOException e) {
-            Log.d("getAssetsBitmap: ", e.getMessage());
-        }
-        return ret;
-    }
-
     public FeViewSelect(Context context){
         super(context);
         paramMap = FeData.feParamMap;
         //
-        bitmapSelect = getAssetsBitmap("/assets/menu/map/select.png");
+        bitmapSelect = FeData.feAssets.menu.getMapSelect();
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
         rectDistSelect = new Rect(0, 0, 0, 0);
         rectSrcSelect = new Rect(0, 0, bitmapSelect.getWidth(), bitmapSelect.getHeight());

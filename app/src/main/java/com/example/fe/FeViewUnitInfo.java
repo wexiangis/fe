@@ -32,29 +32,11 @@ public class FeViewUnitInfo extends View {
     private float pixelPowHead;
     private boolean drawHead = false;
 
-    //
-    public Bitmap getAssetsBitmap(String path)
-    {
-        Bitmap ret = null;
-        try {
-            InputStream is = getClass().getResourceAsStream(path);
-            if(is != null){
-                ret = BitmapFactory.decodeStream(is);
-                is.close();
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("getAssetsBitmap: ", "not found");
-        } catch (IOException e) {
-            Log.d("getAssetsBitmap: ", e.getMessage());
-        }
-        return ret;
-    }
-
     public FeViewUnitInfo(Context context){
         super(context);
         paramMap = FeData.feParamMap;
         //
-        bitmapHeadBg = getAssetsBitmap("/assets/menu/map/header.png");
+        bitmapHeadBg = FeData.feAssets.menu.getMapHeader();
         //
         pixelPowHead = paramMap.yGridPixel*2/bitmapHeadBg.getHeight();
         //

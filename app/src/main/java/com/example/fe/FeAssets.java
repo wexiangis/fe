@@ -5,14 +5,10 @@ package com.example.fe;
  */
 public class FeAssets {
 
-    public FeDataMap map;
-    public FeDataUnit unit;
+    public FeDataMap map = new FeDataMap();
+    public FeDataMenu menu = new FeDataMenu();
+    public FeDataUnit unit = new FeDataUnit();
 
-    public FeAssets()
-    {
-        map = new FeDataMap();
-        unit = new FeDataUnit();
-    }
 }
 
 

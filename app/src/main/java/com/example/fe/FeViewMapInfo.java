@@ -37,29 +37,11 @@ public class FeViewMapInfo extends View {
     private float pixelPowInfo;
     private boolean drawInfo = false;
 
-    //
-    public Bitmap getAssetsBitmap(String path)
-    {
-        Bitmap ret = null;
-        try {
-            InputStream is = getClass().getResourceAsStream(path);
-            if(is != null){
-                ret = BitmapFactory.decodeStream(is);
-                is.close();
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("getAssetsBitmap: ", "not found");
-        } catch (IOException e) {
-            Log.d("getAssetsBitmap: ", e.getMessage());
-        }
-        return ret;
-    }
-
     public FeViewMapInfo(Context context) {
         super(context);
         paramMap = FeData.feParamMap;
         //
-        bitmapInfo = getAssetsBitmap("/assets/menu/map/mapinfo.png");
+        bitmapInfo = FeData.feAssets.menu.getMapInfo();
         //
         pixelPowInfo = paramMap.yGridPixel * 2 / bitmapInfo.getHeight();
         //
