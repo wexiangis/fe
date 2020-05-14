@@ -2,6 +2,16 @@ package com.example.fe;
 
 /*
     通用行文件管理工具, 继承使用
+    example:
+        class XXX extends FeAssetsFileReader{
+            public XXX(){
+                //需在构造函数指定以下信息
+                folderAndName = new String[]{"/unit/", "items.txt"};
+                split = ";";
+                //从文件加载
+                load();
+            }
+        }
  */
 public class FeAssetsFileReader {
     //文件路径和分隔符
