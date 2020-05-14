@@ -12,4 +12,4 @@
 
 ## 结构总览
 
-![Image](structure.png)
+![Image](https://gitee.com/wexiangis/FE/blob/master/structure.png)
