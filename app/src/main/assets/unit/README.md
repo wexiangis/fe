@@ -150,5 +150,13 @@
 
 * 格式: 名称即为序号,从000.png到999.png
 
+## type/xxx.png : 职业类型图标文件
+
+* 格式: 名称即为序号,从000.png到999.png
+
+## item/xxx.png : 物品图标文件
+
+* 格式: 名称即为序号,从000.png到999.png
+
 # 文件结构总览
 ![Image](structure.png)

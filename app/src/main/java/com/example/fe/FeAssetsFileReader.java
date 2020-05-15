@@ -14,11 +14,20 @@ package com.example.fe;
         }
  */
 public class FeAssetsFileReader {
+
     //文件路径和分隔符
-    public String[] folderAndName;
-    public String split;
+    private String[] folderAndName;
+    private String split;
+
+    public FeAssetsFileReader(String folder, String name, String split)
+    {
+        this.folderAndName = new String[] {folder, name};
+        this.split = split;
+        load();
+    }
+
     //链表数据结构,一行数据占用一个Data
-    public Data data;
+    private Data data;
     public class Data{
         public String[] content;//原汁原味保留行数据,用split分隔而来
         public Data next = null;
@@ -26,6 +35,7 @@ public class FeAssetsFileReader {
             this.content = content;
         }
     }
+    
     //获取某一行数据格式: 数据 = 对象.getData(line).数据名称;
     public Data getData(int line){
         int count = 0;

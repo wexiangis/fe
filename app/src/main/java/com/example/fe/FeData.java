@@ -18,9 +18,9 @@ public class FeData extends Application {
     public static FeLayoutMainTheme feLayoutMainTheme = null;
     public static FeLayoutSection feLayoutSection = null;
     //参数合集
+    public static FeAssets feAssets = null;
     public static FeParamMap feParamMap = null;
     public static FeParamUnit feParamUnit = null;
-    public static FeAssets feAssets = null;
 
     public static void start(Activity act){
         //保留activity

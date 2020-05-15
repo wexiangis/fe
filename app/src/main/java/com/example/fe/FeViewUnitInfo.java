@@ -99,12 +99,12 @@ public class FeViewUnitInfo extends View {
             canvas.drawBitmap(bitmapHeadBg, rectSrcHeadBg, rectDistHeadBg, paintHeadBg);
             //填信息
             canvas.drawText(
-                FeData.feAssets.unit.getUnitName(0),
+                FeData.feAssets.unit.getName(0),
                 rectDistHeadBg.left + rectDistHeadBg.width()/4,
                 rectDistHeadBg.top + rectDistHeadBg.height()/4,
                 paintParam);
             canvas.drawText(
-                    FeData.feAssets.unit.getUnitNameSummary(0),
+                    FeData.feAssets.unit.getSummary(0),
                     rectDistHeadBg.left + rectDistHeadBg.width()/4,
                     rectDistHeadBg.top + rectDistHeadBg.height()/2,
                     paintParam);

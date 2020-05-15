@@ -10,37 +10,375 @@ public class FeDataUnit {
 
     //----- api -----
 
-    public String getUnitName(int count){
+    // name.txt
+    public String getName(int count){
         return name.getName(unit.getName(count));
     }
-    public String getUnitNameSummary(int count){
+    public String getSummary(int count){
         return name.getSummary(unit.getName(count));
+    }
+    // /head/xx.png
+    public Bitmap getHead(int count){
+        return _getHead(unit.getHead(count));
+    }
+    // p_name.txt
+    public String getProfessionName(int count){
+        return p_name.getName(profession.getName(unit.getProfession(count)));
+    }
+    public String getProfessionSummary(int count){
+        return p_name.getSummary(profession.getName(unit.getProfession(count)));
+    }
+    // /anim/xxx.png
+    public Bitmap getProfessionAnim(int count){
+        return _getAnim(profession.getAnim(unit.getProfession(count)));
+    }
+    // p_ability.txt
+    public int getProfessionAbilityHp(int count){
+        return p_ability.getHp(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilityStr(int count){
+        return p_ability.getStr(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilityMag(int count){
+        return p_ability.getMag(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilitySkill(int count){
+        return p_ability.getSkill(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilitySpe(int count){
+        return p_ability.getSpe(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilityLuk(int count){
+        return p_ability.getLuk(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilityDef(int count){
+        return p_ability.getDef(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilityMde(int count){
+        return p_ability.getMde(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilityWeig(int count){
+        return p_ability.getWeig(profession.getAbility(unit.getProfession(count)));
+    }
+    public int getProfessionAbilityMov(int count){
+        return p_ability.getMov(profession.getAbility(unit.getProfession(count)));
+    }
+    // p_upgrade.txt
+    public int getProfessionUpgradeHp(int count){
+        return p_upgrade.getHp(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeStr(int count){
+        return p_upgrade.getStr(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeMag(int count){
+        return p_upgrade.getMag(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeSkill(int count){
+        return p_upgrade.getSkill(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeSpe(int count){
+        return p_upgrade.getSpe(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeLuk(int count){
+        return p_upgrade.getLuk(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeDef(int count){
+        return p_upgrade.getDef(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeMde(int count){
+        return p_upgrade.getMde(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeWeig(int count){
+        return p_upgrade.getWeig(profession.getUpgrade(unit.getProfession(count)));
+    }
+    public int getProfessionUpgradeMov(int count){
+        return p_upgrade.getMov(profession.getUpgrade(unit.getProfession(count)));
+    }
+    // p_grow.txt
+    public int getProfessionGrowHp(int count){
+        return p_grow.getHp(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowStr(int count){
+        return p_grow.getStr(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowMag(int count){
+        return p_grow.getMag(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowSkill(int count){
+        return p_grow.getSkill(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowSpe(int count){
+        return p_grow.getSpe(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowLuk(int count){
+        return p_grow.getLuk(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowDef(int count){
+        return p_grow.getDef(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowMde(int count){
+        return p_grow.getMde(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowWeig(int count){
+        return p_grow.getWeig(profession.getGrow(unit.getProfession(count)));
+    }
+    public int getProfessionGrowMov(int count){
+        return p_grow.getMov(profession.getGrow(unit.getProfession(count)));
+    }
+    // p_skill.txt
+    public int getProfessionSkillSword(int count){
+        return p_skill.getSword(profession.getSkill(unit.getProfession(count)));
+    }
+    public int getProfessionSkillGun(int count){
+        return p_skill.getGun(profession.getSkill(unit.getProfession(count)));
+    }
+    public int getProfessionSkillAxe(int count){
+        return p_skill.getAxe(profession.getSkill(unit.getProfession(count)));
+    }
+    public int getProfessionSkillArrow(int count){
+        return p_skill.getArrow(profession.getSkill(unit.getProfession(count)));
+    }
+    public int getProfessionSkillPhy(int count){
+        return p_skill.getPhy(profession.getSkill(unit.getProfession(count)));
+    }
+    public int getProfessionSkillLight(int count){
+        return p_skill.getLight(profession.getSkill(unit.getProfession(count)));
+    }
+    public int getProfessionSkillDark(int count){
+        return p_skill.getDark(profession.getSkill(unit.getProfession(count)));
+    }
+    public int getProfessionSkillStick(int count){
+        return p_skill.getStick(profession.getSkill(unit.getProfession(count)));
+    }
+    // p_special.txt
+    public int getProfessionSpecial1(int count){
+        return p_special.getSpe1(profession.getSpecial(unit.getProfession(count)));
+    }
+    public int getProfessionSpecial2(int count){
+        return p_special.getSpe2(profession.getSpecial(unit.getProfession(count)));
+    }
+    public int getProfessionSpecial3(int count){
+        return p_special.getSpe3(profession.getSpecial(unit.getProfession(count)));
+    }
+    public int getProfessionSpecial4(int count){
+        return p_special.getSpe4(profession.getSpecial(unit.getProfession(count)));
+    }
+    // p_type.txt
+    public String getProfessionTypeName(int count){
+        return p_types.getName(profession.getType(unit.getProfession(count)));
+    }
+    public String getProfessionTypeSummary(int count){
+        return p_types.getSummary(profession.getType(unit.getProfession(count)));
+    }
+    public Bitmap getProfessionTypePicture(int count){
+        return _getType(p_types.getPicture(profession.getType(unit.getProfession(count))));
+    }
+    // a_ability.txt
+    public int getAdditionAbilityHp(int count){
+        return a_ability.getHp(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilityStr(int count){
+        return a_ability.getStr(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilityMag(int count){
+        return a_ability.getMag(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilitySkill(int count){
+        return a_ability.getSkill(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilitySpe(int count){
+        return a_ability.getSpe(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilityLuk(int count){
+        return a_ability.getLuk(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilityDef(int count){
+        return a_ability.getDef(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilityMde(int count){
+        return a_ability.getMde(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilityWeig(int count){
+        return a_ability.getWeig(addition.getAbility(unit.getAddition(count)));
+    }
+    public int getAdditionAbilityMov(int count){
+        return a_ability.getMov(addition.getAbility(unit.getAddition(count)));
+    }
+    // a_grow.txt
+    public int getAdditionGrowHp(int count){
+        return a_grow.getHp(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowStr(int count){
+        return a_grow.getStr(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowMag(int count){
+        return a_grow.getMag(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowSkill(int count){
+        return a_grow.getSkill(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowSpe(int count){
+        return a_grow.getSpe(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowLuk(int count){
+        return a_grow.getLuk(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowDef(int count){
+        return a_grow.getDef(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowMde(int count){
+        return a_grow.getMde(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowWeig(int count){
+        return a_grow.getWeig(addition.getGrow(unit.getAddition(count)));
+    }
+    public int getAdditionGrowMov(int count){
+        return a_grow.getMov(addition.getGrow(unit.getAddition(count)));
+    }
+    // a_skill.txt
+    public int getAdditionSkillSword(int count){
+        return a_skill.getSword(addition.getSkill(unit.getAddition(count)));
+    }
+    public int getAdditionSkillGun(int count){
+        return a_skill.getGun(addition.getSkill(unit.getAddition(count)));
+    }
+    public int getAdditionSkillAxe(int count){
+        return a_skill.getAxe(addition.getSkill(unit.getAddition(count)));
+    }
+    public int getAdditionSkillArrow(int count){
+        return a_skill.getArrow(addition.getSkill(unit.getAddition(count)));
+    }
+    public int getAdditionSkillPhy(int count){
+        return a_skill.getPhy(addition.getSkill(unit.getAddition(count)));
+    }
+    public int getAdditionSkillLight(int count){
+        return a_skill.getLight(addition.getSkill(unit.getAddition(count)));
+    }
+    public int getAdditionSkillDark(int count){
+        return a_skill.getDark(addition.getSkill(unit.getAddition(count)));
+    }
+    // a_special.txt
+    public int getAdditionSpecial1(int count){
+        return a_special.getSpe1(addition.getSpecial(unit.getAddition(count)));
+    }
+    public int getAdditionSpecial2(int count){
+        return a_special.getSpe2(addition.getSpecial(unit.getAddition(count)));
+    }
+    public int getAdditionSpecial3(int count){
+        return a_special.getSpe3(addition.getSpecial(unit.getAddition(count)));
+    }
+    public int getAdditionSpecial4(int count){
+        return a_special.getSpe4(addition.getSpecial(unit.getAddition(count)));
+    }
+    // unit.txt
+    public int getLevel(int count){
+        return unit.getLevel(count);
+    }
+    // item.txt
+    public int getItem1(int count){
+        return item.getIt1(unit.getItem(count));
+    }
+    public int getItem2(int count){
+        return item.getIt2(unit.getItem(count));
+    }
+    public int getItem3(int count){
+        return item.getIt3(unit.getItem(count));
+    }
+    public int getItem4(int count){
+        return item.getIt4(unit.getItem(count));
+    }
+    public int getItem5(int count){
+        return item.getIt5(unit.getItem(count));
+    }
+    public int getItem6(int count){
+        return item.getIt6(unit.getItem(count));
+    }
+    // special.txt
+    public String getSpecialName(int id){
+        return special.getName(id);
+    }
+    public String getSpecialSummary(int id){
+        return special.getSummary(id);
+    }
+    public Bitmap getSpecialPicture(int id){
+        return _getSpecial(special.getPicture(id));
+    }
+    // items.txt
+    public int getItemsType(int id){
+        return items.getType(id);
+    }
+    public String getItemsName(int id){
+        return items.getName(id);
+    }
+    public String getItemsSummary(int id){
+        return items.getSummary(id);
+    }
+    public Bitmap getItemsPicture(int id){
+        return _getItem(items.getPicture(id));
+    }
+    public int getItemsLevel(int id){
+        return items.getLevel(id);
+    }
+    public int getItemsRange(int id){
+        return items.getRange(id);
+    }
+    public int getItemsWeight(int id){
+        return items.getWeight(id);
+    }
+    public int getItemsPower(int id){
+        return items.getPower(id);
+    }
+    public int getItemsHit(int id){
+        return items.getHit(id);
+    }
+    public int getItemsCritical(int id){
+        return items.getCritical(id);
     }
 
     //----- all file -----
 
     // unit
-    public Unit unit = new Unit();
-    public Name name = new Name();
-    public Item item = new Item();
+    private Unit unit = new Unit("/unit/", "unit.txt", ";");
+    private Name name = new Name("/unit/", "name.txt", ";");
+    private Item item = new Item("/unit/", "item.txt", ";");
     // unit addition
-    public Addition addition = new Addition();
-    public A_Ability a_ability = new A_Ability();
-    public A_Grow a_grow = new A_Grow();
-    public A_Skill a_skill = new A_Skill();
-    public A_Special a_special = new A_Special();
+    private Addition addition = new Addition("/unit/", "ability.txt", ";");
+    private A_Ability a_ability = new A_Ability("/unit/", "a_ability.txt", ";");
+    private A_Grow a_grow = new A_Grow("/unit/", "a_grow.txt", ";");
+    private A_Skill a_skill = new A_Skill("/unit/", "a_skill.txt", ";");
+    private A_Special a_special = new A_Special("/unit/", "a_special.txt", ";");
     // unit profession
-    public Profession profession = new Profession();
-    public P_Name p_name = new P_Name();
-    public P_Ability p_ability = new P_Ability();
-    public P_Upgrade p_upgrade = new P_Upgrade();
-    public P_Grow p_grow = new P_Grow();
-    public P_Skill p_skill = new P_Skill();
-    public P_Special p_special = new P_Special();
-    public P_Types p_types = new P_Types();
+    private Profession profession = new Profession("/unit/", "profession.txt", ";");
+    private P_Name p_name = new P_Name("/unit/", "p_name.txt", ";");
+    private P_Ability p_ability = new P_Ability("/unit/", "p_ability.txt", ";");
+    private P_Upgrade p_upgrade = new P_Upgrade("/unit/", "p_upgrade.txt", ";");
+    private P_Grow p_grow = new P_Grow("/unit/", "p_grow.txt", ";");
+    private P_Skill p_skill = new P_Skill("/unit/", "p_skill.txt", ";");
+    private P_Special p_special = new P_Special("/unit/", "p_special.txt", ";");
+    private P_Types p_types = new P_Types("/unit/", "p_type.txt", ";");
     // unit else
-    public Items items = new Items();
-    public Special special = new Special();
+    private Items items = new Items("/unit/", "items.txt", ";");
+    private Special special = new Special("/unit/", "special.txt", ";");
+
+    //----- unit 文件夹 -----
+
+    private FeAssetsBitmapReader bitmapReader = new FeAssetsBitmapReader();
+
+    private Bitmap _getAnim(int id){
+        return bitmapReader.load_png_byId("/unit/anim/", id);
+    }
+    private Bitmap _getHead(int id){
+        return bitmapReader.load_png_byId("/unit/head/", id);
+    }
+    private Bitmap _getSpecial(int id){
+        return bitmapReader.load_png_byId("/unit/special/", id);
+    }
+    private Bitmap _getType(int id){
+        return bitmapReader.load_png_byId("/unit/type/", id);
+    }
+    private Bitmap _getItem(int id){
+        return bitmapReader.load_png_byId("/unit/item/", id);
+    }
 
     //----- unit -----
 
@@ -60,10 +398,8 @@ public class FeDataUnit {
         public void setLevel(int line, int level){ setValue(level, line, 4); }
         public void setItem(int line, int item){ setValue(item, line, 5); }
 
-        public Unit(){
-            folderAndName = new String[]{"/unit/", "unit.txt"};
-            split = ";";
-            load();
+        public Unit(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -75,10 +411,8 @@ public class FeDataUnit {
         public void setName(int line, String name){ setValue(name, line, 0); }
         public void setSummary(int line, String summary){ setValue(summary, line, 1); }
 
-        public Name(){
-            folderAndName = new String[]{"/unit/", "name.txt"};
-            split = ";";
-            load();
+        public Name(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -98,10 +432,8 @@ public class FeDataUnit {
         public void setIt5(int line, int it5){ setValue(it5, line, 4); }
         public void setIt6(int line, int it6){ setValue(it6, line, 5); }
 
-        public Item(){
-            folderAndName = new String[]{"/unit/", "item.txt"};
-            split = ";";
-            load();
+        public Item(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -119,10 +451,8 @@ public class FeDataUnit {
         public void setSkill(int line, int skill){ setValue(skill, line, 2); }
         public void setSpecial(int line, int special){ setValue(special, line, 3); }
 
-        public Addition(){
-            folderAndName = new String[]{"/unit/", "addition.txt"};
-            split = ";";
-            load();
+        public Addition(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -150,10 +480,8 @@ public class FeDataUnit {
         public void setWeig(int line, int weig){ setValue(weig, line, 8); }
         public void setMov(int line, int mov){ setValue(mov, line, 9); }
 
-        public A_Ability(){
-            folderAndName = new String[]{"/unit/", "a_ability.txt"};
-            split = ";";
-            load();
+        public A_Ability(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -181,10 +509,8 @@ public class FeDataUnit {
         public void setWeig(int line, int weig){ setValue(weig, line, 8); }
         public void setMov(int line, int mov){ setValue(mov, line, 9); }
 
-        public A_Grow(){
-            folderAndName = new String[]{"/unit/", "a_grow.txt"};
-            split = ";";
-            load();
+        public A_Grow(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -208,10 +534,8 @@ public class FeDataUnit {
         public void setDark(int line, int dark){ setValue(dark, line, 6); }
         public void setStick(int line, int stick){ setValue(stick, line, 7); }
 
-        public A_Skill(){
-            folderAndName = new String[]{"/unit/", "a_skill.txt"};
-            split = ";";
-            load();
+        public A_Skill(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -227,10 +551,8 @@ public class FeDataUnit {
         public void setSpe3(int line, int spe3){ setValue(spe3, line, 2); }
         public void setSpe4(int line, int spe4){ setValue(spe4, line, 3); }
 
-        public A_Special(){
-            folderAndName = new String[]{"/unit/", "a_special.txt"};
-            split = ";";
-            load();
+        public A_Special(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -256,10 +578,8 @@ public class FeDataUnit {
         public void setSpecial(int line, int special){ setValue(special, line, 6); }
         public void setType(int line, int type){ setValue(type, line, 7); }
 
-        public Profession(){
-            folderAndName = new String[]{"/unit/", "profession.txt"};
-            split = ";";
-            load();
+        public Profession(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -271,10 +591,8 @@ public class FeDataUnit {
         public void setName(int line, String name){ setValue(name, line, 0); }
         public void setSummary(int line, String summary){ setValue(summary, line, 1); }
 
-        public P_Name(){
-            folderAndName = new String[]{"/unit/", "p_name.txt"};
-            split = ";";
-            load();
+        public P_Name(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -302,10 +620,8 @@ public class FeDataUnit {
         public void setWeig(int line, int weig){ setValue(weig, line, 8); }
         public void setMov(int line, int mov){ setValue(mov, line, 9); }
 
-        public P_Ability(){
-            folderAndName = new String[]{"/unit/", "p_ability.txt"};
-            split = ";";
-            load();
+        public P_Ability(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -333,10 +649,8 @@ public class FeDataUnit {
         public void setWeig(int line, int weig){ setValue(weig, line, 8); }
         public void setMov(int line, int mov){ setValue(mov, line, 9); }
 
-        public P_Upgrade(){
-            folderAndName = new String[]{"/unit/", "p_upgrade.txt"};
-            split = ";";
-            load();
+        public P_Upgrade(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -364,10 +678,8 @@ public class FeDataUnit {
         public void setWeig(int line, int weig){ setValue(weig, line, 8); }
         public void setMov(int line, int mov){ setValue(mov, line, 9); }
 
-        public P_Grow(){
-            folderAndName = new String[]{"/unit/", "p_grow.txt"};
-            split = ";";
-            load();
+        public P_Grow(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -391,10 +703,8 @@ public class FeDataUnit {
         public void setDark(int line, int dark){ setValue(dark, line, 6); }
         public void setStick(int line, int stick){ setValue(stick, line, 7); }
 
-        public P_Skill(){
-            folderAndName = new String[]{"/unit/", "p_skill.txt"};
-            split = ";";
-            load();
+        public P_Skill(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -410,10 +720,8 @@ public class FeDataUnit {
         public void setSpe3(int line, int spe3){ setValue(spe3, line, 2); }
         public void setSpe4(int line, int spe4){ setValue(spe4, line, 3); }
 
-        public P_Special(){
-            folderAndName = new String[]{"/unit/", "p_special.txt"};
-            split = ";";
-            load();
+        public P_Special(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -427,23 +735,9 @@ public class FeDataUnit {
         public void setSummary(int line, String summary){ setValue(summary, line, 1); }
         public void setPicture(int line, int picture){ setValue(picture, line, 2); }
 
-        public P_Types(){
-            folderAndName = new String[]{"/unit/", "p_types.txt"};
-            split = ";";
-            load();
+        public P_Types(String folder, String name, String split){
+            super(folder, name, split);
         }
-    }
-
-    //----- unit 文件夹 -----
-
-    FeAssetsBitmapReader bitmapReader = new FeAssetsBitmapReader();
-
-    public Bitmap getAnim(int id){
-        return bitmapReader.load_png_byId("/unit/anim/", id);
-    }
-
-    public Bitmap getHead(int id){
-        return bitmapReader.load_png_byId("/unit/head/", id);
     }
 
     //----- unit else -----
@@ -472,10 +766,8 @@ public class FeDataUnit {
         public void setHit(int line, int hit){ setValue(hit, line, 8); }
         public void setCritical(int line, int critical){ setValue(critical, line, 9); }
 
-        public Items(){
-            folderAndName = new String[]{"/unit/", "items.txt"};
-            split = ";";
-            load();
+        public Items(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 
@@ -489,10 +781,8 @@ public class FeDataUnit {
         public void setSummary(int line, String summary){ setValue(summary, line, 1); }
         public void setPicture(int line, int picture){ setValue(picture, line, 2); }
 
-        public Special(){
-            folderAndName = new String[]{"/unit/", "special.txt"};
-            split = ";";
-            load();
+        public Special(String folder, String name, String split){
+            super(folder, name, split);
         }
     }
 }
