@@ -2,6 +2,9 @@ package com.example.fe;
 
 import android.graphics.Bitmap;
 
+/*
+    /assets/menu 文件夹资源管理器
+ */
 public class FeDataMenu {
 
     private FeAssetsBitmapReader bitmapStruct;

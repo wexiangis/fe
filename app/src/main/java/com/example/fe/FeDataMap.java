@@ -1,5 +1,8 @@
 package com.example.fe;
 
+/*
+    /assets/map 文件夹资源管理器
+ */
 public class FeDataMap {
 
     private FeAssetsMapReader mapReader;
