@@ -334,6 +334,28 @@ public class FeDataUnit {
     public int getItemsCritical(int id){
         return items.getCritical(id);
     }
+    // skill_level.txt
+    public int getSkillLevelE(){
+        return skillLevel.getE(0);
+    }
+    public int getSkillLevelD(){
+        return skillLevel.getD(0);
+    }
+    public int getSkillLevelC(){
+        return skillLevel.getC(0);
+    }
+    public int getSkillLevelB(){
+        return skillLevel.getB(0);
+    }
+    public int getSkillLevelA(){
+        return skillLevel.getA(0);
+    }
+    public int getSkillLevelS(){
+        return skillLevel.getS(0);
+    }
+    public int getSkillLevelSS(){
+        return skillLevel.getSS(0);
+    }
 
     //----- all file -----
 
@@ -359,6 +381,7 @@ public class FeDataUnit {
     // unit else
     private Items items = new Items("/unit/", "items.txt", ";");
     private Special special = new Special("/unit/", "special.txt", ";");
+    private SkillLevel skillLevel = new SkillLevel("/unit/", "skill_level.txt", ";");
 
     //----- unit 文件夹 -----
 
@@ -782,6 +805,21 @@ public class FeDataUnit {
         public void setPicture(int line, int picture){ setValue(picture, line, 2); }
 
         public Special(String folder, String name, String split){
+            super(folder, name, split);
+        }
+    }
+
+    //技能等级
+    class SkillLevel extends FeAssetsFileReader {
+        public int getE(int line){ return getInt(line, 0); }
+        public int getD(int line){ return getInt(line, 1); }
+        public int getC(int line){ return getInt(line, 2); }
+        public int getB(int line){ return getInt(line, 3); }
+        public int getA(int line){ return getInt(line, 4); }
+        public int getS(int line){ return getInt(line, 5); }
+        public int getSS(int line){ return getInt(line, 6); }
+
+        public SkillLevel(String folder, String name, String split){
             super(folder, name, split);
         }
     }
