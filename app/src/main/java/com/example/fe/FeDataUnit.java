@@ -295,7 +295,7 @@ public class FeDataUnit {
     private Name name = new Name("/unit/", "name.txt", ";");
     private Item item = new Item("/unit/", "item.txt", ";");
     // unit addition
-    private Addition addition = new Addition("/unit/", "ability.txt", ";");
+    private Addition addition = new Addition("/unit/", "addition.txt", ";");
     private A_Ability a_ability = new A_Ability("/unit/", "a_ability.txt", ";");
     private A_Grow a_grow = new A_Grow("/unit/", "a_grow.txt", ";");
     private A_Skill a_skill = new A_Skill("/unit/", "a_skill.txt", ";");

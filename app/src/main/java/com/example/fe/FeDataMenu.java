@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
  */
 public class FeDataMenu {
 
-    private FeAssetsBitmapReader bitmapStruct;
+    private FeAssetsBitmapReader bitmapStruct = new FeAssetsBitmapReader();
 
     // /menu/map/xxx.png
     void FeDataMenu(){
