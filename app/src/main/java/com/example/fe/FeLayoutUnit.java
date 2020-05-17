@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 public class FeLayoutUnit extends RelativeLayout {
 
     private FeParamMap paramMap;
+    private FeParamUnit paramUnit;
     private int hitAnimOrder = -1;
 
     /*
@@ -25,7 +26,7 @@ public class FeLayoutUnit extends RelativeLayout {
                 FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
                 if(who_refresh == 1)
                     tmp.setAnimMode(tmp.getAnimMode()+1);
-                paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramMap.selectUnit);
+                paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramUnit.selectUnit);
             }
             else
                 tmp.setAnimMode(0);
@@ -55,6 +56,7 @@ public class FeLayoutUnit extends RelativeLayout {
     public FeLayoutUnit(Context context) {
         super(context);
         paramMap = FeData.feParamMap;
+        paramUnit = FeData.feParamUnit;
 
 //        loadView(0, 1, 0);
 //        loadView(1, 2, 1);

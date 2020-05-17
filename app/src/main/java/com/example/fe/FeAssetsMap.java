@@ -7,8 +7,8 @@ public class FeAssetsMap {
 
     private FeReaderMap mapReader = new FeReaderMap();
 
-    public FeMapInfo getMap(int section){
-        FeMapInfo mapInfo = new FeMapInfo(section);
+    public FeInfoMap getMap(int section){
+        FeInfoMap mapInfo = new FeInfoMap(section);
         mapReader.getFeMapInfo(mapInfo, section);
         return mapInfo;
     }

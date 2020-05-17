@@ -2,7 +2,7 @@ package com.example.fe;
 
 import android.graphics.Bitmap;
 
-public class FeMapInfo {
+public class FeInfoMap {
 
     public int section;
 
@@ -27,7 +27,7 @@ public class FeMapInfo {
     public short[] type;
     public String[] info;
 
-    public FeMapInfo(int section){
+    public FeInfoMap(int section){
         this.section = section;
     }
 

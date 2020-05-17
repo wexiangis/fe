@@ -13,6 +13,7 @@ import android.view.View;
 public class FeViewMap extends View {
 
     private FeParamMap paramMap;
+    private FeParamUnit paramUnit;
 
     //地图移动格子数
     private int xGridErr = 0, yGridErr = 0;
@@ -28,6 +29,7 @@ public class FeViewMap extends View {
     public FeViewMap(Context context) {
         super(context);
         paramMap = FeData.feParamMap;
+        paramUnit = FeData.feParamUnit;
         //输入坐标求格子位置
         paramMap.getRectByLocation(0, 0, paramMap.selectMap);
         //画笔
@@ -160,19 +162,19 @@ public class FeViewMap extends View {
                 //选中人物太过靠近边界,挪动地图
                 if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) &&
                     !paramMap.srcGridCenter.contains(
-                    paramMap.selectUnit.selectPoint[0],
-                    paramMap.selectUnit.selectPoint[1])){
+                    paramUnit.selectUnit.selectPoint[0],
+                    paramUnit.selectUnit.selectPoint[1])){
 //                    //挪动地图,把选中点居中
-//                    moveCenter(paramMap.selectUnit.selectPoint[0], paramMap.selectUnit.selectPoint[1]);
+//                    moveCenter(paramUnit.selectUnit.selectPoint[0], paramUnit.selectUnit.selectPoint[1]);
                     //把需要移动的量先记到xGridErr,yGridErr, 动画心跳回调会慢慢把这些差值吃掉
-                    if(paramMap.selectUnit.selectPoint[0] < paramMap.srcGridCenter.left)
-                        xGridErr = paramMap.selectUnit.selectPoint[0] - paramMap.srcGridCenter.left;
-                    else if(paramMap.selectUnit.selectPoint[0] > paramMap.srcGridCenter.right)
-                        xGridErr = paramMap.selectUnit.selectPoint[0] - paramMap.srcGridCenter.right;
-                    if(paramMap.selectUnit.selectPoint[1] < paramMap.srcGridCenter.top)
-                        yGridErr = paramMap.selectUnit.selectPoint[1] - paramMap.srcGridCenter.top;
-                    else if(paramMap.selectUnit.selectPoint[1] > paramMap.srcGridCenter.bottom)
-                        yGridErr = paramMap.selectUnit.selectPoint[1] - paramMap.srcGridCenter.bottom;
+                    if(paramUnit.selectUnit.selectPoint[0] < paramMap.srcGridCenter.left)
+                        xGridErr = paramUnit.selectUnit.selectPoint[0] - paramMap.srcGridCenter.left;
+                    else if(paramUnit.selectUnit.selectPoint[0] > paramMap.srcGridCenter.right)
+                        xGridErr = paramUnit.selectUnit.selectPoint[0] - paramMap.srcGridCenter.right;
+                    if(paramUnit.selectUnit.selectPoint[1] < paramMap.srcGridCenter.top)
+                        yGridErr = paramUnit.selectUnit.selectPoint[1] - paramMap.srcGridCenter.top;
+                    else if(paramUnit.selectUnit.selectPoint[1] > paramMap.srcGridCenter.bottom)
+                        yGridErr = paramUnit.selectUnit.selectPoint[1] - paramMap.srcGridCenter.bottom;
                 }
             }
             break;

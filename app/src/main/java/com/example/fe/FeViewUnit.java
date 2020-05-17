@@ -71,7 +71,7 @@ public class FeViewUnit extends View {
         //引入心跳
         FeData.feHeart.addUnit(heartUnit);
         //类中类需有实例化的对象来new
-        selectUnit = paramMap.new GridInMap();
+        selectUnit = new FeInfoGrid();
     }
 
     //移动方格
@@ -161,7 +161,7 @@ public class FeViewUnit extends View {
     });
 
     //临时参数
-    public FeParamMap.GridInMap selectUnit;
+    public FeInfoGrid selectUnit;
     private Rect bitmapDist = new Rect(0,0,0,0);
 
     //绘图回调

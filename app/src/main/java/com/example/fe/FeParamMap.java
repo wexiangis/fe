@@ -1,6 +1,5 @@
 package com.example.fe;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Path;
@@ -13,12 +12,11 @@ import android.util.DisplayMetrics;
  */
 public class FeParamMap {
 
-    private Activity activity;
     public int section;
 
     public Matrix matrix = new Matrix();
 
-    public FeMapInfo map;
+    public FeInfoMap map;
 
     public Bitmap bitmap = null;
 
@@ -44,15 +42,15 @@ public class FeParamMap {
     //横纵向动画初始偏移
     public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
 
-    public FeParamMap(Activity act, int feSection)
+    public FeParamMap(int feSection)
     {
-        activity = act;
         section = feSection;
         //获取屏幕参数
         DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        FeData.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         //初始化map参数结构体
         map = FeData.feAssets.map.getMap(section);
+        //适配屏幕
         init(dm.widthPixels, dm.heightPixels, map.xGrid, map.yGrid, map.pixelPerGrid);
         //两参数分别为xy缩放比例
         float xp = (float)width/map.bitmap.getWidth()/2;
@@ -257,26 +255,12 @@ public class FeParamMap {
 
     //----- 求梯形中的某一格子 -----
 
-    public class GridInMap{
-        //方格梯形
-        public Path selectPath = new Path();
-        //方格
-        public Rect selectRect = new Rect(0,0,0,0);
-        //方格横纵格数
-        public int[] selectPoint = new int[2];
-        //
-        public void clean(){
-            selectPath.reset();
-        }
-    }
-
-    public GridInMap selectMap = new GridInMap();
-    public GridInMap selectUnit = new GridInMap();
+    public FeInfoGrid selectMap = new FeInfoGrid();
 
     //输入格子求位置
-    public void getRectByGrid(int xG, int yG, GridInMap gim){
-        gim.selectPoint[0] = xG;
-        gim.selectPoint[1] = yG;
+    public void getRectByGrid(int xG, int yG, FeInfoGrid fig){
+        fig.selectPoint[0] = xG;
+        fig.selectPoint[1] = yG;
         //
         if(xG >= srcGridXStart &&
                 xG < srcGridXStart + srcGridX &&
@@ -286,48 +270,48 @@ public class FeParamMap {
             int x = xG - srcGridXStart;
             int y = yG - srcGridYStart;
             //
-            gim.selectRect.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
-            gim.selectRect.bottom = (int)(srcGridLine[y][1]);
-            gim.selectRect.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
-            gim.selectRect.right = (int)(gim.selectRect.left + srcGridLine[y][3]);
+            fig.selectRect.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
+            fig.selectRect.bottom = (int)(srcGridLine[y][1]);
+            fig.selectRect.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
+            fig.selectRect.right = (int)(fig.selectRect.left + srcGridLine[y][3]);
             //
-            gim.selectPath.reset();
+            fig.selectPath.reset();
             //
             if(y == 0){
-                gim.selectPath.moveTo(x * screenWidth / srcGridX, 0);
-                gim.selectPath.lineTo((x + 1) * screenWidth / srcGridX, 0);
+                fig.selectPath.moveTo(x * screenWidth / srcGridX, 0);
+                fig.selectPath.lineTo((x + 1) * screenWidth / srcGridX, 0);
             }else{
-                gim.selectPath.moveTo(
+                fig.selectPath.moveTo(
                         x * srcGridLine[y-1][3] - srcGridLine[y-1][2],
                         srcGridLine[y-1][1]);
-                gim.selectPath.lineTo(
+                fig.selectPath.lineTo(
                         (x + 1) * srcGridLine[y-1][3] - srcGridLine[y-1][2],
                         srcGridLine[y-1][1]);
             }
-            gim.selectPath.lineTo(gim.selectRect.right, gim.selectRect.bottom);
-            gim.selectPath.lineTo(gim.selectRect.left, gim.selectRect.bottom);
-            gim.selectPath.close();
+            fig.selectPath.lineTo(fig.selectRect.right, fig.selectRect.bottom);
+            fig.selectPath.lineTo(fig.selectRect.left, fig.selectRect.bottom);
+            fig.selectPath.close();
         }
         else{
-            gim.selectRect.left = (int)(-xGridPixel)*2;
-            gim.selectRect.right = (int)(-xGridPixel);
-            gim.selectRect.top = (int)(-yGridPixel)*2;
-            gim.selectRect.bottom = (int)(-yGridPixel);
+            fig.selectRect.left = (int)(-xGridPixel)*2;
+            fig.selectRect.right = (int)(-xGridPixel);
+            fig.selectRect.top = (int)(-yGridPixel)*2;
+            fig.selectRect.bottom = (int)(-yGridPixel);
         }
     }
 
     //输入坐标求格子位置
-    public void getRectByLocation(float x, float y, GridInMap gim) {
+    public void getRectByLocation(float x, float y, FeInfoGrid fig) {
         for(int yCount = 0; yCount < srcGridY; yCount++){
             if(y < srcGridLine[yCount][1]){
-                gim.selectPoint[1] = yCount + srcGridYStart;
-                gim.selectPoint[0] = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
+                fig.selectPoint[1] = yCount + srcGridYStart;
+                fig.selectPoint[0] = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
                 //
-                getRectByGrid(gim.selectPoint[0], gim.selectPoint[1], gim);
+                getRectByGrid(fig.selectPoint[0], fig.selectPoint[1], fig);
                 return;
             }
         }
-        getRectByGrid(-1, -1 + srcGridXStart, gim);
+        getRectByGrid(-1, -1 + srcGridXStart, fig);
     }
 }
 

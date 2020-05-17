@@ -15,6 +15,7 @@ import android.view.View;
 public class FeViewSelect extends View {
 
     private FeParamMap paramMap;
+    private FeParamUnit paramUnit;
 
     //选中框图片
     private Bitmap bitmapSelect;
@@ -28,6 +29,7 @@ public class FeViewSelect extends View {
     public FeViewSelect(Context context){
         super(context);
         paramMap = FeData.feParamMap;
+        paramUnit = FeData.feParamUnit;
         //
         bitmapSelect = FeData.feAssets.menu.getMapSelect();
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
@@ -95,10 +97,10 @@ public class FeViewSelect extends View {
         }
         else if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)){
             //计算输出位置
-            rectDistSelect.left = paramMap.selectUnit.selectRect.left - paramMap.selectUnit.selectRect.width()/4;
-            rectDistSelect.right = paramMap.selectUnit.selectRect.right + paramMap.selectUnit.selectRect.width()/4;
-            rectDistSelect.top = paramMap.selectUnit.selectRect.top - paramMap.selectUnit.selectRect.height()/2;
-            rectDistSelect.bottom = paramMap.selectUnit.selectRect.bottom;
+            rectDistSelect.left = paramUnit.selectUnit.selectRect.left - paramUnit.selectUnit.selectRect.width()/4;
+            rectDistSelect.right = paramUnit.selectUnit.selectRect.right + paramUnit.selectUnit.selectRect.width()/4;
+            rectDistSelect.top = paramUnit.selectUnit.selectRect.top - paramUnit.selectUnit.selectRect.height()/2;
+            rectDistSelect.bottom = paramUnit.selectUnit.selectRect.bottom;
             //使用大框
             rectSrcSelect.top = 0;
             rectSrcSelect.bottom = bitmapSelectFrameHeight;

@@ -21,7 +21,7 @@ public class FeData extends Application {
     public static FeAssets feAssets = null;//assets文件资源管理
     public static FeEvent feEvent = null;//用户操作事件管理
     public static FeParamMap feParamMap = null;
-//    public static FeParamUnit feParamUnit = null;
+    public static FeParamUnit feParamUnit = null;
 
     public static void start(Activity act){
         //保留activity
@@ -49,5 +49,6 @@ public class FeData extends Application {
         feFlow = new FeFlow();
         feAssets = new FeAssets();
         feEvent = new FeEvent();
+        feParamUnit = new FeParamUnit();
     }
 }

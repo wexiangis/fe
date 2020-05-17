@@ -2,18 +2,12 @@ package com.example.fe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /*
     地图上的人物头像等信息框
@@ -21,6 +15,7 @@ import java.io.InputStream;
 public class FeViewUnitInfo extends View {
 
     private FeParamMap paramMap;
+    private FeParamUnit paramUnit;
 
     //头像背景框图片源位置和输出位置
     private Rect rectSrcHeadBg, rectDistHeadBg;
@@ -35,6 +30,7 @@ public class FeViewUnitInfo extends View {
     public FeViewUnitInfo(Context context){
         super(context);
         paramMap = FeData.feParamMap;
+        paramUnit = FeData.feParamUnit;
         //
         bitmapHeadBg = FeData.feAssets.menu.getMapHeader();
         //
@@ -78,7 +74,7 @@ public class FeViewUnitInfo extends View {
         }
 
         //图像位置自动调整
-        if(paramMap.selectUnit.selectRect.right > paramMap.screenWidth/2){ //放到左边
+        if(paramUnit.selectUnit.selectRect.right > paramMap.screenWidth/2){ //放到左边
             rectDistHeadBg.left = (int)(paramMap.xGridPixel/4);
             rectDistHeadBg.right = (int)(paramMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead);
         }else{ //放到右边
@@ -88,10 +84,10 @@ public class FeViewUnitInfo extends View {
 
         //画人物头像
         if(!FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) ||
-            paramMap.selectUnit.selectRect.left > paramMap.screenWidth ||
-            paramMap.selectUnit.selectRect.right < 0 ||
-            paramMap.selectUnit.selectRect.top > paramMap.screenHeight ||
-            paramMap.selectUnit.selectRect.bottom < 0){
+            paramUnit.selectUnit.selectRect.left > paramMap.screenWidth ||
+            paramUnit.selectUnit.selectRect.right < 0 ||
+            paramUnit.selectUnit.selectRect.top > paramMap.screenHeight ||
+            paramUnit.selectUnit.selectRect.bottom < 0){
             drawHead = false;
         }else {
             drawHead = true;
