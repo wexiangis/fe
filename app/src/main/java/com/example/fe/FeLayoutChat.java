@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutChat extends RelativeLayout {
 
-    public boolean checkHit(int type, float x, float y){
+    public boolean checkHit(float x, float y){
         return false;
     }
 

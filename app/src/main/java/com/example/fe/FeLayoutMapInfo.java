@@ -1,7 +1,6 @@
 package com.example.fe;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /*
@@ -9,10 +8,8 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutMapInfo extends RelativeLayout {
 
-    public boolean checkHit(int type, float x, float y){
-        if(type == MotionEvent.ACTION_UP){
-            refresh();
-        }
+    public boolean checkHit(float x, float y){
+        refresh();
         return false;
     }
 

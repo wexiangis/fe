@@ -1,7 +1,6 @@
 package com.example.fe;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /*
@@ -34,9 +33,8 @@ public class FeLayoutUnit extends RelativeLayout {
         }
     }
 
-    public boolean checkHit(int type, float x, float y){
-        if(type == MotionEvent.ACTION_UP &&
-            !paramMap.checkSelectType(FeParamMap.SELECT_MOVE_END))
+    public boolean checkHit(float x, float y){
+        if(!paramMap.checkSelectType(FeParamMap.SELECT_MOVE_END))
         {
             FeViewUnit tmp;
             //遍历所有子view

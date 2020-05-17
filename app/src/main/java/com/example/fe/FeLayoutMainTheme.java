@@ -47,7 +47,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
                     showMenu = !showMenu;
                 }
                 else if(v == tv1){
-                    FeData.feEvent.loadSection(0);
+                    FeData.feFlow.loadSection(0);
                 }
                 else{
                     ;//菜单按键

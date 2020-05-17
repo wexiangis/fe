@@ -1,7 +1,6 @@
 package com.example.fe;
 
 import android.content.Context;
-import android.view.MotionEvent;
 import android.widget.RelativeLayout;
 
 /*
@@ -9,10 +8,7 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutUnitMenu extends RelativeLayout {
 
-    public boolean checkHit(int type, float x, float y){
-        if(type == MotionEvent.ACTION_UP){
-            ;
-        }
+    public boolean checkHit(float x, float y){
         return false;
     }
 
