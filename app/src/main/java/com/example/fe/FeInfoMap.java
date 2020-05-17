@@ -2,6 +2,9 @@ package com.example.fe;
 
 import android.graphics.Bitmap;
 
+/*
+    地图基本信息
+ */
 public class FeInfoMap {
 
     public int section;

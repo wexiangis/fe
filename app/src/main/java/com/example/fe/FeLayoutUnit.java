@@ -26,7 +26,7 @@ public class FeLayoutUnit extends RelativeLayout {
                 FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
                 if(who_refresh == 1)
                     tmp.setAnimMode(tmp.getAnimMode()+1);
-                paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramUnit.selectUnit);
+                paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramUnit.selectSite);
             }
             else
                 tmp.setAnimMode(0);
@@ -35,13 +35,14 @@ public class FeLayoutUnit extends RelativeLayout {
     }
 
     public boolean checkHit(float x, float y){
-        FeViewUnit tmp;
+        FeViewUnit fvu;
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++) {
-            tmp = (FeViewUnit)getChildAt(i);
-            if (tmp.checkHit(x, y)) {
+            fvu = (FeViewUnit)getChildAt(i);
+            if (fvu.checkHit(x, y)) {
                 hitAnimOrder = i;
                 FeData.feEvent.setSelectType(FeEvent.EVENT_HIT_UNIT);
+                FeData.feParamUnit.selectView = fvu;
                 refresh(1);
                 return true;
             }
@@ -57,6 +58,8 @@ public class FeLayoutUnit extends RelativeLayout {
         super(context);
         paramMap = FeData.feParamMap;
         paramUnit = FeData.feParamUnit;
+
+        FeData.feParamUnit.group = this;
 
 //        loadView(0, 1, 0);
 //        loadView(1, 2, 1);

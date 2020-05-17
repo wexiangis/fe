@@ -31,7 +31,7 @@ public class FeViewMap extends View {
         paramMap = FeData.feParamMap;
         paramUnit = FeData.feParamUnit;
         //输入坐标求格子位置
-        paramMap.getRectByLocation(0, 0, paramMap.selectMap);
+        paramMap.getRectByLocation(0, 0, paramMap.selectSite);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
@@ -158,23 +158,23 @@ public class FeViewMap extends View {
                 }
                 isMove = false;
                 //输入坐标求格子位置
-                paramMap.getRectByLocation(tUpX, tUpY, paramMap.selectMap);
+                paramMap.getRectByLocation(tUpX, tUpY, paramMap.selectSite);
                 //选中人物太过靠近边界,挪动地图
                 if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) &&
                     !paramMap.srcGridCenter.contains(
-                    paramUnit.selectUnit.selectPoint[0],
-                    paramUnit.selectUnit.selectPoint[1])){
+                    paramUnit.selectSite.selectPoint[0],
+                    paramUnit.selectSite.selectPoint[1])){
 //                    //挪动地图,把选中点居中
-//                    moveCenter(paramUnit.selectUnit.selectPoint[0], paramUnit.selectUnit.selectPoint[1]);
+//                    moveCenter(paramUnit.selectSite.selectPoint[0], paramUnit.selectSite.selectPoint[1]);
                     //把需要移动的量先记到xGridErr,yGridErr, 动画心跳回调会慢慢把这些差值吃掉
-                    if(paramUnit.selectUnit.selectPoint[0] < paramMap.srcGridCenter.left)
-                        xGridErr = paramUnit.selectUnit.selectPoint[0] - paramMap.srcGridCenter.left;
-                    else if(paramUnit.selectUnit.selectPoint[0] > paramMap.srcGridCenter.right)
-                        xGridErr = paramUnit.selectUnit.selectPoint[0] - paramMap.srcGridCenter.right;
-                    if(paramUnit.selectUnit.selectPoint[1] < paramMap.srcGridCenter.top)
-                        yGridErr = paramUnit.selectUnit.selectPoint[1] - paramMap.srcGridCenter.top;
-                    else if(paramUnit.selectUnit.selectPoint[1] > paramMap.srcGridCenter.bottom)
-                        yGridErr = paramUnit.selectUnit.selectPoint[1] - paramMap.srcGridCenter.bottom;
+                    if(paramUnit.selectSite.selectPoint[0] < paramMap.srcGridCenter.left)
+                        xGridErr = paramUnit.selectSite.selectPoint[0] - paramMap.srcGridCenter.left;
+                    else if(paramUnit.selectSite.selectPoint[0] > paramMap.srcGridCenter.right)
+                        xGridErr = paramUnit.selectSite.selectPoint[0] - paramMap.srcGridCenter.right;
+                    if(paramUnit.selectSite.selectPoint[1] < paramMap.srcGridCenter.top)
+                        yGridErr = paramUnit.selectSite.selectPoint[1] - paramMap.srcGridCenter.top;
+                    else if(paramUnit.selectSite.selectPoint[1] > paramMap.srcGridCenter.bottom)
+                        yGridErr = paramUnit.selectSite.selectPoint[1] - paramMap.srcGridCenter.bottom;
                 }
             }
             break;
@@ -217,7 +217,7 @@ public class FeViewMap extends View {
                     //设置触屏移动
                     FeData.feEvent.setSelectType(FeEvent.EVENT_MOVE);
                     //输入坐标求格子位置
-                    paramMap.getRectByLocation(tMoveX, tMoveY, paramMap.selectMap);
+                    paramMap.getRectByLocation(tMoveX, tMoveY, paramMap.selectSite);
                     //调用一次onDraw
                     invalidate();
                 }

@@ -3,6 +3,9 @@ package com.example.fe;
 import android.graphics.Path;
 import android.graphics.Rect;
 
+/*
+    格子在地图上的定位信息
+ */
 public class FeInfoGrid {
     //方格梯形
     public Path selectPath = new Path();

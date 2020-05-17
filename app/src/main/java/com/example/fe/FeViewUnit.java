@@ -52,7 +52,7 @@ public class FeViewUnit extends View {
 //        paint.setAntiAlias(true);
 //        paint.setBitmapFilter(true);
         //图片加载和颜色变换
-        bitmap = replaceBitmapColor(FeData.feAssets.unit.getProfessionAnim(id), colorMode);
+        bitmap = FePallet.replace(FeData.feAssets.unit.getProfessionAnim(id), colorMode);
         matrix.postScale(-1, 1);
         //根据动画类型使用对应的心跳
         setAnimMode(animMode);
@@ -71,7 +71,7 @@ public class FeViewUnit extends View {
         //引入心跳
         FeData.feHeart.addUnit(heartUnit);
         //类中类需有实例化的对象来new
-        selectUnit = new FeInfoGrid();
+        site = new FeInfoGrid();
     }
 
     //移动方格
@@ -95,7 +95,7 @@ public class FeViewUnit extends View {
         if(_colorMode != colorMode) {
             synchronized (paint) {
                 bitmap.recycle();
-                bitmap = replaceBitmapColor(FeData.feAssets.unit.getProfessionAnim(_id), colorMode);
+                bitmap = FePallet.replace(FeData.feAssets.unit.getProfessionAnim(_id), colorMode);
                 _colorMode = colorMode;
             }
         }
@@ -161,18 +161,18 @@ public class FeViewUnit extends View {
     });
 
     //临时参数
-    public FeInfoGrid selectUnit;
+    public FeInfoGrid site;
     private Rect bitmapDist = new Rect(0,0,0,0);
 
     //绘图回调
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //跟地图要位置
-        paramMap.getRectByGrid(_gridX, _gridY, selectUnit);
-        bitmapDist.left = selectUnit.selectRect.left - selectUnit.selectRect.width()/2;
-        bitmapDist.right = selectUnit.selectRect.right + selectUnit.selectRect.width()/2;
-        bitmapDist.top = selectUnit.selectRect.bottom - selectUnit.selectRect.width()*2;
-        bitmapDist.bottom = selectUnit.selectRect.bottom;
+        paramMap.getRectByGrid(_gridX, _gridY, site);
+        bitmapDist.left = site.selectRect.left - site.selectRect.width()/2;
+        bitmapDist.right = site.selectRect.right + site.selectRect.width()/2;
+        bitmapDist.top = site.selectRect.bottom - site.selectRect.width()*2;
+        bitmapDist.bottom = site.selectRect.bottom;
         //绘图
         canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
@@ -180,69 +180,9 @@ public class FeViewUnit extends View {
 
     //检查坐标是否在当前人物上
     public boolean checkHit(float x, float y){
-        if(selectUnit.selectRect.contains((int)x, (int)y))
+        if(site.selectRect.contains((int)x, (int)y))
             return true;
         return false;
-    }
-
-    //颜色替换工具
-    //oldBitmap: 原图
-    //type: 0/原色 1/绿色 2/红色
-    public Bitmap replaceBitmapColor(Bitmap oldBitmap, int type){
-        if(type == 0)   //使用原色
-            return oldBitmap;
-        //相关说明可参考 http://xys289187120.blog.51cto.com/3361352/657590/
-        Bitmap mBitmap = oldBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        //循环获得bitmap所有像素点
-        int mBitmapWidth = mBitmap.getWidth();
-        int mBitmapHeight = mBitmap.getHeight();
-        int r, g, b, color, tcolor, tmp;
-
-        for (int i = 0; i < mBitmapHeight; i++) {
-            for (int j = 0; j < mBitmapWidth; j++) {
-                color = mBitmap.getPixel(j, i);
-                tcolor = color&0xff000000;
-                r = (color&0x00ff0000)>>16;
-                g = (color&0x0000ff00)>>8;
-                b = color&0x000000ff;
-                if(b > g && b > r) {
-                    if (type == 1) {         //蓝色 换 绿色
-                        tcolor |= (int) (r * 0.5) << 16;
-                        tcolor |= (int) (b * 0.9) << 8;
-                        tcolor |= (int) (g * 0.5) << 0;
-                        mBitmap.setPixel(j, i, tcolor);
-                    }else if (type == 2) {    //蓝色 换 红色
-                        tcolor |= (int) (b * 1.0) << 16;
-                        tcolor |= (int) (g * 0.5) << 8;
-                        tcolor |= (int) (r * 0.5) << 0;
-                        mBitmap.setPixel(j, i, tcolor);
-                    }else if (type == 3) {    //蓝色 换 黑色
-                        tmp = r + g + b;
-                        r = g = b = tmp/4;
-                        tcolor |= (int) (r * 1.0) << 16;
-                        tcolor |= (int) (g * 1.0) << 8;
-                        tcolor |= (int) (b * 1.0) << 0;
-                        mBitmap.setPixel(j, i, tcolor);
-                    }else if (type == 4) {    //蓝色 换 橙色
-                        tcolor |= (int) (b * 1.0) << 16;
-                        tcolor |= (int) (g * 1.0) << 8;
-                        tcolor |= (int) (r * 0.5) << 0;
-                        mBitmap.setPixel(j, i, tcolor);
-                    }else if (type == 5) {    //蓝色 换 红紫色
-                        tcolor |= (int) (b * 0.8) << 16;
-                        tcolor |= (int) (r * 0.5) << 8;
-                        tcolor |= (int) (g * 1.0) << 0;
-                        mBitmap.setPixel(j, i, tcolor);
-                    }else if (type == 6) {    //蓝色 换 红紫色
-                        tcolor |= (int) (r * 0.8) << 16;
-                        tcolor |= (int) (b * 0.8) << 8;
-                        tcolor |= (int) (b * 0.8) << 0;
-                        mBitmap.setPixel(j, i, tcolor);
-                    }
-                }
-            }
-        }
-        return mBitmap;
     }
 
 }

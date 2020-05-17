@@ -85,29 +85,29 @@ public class FeViewSelect extends View {
         if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_MAP) &&
                 !FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
             //计算输出位置
-            rectDistSelect.left = paramMap.selectMap.selectRect.left - paramMap.selectMap.selectRect.width()/4;
-            rectDistSelect.right = paramMap.selectMap.selectRect.right + paramMap.selectMap.selectRect.width()/4;
-            rectDistSelect.top = paramMap.selectMap.selectRect.top - paramMap.selectMap.selectRect.height()/4;
-            rectDistSelect.bottom = paramMap.selectMap.selectRect.bottom + paramMap.selectMap.selectRect.height()/4;
+            rectDistSelect.left = paramMap.selectSite.selectRect.left - paramMap.selectSite.selectRect.width()/4;
+            rectDistSelect.right = paramMap.selectSite.selectRect.right + paramMap.selectSite.selectRect.width()/4;
+            rectDistSelect.top = paramMap.selectSite.selectRect.top - paramMap.selectSite.selectRect.height()/4;
+            rectDistSelect.bottom = paramMap.selectSite.selectRect.bottom + paramMap.selectSite.selectRect.height()/4;
             //抗锯齿
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
             //画图
-//            canvas.drawPath(paramMap.selectMap.selectPath, paintSelct);
+//            canvas.drawPath(paramMap.selectSite.selectPath, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
         else if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)){
             //计算输出位置
-            rectDistSelect.left = paramUnit.selectUnit.selectRect.left - paramUnit.selectUnit.selectRect.width()/4;
-            rectDistSelect.right = paramUnit.selectUnit.selectRect.right + paramUnit.selectUnit.selectRect.width()/4;
-            rectDistSelect.top = paramUnit.selectUnit.selectRect.top - paramUnit.selectUnit.selectRect.height()/2;
-            rectDistSelect.bottom = paramUnit.selectUnit.selectRect.bottom;
+            rectDistSelect.left = paramUnit.selectSite.selectRect.left - paramUnit.selectSite.selectRect.width()/4;
+            rectDistSelect.right = paramUnit.selectSite.selectRect.right + paramUnit.selectSite.selectRect.width()/4;
+            rectDistSelect.top = paramUnit.selectSite.selectRect.top - paramUnit.selectSite.selectRect.height()/2;
+            rectDistSelect.bottom = paramUnit.selectSite.selectRect.bottom;
             //使用大框
             rectSrcSelect.top = 0;
             rectSrcSelect.bottom = bitmapSelectFrameHeight;
             //抗锯齿
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
             //画图
-//            canvas.drawPath(paramMap.selectMap.selectPath, paintSelct);
+//            canvas.drawPath(paramMap.selectSite.selectPath, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
     }

@@ -255,7 +255,7 @@ public class FeParamMap {
 
     //----- 求梯形中的某一格子 -----
 
-    public FeInfoGrid selectMap = new FeInfoGrid();
+    public FeInfoGrid selectSite = new FeInfoGrid();
 
     //输入格子求位置
     public void getRectByGrid(int xG, int yG, FeInfoGrid fig){
