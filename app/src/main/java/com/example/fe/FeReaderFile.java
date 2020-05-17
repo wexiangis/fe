@@ -1,5 +1,7 @@
 package com.example.fe;
 
+import android.util.Log;
+
 /*
     通用行文件管理工具, 继承使用
     example:
@@ -47,26 +49,42 @@ public class FeReaderFile {
     //获取/设置指定行,指定序号的数据
     public String getString(int line, int count){
         Data d = getData(line);
-        if(d != null || count < d.content.length)
-            return d.content[count];
-        return "";
+        if(d == null){
+            Log.d("FeReaderFile.getString", "data is null");
+            return "";
+        }
+        if(count >= d.content.length){
+            Log.d("FeReaderFile.getString", "count >= " + d.content.length);
+            return "";
+        }
+        return d.content[count];
     }
     public void setValue(String val, int line, int count){
         Data d = getData(line);
         if(d != null && count < d.content.length)
             d.content[count] = val;
+        else
+            Log.d("FeReaderFile.setValue", "set failed : v/" + val + " l/" + line + " c/" + count);
     }
     //获取/设置指定行,指定序号的数据
     public int getInt(int line, int count){
         Data d = getData(line);
-        if(d != null || count < d.content.length)
-            return Integer.valueOf(d.content[count]);
-        return -1;
+        if(d == null){
+            Log.d("FeReaderFile.getInt", "data is null");
+            return 0;
+        }
+        if(count >= d.content.length){
+            Log.d("FeReaderFile.getInt", "count >= " + d.content.length);
+            return 0;
+        }
+        return Integer.valueOf(d.content[count]);
     }
     public void setValue(int val, int line, int count){
         Data d = getData(line);
         if(d != null && count < d.content.length)
             d.content[count] = String.valueOf(val);
+        else
+            Log.d("FeReaderFile.setValue", "set failed : v/" + val + " l/" + line + " c/" + count);
     }
     //从文件加载数据到data链表
     public void load(){

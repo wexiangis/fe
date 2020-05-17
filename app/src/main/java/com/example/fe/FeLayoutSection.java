@@ -9,31 +9,16 @@ import android.widget.RelativeLayout;
 public class FeLayoutSection extends RelativeLayout {
 
     public FeLayoutMap mapLayout = null;
+    public FeLayoutMark markLayout = null;
     public FeLayoutUnit unitLayout = null;
     public FeLayoutMapInfo mapInfoLayout = null;
     public FeLayoutUnitMenu unitMenuLayout = null;
     public FeLayoutMenu menuLayout = null;
     public FeLayoutChat chatLayout = null;
 
-    public void refreshMap(){
-        mapLayout.refresh();
-    }
-    public void refreshMapUnit(){
-        unitLayout.refresh(0);
-    }
-    public void refreshMapInfo(){
-        mapInfoLayout.refresh();
-    }
-    public void refreshMapUnitMenu(){
-        unitMenuLayout.refresh();
-    }
-    public void refreshMapMenu(){
-        menuLayout.refresh();
-    }
-    public void refreshMapChat(){
-        chatLayout.refresh();
-    }
     public void refresh(){
+        //更新标记格
+        markLayout.refresh();
         //更新人物动画
         unitLayout.refresh(0);
         //更新地形信息
@@ -53,11 +38,12 @@ public class FeLayoutSection extends RelativeLayout {
         menuLayout.checkHit(x, y);
         //点击:人物菜单中?
         unitMenuLayout.checkHit(x, y);
+        //点击:标记格
+        markLayout.checkHit(x, y);
         //点击:选中人物?
         unitLayout.checkHit(x, y);
         //点击:地图信息?
         mapInfoLayout.checkHit(x, y);
-        //
         return false;
     }
 
@@ -66,7 +52,10 @@ public class FeLayoutSection extends RelativeLayout {
         //地图图层
         mapLayout = new FeLayoutMap(FeData.context, section);
         addView(mapLayout);
-        //地图人物动画图层
+        //标记格图层
+        markLayout = new FeLayoutMark(FeData.context);
+        addView(markLayout);
+        //人物动画图层
         unitLayout = new FeLayoutUnit(FeData.context);
         addView(unitLayout);
         //地图地形信息

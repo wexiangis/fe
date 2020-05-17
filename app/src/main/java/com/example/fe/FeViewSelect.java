@@ -2,17 +2,12 @@ package com.example.fe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /*
     光标选中框
@@ -81,12 +76,12 @@ public class FeViewSelect extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.feEvent.checkSelectType(FeEvent.SELECT_MOVE))
+        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_MOVE))
             return;
 
         //画选中框
-        if(FeData.feEvent.checkSelectType(FeEvent.SELECT_MAP) &&
-                !FeData.feEvent.checkSelectType(FeEvent.SELECT_UNIT)) {
+        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_MAP) &&
+                !FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
             //计算输出位置
             rectDistSelect.left = paramMap.selectMap.selectRect.left - paramMap.selectMap.selectRect.width()/4;
             rectDistSelect.right = paramMap.selectMap.selectRect.right + paramMap.selectMap.selectRect.width()/4;
@@ -98,7 +93,7 @@ public class FeViewSelect extends View {
 //            canvas.drawPath(paramMap.selectMap.selectPath, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
-        else if(FeData.feEvent.checkSelectType(FeEvent.SELECT_UNIT)){
+        else if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)){
             //计算输出位置
             rectDistSelect.left = paramMap.selectUnit.selectRect.left - paramMap.selectUnit.selectRect.width()/4;
             rectDistSelect.right = paramMap.selectUnit.selectRect.right + paramMap.selectUnit.selectRect.width()/4;

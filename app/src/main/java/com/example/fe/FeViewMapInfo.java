@@ -2,18 +2,13 @@ package com.example.fe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /*
     地图上的地图类型等信息框
@@ -90,7 +85,7 @@ public class FeViewMapInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.feEvent.checkSelectType(FeEvent.SELECT_MOVE)){
+        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_MOVE)){
             drawInfo = false;
             return;
         }
@@ -109,7 +104,7 @@ public class FeViewMapInfo extends View {
         rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
 
         //画地图信息
-        if(FeData.feEvent.checkSelectType(FeEvent.SELECT_MAP)){
+        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_MAP)){
             drawInfo = true;
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息

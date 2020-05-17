@@ -2,18 +2,13 @@ package com.example.fe;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /*
     电影胶片式播放动画,针对地图人物动画管理而封装;
@@ -44,25 +39,7 @@ public class FeViewUnit extends View {
     //扣取图片位置
     private Rect bitmapBody = new Rect(0,0,0,0);
 
-    //
-    public Bitmap getAssetsUnitAnim(int id)
-    {
-        Bitmap ret = null;
-        try {
-            InputStream is = getClass().getResourceAsStream("/assets/unit/anim/"+String.format("%03d.png",id));
-            if(is != null){
-                ret = BitmapFactory.decodeStream(is);
-                is.close();
-            }
-        } catch (java.io.FileNotFoundException e) {
-            Log.d("getAssetsBitmap: ", "not found");
-        } catch (IOException e) {
-            Log.d("getAssetsBitmap: ", e.getMessage());
-        }
-        return ret;
-    }
-
-    //
+    //颜色模式: 0/原色 1/绿色 2/红色 3/灰色 4/橙色 5/紫色 6/不蓝不绿
     public FeViewUnit(Context context, 
         int id, int gridX, int gridY, 
         int animMode, int colorMode)
@@ -75,7 +52,7 @@ public class FeViewUnit extends View {
 //        paint.setAntiAlias(true);
 //        paint.setBitmapFilter(true);
         //图片加载和颜色变换
-        bitmap = replaceBitmapColor(getAssetsUnitAnim(id), colorMode);
+        bitmap = replaceBitmapColor(FeData.feAssets.unit.getProfessionAnim(id), colorMode);
         matrix.postScale(-1, 1);
         //根据动画类型使用对应的心跳
         setAnimMode(animMode);
@@ -113,12 +90,12 @@ public class FeViewUnit extends View {
         topMargin = y*paramMap.yGridPixel;
     }
 
-    //颜色模式: 0/原色 1/绿色 2/红色
+    //颜色模式: 0/原色 1/绿色 2/红色 3/灰色 4/橙色 5/紫色 6/不蓝不绿
     public void setColorMode(int colorMode){
         if(_colorMode != colorMode) {
             synchronized (paint) {
                 bitmap.recycle();
-                bitmap = replaceBitmapColor(BitmapFactory.decodeResource(FeData.context.getResources(), _id), colorMode);
+                bitmap = replaceBitmapColor(FeData.feAssets.unit.getProfessionAnim(_id), colorMode);
                 _colorMode = colorMode;
             }
         }

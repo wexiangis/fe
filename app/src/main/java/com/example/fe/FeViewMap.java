@@ -137,28 +137,28 @@ public class FeViewMap extends View {
                 isMove = false;
                 //
                 xGridErr = yGridErr = 0;
-                FeData.feEvent.cleanSelectType(FeEvent.SELECT_MOVE);
+                FeData.feEvent.cleanSelectType(FeEvent.EVENT_MOVE);
             }
             break;
             case MotionEvent.ACTION_UP: {
                 float tUpX = event.getX();
                 float tUpY = event.getY();
                 //选中方格标志
-                FeData.feEvent.cleanSelectType(FeEvent.SELECT_MOVE);
+                FeData.feEvent.cleanSelectType(FeEvent.EVENT_MOVE);
                 //是否是点击事件
                 if(!isMove) {
-                    FeData.feEvent.setSelectType(FeEvent.SELECT_MAP);
+                    FeData.feEvent.setSelectType(FeEvent.EVENT_HIT_MAP);
                     //上传click事件
                     ((FeLayoutSection)getParent().getParent()).click(tUpX, tUpY);
                 }
                 else{
-                    FeData.feEvent.cleanSelectType(FeEvent.SELECT_MAP);
+                    FeData.feEvent.cleanSelectType(FeEvent.EVENT_HIT_MAP);
                 }
                 isMove = false;
                 //输入坐标求格子位置
                 paramMap.getRectByLocation(tUpX, tUpY, paramMap.selectMap);
                 //选中人物太过靠近边界,挪动地图
-                if(FeData.feEvent.checkSelectType(FeEvent.SELECT_UNIT) &&
+                if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) &&
                     !paramMap.srcGridCenter.contains(
                     paramMap.selectUnit.selectPoint[0],
                     paramMap.selectUnit.selectPoint[1])){
@@ -211,9 +211,9 @@ public class FeViewMap extends View {
                 //调用一次onDraw
                 if (needRefresh) {
                     //清触屏点击
-                    FeData.feEvent.cleanSelectType(FeEvent.SELECT_MAP);
+                    FeData.feEvent.cleanSelectType(FeEvent.EVENT_HIT_MAP);
                     //设置触屏移动
-                    FeData.feEvent.setSelectType(FeEvent.SELECT_MOVE);
+                    FeData.feEvent.setSelectType(FeEvent.EVENT_MOVE);
                     //输入坐标求格子位置
                     paramMap.getRectByLocation(tMoveX, tMoveY, paramMap.selectMap);
                     //调用一次onDraw
