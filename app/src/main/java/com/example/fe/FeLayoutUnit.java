@@ -22,7 +22,7 @@ public class FeLayoutUnit extends RelativeLayout {
         for (int i = 0; i < getChildCount(); i++) {
             tmp = (FeViewUnit)getChildAt(i);
             if(hitAnimOrder == i &&
-                paramMap.checkSelectType(FeParamMap.SELECT_UNIT)) {
+                FeData.feEvent.checkSelectType(FeEvent.SELECT_UNIT)) {
                 if(who_refresh == 1)
                     tmp.setAnimMode(tmp.getAnimMode()+1);
                 paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramMap.selectUnit);
@@ -34,24 +34,21 @@ public class FeLayoutUnit extends RelativeLayout {
     }
 
     public boolean checkHit(float x, float y){
-        if(!paramMap.checkSelectType(FeParamMap.SELECT_MOVE_END))
-        {
-            FeViewUnit tmp;
-            //遍历所有子view
-            for (int i = 0; i < getChildCount(); i++) {
-                tmp = (FeViewUnit)getChildAt(i);
-                if (tmp.checkHit(x, y)) {
-                    hitAnimOrder = i;
-                    paramMap.setSelectType(FeParamMap.SELECT_UNIT);
-                    refresh(1);
-                    return true;
-                }
+        FeViewUnit tmp;
+        //遍历所有子view
+        for (int i = 0; i < getChildCount(); i++) {
+            tmp = (FeViewUnit)getChildAt(i);
+            if (tmp.checkHit(x, y)) {
+                hitAnimOrder = i;
+                FeData.feEvent.setSelectType(FeEvent.SELECT_UNIT);
+                refresh(1);
+                return true;
             }
-            //
-            hitAnimOrder = -1;
-            paramMap.cleanSelectType(FeParamMap.SELECT_UNIT);
-            refresh(0);
         }
+        //
+        hitAnimOrder = -1;
+        FeData.feEvent.cleanSelectType(FeEvent.SELECT_UNIT);
+        refresh(0);
         return false;
     }
 
@@ -65,10 +62,10 @@ public class FeLayoutUnit extends RelativeLayout {
 //        loadView(3, 4, 1);
 //        loadView(4, 5, 0);
 //        loadView(5, 6, 1);
-//        loadView(6, 7, 0);
-//        loadView(7, 8, 1);
-        loadView(8, 9, 0);
-        loadView(9, 10, 1);
+        loadView(6, 7, 0);
+        loadView(7, 8, 1);
+//        loadView(8, 9, 0);
+//        loadView(9, 10, 1);
 //        loadView(10, 11, 0);
 //        loadView(11, 12, 1);
 //        loadView(12, 13, 0);
@@ -76,10 +73,10 @@ public class FeLayoutUnit extends RelativeLayout {
 
 //        loadView(14, 1, 12);
 //        loadView(15, 2, 13);
-        loadView(16, 3, 12);
-        loadView(17, 4, 13);
-//        loadView(18, 5, 12);
-//        loadView(19, 6, 13);
+//        loadView(16, 3, 12);
+//        loadView(17, 4, 13);
+        loadView(18, 5, 12);
+        loadView(19, 6, 13);
 //        loadView(20, 7, 12);
 //        loadView(21, 8, 13);
 //        loadView(22, 9, 12);

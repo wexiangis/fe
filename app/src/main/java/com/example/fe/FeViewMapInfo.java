@@ -90,7 +90,7 @@ public class FeViewMapInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(paramMap.checkSelectType(FeParamMap.SELECT_MOVE)){
+        if(FeData.feEvent.checkSelectType(FeEvent.SELECT_MOVE)){
             drawInfo = false;
             return;
         }
@@ -109,7 +109,7 @@ public class FeViewMapInfo extends View {
         rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
 
         //画地图信息
-        if(paramMap.checkSelectType(FeParamMap.SELECT_MAP)){
+        if(FeData.feEvent.checkSelectType(FeEvent.SELECT_MAP)){
             drawInfo = true;
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息
