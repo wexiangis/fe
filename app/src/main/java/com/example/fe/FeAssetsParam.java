@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /*
     /assets/param 文件夹资源管理器
  */
-public class FeDataParam {
+public class FeAssetsParam {
 
     //----- api -----
 
@@ -124,7 +124,7 @@ public class FeDataParam {
 
     //----- unit 文件夹 -----
 
-    private FeAssetsBitmapReader bitmapReader = new FeAssetsBitmapReader();
+    private FeReaderBitmap bitmapReader = new FeReaderBitmap();
 
     private Bitmap getSpecialsBitmap(int id){
         return bitmapReader.load_png_byId("/param/special/", id);
@@ -139,7 +139,7 @@ public class FeDataParam {
     //----- xxx -----
 
     //职业类型列表
-    class Types extends FeAssetsFileReader {
+    class Types extends FeReaderFile {
         public String getName(int line){ return getString(line, 0); }
         public String getSummary(int line){ return getString(line, 1); }
         public int getPicture(int line){ return getInt(line, 2); }
@@ -154,7 +154,7 @@ public class FeDataParam {
     }
 
     //物品列表
-    class Items extends FeAssetsFileReader {
+    class Items extends FeReaderFile {
         public int getType(int line){ return getInt(line, 0); }
         public String getName(int line){ return getString(line, 1); }
         public String getSummary(int line){ return getString(line, 2); }
@@ -183,7 +183,7 @@ public class FeDataParam {
     }
 
     //特技列表
-    class Specials extends FeAssetsFileReader {
+    class Specials extends FeReaderFile {
         public String getName(int line){ return getString(line, 0); }
         public String getSummary(int line){ return getString(line, 1); }
         public int getPicture(int line){ return getInt(line, 2); }
@@ -198,7 +198,7 @@ public class FeDataParam {
     }
 
     //技能等级
-    class SkillLevel extends FeAssetsFileReader {
+    class SkillLevel extends FeReaderFile {
         public int getE(int line){ return getInt(line, 0); }
         public int getD(int line){ return getInt(line, 1); }
         public int getC(int line){ return getInt(line, 2); }
@@ -213,7 +213,7 @@ public class FeDataParam {
     }
 
     //能力上限
-    class AbilityLimit extends FeAssetsFileReader {
+    class AbilityLimit extends FeReaderFile {
         public int getHp(int line){ return getInt(line, 0); }
         public int getStr(int line){ return getInt(line, 1); }
         public int getMag(int line){ return getInt(line, 2); }

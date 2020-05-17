@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 /*
     地图信息(FeMapInfo类)的加载工具
  */
-class FeAssetsMapReader {
+class FeReaderMap {
 
     //关键路径
     private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";

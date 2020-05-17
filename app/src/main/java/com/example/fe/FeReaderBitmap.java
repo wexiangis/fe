@@ -12,10 +12,10 @@ import java.io.InputStream;
 /*
     通用的根据文件夹和id获取图片方法
     example:
-        FeAssetsBitmapReader bitmapReader = new FeAssetsBitmapReader();
+        FeReaderBitmap bitmapReader = new FeReaderBitmap();
         bitmapReader.load_xxx()
  */
-class FeAssetsBitmapReader {
+class FeReaderBitmap {
 
     //关键路径
     private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";

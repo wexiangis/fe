@@ -1,6 +1,5 @@
 package com.example.fe;
 
-import android.app.Activity;
 import android.view.ViewGroup;
 
 /*

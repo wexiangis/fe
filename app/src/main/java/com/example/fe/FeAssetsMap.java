@@ -3,9 +3,9 @@ package com.example.fe;
 /*
     /assets/map 文件夹资源管理器
  */
-public class FeDataMap {
+public class FeAssetsMap {
 
-    private FeAssetsMapReader mapReader = new FeAssetsMapReader();
+    private FeReaderMap mapReader = new FeReaderMap();
 
     public FeMapInfo getMap(int section){
         FeMapInfo mapInfo = new FeMapInfo(section);

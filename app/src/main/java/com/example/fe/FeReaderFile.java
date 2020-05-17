@@ -3,7 +3,7 @@ package com.example.fe;
 /*
     通用行文件管理工具, 继承使用
     example:
-        class XXX extends FeAssetsFileReader{
+        class XXX extends FeReaderFile{
             public XXX(){
                 //需在构造函数指定以下信息
                 folderAndName = new String[]{"/unit/", "items.txt"};
@@ -13,13 +13,13 @@ package com.example.fe;
             }
         }
  */
-public class FeAssetsFileReader {
+public class FeReaderFile {
 
     //文件路径和分隔符
     private String[] folderAndName;
     private String split;
 
-    public FeAssetsFileReader(String folder, String name, String split)
+    public FeReaderFile(String folder, String name, String split)
     {
         this.folderAndName = new String[] {folder, name};
         this.split = split;
