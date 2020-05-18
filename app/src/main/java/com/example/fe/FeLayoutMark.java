@@ -17,5 +17,7 @@ public class FeLayoutMark extends RelativeLayout {
 
     public FeLayoutMark(Context context) {
         super(context);
+
+        addView(new FeViewMark(context));
     }
 }

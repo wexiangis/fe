@@ -169,10 +169,10 @@ public class FeViewUnit extends View {
         super.onDraw(canvas);
         //跟地图要位置
         paramMap.getRectByGrid(_gridX, _gridY, site);
-        bitmapDist.left = site.selectRect.left - site.selectRect.width()/2;
-        bitmapDist.right = site.selectRect.right + site.selectRect.width()/2;
-        bitmapDist.top = site.selectRect.bottom - site.selectRect.width()*2;
-        bitmapDist.bottom = site.selectRect.bottom;
+        bitmapDist.left = site.rect.left - site.rect.width()/2;
+        bitmapDist.right = site.rect.right + site.rect.width()/2;
+        bitmapDist.top = site.rect.bottom - site.rect.width()*2;
+        bitmapDist.bottom = site.rect.bottom;
         //绘图
         canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
         canvas.drawBitmap(bitmap, bitmapBody, bitmapDist, paint);
@@ -180,7 +180,7 @@ public class FeViewUnit extends View {
 
     //检查坐标是否在当前人物上
     public boolean checkHit(float x, float y){
-        if(site.selectRect.contains((int)x, (int)y))
+        if(site.rect.contains((int)x, (int)y))
             return true;
         return false;
     }

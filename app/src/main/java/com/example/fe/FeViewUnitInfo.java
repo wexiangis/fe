@@ -74,7 +74,7 @@ public class FeViewUnitInfo extends View {
         }
 
         //图像位置自动调整
-        if(paramUnit.selectSite.selectRect.right > paramMap.screenWidth/2){ //放到左边
+        if(paramUnit.selectSite.rect.right > paramMap.screenWidth/2){ //放到左边
             rectDistHeadBg.left = (int)(paramMap.xGridPixel/4);
             rectDistHeadBg.right = (int)(paramMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead);
         }else{ //放到右边
@@ -84,10 +84,10 @@ public class FeViewUnitInfo extends View {
 
         //画人物头像
         if(!FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) ||
-            paramUnit.selectSite.selectRect.left > paramMap.screenWidth ||
-            paramUnit.selectSite.selectRect.right < 0 ||
-            paramUnit.selectSite.selectRect.top > paramMap.screenHeight ||
-            paramUnit.selectSite.selectRect.bottom < 0){
+            paramUnit.selectSite.rect.left > paramMap.screenWidth ||
+            paramUnit.selectSite.rect.right < 0 ||
+            paramUnit.selectSite.rect.top > paramMap.screenHeight ||
+            paramUnit.selectSite.rect.bottom < 0){
             drawHead = false;
         }else {
             drawHead = true;

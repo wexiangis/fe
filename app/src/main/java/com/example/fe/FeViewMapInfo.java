@@ -93,7 +93,7 @@ public class FeViewMapInfo extends View {
         canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));//抗锯齿
 
         //图像位置自动调整
-        if(paramMap.selectSite.selectRect.right > paramMap.screenWidth/2){ //放到左边
+        if(paramMap.selectSite.rect.right > paramMap.screenWidth/2){ //放到左边
             rectDistInfo.left = (int)(paramMap.xGridPixel/4);
             rectDistInfo.right = (int)(paramMap.xGridPixel/4 + bitmapInfo.getWidth()*pixelPowInfo);
         }else{ //放到右边
@@ -109,8 +109,8 @@ public class FeViewMapInfo extends View {
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息
             int mapInfoOrder = paramMap.map.grid
-                    [paramMap.selectSite.selectPoint[1]]
-                    [paramMap.selectSite.selectPoint[0]];
+                    [paramMap.selectSite.point[1]]
+                    [paramMap.selectSite.point[0]];
             //填地形信息
             canvas.drawText(
                     paramMap.map.name[mapInfoOrder],

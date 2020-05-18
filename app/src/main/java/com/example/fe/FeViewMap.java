@@ -162,19 +162,19 @@ public class FeViewMap extends View {
                 //选中人物太过靠近边界,挪动地图
                 if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) &&
                     !paramMap.srcGridCenter.contains(
-                    paramUnit.selectSite.selectPoint[0],
-                    paramUnit.selectSite.selectPoint[1])){
+                    paramUnit.selectSite.point[0],
+                    paramUnit.selectSite.point[1])){
 //                    //挪动地图,把选中点居中
-//                    moveCenter(paramUnit.selectSite.selectPoint[0], paramUnit.selectSite.selectPoint[1]);
+//                    moveCenter(paramUnit.selectSite.point[0], paramUnit.selectSite.point[1]);
                     //把需要移动的量先记到xGridErr,yGridErr, 动画心跳回调会慢慢把这些差值吃掉
-                    if(paramUnit.selectSite.selectPoint[0] < paramMap.srcGridCenter.left)
-                        xGridErr = paramUnit.selectSite.selectPoint[0] - paramMap.srcGridCenter.left;
-                    else if(paramUnit.selectSite.selectPoint[0] > paramMap.srcGridCenter.right)
-                        xGridErr = paramUnit.selectSite.selectPoint[0] - paramMap.srcGridCenter.right;
-                    if(paramUnit.selectSite.selectPoint[1] < paramMap.srcGridCenter.top)
-                        yGridErr = paramUnit.selectSite.selectPoint[1] - paramMap.srcGridCenter.top;
-                    else if(paramUnit.selectSite.selectPoint[1] > paramMap.srcGridCenter.bottom)
-                        yGridErr = paramUnit.selectSite.selectPoint[1] - paramMap.srcGridCenter.bottom;
+                    if(paramUnit.selectSite.point[0] < paramMap.srcGridCenter.left)
+                        xGridErr = paramUnit.selectSite.point[0] - paramMap.srcGridCenter.left;
+                    else if(paramUnit.selectSite.point[0] > paramMap.srcGridCenter.right)
+                        xGridErr = paramUnit.selectSite.point[0] - paramMap.srcGridCenter.right;
+                    if(paramUnit.selectSite.point[1] < paramMap.srcGridCenter.top)
+                        yGridErr = paramUnit.selectSite.point[1] - paramMap.srcGridCenter.top;
+                    else if(paramUnit.selectSite.point[1] > paramMap.srcGridCenter.bottom)
+                        yGridErr = paramUnit.selectSite.point[1] - paramMap.srcGridCenter.bottom;
                 }
             }
             break;

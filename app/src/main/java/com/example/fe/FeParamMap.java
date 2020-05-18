@@ -259,8 +259,8 @@ public class FeParamMap {
 
     //输入格子求位置
     public void getRectByGrid(int xG, int yG, FeInfoGrid fig){
-        fig.selectPoint[0] = xG;
-        fig.selectPoint[1] = yG;
+        fig.point[0] = xG;
+        fig.point[1] = yG;
         //
         if(xG >= srcGridXStart &&
                 xG < srcGridXStart + srcGridX &&
@@ -270,33 +270,33 @@ public class FeParamMap {
             int x = xG - srcGridXStart;
             int y = yG - srcGridYStart;
             //
-            fig.selectRect.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
-            fig.selectRect.bottom = (int)(srcGridLine[y][1]);
-            fig.selectRect.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
-            fig.selectRect.right = (int)(fig.selectRect.left + srcGridLine[y][3]);
+            fig.rect.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
+            fig.rect.bottom = (int)(srcGridLine[y][1]);
+            fig.rect.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
+            fig.rect.right = (int)(fig.rect.left + srcGridLine[y][3]);
             //
-            fig.selectPath.reset();
+            fig.path.reset();
             //
             if(y == 0){
-                fig.selectPath.moveTo(x * screenWidth / srcGridX, 0);
-                fig.selectPath.lineTo((x + 1) * screenWidth / srcGridX, 0);
+                fig.path.moveTo(x * screenWidth / srcGridX, 0);
+                fig.path.lineTo((x + 1) * screenWidth / srcGridX, 0);
             }else{
-                fig.selectPath.moveTo(
+                fig.path.moveTo(
                         x * srcGridLine[y-1][3] - srcGridLine[y-1][2],
                         srcGridLine[y-1][1]);
-                fig.selectPath.lineTo(
+                fig.path.lineTo(
                         (x + 1) * srcGridLine[y-1][3] - srcGridLine[y-1][2],
                         srcGridLine[y-1][1]);
             }
-            fig.selectPath.lineTo(fig.selectRect.right, fig.selectRect.bottom);
-            fig.selectPath.lineTo(fig.selectRect.left, fig.selectRect.bottom);
-            fig.selectPath.close();
+            fig.path.lineTo(fig.rect.right, fig.rect.bottom);
+            fig.path.lineTo(fig.rect.left, fig.rect.bottom);
+            fig.path.close();
         }
         else{
-            fig.selectRect.left = (int)(-xGridPixel)*2;
-            fig.selectRect.right = (int)(-xGridPixel);
-            fig.selectRect.top = (int)(-yGridPixel)*2;
-            fig.selectRect.bottom = (int)(-yGridPixel);
+            fig.rect.left = (int)(-xGridPixel)*2;
+            fig.rect.right = (int)(-xGridPixel);
+            fig.rect.top = (int)(-yGridPixel)*2;
+            fig.rect.bottom = (int)(-yGridPixel);
         }
     }
 
@@ -304,10 +304,10 @@ public class FeParamMap {
     public void getRectByLocation(float x, float y, FeInfoGrid fig) {
         for(int yCount = 0; yCount < srcGridY; yCount++){
             if(y < srcGridLine[yCount][1]){
-                fig.selectPoint[1] = yCount + srcGridYStart;
-                fig.selectPoint[0] = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
+                fig.point[1] = yCount + srcGridYStart;
+                fig.point[0] = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
                 //
-                getRectByGrid(fig.selectPoint[0], fig.selectPoint[1], fig);
+                getRectByGrid(fig.point[0], fig.point[1], fig);
                 return;
             }
         }
