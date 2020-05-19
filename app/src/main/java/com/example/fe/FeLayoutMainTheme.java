@@ -19,8 +19,6 @@ public class FeLayoutMainTheme extends RelativeLayout {
 
     private boolean showMenu = false;
 
-    private FeAnimFrame cover = null;
-
     private TextView tipsText = null;
     private RelativeLayout.LayoutParams tipsTextParam = null;
 
@@ -33,8 +31,10 @@ public class FeLayoutMainTheme extends RelativeLayout {
         public boolean onTouch(View v, MotionEvent event) {
             if(event.getAction() == MotionEvent.ACTION_UP)
             {
-                if(v == cover) {
-                    //
+                if(v == tv1){
+                    FeData.feFlow.loadSection(0);
+                }
+                else{
                     if(showMenu) {
                         removeMenu();
                         loadTip();
@@ -45,12 +45,6 @@ public class FeLayoutMainTheme extends RelativeLayout {
                     }
                     //
                     showMenu = !showMenu;
-                }
-                else if(v == tv1){
-                    FeData.feFlow.loadSection(0);
-                }
-                else{
-                    ;//菜单按键
                 }
             }
             return true;//不返回true的话ACTION_DOWN之后的事件都会被丢弃
@@ -65,22 +59,8 @@ public class FeLayoutMainTheme extends RelativeLayout {
         FeData.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenWidth = dm.widthPixels;
         screenHeight = dm.heightPixels;
-        //加载背景动画
-        loadCover();
         //加载按任意键提示
         loadTip();
-    }
-
-    public void loadCover(){
-        if(cover != null)
-            return;
-        //主界面封面背景
-        cover = new FeAnimFrame(FeData.context, new int [] {
-                R.drawable.cover,
-                R.drawable.cover2,
-                R.drawable.cover3}, 500, new Rect(0, 0, screenWidth, screenHeight));
-        cover.setOnTouchListener(onTouchListener);
-        this.addView(cover);
     }
 
     public void loadTip(){

@@ -80,6 +80,9 @@ public class FeFileRead {
         //sd卡(内置存储)路径准备
         if(!sdFileFolderPath.exists())
             sdFileFolderPath.mkdirs();
+        //都不存在的文件
+//        if(!assetsFilePath.exists() && !sdFilePath.exists())
+//            return;
         //存在sd卡(内置存储)配置则优先使用该配置
         try{
             if(sdFilePath.exists()) {
@@ -95,13 +98,13 @@ public class FeFileRead {
                 isr = new InputStreamReader(is);
                 br = new BufferedReader(isr);
             }
-            else {
+            else if(fis != null){
                 isr = new InputStreamReader(fis, "UTF-8");
                 br = new BufferedReader(isr);
             }
         } catch (java.io.FileNotFoundException e) {
             Log.d("FeFileRead.FeFileRead", "not found : " + filePath);
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             Log.d("FeFileRead.FeFileRead", "IOException : " + filePath);
         }
     }

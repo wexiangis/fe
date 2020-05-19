@@ -62,6 +62,7 @@ public class FeReaderFile {
                 count += 0;
             }
             dat.next = new Data(line);
+            return count;
         }
     }
 

@@ -53,7 +53,7 @@ class FeAssetsSaveUnit {
     //----- api -----
 
     public int addUnit(int count){
-        ;
+        return 0;
     }
 
     // name.txt
