@@ -287,13 +287,6 @@ public class FeAssetsUnit {
     public int getItem6(int count){
         return item.getIt6(unit.getItem(count));
     }
-    // unit.txt
-    public int getCamp(int count){
-        return unit.getCamp(count);
-    }
-    public int getState(int count){
-        return unit.getState(count);
-    }
 
     //----- all file -----
 
@@ -337,8 +330,6 @@ public class FeAssetsUnit {
         public int getAddition(int line){ return getInt(line, 3); }
         public int getLevel(int line){ return getInt(line, 4); }
         public int getItem(int line){ return getInt(line, 5); }
-        public int getCamp(int line){ return getInt(line, 6); }
-        public int getState(int line){ return getInt(line, 7); }
 
         public void setName(int line, int name){ setValue(name, line, 0); }
         public void setHead(int line, int head){ setValue(head, line, 1); }
@@ -346,8 +337,6 @@ public class FeAssetsUnit {
         public void setAddition(int line, int addition){ setValue(addition, line, 3); }
         public void setLevel(int line, int level){ setValue(level, line, 4); }
         public void setItem(int line, int item){ setValue(item, line, 5); }
-        public void setCamp(int line, int camp){ setValue(camp, line, 6); }
-        public void setState(int line, int state){ setValue(state, line, 7); }
 
         public Unit(String folder, String name, String split){
             super(folder, name, split);
@@ -375,6 +364,7 @@ public class FeAssetsUnit {
         public int getIt4(int line){ return getInt(line, 3); }
         public int getIt5(int line){ return getInt(line, 4); }
         public int getIt6(int line){ return getInt(line, 5); }
+        public int getEquip(int line){ return getInt(line, 6); }
 
         public void setIt1(int line, int it1){ setValue(it1, line, 0); }
         public void setIt2(int line, int it2){ setValue(it2, line, 1); }
@@ -382,6 +372,7 @@ public class FeAssetsUnit {
         public void setIt4(int line, int it4){ setValue(it4, line, 3); }
         public void setIt5(int line, int it5){ setValue(it5, line, 4); }
         public void setIt6(int line, int it6){ setValue(it6, line, 5); }
+        public void setEquip(int line, int equip){ setValue(equip, line, 6); }
 
         public Item(String folder, String name, String split){
             super(folder, name, split);
