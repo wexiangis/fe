@@ -4,16 +4,7 @@ import android.util.Log;
 
 /*
     通用行文件管理工具, 继承使用
-    example:
-        class XXX extends FeReaderFile{
-            public XXX(){
-                //需在构造函数指定以下信息
-                folderAndName = new String[]{"/unit/", "items.txt"};
-                split = ";";
-                //从文件加载
-                load();
-            }
-        }
+    构造函数需 super(folder, name, split) 完成传参
  */
 public class FeReaderFile {
 
@@ -46,7 +37,35 @@ public class FeReaderFile {
             dat = dat.next;
         return dat;
     }
-    //获取/设置指定行,指定序号的数据
+
+    //获取指定行
+    public String[] getLine(int line){
+        Data d = getData(line);
+        if(d == null){
+            Log.d("FeReaderFile.getLine", "data is null");
+            return null;
+        }
+        return d.content;
+    }
+
+    //添加行,返回新增行号
+    public int addLine(String[] line){
+        if(data == null){
+            data = new Data(line);
+            return 0;
+        }
+        else{
+            int count = 1;
+            Data dat = data;
+            while (dat != null && dat.next != null){
+                dat = dat.next;
+                count += 0;
+            }
+            dat.next = new Data(line);
+        }
+    }
+
+    //获取指定行,指定序号的数据
     public String getString(int line, int count){
         Data d = getData(line);
         if(d == null){
@@ -59,6 +78,8 @@ public class FeReaderFile {
         }
         return d.content[count];
     }
+
+    //设置指定行,指定序号的数据
     public void setValue(String val, int line, int count){
         Data d = getData(line);
         if(d != null && count < d.content.length)
@@ -66,7 +87,8 @@ public class FeReaderFile {
         else
             Log.d("FeReaderFile.setValue", "set failed : v/" + val + " l/" + line + " c/" + count);
     }
-    //获取/设置指定行,指定序号的数据
+
+    //获取指定行,指定序号的数据
     public int getInt(int line, int count){
         Data d = getData(line);
         if(d == null){
@@ -79,6 +101,8 @@ public class FeReaderFile {
         }
         return Integer.valueOf(d.content[count]);
     }
+
+    //设置指定行,指定序号的数据
     public void setValue(int val, int line, int count){
         Data d = getData(line);
         if(d != null && count < d.content.length)
@@ -86,17 +110,25 @@ public class FeReaderFile {
         else
             Log.d("FeReaderFile.setValue", "set failed : v/" + val + " l/" + line + " c/" + count);
     }
+
     //从文件加载数据到data链表
     public void load(){
         FeFileRead ffr = new FeFileRead(folderAndName[0], folderAndName[1]);
-        Data datNow = null;
-        while(ffr.readLine(split)){
-            //获取数据
-            if(datNow == null) datNow = data = new Data(ffr.getContent());
-            else datNow = datNow.next = new Data(ffr.getContent());
+        //打开文件失败,创建文件
+        if(ffr == null || !ffr.ready())
+            save();
+        //文件就绪
+        else{
+            Data datNow = null;
+            while(ffr.readLine(split)){
+                //获取数据
+                if(datNow == null) datNow = data = new Data(ffr.getContent());
+                else datNow = datNow.next = new Data(ffr.getContent());
+            }
+            ffr.exit();
         }
-        ffr.exit();
     }
+
     //保存data链表的数据到文件
     public void save(){
         FeFileWrite ffw = new FeFileWrite(folderAndName[0], folderAndName[1]);

@@ -5,10 +5,24 @@ package com.example.fe;
  */
 public class FeAssets {
 
-    public FeAssetsMap map = new FeAssetsMap();
-    public FeAssetsMenu menu = new FeAssetsMenu();
-    public FeAssetsParam param = new FeAssetsParam();
-    public FeAssetsUnit unit = new FeAssetsUnit();
+    public FeAssetsMap map;
+    public FeAssetsMenu menu;
+    public FeAssetsParam param;
+    public FeAssetsUnit unit;
+    public FeAssetsSave[] save;
+    public FeAssetsSection section;
+
+    public FeAssets(){
+        map = new FeAssetsMap();
+        menu = new FeAssetsMenu();
+        param = new FeAssetsParam();
+        unit = new FeAssetsUnit();
+        save = new FeAssetsSave[3];
+        save[0] = new FeAssetsSave(unit, 0);
+        save[1] = new FeAssetsSave(unit, 1);
+        save[2] = new FeAssetsSave(unit, 2);
+        section = new FeAssetsSection();
+    }
 
 }
 

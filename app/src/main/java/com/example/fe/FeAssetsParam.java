@@ -116,23 +116,23 @@ public class FeAssetsParam {
 
     //----- all file -----
 
-    private Types types = new Types("/param/", "types.txt", ";");
-    private Items items = new Items("/param/", "items.txt", ";");
-    private Specials specials = new Specials("/param/", "specials.txt", ";");
-    private SkillLevel skillLevel = new SkillLevel("/param/", "skill_level.txt", ";");
-    private AbilityLimit abilityLimit = new AbilityLimit("/param/", "ability_limit.txt", ";");
+    public Types types = new Types("/param/", "types.txt", ";");
+    public Items items = new Items("/param/", "items.txt", ";");
+    public Specials specials = new Specials("/param/", "specials.txt", ";");
+    public SkillLevel skillLevel = new SkillLevel("/param/", "skill_level.txt", ";");
+    public AbilityLimit abilityLimit = new AbilityLimit("/param/", "ability_limit.txt", ";");
 
     //----- unit 文件夹 -----
 
     private FeReaderBitmap bitmapReader = new FeReaderBitmap();
 
-    private Bitmap getSpecialsBitmap(int id){
+    public Bitmap getSpecialsBitmap(int id){
         return bitmapReader.load_png_byId("/param/special/", id);
     }
-    private Bitmap getTypesBitmap(int id){
+    public Bitmap getTypesBitmap(int id){
         return bitmapReader.load_png_byId("/param/type/", id);
     }
-    private Bitmap getItemsBitmap(int id){
+    public Bitmap getItemsBitmap(int id){
         return bitmapReader.load_png_byId("/param/item/", id);
     }
 

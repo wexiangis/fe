@@ -1,171 +1,217 @@
 package com.example.fe;
 
-
 import android.graphics.Bitmap;
 
 /*
-    /assets/unit 文件夹资源管理器
+    /assets/save/sX 文件夹资源管理器
  */
-public class FeAssetsUnit {
+public class FeAssetsSave {
+
+    public FeAssetsSaveUnit unit;
+    public FeAssetsSaveSection section;
+
+    public FeAssetsSave(FeAssetsUnit unit, int sX){
+        this.unit = new FeAssetsSaveUnit(unit, sX);
+        this.section = new FeAssetsSaveSection(unit, sX);
+    }
+}
+
+/*
+    /assets/save/sX/section 文件夹资源管理器
+ */
+class FeAssetsSaveSection {
+
+    public FeAssetsSaveSection(FeAssetsUnit unit, int sX){
+    }
+}
+
+/*
+    /assets/save/sX/unit 文件夹资源管理器
+ */
+class FeAssetsSaveUnit {
+
+    private FeAssetsUnit _unit;
+    private int sX = 0;
+
+    public FeAssetsSaveUnit(FeAssetsUnit unit, int sX){
+        this._unit = unit;
+        this.sX = sX;
+        //sX
+        String unitFolder = String.format("/save/s%d/unit/", sX);
+        String sectionFolder = String.format("/save/s%d/section/", sX);
+        // unit
+        this.unit = new Unit(unitFolder, "unit.txt", ";");
+        this.item = new Item(unitFolder, "item.txt", ";");
+        // unit addition
+        addition = new Addition(unitFolder, "addition.txt", ";");
+        a_ability = new A_Ability(unitFolder, "a_ability.txt", ";");
+        a_grow = new A_Grow(unitFolder, "a_grow.txt", ";");
+        a_skill = new A_Skill(unitFolder, "a_skill.txt", ";");
+        a_special = new A_Special(unitFolder, "a_special.txt", ";");
+    }
 
     //----- api -----
 
+    public int addUnit(int count){
+        ;
+    }
+
     // name.txt
     public String getName(int count){
-        return name.getName(unit.getName(count));
+        return _unit.name.getName(unit.getName(count));
     }
     public String getSummary(int count){
-        return name.getSummary(unit.getName(count));
+        return _unit.name.getSummary(unit.getName(count));
     }
     // /head/xx.png
     public Bitmap getHead(int count){
-        return getHeadBitmap(unit.getHead(count));
+        return _unit.getHeadBitmap(unit.getHead(count));
     }
-    // p_name.txt
+    // _unit.p_name.txt
     public String getProfessionName(int count){
-        return p_name.getName(profession.getName(unit.getProfession(count)));
+        return _unit.p_name.getName(_unit.profession.getName(unit.getProfession(count)));
     }
     public String getProfessionSummary(int count){
-        return p_name.getSummary(profession.getName(unit.getProfession(count)));
+        return _unit.p_name.getSummary(_unit.profession.getName(unit.getProfession(count)));
     }
     // /anim/xxx.png
     public Bitmap getProfessionAnim(int count){
-        return getAnimBitmap(profession.getAnim(unit.getProfession(count)));
+        return _unit.getAnimBitmap(_unit.profession.getAnim(unit.getProfession(count)));
     }
-    // p_ability.txt
+    // _unit.p_ability.txt
     public int getProfessionAbilityHp(int count){
-        return p_ability.getHp(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getHp(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilityStr(int count){
-        return p_ability.getStr(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getStr(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilityMag(int count){
-        return p_ability.getMag(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getMag(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilitySkill(int count){
-        return p_ability.getSkill(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getSkill(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilitySpe(int count){
-        return p_ability.getSpe(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getSpe(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilityLuk(int count){
-        return p_ability.getLuk(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getLuk(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilityDef(int count){
-        return p_ability.getDef(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getDef(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilityMde(int count){
-        return p_ability.getMde(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getMde(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilityWeig(int count){
-        return p_ability.getWeig(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getWeig(_unit.profession.getAbility(unit.getProfession(count)));
     }
     public int getProfessionAbilityMov(int count){
-        return p_ability.getMov(profession.getAbility(unit.getProfession(count)));
+        return _unit.p_ability.getMov(_unit.profession.getAbility(unit.getProfession(count)));
     }
-    // p_upgrade.txt
+    // _unit.p_upgrade.txt
     public int getProfessionUpgradeHp(int count){
-        return p_upgrade.getHp(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getHp(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeStr(int count){
-        return p_upgrade.getStr(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getStr(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeMag(int count){
-        return p_upgrade.getMag(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getMag(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeSkill(int count){
-        return p_upgrade.getSkill(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getSkill(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeSpe(int count){
-        return p_upgrade.getSpe(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getSpe(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeLuk(int count){
-        return p_upgrade.getLuk(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getLuk(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeDef(int count){
-        return p_upgrade.getDef(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getDef(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeMde(int count){
-        return p_upgrade.getMde(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getMde(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeWeig(int count){
-        return p_upgrade.getWeig(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getWeig(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
     public int getProfessionUpgradeMov(int count){
-        return p_upgrade.getMov(profession.getUpgrade(unit.getProfession(count)));
+        return _unit.p_upgrade.getMov(_unit.profession.getUpgrade(unit.getProfession(count)));
     }
-    // p_grow.txt
+    // _unit.p_grow.txt
     public int getProfessionGrowHp(int count){
-        return p_grow.getHp(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getHp(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowStr(int count){
-        return p_grow.getStr(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getStr(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowMag(int count){
-        return p_grow.getMag(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getMag(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowSkill(int count){
-        return p_grow.getSkill(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getSkill(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowSpe(int count){
-        return p_grow.getSpe(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getSpe(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowLuk(int count){
-        return p_grow.getLuk(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getLuk(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowDef(int count){
-        return p_grow.getDef(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getDef(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowMde(int count){
-        return p_grow.getMde(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getMde(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowWeig(int count){
-        return p_grow.getWeig(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getWeig(_unit.profession.getGrow(unit.getProfession(count)));
     }
     public int getProfessionGrowMov(int count){
-        return p_grow.getMov(profession.getGrow(unit.getProfession(count)));
+        return _unit.p_grow.getMov(_unit.profession.getGrow(unit.getProfession(count)));
     }
-    // p_skill.txt
+    // _unit.p_skill.txt
     public int getProfessionSkillSword(int count){
-        return p_skill.getSword(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getSword(_unit.profession.getSkill(unit.getProfession(count)));
     }
     public int getProfessionSkillGun(int count){
-        return p_skill.getGun(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getGun(_unit.profession.getSkill(unit.getProfession(count)));
     }
     public int getProfessionSkillAxe(int count){
-        return p_skill.getAxe(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getAxe(_unit.profession.getSkill(unit.getProfession(count)));
     }
     public int getProfessionSkillArrow(int count){
-        return p_skill.getArrow(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getArrow(_unit.profession.getSkill(unit.getProfession(count)));
     }
     public int getProfessionSkillPhy(int count){
-        return p_skill.getPhy(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getPhy(_unit.profession.getSkill(unit.getProfession(count)));
     }
     public int getProfessionSkillLight(int count){
-        return p_skill.getLight(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getLight(_unit.profession.getSkill(unit.getProfession(count)));
     }
     public int getProfessionSkillDark(int count){
-        return p_skill.getDark(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getDark(_unit.profession.getSkill(unit.getProfession(count)));
     }
     public int getProfessionSkillStick(int count){
-        return p_skill.getStick(profession.getSkill(unit.getProfession(count)));
+        return _unit.p_skill.getStick(_unit.profession.getSkill(unit.getProfession(count)));
     }
-    // p_special.txt
+    // _unit.p_special.txt
     public int getProfessionSpecial1(int count){
-        return p_special.getSpe1(profession.getSpecial(unit.getProfession(count)));
+        return _unit.p_special.getSpe1(_unit.profession.getSpecial(unit.getProfession(count)));
     }
     public int getProfessionSpecial2(int count){
-        return p_special.getSpe2(profession.getSpecial(unit.getProfession(count)));
+        return _unit.p_special.getSpe2(_unit.profession.getSpecial(unit.getProfession(count)));
     }
     public int getProfessionSpecial3(int count){
-        return p_special.getSpe3(profession.getSpecial(unit.getProfession(count)));
+        return _unit.p_special.getSpe3(_unit.profession.getSpecial(unit.getProfession(count)));
     }
     public int getProfessionSpecial4(int count){
-        return p_special.getSpe4(profession.getSpecial(unit.getProfession(count)));
+        return _unit.p_special.getSpe4(_unit.profession.getSpecial(unit.getProfession(count)));
     }
-    // profession.txt
+    // _unit.profession.txt
     public int getProfessionType(int count){
-        return profession.getType(unit.getProfession(count));
+        return _unit.profession.getType(unit.getProfession(count));
     }
     // a_ability.txt
     public int getAdditionAbilityHp(int count){
@@ -298,34 +344,14 @@ public class FeAssetsUnit {
     //----- all file -----
 
     // unit
-    public Unit unit = new Unit("/unit/", "unit.txt", ";");
-    public Name name = new Name("/unit/", "name.txt", ";");
-    public Item item = new Item("/unit/", "item.txt", ";");
+    public Unit unit;
+    public Item item;
     // unit addition
-    public Addition addition = new Addition("/unit/", "addition.txt", ";");
-    public A_Ability a_ability = new A_Ability("/unit/", "a_ability.txt", ";");
-    public A_Grow a_grow = new A_Grow("/unit/", "a_grow.txt", ";");
-    public A_Skill a_skill = new A_Skill("/unit/", "a_skill.txt", ";");
-    public A_Special a_special = new A_Special("/unit/", "a_special.txt", ";");
-    // unit profession
-    public Profession profession = new Profession("/unit/", "profession.txt", ";");
-    public P_Name p_name = new P_Name("/unit/", "p_name.txt", ";");
-    public P_Ability p_ability = new P_Ability("/unit/", "p_ability.txt", ";");
-    public P_Upgrade p_upgrade = new P_Upgrade("/unit/", "p_upgrade.txt", ";");
-    public P_Grow p_grow = new P_Grow("/unit/", "p_grow.txt", ";");
-    public P_Skill p_skill = new P_Skill("/unit/", "p_skill.txt", ";");
-    public P_Special p_special = new P_Special("/unit/", "p_special.txt", ";");
-
-    //----- unit 文件夹 -----
-
-    private FeReaderBitmap bitmapReader = new FeReaderBitmap();
-
-    public Bitmap getAnimBitmap(int id){
-        return bitmapReader.load_png_byId("/unit/anim/", id);
-    }
-    public Bitmap getHeadBitmap(int id){
-        return bitmapReader.load_png_byId("/unit/head/", id);
-    }
+    public Addition addition;
+    public A_Ability a_ability;
+    public A_Grow a_grow;
+    public A_Skill a_skill;
+    public A_Special a_special;
 
     //----- unit -----
 
@@ -350,19 +376,6 @@ public class FeAssetsUnit {
         public void setState(int line, int state){ setValue(state, line, 7); }
 
         public Unit(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //人物名称列表
-    class Name extends FeReaderFile {
-        public String getName(int line){ return getString(line, 0); }
-        public String getSummary(int line){ return getString(line, 1); }
-
-        public void setName(int line, String name){ setValue(name, line, 0); }
-        public void setSummary(int line, String summary){ setValue(summary, line, 1); }
-
-        public Name(String folder, String name, String split){
             super(folder, name, split);
         }
     }
@@ -503,175 +516,6 @@ public class FeAssetsUnit {
         public void setSpe4(int line, int spe4){ setValue(spe4, line, 3); }
 
         public A_Special(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //----- unit profession -----
-
-    //职业列表
-    class Profession extends FeReaderFile {
-        public int getName(int line){ return getInt(line, 0); }
-        public int getAnim(int line){ return getInt(line, 1); }
-        public int getAbility(int line){ return getInt(line, 2); }
-        public int getUpgrade(int line){ return getInt(line, 3); }
-        public int getGrow(int line){ return getInt(line, 4); }
-        public int getSkill(int line){ return getInt(line, 5); }
-        public int getSpecial(int line){ return getInt(line, 6); }
-        public int getType(int line){ return getInt(line, 7); }
-
-        public void setName(int line, int name){ setValue(name, line, 0); }
-        public void setAnim(int line, int anim){ setValue(anim, line, 1); }
-        public void setAbility(int line, int ability){ setValue(ability, line, 2); }
-        public void setUpgrade(int line, int upgrade){ setValue(upgrade, line, 3); }
-        public void setGrow(int line, int grow){ setValue(grow, line, 4); }
-        public void setSkill(int line, int skill){ setValue(skill, line, 5); }
-        public void setSpecial(int line, int special){ setValue(special, line, 6); }
-        public void setType(int line, int type){ setValue(type, line, 7); }
-
-        public Profession(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //职业名称列表
-    class P_Name extends FeReaderFile {
-        public String getName(int line){ return getString(line, 0); }
-        public String getSummary(int line){ return getString(line, 1); }
-
-        public void setName(int line, String name){ setValue(name, line, 0); }
-        public void setSummary(int line, String summary){ setValue(summary, line, 1); }
-
-        public P_Name(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //职业能力列表
-    class P_Ability extends FeReaderFile {
-        public int getHp(int line){ return getInt(line, 0); }
-        public int getStr(int line){ return getInt(line, 1); }
-        public int getMag(int line){ return getInt(line, 2); }
-        public int getSkill(int line){ return getInt(line, 3); }
-        public int getSpe(int line){ return getInt(line, 4); }
-        public int getLuk(int line){ return getInt(line, 5); }
-        public int getDef(int line){ return getInt(line, 6); }
-        public int getMde(int line){ return getInt(line, 7); }
-        public int getWeig(int line){ return getInt(line, 8); }
-        public int getMov(int line){ return getInt(line, 9); }
-
-        public void setHp(int line, int hp){ setValue(hp, line, 0); }
-        public void setStr(int line, int str){ setValue(str, line, 1); }
-        public void setMag(int line, int mag){ setValue(mag, line, 2); }
-        public void setSkill(int line, int skill){ setValue(skill, line, 3); }
-        public void setSpe(int line, int spe){ setValue(spe, line, 4); }
-        public void setLuk(int line, int luk){ setValue(luk, line, 5); }
-        public void setDef(int line, int def){ setValue(def, line, 6); }
-        public void setMde(int line, int mde){ setValue(mde, line, 7); }
-        public void setWeig(int line, int weig){ setValue(weig, line, 8); }
-        public void setMov(int line, int mov){ setValue(mov, line, 9); }
-
-        public P_Ability(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //职业升级加点列表
-    class P_Upgrade extends FeReaderFile {
-        public int getHp(int line){ return getInt(line, 0); }
-        public int getStr(int line){ return getInt(line, 1); }
-        public int getMag(int line){ return getInt(line, 2); }
-        public int getSkill(int line){ return getInt(line, 3); }
-        public int getSpe(int line){ return getInt(line, 4); }
-        public int getLuk(int line){ return getInt(line, 5); }
-        public int getDef(int line){ return getInt(line, 6); }
-        public int getMde(int line){ return getInt(line, 7); }
-        public int getWeig(int line){ return getInt(line, 8); }
-        public int getMov(int line){ return getInt(line, 9); }
-
-        public void setHp(int line, int hp){ setValue(hp, line, 0); }
-        public void setStr(int line, int str){ setValue(str, line, 1); }
-        public void setMag(int line, int mag){ setValue(mag, line, 2); }
-        public void setSkill(int line, int skill){ setValue(skill, line, 3); }
-        public void setSpe(int line, int spe){ setValue(spe, line, 4); }
-        public void setLuk(int line, int luk){ setValue(luk, line, 5); }
-        public void setDef(int line, int def){ setValue(def, line, 6); }
-        public void setMde(int line, int mde){ setValue(mde, line, 7); }
-        public void setWeig(int line, int weig){ setValue(weig, line, 8); }
-        public void setMov(int line, int mov){ setValue(mov, line, 9); }
-
-        public P_Upgrade(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //职业成长率列表
-    class P_Grow extends FeReaderFile {
-        public int getHp(int line){ return getInt(line, 0); }
-        public int getStr(int line){ return getInt(line, 1); }
-        public int getMag(int line){ return getInt(line, 2); }
-        public int getSkill(int line){ return getInt(line, 3); }
-        public int getSpe(int line){ return getInt(line, 4); }
-        public int getLuk(int line){ return getInt(line, 5); }
-        public int getDef(int line){ return getInt(line, 6); }
-        public int getMde(int line){ return getInt(line, 7); }
-        public int getWeig(int line){ return getInt(line, 8); }
-        public int getMov(int line){ return getInt(line, 9); }
-
-        public void setHp(int line, int hp){ setValue(hp, line, 0); }
-        public void setStr(int line, int str){ setValue(str, line, 1); }
-        public void setMag(int line, int mag){ setValue(mag, line, 2); }
-        public void setSkill(int line, int skill){ setValue(skill, line, 3); }
-        public void setSpe(int line, int spe){ setValue(spe, line, 4); }
-        public void setLuk(int line, int luk){ setValue(luk, line, 5); }
-        public void setDef(int line, int def){ setValue(def, line, 6); }
-        public void setMde(int line, int mde){ setValue(mde, line, 7); }
-        public void setWeig(int line, int weig){ setValue(weig, line, 8); }
-        public void setMov(int line, int mov){ setValue(mov, line, 9); }
-
-        public P_Grow(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //职业技能列表
-    class P_Skill extends FeReaderFile {
-        public int getSword(int line){ return getInt(line, 0); }
-        public int getGun(int line){ return getInt(line, 1); }
-        public int getAxe(int line){ return getInt(line, 2); }
-        public int getArrow(int line){ return getInt(line, 3); }
-        public int getPhy(int line){ return getInt(line, 4); }
-        public int getLight(int line){ return getInt(line, 5); }
-        public int getDark(int line){ return getInt(line, 6); }
-        public int getStick(int line){ return getInt(line, 7); }
-
-        public void setSword(int line, int sword){ setValue(sword, line, 0); }
-        public void setGun(int line, int gun){ setValue(gun, line, 1); }
-        public void setAxe(int line, int axe){ setValue(axe, line, 2); }
-        public void setArrow(int line, int arrow){ setValue(arrow, line, 3); }
-        public void setPhy(int line, int phy){ setValue(phy, line, 4); }
-        public void setLight(int line, int light){ setValue(light, line, 5); }
-        public void setDark(int line, int dark){ setValue(dark, line, 6); }
-        public void setStick(int line, int stick){ setValue(stick, line, 7); }
-
-        public P_Skill(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    //职业特技列表
-    class P_Special extends FeReaderFile {
-        public int getSpe1(int line){ return getInt(line, 0); }
-        public int getSpe2(int line){ return getInt(line, 1); }
-        public int getSpe3(int line){ return getInt(line, 2); }
-        public int getSpe4(int line){ return getInt(line, 3); }
-
-        public void setSpe1(int line, int spe1){ setValue(spe1, line, 0); }
-        public void setSpe2(int line, int spe2){ setValue(spe2, line, 1); }
-        public void setSpe3(int line, int spe3){ setValue(spe3, line, 2); }
-        public void setSpe4(int line, int spe4){ setValue(spe4, line, 3); }
-
-        public P_Special(String folder, String name, String split){
             super(folder, name, split);
         }
     }
