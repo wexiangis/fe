@@ -74,6 +74,11 @@ public class FeViewUnit extends View {
         site = new FeInfoGrid();
     }
 
+    //人物id
+    public int getId(){
+        return _id;
+    }
+
     //移动方格
     public void setGrid(int x, int y){
         _gridX += x;
