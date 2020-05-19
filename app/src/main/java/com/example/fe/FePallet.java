@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
  */
 public class FePallet {
 
-    //type: 0/原色 1/绿色 2/红色 3/灰色 4/橙色 5/紫色 6/不蓝不绿
+    //type: 0/原色 1/红色 2/绿色 3/灰色 4/橙色 5/紫色 6/不蓝不绿
     public static Bitmap replace(Bitmap oldBitmap, int type){
         if(type == 0)   //使用原色
             return oldBitmap;
@@ -26,15 +26,15 @@ public class FePallet {
                 g = (color&0x0000ff00)>>8;
                 b = color&0x000000ff;
                 if(b > g && b > r) {
-                    if (type == 1) {         //蓝色 换 绿色
-                        tcolor |= (int) (r * 0.5) << 16;
-                        tcolor |= (int) (b * 0.9) << 8;
-                        tcolor |= (int) (g * 0.5) << 0;
-                        mBitmap.setPixel(j, i, tcolor);
-                    }else if (type == 2) {    //蓝色 换 红色
+                    if (type == 1) {          //蓝色 换 红色
                         tcolor |= (int) (b * 1.0) << 16;
                         tcolor |= (int) (g * 0.5) << 8;
                         tcolor |= (int) (r * 0.5) << 0;
+                        mBitmap.setPixel(j, i, tcolor);
+                    }else if (type == 2) {    //蓝色 换 绿色
+                        tcolor |= (int) (r * 0.5) << 16;
+                        tcolor |= (int) (b * 0.9) << 8;
+                        tcolor |= (int) (g * 0.5) << 0;
                         mBitmap.setPixel(j, i, tcolor);
                     }else if (type == 3) {    //蓝色 换 黑色
                         tmp = r + g + b;
@@ -53,7 +53,7 @@ public class FePallet {
                         tcolor |= (int) (r * 0.5) << 8;
                         tcolor |= (int) (g * 1.0) << 0;
                         mBitmap.setPixel(j, i, tcolor);
-                    }else if (type == 6) {    //蓝色 换 红紫色
+                    }else if (type == 6) {    //蓝色 换 不蓝不绿
                         tcolor |= (int) (r * 0.8) << 16;
                         tcolor |= (int) (b * 0.8) << 8;
                         tcolor |= (int) (b * 0.8) << 0;
