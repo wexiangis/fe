@@ -1,7 +1,6 @@
 package com.example.fe;
 
 import android.graphics.Bitmap;
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
 /*
     /assets/save/sX 文件夹资源管理器
@@ -32,6 +31,9 @@ class FeAssetsSaveSection {
         String sectionFolder = String.format("/save/s%d/section/", sX);
         //section
         this.unit = new Unit(sectionFolder, "unit.txt", ";");
+        this.round = new Round(sectionFolder, "round.txt", ";");
+        //
+        // this.campBlue = new Camp(sectionFolder, "b_000.txt", ";");
     }
 
     //----- api -----
@@ -51,6 +53,7 @@ class FeAssetsSaveSection {
     //----- all file -----
 
     public Unit unit;
+    public Round round;
 
     // 有添加时初始化
     public Camp campBlue = null;
@@ -66,18 +69,34 @@ class FeAssetsSaveSection {
     class Unit extends FeReaderFile{
 
         public int getCamp(int line){ return getInt(line, 0); }
-        public int getId(int line){ return getInt(line, 1); }
-        public int getX(int line){ return getInt(line, 2)/1000; }
-        public int getY(int line){ return getInt(line, 2)%1000; }
-        public int getOrder(int line){ return getInt(line, 3); }
+        public int getOrder(int line){ return getInt(line, 1); }
+        public int getId(int line){ return getInt(line, 2); }
+        public int getX(int line){ return getInt(line, 3)/1000; }
+        public int getY(int line){ return getInt(line, 3)%1000; }
 
         public void setCamp(int line, int camp){ setValue(camp, line, 0); }
-        public void setId(int line, int id){ setValue(id, line, 1); }
-        public void setX(int line, int x){ setValue(x*1000+getY(line), line, 2); }
-        public void setY(int line, int y){ setValue(getX(line)*1000+y, line, 2); }
-        public void setOrder(int line, int order){ setValue(order, line, 3); }
+        public void setOrder(int line, int order){ setValue(order, line, 1); }
+        public void setId(int line, int id){ setValue(id, line, 2); }
+        public void setX(int line, int x){ setValue(x*1000+getY(line), line, 3); }
+        public void setY(int line, int y){ setValue(getX(line)*1000+y, line, 3); }
         
         public Unit(String folder, String name, String split){
+            super(folder, name, split);
+        }
+    }
+
+    class Round extends FeReaderFile{
+
+        public int getTurn(int line){ return getInt(line, 0); }
+        public int getCamp(int line){ return getInt(line, 1); }
+        public int getOrder(int line){ return getInt(line, 2); }
+        public int getTime(int line){ return getInt(line, 3); }
+
+        public void setTurn(int line, int turn){ setValue(turn, line, 0); }
+        public void setCamp(int line, int camp){ setValue(camp, line, 1); }
+        public void setOrder(int line, int order){ setValue(order, line, 2); }
+        
+        public Round(String folder, String name, String split){
             super(folder, name, split);
         }
     }
@@ -219,157 +238,161 @@ class FeAssetsSaveUnit {
         return 0;
     }
 
+    // unit.txt
+    public int getId(int count){
+        return unit.getId(count);
+    }
     // _unit.name.txt
     public String getName(int count){
-        return _unit.name.getName(unit.getName(count));
+        return _unit.getName(unit.getId(count));
     }
     public String getSummary(int count){
-        return _unit.name.getSummary(unit.getName(count));
+        return _unit.getSummary(unit.getId(count));
     }
     // /head/xx.png
     public Bitmap getHead(int count){
-        return _unit.getHeadBitmap(unit.getHead(count));
+        return _unit.getHead(unit.getId(count));
     }
     // /anim/xxx.png
     public Bitmap getProfessionAnim(int count){
-        return _unit.getAnimBitmap(_unit.profession.getAnim(unit.getProfession(count)));
+        return _unit.getProfessionAnim(unit.getId(count));
     }
     // _unit.p_name.txt
     public String getProfessionName(int count){
-        return _unit.p_name.getName(_unit.profession.getName(unit.getProfession(count)));
+        return _unit.getProfessionName(unit.getId(count));
     }
     public String getProfessionSummary(int count){
-        return _unit.p_name.getSummary(_unit.profession.getName(unit.getProfession(count)));
+        return _unit.getProfessionSummary(unit.getId(count));
     }
     // _unit.p_upgrade.txt
     public int getProfessionUpgradeHp(int count){
-        return _unit.p_upgrade.getHp(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeHp(unit.getId(count));
     }
     public int getProfessionUpgradeStr(int count){
-        return _unit.p_upgrade.getStr(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeStr(unit.getId(count));
     }
     public int getProfessionUpgradeMag(int count){
-        return _unit.p_upgrade.getMag(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeMag(unit.getId(count));
     }
     public int getProfessionUpgradeSkill(int count){
-        return _unit.p_upgrade.getSkill(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeSkill(unit.getId(count));
     }
     public int getProfessionUpgradeSpe(int count){
-        return _unit.p_upgrade.getSpe(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeSpe(unit.getId(count));
     }
     public int getProfessionUpgradeLuk(int count){
-        return _unit.p_upgrade.getLuk(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeLuk(unit.getId(count));
     }
     public int getProfessionUpgradeDef(int count){
-        return _unit.p_upgrade.getDef(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeDef(unit.getId(count));
     }
     public int getProfessionUpgradeMde(int count){
-        return _unit.p_upgrade.getMde(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeMde(unit.getId(count));
     }
     public int getProfessionUpgradeWeig(int count){
-        return _unit.p_upgrade.getWeig(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeWeig(unit.getId(count));
     }
     public int getProfessionUpgradeMov(int count){
-        return _unit.p_upgrade.getMov(_unit.profession.getUpgrade(unit.getProfession(count)));
+        return _unit.getProfessionUpgradeMov(unit.getId(count));
     }
     // _unit.p_special.txt
     public int getProfessionSpecial1(int count){
-        return _unit.p_special.getSpe1(_unit.profession.getSpecial(unit.getProfession(count)));
+        return _unit.getProfessionSpecial1(unit.getId(count));
     }
     public int getProfessionSpecial2(int count){
-        return _unit.p_special.getSpe2(_unit.profession.getSpecial(unit.getProfession(count)));
+        return _unit.getProfessionSpecial2(unit.getId(count));
     }
     public int getProfessionSpecial3(int count){
-        return _unit.p_special.getSpe3(_unit.profession.getSpecial(unit.getProfession(count)));
+        return _unit.getProfessionSpecial3(unit.getId(count));
     }
     public int getProfessionSpecial4(int count){
-        return _unit.p_special.getSpe4(_unit.profession.getSpecial(unit.getProfession(count)));
+        return _unit.getProfessionSpecial4(unit.getId(count));
     }
     // ability.txt
-    public int getProfessionAbilityHp(int count){
+    public int getAbilityHp(int count){
         return ability.getHp(unit.getAbility(count));
     }
-    public int getProfessionAbilityStr(int count){
+    public int getAbilityStr(int count){
         return ability.getStr(unit.getAbility(count));
     }
-    public int getProfessionAbilityMag(int count){
+    public int getAbilityMag(int count){
         return ability.getMag(unit.getAbility(count));
     }
-    public int getProfessionAbilitySkill(int count){
+    public int getAbilitySkill(int count){
         return ability.getSkill(unit.getAbility(count));
     }
-    public int getProfessionAbilitySpe(int count){
+    public int getAbilitySpe(int count){
         return ability.getSpe(unit.getAbility(count));
     }
-    public int getProfessionAbilityLuk(int count){
+    public int getAbilityLuk(int count){
         return ability.getLuk(unit.getAbility(count));
     }
-    public int getProfessionAbilityDef(int count){
+    public int getAbilityDef(int count){
         return ability.getDef(unit.getAbility(count));
     }
-    public int getProfessionAbilityMde(int count){
+    public int getAbilityMde(int count){
         return ability.getMde(unit.getAbility(count));
     }
-    public int getProfessionAbilityWeig(int count){
+    public int getAbilityWeig(int count){
         return ability.getWeig(unit.getAbility(count));
     }
-    public int getProfessionAbilityMov(int count){
+    public int getAbilityMov(int count){
         return ability.getMov(unit.getAbility(count));
     }
     // grow.txt
-    public int getProfessionGrowHp(int count){
+    public int getGrowHp(int count){
         return grow.getHp(unit.getGrow(count));
     }
-    public int getProfessionGrowStr(int count){
+    public int getGrowStr(int count){
         return grow.getStr(unit.getGrow(count));
     }
-    public int getProfessionGrowMag(int count){
+    public int getGrowMag(int count){
         return grow.getMag(unit.getGrow(count));
     }
-    public int getProfessionGrowSkill(int count){
+    public int getGrowSkill(int count){
         return grow.getSkill(unit.getGrow(count));
     }
-    public int getProfessionGrowSpe(int count){
+    public int getGrowSpe(int count){
         return grow.getSpe(unit.getGrow(count));
     }
-    public int getProfessionGrowLuk(int count){
+    public int getGrowLuk(int count){
         return grow.getLuk(unit.getGrow(count));
     }
-    public int getProfessionGrowDef(int count){
+    public int getGrowDef(int count){
         return grow.getDef(unit.getGrow(count));
     }
-    public int getProfessionGrowMde(int count){
+    public int getGrowMde(int count){
         return grow.getMde(unit.getGrow(count));
     }
-    public int getProfessionGrowWeig(int count){
+    public int getGrowWeig(int count){
         return grow.getWeig(unit.getGrow(count));
     }
-    public int getProfessionGrowMov(int count){
+    public int getGrowMov(int count){
         return grow.getMov(unit.getGrow(count));
     }
     // skill.txt
-    public int getProfessionSkillSword(int count){
+    public int getSkillSword(int count){
         return skill.getSword(unit.getSkill(count));
     }
-    public int getProfessionSkillGun(int count){
+    public int getSkillGun(int count){
         return skill.getGun(unit.getSkill(count));
     }
-    public int getProfessionSkillAxe(int count){
+    public int getSkillAxe(int count){
         return skill.getAxe(unit.getSkill(count));
     }
-    public int getProfessionSkillArrow(int count){
+    public int getSkillArrow(int count){
         return skill.getArrow(unit.getSkill(count));
     }
-    public int getProfessionSkillPhy(int count){
+    public int getSkillPhy(int count){
         return skill.getPhy(unit.getSkill(count));
     }
-    public int getProfessionSkillLight(int count){
+    public int getSkillLight(int count){
         return skill.getLight(unit.getSkill(count));
     }
-    public int getProfessionSkillDark(int count){
+    public int getSkillDark(int count){
         return skill.getDark(unit.getSkill(count));
     }
-    public int getProfessionSkillStick(int count){
+    public int getSkillStick(int count){
         return skill.getStick(unit.getSkill(count));
     }
     // special.txt
@@ -430,29 +453,25 @@ class FeAssetsSaveUnit {
 
     //人物列表
     class Unit extends FeReaderFile {
-        public int getName(int line){ return getInt(line, 0); }
-        public int getHead(int line){ return getInt(line, 1); }
-        public int getProfession(int line){ return getInt(line, 2); }
-        public int getAbility(int line){ return getInt(line, 3); }
-        public int getGrow(int line){ return getInt(line, 4); }
-        public int getSkill(int line){ return getInt(line, 5); }
-        public int getSpecial(int line){ return getInt(line, 6); }
-        public int getLevel(int line){ return getInt(line, 7); }
-        public int getItem(int line){ return getInt(line, 8); }
-        public int getCamp(int line){ return getInt(line, 9); }
-        public int getState(int line){ return getInt(line, 10); }
+        public int getId(int line){ return getInt(line, 0); }
+        public int getAbility(int line){ return getInt(line, 1); }
+        public int getGrow(int line){ return getInt(line, 2); }
+        public int getSkill(int line){ return getInt(line, 3); }
+        public int getSpecial(int line){ return getInt(line, 4); }
+        public int getLevel(int line){ return getInt(line, 5); }
+        public int getItem(int line){ return getInt(line, 6); }
+        public int getCamp(int line){ return getInt(line, 7); }
+        public int getState(int line){ return getInt(line, 8); }
 
-        public void setName(int line, int name){ setValue(name, line, 0); }
-        public void setHead(int line, int head){ setValue(head, line, 1); }
-        public void setProfession(int line, int profession){ setValue(profession, line, 2); }
-        public void setAbility(int line, int ability){ setValue(ability, line, 3); }
-        public void setGrow(int line, int grow){ setValue(grow, line, 4); }
-        public void setSkill(int line, int skill){ setValue(skill, line, 5); }
-        public void setSpecial(int line, int special){ setValue(special, line, 6); }
-        public void setLevel(int line, int level){ setValue(level, line, 7); }
-        public void setItem(int line, int item){ setValue(item, line, 8); }
-        public void setCamp(int line, int camp){ setValue(camp, line, 9); }
-        public void setState(int line, int state){ setValue(state, line, 10); }
+        public void setId(int line, int id){ setValue(id, line, 0); }
+        public void setAbility(int line, int ability){ setValue(ability, line, 1); }
+        public void setGrow(int line, int grow){ setValue(grow, line, 2); }
+        public void setSkill(int line, int skill){ setValue(skill, line, 3); }
+        public void setSpecial(int line, int special){ setValue(special, line, 4); }
+        public void setLevel(int line, int level){ setValue(level, line, 5); }
+        public void setItem(int line, int item){ setValue(item, line, 6); }
+        public void setCamp(int line, int camp){ setValue(camp, line, 7); }
+        public void setState(int line, int state){ setValue(state, line, 8); }
 
         public Unit(String folder, String name, String split){
             super(folder, name, split);
