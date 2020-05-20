@@ -510,6 +510,7 @@ public class FeAssetsUnit {
         public int getSkill(int line){ return getInt(line, 5); }
         public int getSpecial(int line){ return getInt(line, 6); }
         public int getType(int line){ return getInt(line, 7); }
+        public int getNext(int line){ return getInt(line, 8); }
 
         public void setName(int line, int name){ setValue(name, line, 0); }
         public void setAnim(int line, int anim){ setValue(anim, line, 1); }
@@ -519,6 +520,7 @@ public class FeAssetsUnit {
         public void setSkill(int line, int skill){ setValue(skill, line, 5); }
         public void setSpecial(int line, int special){ setValue(special, line, 6); }
         public void setType(int line, int type){ setValue(type, line, 7); }
+        public void setNext(int line, int next){ setValue(next, line, 8); }
 
         public Profession(String folder, String name, String split){
             super(folder, name, split);

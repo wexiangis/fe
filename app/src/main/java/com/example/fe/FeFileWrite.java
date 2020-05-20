@@ -8,7 +8,12 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
 /*
-    按行写文件工具
+    按行写文件工具,文件会写到手机内存FE文件夹内
+    使用顺序:
+        1.构造函数
+        2.ready() //检查文件打开成功
+        3.重复 write() 或者 writeLine()
+        6.exit() //关闭各种句柄
  */
 public class FeFileWrite {
     //关键路径
@@ -18,6 +23,7 @@ public class FeFileWrite {
     private FileOutputStream fos;
     private OutputStreamWriter osw;
 
+    // autoCRCL: 是否自动补上"\r\n"
     public void write(String value, Boolean autoCRCL){
         try {
             if (osw != null){
@@ -31,6 +37,7 @@ public class FeFileWrite {
         }
     }
 
+    // 用分隔符 spl 分隔后面输入的 argv.length 个字符串
     public void writeLine(String spl, String ... argv){
         try {
             if (osw != null){
@@ -47,16 +54,16 @@ public class FeFileWrite {
     }
 
     /*
-        folder: 示例 "/unit/" 前后都带斜杠
-        path: 示例 "test.txt" 没有斜杠
+        folder: 目标文件夹, 示例 "/unit/" 前后都带斜杠
+        name: 目标名称, 示例 "test.txt" 没有斜杠
      */
-    public FeFileWrite(String folder, String path) {
+    public FeFileWrite(String folder, String name) {
         //文件夹检查
         File sdFileFolderPath = new File(feSdRootPath + folder);
         if(!sdFileFolderPath.exists())
             sdFileFolderPath.mkdirs();
         //文件写到sd卡(内置)存储
-        filePath = feSdRootPath + folder + path;
+        filePath = feSdRootPath + folder + name;
         try {
             fos = new FileOutputStream(filePath);
             if(fos != null)
@@ -68,18 +75,22 @@ public class FeFileWrite {
         }
     }
 
+    // 文件打开就绪
     public Boolean ready(){
         if(osw != null)
             return true;
         return false;
     }
 
+    // 关闭各种句柄
     public void exit(){
         try {
             if(osw != null)
                 osw.close();
+            osw = null;
             if (fos != null)
                 fos.close();
+            fos = null;
         } catch (java.io.IOException e) {
             Log.d("FeFileWrite: exit " + filePath, e.getMessage());
         }

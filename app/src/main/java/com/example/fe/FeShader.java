@@ -34,8 +34,8 @@ public class FeShader {
         xCount: 横向移动量
         yCount: 纵向移动量
         step: 步长
-        colors[]: 颜色列表, 例如 int[] cc = int[]{0xFF00FF00, 0xFFFF0000, 0xFF0000FF}
-        positions[]: 指定colors[]里的颜色出现位置0.0~1.0, 例如 float[] pp = float[]{0.25, 0.5, 0.75}
+        colors[]: 颜色列表, 例如 new int[]{0xFF00FF00, 0xFFFF0000, 0xFF0000FF}
+        positions[]: 指定colors[]里的颜色出现位置0.0~1.0, 例如 new float[]{0.25, 0.5, 0.75}
      */
     public FeShader(RectF rect, int xCount, int yCount, int step, int colors[], float positions[], Shader.TileMode tile){
 
