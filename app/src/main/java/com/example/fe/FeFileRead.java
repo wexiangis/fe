@@ -11,7 +11,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /*
-    按行读文件工具
+    按行读文件工具,手机内存FE文件夹内有文件会优先读取,否则读/assets目录文件
+    使用顺序:
+        1.构造函数
+        2.ready() //检查文件打开成功
+        3.readLine() //返回 true/读取一行数据就绪 false/文件读完了
+        4.getContent() 或者 getLineContent() 获取该行数据
+        5.重复3,4
+        6.exit() //关闭各种句柄
  */
 public class FeFileRead {
     //关键路径
@@ -27,32 +34,38 @@ public class FeFileRead {
     private String[] content;//按分隔符处理后的行数据
     private int line = -1;//当前行数
 
+    // 返回按分隔符分割好的一行数据
     public String[] getContent(){
         return content;
     }
 
+    // 返回一行原始数据
     public String getLineContent(){
         return lineContent;
     }
 
+    // 当前读取行号, 从0数起
     public int getLine(){
         if(line < 0)
             return 0;
         return line;
     }
 
+    // 返回改行 String[count] 的数据
     public int getInt(int count){
         if(content != null && content.length > count)
             return Integer.valueOf(content[count]);
         return -1;
     }
 
+    // 返回改行 String[count] 的数据
     public String getString(int count){
         if(content != null && content.length > count)
             return content[count];
         return "";
     }
 
+    // spl: 分隔符, 一般为";"
     public boolean readLine(String spl){
         try{
             if(br == null)
@@ -70,12 +83,12 @@ public class FeFileRead {
     }
 
     /*
-        folder: 示例 "/unit/" 前后都带斜杠
-        path: 示例 "test.txt" 没有斜杠
+        folder: 目标文件夹, 示例 "/unit/" 前后都带斜杠
+        name: 目标名称, 示例 "test.txt" 没有斜杠
      */
-    public FeFileRead(String folder, String path) {
-        File assetsFilePath = new File("/assets" + folder + path);
-        File sdFilePath = new File(feSdRootPath + folder + path);
+    public FeFileRead(String folder, String name) {
+        File assetsFilePath = new File("/assets" + folder + name);
+        File sdFilePath = new File(feSdRootPath + folder + name);
         File sdFileFolderPath = new File(feSdRootPath + folder);
         //sd卡(内置存储)路径准备
         if(!sdFileFolderPath.exists())
@@ -109,22 +122,28 @@ public class FeFileRead {
         }
     }
 
+    // 文件打开就绪
     public Boolean ready(){
         if(br != null)
             return true;
         return false;
     }
 
+    // 关闭各种句柄
     public void exit(){
         try {
             if (br != null)
                 br.close();
+            br = null;
             if (isr != null)
                 isr.close();
+            isr = null;
             if (is != null)
                 is.close();
+            is = null;
             if(fis != null)
                 fis.close();
+            fis = null;
         } catch (IOException e) {
             Log.d("FeFileRead.exit", "IOException : " + filePath);
         }
