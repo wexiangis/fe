@@ -439,7 +439,17 @@ class FeAssetsSaveUnit {
     public int getState(int count){
         return unit.getState(count);
     }
-
+    // unit.txt
+    public int getFight(int count){
+        return unit.getFight(count);
+    }
+    public int getWin(int count){
+        return unit.getWin(count);
+    }
+    public int getDie(int count){
+        return unit.getDie(count);
+    }
+    
     //----- all file -----
 
     public Unit unit;
@@ -462,6 +472,9 @@ class FeAssetsSaveUnit {
         public int getItem(int line){ return getInt(line, 6); }
         public int getCamp(int line){ return getInt(line, 7); }
         public int getState(int line){ return getInt(line, 8); }
+        public int getFight(int line){ return getInt(line, 9); }
+        public int getWin(int line){ return getInt(line, 10); }
+        public int getDie(int line){ return getInt(line, 11); }
 
         public void setId(int line, int id){ setValue(id, line, 0); }
         public void setAbility(int line, int ability){ setValue(ability, line, 1); }
@@ -472,6 +485,9 @@ class FeAssetsSaveUnit {
         public void setItem(int line, int item){ setValue(item, line, 6); }
         public void setCamp(int line, int camp){ setValue(camp, line, 7); }
         public void setState(int line, int state){ setValue(state, line, 8); }
+        public void setFight(int line, int fight){ setValue(fight, line, 9); }
+        public void setWin(int line, int win){ setValue(win, line, 10); }
+        public void setDie(int line, int die){ setValue(die, line, 11); }
 
         public Unit(String folder, String name, String split){
             super(folder, name, split);
