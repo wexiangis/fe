@@ -15,7 +15,7 @@
 ## profession.txt : 职业描述文件
 
 * 格式: 每个职业由多种信息拼凑而成,这里一行描述一个人物
-* 示例: name;anim;ability;grow;upgrade;skill;special;type;下一职业(不能再转填自己);保留;
+* 示例: name;anim;ability;grow;upgrade;skill;special;type;下一职业(不能再转填自己);下一职业2;保留;
 
 ## p_name.txt : 职业名称列表
 
@@ -62,10 +62,10 @@
 
 ## p_special.txt : 职业特技列表
 
-* 格式: 每行代表一个职业拥有的特技,从0行数起,每行4个
+* 格式: 每行代表一个职业拥有的特技,从0行数起,每行2个
 * 示例: 0表示没有装载,前面2个槽为职业特技
-* 2;1;0;0;
-* 1;0;0;0;
+* 2;1;
+* 1;0;
 
 ## addition.txt : 人物能力加成文件
 

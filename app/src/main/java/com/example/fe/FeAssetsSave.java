@@ -203,6 +203,13 @@ class FeAssetsSaveSection {
         public int getRescueOrder(){ return getInt(6, 1); }
         public void setRescue(int rescue){ setValue(rescue, 6, 0); }
         public void setRescueOrder(int rescueOrder){ setValue(rescueOrder, 6, 1); }
+        // line 7
+        public int getFight(){ return getInt(7, 0); }
+        public int getWin(){ return getInt(7, 1); }
+        public int getDie(){ return getInt(7, 3); }
+        public void setFight(int fight){ setValue(fight, 7, 0); }
+        public void setWin(int win){ setValue(win, 7, 1); }
+        public void setDie(int die){ setValue(die, 7, 2); }
         
         public Camp(String folder, String name, String split){
             super(folder, name, split);
