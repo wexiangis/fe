@@ -93,26 +93,25 @@ public class FeFileRead {
         //sd卡(内置存储)路径准备
         if(!sdFileFolderPath.exists())
             sdFileFolderPath.mkdirs();
-        //都不存在的文件
-//        if(!assetsFilePath.exists() && !sdFilePath.exists())
-//            return;
         //存在sd卡(内置存储)配置则优先使用该配置
         try{
+            //存在于手机内存
             if(sdFilePath.exists()) {
                 filePath = sdFilePath.getPath();
                 fis = new FileInputStream(filePath);
             }
+            //否则尝试从assets打开
             else {
                 filePath = assetsFilePath.getPath();
                 is = getClass().getResourceAsStream(filePath);
             }
-            //reader
-            if (is != null) {
-                isr = new InputStreamReader(is);
+            //获得reader
+            if(fis != null){
+                isr = new InputStreamReader(fis, "UTF-8");
                 br = new BufferedReader(isr);
             }
-            else if(fis != null){
-                isr = new InputStreamReader(fis, "UTF-8");
+            else if (is != null) {
+                isr = new InputStreamReader(is);
                 br = new BufferedReader(isr);
             }
         } catch (java.io.FileNotFoundException e) {

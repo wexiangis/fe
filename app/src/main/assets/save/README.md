@@ -1,3 +1,17 @@
+# save: 存档管理文件夹
+
+## save/lastOne.txt : 最后存档位置
+
+* 说明: 文件就一个数字n
+* 示例:  sX;
+
+# save/sX : 存档X
+
+## save/sX/info.txt : 存档章节信息
+
+* 关于是否中断: 0/加载存档时重新开始章节 1/恢复中断状态
+* 示例:  章节;是否中断;
+
 # save/sX/unit : 己方人物信息文件夹
 
 ## save/sX/unit/unit.txt : 单元描述文件
