@@ -47,7 +47,6 @@ public class FeAssetsSave {
 
     //复制存档sXSrc到sXDist
     public void copySx(int sXDist, int sXSrc){
-        sXCurrent = sX;
     }
 
     /* ---------- 读取数据 ---------- */
