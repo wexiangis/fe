@@ -40,6 +40,12 @@ class FeAssetsSaveSection {
 
     //----- api -----
 
+    public void addCamp(int camp, int id){
+    }
+
+    public void addCamp2(int id){
+    }
+
     //----- all file -----
 
     public Unit unit;
@@ -200,6 +206,11 @@ class FeAssetsSaveSection {
         public void setFight(int fight){ setValue(fight, 7, 0); }
         public void setWin(int win){ setValue(win, 7, 1); }
         public void setDie(int die){ setValue(die, 7, 2); }
+        // line 8
+        public int getView(){ return getInt(8, 0); }
+        public int getViewAdd(){ return getInt(8, 1); }
+        public void setView(int view){ setValue(view, 8, 0); }
+        public void setViewAdd(int viewAdd){ setValue(viewAdd, 8, 1); }
         
         public Camp(String folder, String name, String split){
             super(folder, name, split);
@@ -227,6 +238,7 @@ class FeAssetsSaveUnit {
         this.skill = new Skill(unitFolder, "skill.txt", ";");
         this.special = new Special(unitFolder, "special.txt", ";");
         this.item = new Item(unitFolder, "item.txt", ";");
+        this.record = new Record(unitFolder, "record.txt", ";");
     }
 
     //----- api -----
@@ -436,15 +448,15 @@ class FeAssetsSaveUnit {
     public int getState(int count){
         return unit.getState(count);
     }
-    // unit.txt
-    public int getFight(int count){
-        return unit.getFight(count);
+    // record.txt
+    public int getRecord(int count){
+        return record.getRecord(unit.getRecord(count));
     }
     public int getWin(int count){
-        return unit.getWin(count);
+        return record.getWin(unit.getRecord(count));
     }
     public int getDie(int count){
-        return unit.getDie(count);
+        return record.getDie(unit.getRecord(count));
     }
     
     //----- all file -----
@@ -455,6 +467,7 @@ class FeAssetsSaveUnit {
     public Skill skill;
     public Special special;
     public Item item;
+    public Record record;
 
     //----- unit -----
 
@@ -469,9 +482,7 @@ class FeAssetsSaveUnit {
         public int getItem(int line){ return getInt(line, 6); }
         public int getCamp(int line){ return getInt(line, 7); }
         public int getState(int line){ return getInt(line, 8); }
-        public int getFight(int line){ return getInt(line, 9); }
-        public int getWin(int line){ return getInt(line, 10); }
-        public int getDie(int line){ return getInt(line, 11); }
+        public int getRecord(int line){ return getInt(line, 9); }
 
         public void setId(int line, int id){ setValue(id, line, 0); }
         public void setAbility(int line, int ability){ setValue(ability, line, 1); }
@@ -482,9 +493,7 @@ class FeAssetsSaveUnit {
         public void setItem(int line, int item){ setValue(item, line, 6); }
         public void setCamp(int line, int camp){ setValue(camp, line, 7); }
         public void setState(int line, int state){ setValue(state, line, 8); }
-        public void setFight(int line, int fight){ setValue(fight, line, 9); }
-        public void setWin(int line, int win){ setValue(win, line, 10); }
-        public void setDie(int line, int die){ setValue(die, line, 11); }
+        public void setRecord(int line, int record){ setValue(record, line, 9); }
 
         public Unit(String folder, String name, String split){
             super(folder, name, split);
@@ -610,6 +619,21 @@ class FeAssetsSaveUnit {
         public void setEquip(int line, int equip){ setValue(equip, line, 6); }
 
         public Item(String folder, String name, String split){
+            super(folder, name, split);
+        }
+    }
+
+    //人物战绩
+    class Record extends FeReaderFile {
+        public int getRecord(int line){ return getInt(line, 0); }
+        public int getWin(int line){ return getInt(line, 1); }
+        public int getDie(int line){ return getInt(line, 2); }
+
+        public void setRecord(int line, int record){ setValue(record, line, 0); }
+        public void setWin(int line, int win){ setValue(win, line, 1); }
+        public void setDie(int line, int die){ setValue(die, line, 2); }
+
+        public Record(String folder, String name, String split){
             super(folder, name, split);
         }
     }
