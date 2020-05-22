@@ -74,6 +74,11 @@ public class FeFileRead {
             if(lineContent == null)
                 return false;
             content = lineContent.split(spl);
+            if(content == null)
+            {
+                lineContent = null;
+                return false;
+            }
             line += 1;
             return true;
         } catch (IOException e) {

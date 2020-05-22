@@ -16,6 +16,12 @@ public class FeAssetsSX {
         this._unit = unit;
         this.sX = sX;
     }
+
+    public void load(){
+    }
+
+    public void recover(){
+    }
 }
 
 /*
@@ -25,24 +31,31 @@ class FeAssetsSaveSection {
 
     private FeAssetsUnit _unit;
     private int sX = 0;
+    private FeAssetsSection section;
 
     public FeAssetsSaveSection(FeAssetsUnit unit, int sX){
         this._unit = unit;
         this.sX = sX;
         //sX
-        String sectionFolder = String.format("/save/s%d/section/", sX);
-        //section
-        this.unit = new Unit(sectionFolder, "unit.txt", ";");
-        this.round = new Round(sectionFolder, "round.txt", ";");
-        //
-        // this.campBlue = new Camp(sectionFolder, "b_000.txt", ";");
+        String saveSectionFolder = String.format("/save/s%d/section/", sX);
+        //section 章节指导信息
+        section = new FeAssetsSection(unit, sX);
+        //section 运行信息区
+        this.unit = new Unit(saveSectionFolder, "unit.txt", ";");
+        this.round = new Round(saveSectionFolder, "round.txt", ";");
+    }
+
+    private void loadSectionToSaveSection(){
+        ;
     }
 
     //----- api -----
 
+    // 从/assets/unit/unit.txt中添加人员进来
     public void addCamp(int camp, int id){
     }
 
+    // 从/assets/save/unit/unit.txt(己方人员)中添加人员进来
     public void addCamp2(int id){
     }
 

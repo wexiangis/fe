@@ -1,6 +1,6 @@
 # save: 存档管理文件夹
 
-## save/lastOne.txt : 最后存档位置
+## save/last.txt : 最后存档位置
 
 * 说明: 文件就一个数字n
 * 示例:  sX;
@@ -65,15 +65,15 @@
 
 ## save/sX/section/round.txt : 当前回合、行动阵营、章节时间
 
+* 关于序号: 人物载入地图时的序号, 可用来匹配人物参数 camp_c_xxx.txt 及行动顺序
 * 示例: 回合;阵营;人物序号;章节运行时长;
 
 ## save/sX/section/unit.txt : 全图人物状态
 
 * 说明: 一行代表一个人物
-* 关于序号: 人物载入地图时的序号, 可用来匹配人物参数 camp_c_xxx.txt 及行动顺序
-* 示例: 阵营;序号;人物id;XY坐标;
+* 示例: 阵营;人物序号;人物id;XY坐标;
 
-## save/sX/section/camp_c_xxx.txt : 人物参数, c为阵营, xxx为上面提到的序号
+## save/sX/section/camp_c_xxx.txt : 人物参数, c为阵营, xxx为上面提到的人物序号
 
 * 关于状态: 0/正常 1/中毒 2/睡眠 3/沉默 4/狂乱 5/无敌 444/死亡
 * 关于救出状态: 0/无 1/救出 2/被救起

@@ -12,6 +12,10 @@ public class FeReaderFile {
     private String[] folderAndName;
     private String split;
 
+    /*
+        folder: 目标文件夹, 示例 "/unit/" 前后都带斜杠
+        name: 目标名称, 示例 "test.txt" 没有斜杠
+     */
     public FeReaderFile(String folder, String name, String split)
     {
         this.folderAndName = new String[] {folder, name};

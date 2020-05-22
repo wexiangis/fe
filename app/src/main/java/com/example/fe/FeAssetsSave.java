@@ -1,5 +1,7 @@
 package com.example.fe;
 
+import javax.management.loading.PrivateClassLoader;
+
 
 /*
     /assets/save/sX 文件夹资源管理器
@@ -13,11 +15,18 @@ public class FeAssetsSave {
     public FeAssetsSave(FeAssetsUnit unit){
         this._unit = unit;
         file = new FeFile();
-        //从 /assets/save/lastOne.txt 读取最后存档位置
-        sXCurrent = Integer.valueOf(file.readFile("/save/lastOne.txt", "0", 8));
+        //从 /assets/save/last.txt 读取最后存档位置
+        sXCurrent = Integer.valueOf(file.readFile("/save/last.txt", "0", 8));
     }
 
     /* ---------- 存档槽位检查 ---------- */
+
+    /*
+        获取最后存档位置
+     */
+    public int getLast(){
+        return sXCurrent;
+    }
 
     /*
         获取所有存档槽状态
@@ -53,12 +62,14 @@ public class FeAssetsSave {
 
     //创建新存档
     public void newSx(int sX){
-        sXCurrent = sX;
         String rootPath = String.format("/save/s%d", sX);
         //删空档位
         file.delete(rootPath);
         //创建档位,章节0,非中断状态
         file.writeFile(rootPath, "info.txt", "1;0;");
+        //更新最后存档位置
+        sXCurrent = sX;
+        file.writeFile("/save/", "last.txt", String.valueOf(sXCurrent));
     }
 
     //删除存档
@@ -70,7 +81,5 @@ public class FeAssetsSave {
     public void copySx(int sXDist, int sXSrc){
         file.copy(String.format("/save/s%d", sXDist), String.format("/save/s%d", sXSrc));
     }
-
-    /* ---------- 读取数据 ---------- */
-
+    
 }

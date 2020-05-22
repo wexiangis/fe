@@ -10,7 +10,6 @@ public class FeAssets {
     public FeAssetsParam param;
     public FeAssetsUnit unit;
     public FeAssetsSave save;
-    public FeAssetsSection section;
 
     public FeAssets(){
         map = new FeAssetsMap();
@@ -18,7 +17,6 @@ public class FeAssets {
         param = new FeAssetsParam();
         unit = new FeAssetsUnit();
         save = new FeAssetsSave(unit);
-        section = new FeAssetsSection();
     }
 
 }
