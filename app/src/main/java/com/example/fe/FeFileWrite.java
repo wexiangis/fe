@@ -33,7 +33,7 @@ public class FeFileWrite {
                 osw.flush();
             }
         } catch (java.io.IOException e) {
-            Log.d("FeFileWrite: write " + filePath, e.getMessage());
+            Log.d("FeFileWrite.write", "IOException : " + filePath);
         }
     }
 
@@ -49,7 +49,7 @@ public class FeFileWrite {
                 osw.flush();
             }
         } catch (java.io.IOException e) {
-            Log.d("FeFileWrite: writeLine " + filePath, e.getMessage());
+            Log.d("FeFileWrite.writeLine", "IOException : " + filePath);
         }
     }
 
@@ -69,9 +69,9 @@ public class FeFileWrite {
             if(fos != null)
                 osw = new OutputStreamWriter(fos, "UTF-8");
         }catch (java.io.FileNotFoundException e) {
-            Log.d("FeFileWrite: open " + filePath, "not found");
+            Log.d("FeFileWrite.open", "not found : " + filePath);
         }catch (java.io.UnsupportedEncodingException e) {
-            Log.d("FeFileWrite: open " + filePath, e.getMessage());
+            Log.d("FeFileWrite.open", "UnsupportedEncodingException : " + filePath);
         }
     }
 
@@ -92,7 +92,7 @@ public class FeFileWrite {
                 fos.close();
             fos = null;
         } catch (java.io.IOException e) {
-            Log.d("FeFileWrite: exit " + filePath, e.getMessage());
+            Log.d("FeFileWrite.exit", "IOException : " + filePath);
         }
     }
 }
