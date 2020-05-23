@@ -1,7 +1,5 @@
 package com.example.fe;
 
-import com.example.fe.FeAssetsSection.Setting;
-
 /*
     /assets/section 文件夹资源管理器
  */
@@ -15,11 +13,10 @@ public class FeAssetsSection {
         this.sX = sX;
         //sX
         String sectionFolder = String.format("/section/section%02d/", sX);
-        //section
+        //file
         this.unit = new Unit(sectionFolder, "unit.txt", ";");
         this.site = new Site(sectionFolder, "site.txt", ";");
         this.target = new Target(sectionFolder, "target.txt", ";");
-        this.setting = new Setting(sectionFolder, "setting.txt", ";");
         this.talk = new Talk(sectionFolder, "talk.txt", ";");
         this.bgm = new Bgm(sectionFolder, "bgm.txt", ";");
     }
@@ -31,7 +28,6 @@ public class FeAssetsSection {
     public Unit unit;
     public Site site;
     public Target target;
-    public Setting setting;
     public Talk talk;
     public Bgm bgm;
 
@@ -77,13 +73,6 @@ public class FeAssetsSection {
         public int getY(int line, int num){ return getInt(line, num + 4)%1000; }
         
         public Target(String folder, String name, String split){
-            super(folder, name, split);
-        }
-    }
-
-    class Setting extends FeReaderFile{
-        
-        public Setting(String folder, String name, String split){
             super(folder, name, split);
         }
     }

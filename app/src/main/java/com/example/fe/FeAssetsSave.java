@@ -1,7 +1,5 @@
 package com.example.fe;
 
-import javax.management.loading.PrivateClassLoader;
-
 
 /*
     /assets/save/sX 文件夹资源管理器
@@ -47,7 +45,7 @@ public class FeAssetsSave {
             if(file.exists(path))
             {
                 //读取文件
-                String[] line = file.readFile(path, "0;0;", 16).split(";");
+                String[] line = file.readFile(path, "0;0;0;", 16).split(";");
                 if(line != null){
                     ret[i][0] = Integer.valueOf(line[0]);//得到章节数
                     if(line.length > 1)
@@ -66,7 +64,7 @@ public class FeAssetsSave {
         //删空档位
         file.delete(rootPath);
         //创建档位,章节0,非中断状态
-        file.writeFile(rootPath, "info.txt", "1;0;");
+        file.writeFile(rootPath, "info.txt", "1;0;0;");
         //更新最后存档位置
         sXCurrent = sX;
         file.writeFile("/save/", "last.txt", String.valueOf(sXCurrent));
