@@ -39,9 +39,9 @@ public class FeAssetsSX {
      */
     public void init(){
         //删空缓存
-        new FeFile().delete(String.format("/save/s%d/cache/", sX));
+        new FeFile().delete(String.format("/save/s%d/cache", sX));
         //建立缓存
-        this.saveCache = new FeAssetsSaveCache(_unit, sX);
+        saveCache = new FeAssetsSaveCache(_unit, sX);
         //根据 section 的site加载 saveUnit 人物到 saveCache
         for(int secUnit = 0, savUnit = 0; 
             secUnit < section.site.total() && savUnit < saveUnit.unit.total(); 

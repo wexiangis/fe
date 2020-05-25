@@ -47,7 +47,7 @@ public class FeAssetsSaveCache {
     public void addUnit(int camp, int id, int xxxyyy)
     {
         //获取order
-        int order = unit.addUnit(camp, id, xxxyyy);
+        int order = unit.add(camp, id, xxxyyy);
         //创建文件
         Camp cp = new Camp(folder, camp, order, ";");
         //添加到链表
@@ -81,7 +81,7 @@ public class FeAssetsSaveCache {
             //文件没有加载,创建文件
             if(line() == 0)
             {
-                addLine(new String[]{"0","0","0","回合/当前阵营/当前人物序号/章节时间"});
+                addLine(new String[]{"0","0","0","0","回合/当前阵营/当前人物序号/章节时间"});
                 save();
             }
         }
@@ -92,29 +92,49 @@ public class FeAssetsSaveCache {
         //用于永不重复的生成新的order
         private int order_seed = 0;
 
+        //返回所在行
+        public int find(int camp, int order){
+            for(int i = 0; i < total(); i++)
+            {
+                if(getEnable(i) == 0 &&
+                    getCamp(i) == camp && 
+                    getOrder(i) == order)
+                    return i;
+            }
+            return -1;
+        } 
+        //移除
+        public void remove(int camp, int order){
+            int line = find(camp, order);
+            if(line >= 0)
+                setEnable(line, 1);
+        }
         //注意xy格式如003004,代表x=3,y=4
         //返回序号,可用于创建camp_c_xxx.txt
-        public int addUnit(int camp, int id, int xxxyyy){
+        public int add(int camp, int id, int xxxyyy){
             return addLine(new String[]{
+                "0",
                 String.valueOf(camp),
                 String.valueOf(order_seed++),
                 String.valueOf(id),
                 String.valueOf(xxxyyy)});
         }
 
-        public int getCamp(int line){ return getInt(line, 0); }
-        public int getOrder(int line){ return getInt(line, 1); }
-        public int getId(int line){ return getInt(line, 2); }
-        public int getXY(int line){ return getInt(line, 3); }
-        public int getX(int line){ return getInt(line, 3)/1000; }
-        public int getY(int line){ return getInt(line, 3)%1000; }
+        public int getEnable(int line){ return getInt(line, 0); }
+        public int getCamp(int line){ return getInt(line, 1); }
+        public int getOrder(int line){ return getInt(line, 2); }
+        public int getId(int line){ return getInt(line, 3); }
+        public int getXY(int line){ return getInt(line, 4); }
+        public int getX(int line){ return getInt(line, 4)/1000; }
+        public int getY(int line){ return getInt(line, 4)%1000; }
 
-        public void setCamp(int line, int camp){ setValue(camp, line, 0); }
-        public void setOrder(int line, int order){ setValue(order, line, 1); }
-        public void setId(int line, int id){ setValue(id, line, 2); }
-        public void setXY(int line, int xy){ setValue(xy, line, 3); }
-        public void setX(int line, int x){ setValue(x*1000+getY(line), line, 3); }
-        public void setY(int line, int y){ setValue(getX(line)*1000+y, line, 3); }
+        public void setEnable(int line, int enable){ setValue(enable, line, 0); }
+        public void setCamp(int line, int camp){ setValue(camp, line, 1); }
+        public void setOrder(int line, int order){ setValue(order, line, 2); }
+        public void setId(int line, int id){ setValue(id, line, 3); }
+        public void setXY(int line, int xy){ setValue(xy, line, 4); }
+        public void setX(int line, int x){ setValue(x*1000+getY(line), line, 4); }
+        public void setY(int line, int y){ setValue(getX(line)*1000+y, line, 4); }
         
         public int total(){ return line(); }
         public Unit(String folder, String name, String split){
