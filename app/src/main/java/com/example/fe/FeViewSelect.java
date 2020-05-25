@@ -10,7 +10,7 @@ import android.graphics.Rect;
 import android.view.View;
 
 /*
-    光标选中框
+    光标动画
  */
 public class FeViewSelect extends View {
 

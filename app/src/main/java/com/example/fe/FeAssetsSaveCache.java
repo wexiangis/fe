@@ -7,20 +7,27 @@ public class FeAssetsSaveCache {
 
     private FeAssetsUnit _unit;
     private int sX;
+    private String folder;
 
     public FeAssetsSaveCache(FeAssetsUnit unit, int sX){
         this._unit = unit;
         this.sX = sX;
         //sX
-        String folder = String.format("/save/s%d/cache/", sX);
+        folder = String.format("/save/s%d/cache/", sX);
         //file
         this.unit = new Unit(folder, "unit.txt", ";");
         this.round = new Round(folder, "round.txt", ";");
+        //每个阵营都有一个链表头
+        campBlue = new Camp(folder, 0, 0, ";");
+        campRed = new Camp(folder, 1, 0, ";");
+        campGreen = new Camp(folder, 2, 0, ";");
+        campDark = new Camp(folder, 3, 0, ";");
+        campOrange = new Camp(folder, 4, 0, ";");
+        campPurple = new Camp(folder, 5, 0, ";");
+        campCyan = new Camp(folder, 6, 0, ";");
     }
 
-    //----- api -----
-
-    //----- all file -----
+    //----- file -----
 
     public Unit unit;
     public Round round;
@@ -34,40 +41,88 @@ public class FeAssetsSaveCache {
     public Camp campPurple = null;
     public Camp campCyan = null;
 
+    //----- api -----
+
+    //往特定阵营添加特定人物
+    public void addUnit(int camp, int id, int xxxyyy)
+    {
+        //获取order
+        int order = unit.addUnit(camp, id, xxxyyy);
+        //创建文件
+        Camp cp = new Camp(folder, camp, order, ";");
+        //添加到链表
+        switch(camp){
+            case 0: campBlue.add(cp); break;
+            case 1: campRed.add(cp); break;
+            case 2: campGreen.add(cp); break;
+            case 3: campDark.add(cp); break;
+            case 4: campOrange.add(cp); break;
+            case 5: campPurple.add(cp); break;
+            case 6: campCyan.add(cp); break;
+        }
+    }
+
     //----- class -----
 
+    class Round extends FeReaderFile{
+
+        public int getTurn(){ return getInt(0, 0); }
+        public int getCamp(){ return getInt(0, 1); }
+        public int getOrder(){ return getInt(0, 2); }
+        public int getTime(){ return getInt(0, 3); }
+
+        public void setTurn(int turn){ setValue(turn, 0, 0); }
+        public void setCamp(int camp){ setValue(camp, 0, 1); }
+        public void setOrder(int order){ setValue(order, 0, 2); }
+        public void setTime(int time){ setValue(time, 0, 3); }
+        
+        public Round(String folder, String name, String split){
+            super(folder, name, split);
+            //文件没有加载,创建文件
+            if(line() == 0)
+            {
+                addLine(new String[]{"0","0","0","回合/当前阵营/当前人物序号/章节时间"});
+                save();
+            }
+        }
+    }
+
     class Unit extends FeReaderFile{
+
+        //用于永不重复的生成新的order
+        private int order_seed = 0;
+
+        //注意xy格式如003004,代表x=3,y=4
+        //返回序号,可用于创建camp_c_xxx.txt
+        public int addUnit(int camp, int id, int xxxyyy){
+            return addLine(new String[]{
+                String.valueOf(camp),
+                String.valueOf(order_seed++),
+                String.valueOf(id),
+                String.valueOf(xxxyyy)});
+        }
 
         public int getCamp(int line){ return getInt(line, 0); }
         public int getOrder(int line){ return getInt(line, 1); }
         public int getId(int line){ return getInt(line, 2); }
+        public int getXY(int line){ return getInt(line, 3); }
         public int getX(int line){ return getInt(line, 3)/1000; }
         public int getY(int line){ return getInt(line, 3)%1000; }
 
         public void setCamp(int line, int camp){ setValue(camp, line, 0); }
         public void setOrder(int line, int order){ setValue(order, line, 1); }
         public void setId(int line, int id){ setValue(id, line, 2); }
+        public void setXY(int line, int xy){ setValue(xy, line, 3); }
         public void setX(int line, int x){ setValue(x*1000+getY(line), line, 3); }
         public void setY(int line, int y){ setValue(getX(line)*1000+y, line, 3); }
         
+        public int total(){ return line(); }
         public Unit(String folder, String name, String split){
             super(folder, name, split);
-        }
-    }
-
-    class Round extends FeReaderFile{
-
-        public int getTurn(int line){ return getInt(line, 0); }
-        public int getCamp(int line){ return getInt(line, 1); }
-        public int getOrder(int line){ return getInt(line, 2); }
-        public int getTime(int line){ return getInt(line, 3); }
-
-        public void setTurn(int line, int turn){ setValue(turn, line, 0); }
-        public void setCamp(int line, int camp){ setValue(camp, line, 1); }
-        public void setOrder(int line, int order){ setValue(order, line, 2); }
-        
-        public Round(String folder, String name, String split){
-            super(folder, name, split);
+            //文件加载成功
+            if(line() > 0)
+                //继续上一次的序号
+                order_seed = getOrder(line() - 1);
         }
     }
 
@@ -76,7 +131,44 @@ public class FeAssetsSaveCache {
         //链表信息
         public int order = 0;
         public int camp = 0;
-        public FeReaderFile next = null;
+        public Camp next = null, last = null;
+        //链表操作
+        public Camp find(int order){
+            Camp camp = this.next;
+            if(camp != null){
+                while(camp.order != order && camp.next != null)
+                    camp = camp.next;
+                if(camp.order == order)
+                    return camp;
+            }
+            return this;
+        }
+        public void add(Camp cp){
+            if(this.next == null){
+                this.next = cp;
+                cp.last = this;
+            }
+            else{
+                Camp camp = this.next;
+                while(camp.next != null)
+                    camp = camp.next;
+                camp.next = cp;
+                cp.last = camp;
+            }
+        }
+        public void remove(int order){
+            Camp camp = this.next;
+            if(camp != null){
+                while(camp.order != order && camp.next != null)
+                    camp = camp.next;
+                if(camp.order == order){
+                    if(camp.next != null)
+                        camp.next = camp.last;
+                    if(camp.last != null)
+                        camp.last = camp.next;
+                }
+            }
+        }
 
         // line 0
         public int getStandby(){ return getInt(0, 0); }
@@ -186,8 +278,24 @@ public class FeAssetsSaveCache {
         public void setView(int view){ setValue(view, 8, 0); }
         public void setViewAdd(int viewAdd){ setValue(viewAdd, 8, 1); }
         
-        public Camp(String folder, String name, String split){
-            super(folder, name, split);
+        public Camp(String folder, int camp, int order, String split){
+            super(folder, String.format("camp_%d_%03d.txt", camp, order), split);
+            this.camp = camp;
+            this.order = order;
+            //文件没有加载,创建文件
+            if(line() == 0)
+            {
+                addLine(new String[]{"0","0","0","行0:是否待机/状态/level"});
+                addLine(new String[]{"0","0","0","0","0","0","0","0","0","0","行1:基本能力"});
+                addLine(new String[]{"0","0","0","0","0","0","0","0","0","0","行2:加成能力"});
+                addLine(new String[]{"0","0","0","0","0","0","0","0","行3:武器熟练度"});
+                addLine(new String[]{"0","0","0","0","0","0","0","行4:物品和当前装备"});
+                addLine(new String[]{"0","0","0","0","行5:特技列表"});
+                addLine(new String[]{"0","0","行6:救出状态及其ID"});
+                addLine(new String[]{"0","0","0","0","行7:战绩/战胜/战败"});
+                addLine(new String[]{"0","0","行8:视野/道具加成视野"});
+                save();
+            }
         }
     }
 }

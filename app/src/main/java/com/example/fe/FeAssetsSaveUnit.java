@@ -24,6 +24,16 @@ class FeAssetsSaveUnit {
         this.item = new Item(folder, "item.txt", ";");
         this.record = new Record(folder, "record.txt", ";");
     }
+    
+    //----- file -----
+
+    public Unit unit;
+    public Ability ability;
+    public Grow grow;
+    public Skill skill;
+    public Special special;
+    public Item item;
+    public Record record;
 
     //----- api -----
 
@@ -242,16 +252,6 @@ class FeAssetsSaveUnit {
     public int getDie(int count){
         return record.getDie(unit.getRecord(count));
     }
-    
-    //----- all file -----
-
-    public Unit unit;
-    public Ability ability;
-    public Grow grow;
-    public Skill skill;
-    public Special special;
-    public Item item;
-    public Record record;
 
     //----- class -----
 
@@ -279,6 +279,7 @@ class FeAssetsSaveUnit {
         public void setState(int line, int state){ setValue(state, line, 8); }
         public void setRecord(int line, int record){ setValue(record, line, 9); }
 
+        public int total(){ return line(); }
         public Unit(String folder, String name, String split){
             super(folder, name, split);
         }
@@ -308,6 +309,7 @@ class FeAssetsSaveUnit {
         public void setWeig(int line, int weig){ setValue(weig, line, 8); }
         public void setMov(int line, int mov){ setValue(mov, line, 9); }
 
+        public int total(){ return line(); }
         public Ability(String folder, String name, String split){
             super(folder, name, split);
         }
@@ -337,6 +339,7 @@ class FeAssetsSaveUnit {
         public void setWeig(int line, int weig){ setValue(weig, line, 8); }
         public void setMov(int line, int mov){ setValue(mov, line, 9); }
 
+        public int total(){ return line(); }
         public Grow(String folder, String name, String split){
             super(folder, name, split);
         }
@@ -362,6 +365,7 @@ class FeAssetsSaveUnit {
         public void setDark(int line, int dark){ setValue(dark, line, 6); }
         public void setStick(int line, int stick){ setValue(stick, line, 7); }
 
+        public int total(){ return line(); }
         public Skill(String folder, String name, String split){
             super(folder, name, split);
         }
@@ -379,6 +383,7 @@ class FeAssetsSaveUnit {
         public void setSpe3(int line, int spe3){ setValue(spe3, line, 2); }
         public void setSpe4(int line, int spe4){ setValue(spe4, line, 3); }
 
+        public int total(){ return line(); }
         public Special(String folder, String name, String split){
             super(folder, name, split);
         }
@@ -402,6 +407,7 @@ class FeAssetsSaveUnit {
         public void setIt6(int line, int it6){ setValue(it6, line, 5); }
         public void setEquip(int line, int equip){ setValue(equip, line, 6); }
 
+        public int total(){ return line(); }
         public Item(String folder, String name, String split){
             super(folder, name, split);
         }
@@ -417,6 +423,7 @@ class FeAssetsSaveUnit {
         public void setWin(int line, int win){ setValue(win, line, 1); }
         public void setDie(int line, int die){ setValue(die, line, 2); }
 
+        public int total(){ return line(); }
         public Record(String folder, String name, String split){
             super(folder, name, split);
         }

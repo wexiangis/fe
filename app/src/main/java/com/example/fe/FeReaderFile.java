@@ -11,6 +11,7 @@ public class FeReaderFile {
     //文件路径和分隔符
     private String[] folderAndName;
     private String split;
+    private int line = 0;//总行数
 
     /*
         folder: 目标文件夹, 示例 "/unit/" 前后都带斜杠
@@ -32,6 +33,10 @@ public class FeReaderFile {
             this.content = content;
         }
     }
+
+    public int line(){
+        return line;
+    }
     
     //获取某一行数据格式: 数据 = 对象.getData(line).数据名称;
     public Data getData(int line){
@@ -40,6 +45,13 @@ public class FeReaderFile {
         while (dat != null && count++ != line)
             dat = dat.next;
         return dat;
+    }
+
+    public Data getDataLastOne(){
+        if(line < 1)
+            return null;
+        else
+            return getData(line - 1); 
     }
 
     //获取指定行
@@ -53,9 +65,10 @@ public class FeReaderFile {
     }
 
     //添加行,返回新增行号
-    public int addLine(String[] line){
+    public int addLine(String[] strings){
         if(data == null){
-            data = new Data(line);
+            data = new Data(strings);
+            line = 1;
             return 0;
         }
         else{
@@ -65,7 +78,8 @@ public class FeReaderFile {
                 dat = dat.next;
                 count += 0;
             }
-            dat.next = new Data(line);
+            dat.next = new Data(strings);
+            line = count;
             return count;
         }
     }
@@ -121,7 +135,7 @@ public class FeReaderFile {
         FeFileRead ffr = new FeFileRead(folderAndName[0], folderAndName[1]);
         //打开文件失败,创建文件
         if(ffr == null || !ffr.ready())
-            save();
+            ;//save();
         //文件就绪
         else{
             Data datNow = null;

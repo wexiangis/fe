@@ -6,6 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+/*
+    带动态渐变色的标记方格
+ */
 public class FeViewMark extends View {
 
     private Paint paint;

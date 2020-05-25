@@ -8,8 +8,8 @@ public class FeAssetsSX {
     public FeAssetsUnit _unit;
     public int sX;
 
-    public FeAssetsSaveCache saveSection;
-    public FeAssetsSaveUnit unit;
+    public FeAssetsSaveCache saveCache;
+    public FeAssetsSaveUnit saveUnit;
     public FeAssetsSection section;
 
     public FeAssetsSX(FeAssetsUnit unit, int sX){
@@ -21,30 +21,55 @@ public class FeAssetsSX {
         this.info = new Info(folder, "info.txt", ";");
         this.setting = new Setting(folder, "setting.txt", ";");
         //子文件夹
-        this.section = new FeAssetsSection(unit, sX);
-        this.unit = new FeAssetsSaveUnit(unit, sX);
-        this.saveSection = new FeAssetsSaveCache(unit, sX);
-        //
-        loadSectionToSaveCache();
+        this.section = new FeAssetsSection(unit, info.getSection());
+        this.saveUnit = new FeAssetsSaveUnit(unit, sX);
     }
 
     //----- api -----
 
-    public void load(){
-    }
-
+    /*
+        从中断中回复
+     */
     public void recover(){
-    }
-
-    // 根据FeAssetsSection的unit加载人物到FeSaveCache
-    private void loadSectionToSaveCache(){
         ;
     }
 
-    // 根据FeAssetsSection的site加载人物到FeSaveCache
-    private void loadSaveUnitToSaveCache(){
+    /*
+        初始人物加载
+     */
+    public void init(){
+        //删空缓存
+        new FeFile().delete(String.format("/save/s%d/cache/", sX));
+        //建立缓存
+        this.saveCache = new FeAssetsSaveCache(_unit, sX);
+        //根据 section 的site加载 saveUnit 人物到 saveCache
+        for(int secUnit = 0, savUnit = 0; 
+            secUnit < section.site.total() && savUnit < saveUnit.unit.total(); 
+            secUnit++)
+        {
+            //触发方式为回合触发,且回合为0
+            if(section.site.getTrigger(secUnit) == 0 && 
+                section.site.getTurn(secUnit) == 0)
+            {
+                //添加人物
+            }
+        }
+        //根据 section 的unit加载人物到 saveCache
+        for(int i = 0; i < section.unit.total(); i++){
+            ;
+        }
+    }
+
+    /*
+        回合触发事件
+     */
+    public void eventTurn(int turn, int camp){
         ;
     }
+
+    /*
+        到达
+     */
     
     //----- all file -----
 
@@ -65,6 +90,12 @@ public class FeAssetsSX {
         
         public Info(String folder, String name, String split){
             super(folder, name, split);
+            //文件没有加载,创建文件
+            if(line() == 0)
+            {
+                addLine(new String[]{"1","0","0","章节/是否中断/总用时"});
+                save();
+            }
         }
     }
 
