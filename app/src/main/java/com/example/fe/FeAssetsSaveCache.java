@@ -6,11 +6,13 @@ package com.example.fe;
 public class FeAssetsSaveCache {
 
     private FeAssetsUnit _unit;
+    private FeAssetsSaveUnit _saveUnit;
     private int sX;
     private String folder;
 
-    public FeAssetsSaveCache(FeAssetsUnit unit, int sX){
+    public FeAssetsSaveCache(FeAssetsUnit unit, FeAssetsSaveUnit saveUnit, int sX){
         this._unit = unit;
+        this._saveUnit = saveUnit;
         this.sX = sX;
         //sX
         folder = String.format("/save/s%d/cache/", sX);
@@ -44,10 +46,10 @@ public class FeAssetsSaveCache {
     //----- api -----
 
     //往特定阵营添加特定人物
-    public void addUnit(int camp, int id, int xxxyyy)
+    public void addUnit(int camp, int id, int xy, boolean fromSave)
     {
         //获取order
-        int order = unit.add(camp, id, xxxyyy);
+        int order = unit.add(camp, id, xy);
         //创建文件
         Camp cp = new Camp(folder, camp, order, ";");
         //添加到链表
@@ -59,6 +61,65 @@ public class FeAssetsSaveCache {
             case 4: campOrange.add(cp); break;
             case 5: campPurple.add(cp); break;
             case 6: campCyan.add(cp); break;
+            //camp error !!
+            default: return;
+        }
+        //搬迁camp具体参数
+        if(fromSave){
+            //根据唯一id查找unit
+            int line = _saveUnit.findUnit(id);
+            if(line < 0)
+                return;
+            //搬迁数据
+            //行0
+            cp.setStandby(0);
+            cp.setState(0);
+            cp.setLevel(_saveUnit.getLevel(line));
+            cp.setExp(_saveUnit.getExp(line));
+            //行1 (整行拷贝)
+            cp.setLine(1, _saveUnit.ability.getLine(_saveUnit.unit.getAbility(line)));
+            //行2 (默认为0)
+            //行3 (整行拷贝)
+            cp.setLine(3, _saveUnit.skill.getLine(_saveUnit.unit.getSkill(line)));
+            //行4 (整行拷贝)
+            cp.setLine(4, _saveUnit.item.getLine(_saveUnit.unit.getItem(line)));
+            //行5 (整行拷贝)
+            cp.setLine(5, _saveUnit.special.getLine(_saveUnit.unit.getSpecial(line)));
+            //行6
+            cp.setRescue(0);
+            cp.setRescueOrder(0);
+            //行7 (整行拷贝)
+            cp.setLine(7, _saveUnit.record.getLine(_saveUnit.unit.getRecord(line)));
+            //行8
+            cp.setView(3);
+            cp.setViewAdd(0);
+        }
+        else{
+            //搬迁数据
+            //行0
+            cp.setStandby(0);
+            cp.setState(0);
+            cp.setLevel(_unit.getLevel(id));
+            cp.setExp(0);
+            //行1 (整行拷贝)
+            cp.setLine(1, _unit.getProfessionAbility(id));
+            //行2 (默认为0)
+            //行3 (整行拷贝)
+            cp.setLine(3, _unit.getProfessionSkill(id));
+            //行4 (整行拷贝)
+            cp.setLine(4, _unit.getItem(id));
+            //行5 (整行拷贝)
+            cp.setLine(5, _unit.getAdditionSpecial(id));
+            //行6
+            cp.setRescue(0);
+            cp.setRescueOrder(0);
+            //行7
+            cp.setRescue(0);
+            cp.setWin(0);
+            cp.setDie(0);
+            //行8
+            cp.setView(3);
+            cp.setViewAdd(0);
         }
     }
 
@@ -102,7 +163,7 @@ public class FeAssetsSaveCache {
                     return i;
             }
             return -1;
-        } 
+        }
         //移除
         public void remove(int camp, int order){
             int line = find(camp, order);
@@ -194,9 +255,11 @@ public class FeAssetsSaveCache {
         public int getStandby(){ return getInt(0, 0); }
         public int getState(){ return getInt(0, 1); }
         public int getLevel(){ return getInt(0, 2); }
+        public int getExp(){ return getInt(0, 3); }
         public void setStandby(int standby){ setValue(standby, 0, 0); }
         public void setState(int state){ setValue(state, 0, 1); }
         public void setLevel(int level){ setValue(level, 0, 2); }
+        public void setExp(int exp){ setValue(exp, 0, 3); }
         // line 1
         public int getHp(){ return getInt(1, 0); }
         public int getStr(){ return getInt(1, 1); }

@@ -64,6 +64,84 @@ public class FeReaderFile {
         return d.content;
     }
 
+    //获取指定行
+    public int[] getLineInt(int line){
+        Data d = getData(line);
+        if(d == null){
+            Log.d("FeReaderFile.getLineInt", "data is null");
+            return null;
+        }
+        //转换数据
+        int[] ret = new int[d.content.length];
+        for(int i = 0; i < d.content.length; i++)
+            ret[i] = Integer.valueOf(d.content[i]);
+        return ret;
+    }
+
+    //获取指定行
+    public int[] getLineIntPlus(int line, int[] content){
+        Data d = getData(line);
+        if(d == null){
+            Log.d("FeReaderFile.getLineInt", "data is null");
+            return null;
+        }
+        if(d.content.length != content.length){
+            Log.d("FeReaderFile.get...Plus",
+                "length err : l/" + line
+                    + "Ls/" + d.content.length
+                    + "L1/" + content.length);
+            return null;
+        }
+        //转换数据
+        int[] ret = new int[d.content.length];
+        for(int i = 0; i < d.content.length; i++)
+            ret[i] = Integer.valueOf(d.content[i] + content[i]);
+        return ret;
+    }
+
+    //设置指定行
+    public void setLine(int line, String[] content){
+        Data d = getData(line);
+        if(d != null)
+            d.content = content;
+        else
+            Log.d("FeReaderFile.setLine", "set failed : l/" + line);
+    }
+
+    //设置指定行
+    public void setLine(int line, int[] content){
+        Data d = getData(line);
+        if(d != null) {
+            if(d.content.length != content.length)
+                d.content = new String[content.length];
+            //转换数据
+            for(int i = 0; i < d.content.length; i++)
+                d.content[i] = String.valueOf(content[i]);
+        }
+        else
+            Log.d("FeReaderFile.setLine", "set failed : l/" + line);
+    }
+
+    //设置指定行(两行相加)
+    public void setLinePlus(int line, int[] content, int[] content2){
+        Data d = getData(line);
+        if(d != null){
+            if(d.content.length != content.length ||
+                    d.content.length != content2.length)
+                Log.d("FeReaderFile.setLine",
+                    "length err : l/" + line
+                        + "Ls/" + d.content.length
+                        + "L1/" + content.length
+                        + "L2/" + content2.length);
+            else{
+                for(int i = 0; i < d.content.length; i++)
+                    d.content[i] = String.valueOf(content[i] + content2[i]);
+            }
+        }
+        else
+            Log.d("FeReaderFile.setLine", "set failed : l/" + line);
+    }
+
     //添加行,返回新增行号
     public int addLine(String[] strings){
         if(data == null){

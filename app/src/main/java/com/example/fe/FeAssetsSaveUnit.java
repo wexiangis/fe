@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
 class FeAssetsSaveUnit {
 
     private FeAssetsUnit _unit;
-    private int sX = 0;
+    public int sX = 0;
 
     public FeAssetsSaveUnit(FeAssetsUnit unit, int sX){
         this._unit = unit;
@@ -37,8 +37,13 @@ class FeAssetsSaveUnit {
 
     //----- api -----
 
-    public int addUnit(int count){
-        return 0;
+    // 根据id定位行
+    public int findUnit(int id){
+        for(int i = 0; i < unit.total(); i++){
+            if(unit.getId(i) == id)
+                return i;
+        }
+        return -1;
     }
 
     // unit.txt
@@ -68,6 +73,9 @@ class FeAssetsSaveUnit {
         return _unit.getProfessionSummary(unit.getId(count));
     }
     // _unit.p_upgrade.txt
+    public int[] getProfessionUpgrade(int count){
+        return _unit.getProfessionUpgrade(unit.getId(count));
+    }
     public int getProfessionUpgradeHp(int count){
         return _unit.getProfessionUpgradeHp(unit.getId(count));
     }
@@ -99,6 +107,9 @@ class FeAssetsSaveUnit {
         return _unit.getProfessionUpgradeMov(unit.getId(count));
     }
     // _unit.p_special.txt
+    public int[] getProfessionSpecial(int count){
+        return _unit.getProfessionSpecial(unit.getId(count));
+    }
     public int getProfessionSpecial1(int count){
         return _unit.getProfessionSpecial1(unit.getId(count));
     }
@@ -112,6 +123,9 @@ class FeAssetsSaveUnit {
         return _unit.getProfessionSpecial4(unit.getId(count));
     }
     // ability.txt
+    public int[] getAbility(int count){
+        return ability.getLineInt(unit.getAbility(count));
+    }
     public int getAbilityHp(int count){
         return ability.getHp(unit.getAbility(count));
     }
@@ -143,6 +157,9 @@ class FeAssetsSaveUnit {
         return ability.getMov(unit.getAbility(count));
     }
     // grow.txt
+    public int[] getGrow(int count){
+        return grow.getLineInt(unit.getGrow(count));
+    }
     public int getGrowHp(int count){
         return grow.getHp(unit.getGrow(count));
     }
@@ -174,6 +191,9 @@ class FeAssetsSaveUnit {
         return grow.getMov(unit.getGrow(count));
     }
     // skill.txt
+    public int[] getSkill(int count){
+        return skill.getLineInt(unit.getSkill(count));
+    }
     public int getSkillSword(int count){
         return skill.getSword(unit.getSkill(count));
     }
@@ -199,6 +219,9 @@ class FeAssetsSaveUnit {
         return skill.getStick(unit.getSkill(count));
     }
     // special.txt
+    public int[] getSpecial(int count){
+        return special.getLineInt(unit.getSpecial(count));
+    }
     public int getSpecial1(int count){
         return special.getSpe1(unit.getSpecial(count));
     }
@@ -216,6 +239,9 @@ class FeAssetsSaveUnit {
         return unit.getLevel(count);
     }
     // item.txt
+    public int[] getItem(int count){
+        return item.getLineInt(unit.getItem(count));
+    }
     public int getItem1(int count){
         return item.getIt1(unit.getItem(count));
     }
@@ -252,6 +278,10 @@ class FeAssetsSaveUnit {
     public int getDie(int count){
         return record.getDie(unit.getRecord(count));
     }
+    // exp
+    public int getExp(int count){
+        return unit.getExp(count);
+    }
 
     //----- class -----
 
@@ -267,6 +297,7 @@ class FeAssetsSaveUnit {
         public int getCamp(int line){ return getInt(line, 7); }
         public int getState(int line){ return getInt(line, 8); }
         public int getRecord(int line){ return getInt(line, 9); }
+        public int getExp(int line){ return getInt(line, 10); }
 
         public void setId(int line, int id){ setValue(id, line, 0); }
         public void setAbility(int line, int ability){ setValue(ability, line, 1); }
@@ -278,6 +309,7 @@ class FeAssetsSaveUnit {
         public void setCamp(int line, int camp){ setValue(camp, line, 7); }
         public void setState(int line, int state){ setValue(state, line, 8); }
         public void setRecord(int line, int record){ setValue(record, line, 9); }
+        public void setExp(int line, int exp){ setValue(exp, line, 10); }
 
         public int total(){ return line(); }
         public Unit(String folder, String name, String split){

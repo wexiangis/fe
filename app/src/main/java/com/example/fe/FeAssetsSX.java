@@ -5,8 +5,8 @@ package com.example.fe;
  */
 public class FeAssetsSX {
 
-    public FeAssetsUnit _unit;
-    public int sX;
+    private FeAssetsUnit _unit;
+    private int sX;
 
     public FeAssetsSaveCache saveCache;
     public FeAssetsSaveUnit saveUnit;
@@ -41,22 +41,26 @@ public class FeAssetsSX {
         //删空缓存
         new FeFile().delete(String.format("/save/s%d/cache", sX));
         //建立缓存
-        saveCache = new FeAssetsSaveCache(_unit, sX);
+        saveCache = new FeAssetsSaveCache(_unit, saveUnit, sX);
         //根据 section 的site加载 saveUnit 人物到 saveCache
-        for(int secUnit = 0, savUnit = 0; 
-            secUnit < section.site.total() && savUnit < saveUnit.unit.total(); 
-            secUnit++)
+        //
+        for(int siteCount = 0, saveUnitCount = 0;
+            siteCount < section.site.total() &&
+            saveUnitCount < saveUnit.unit.total();
+            siteCount++)
         {
             //触发方式为回合触发,且回合为0
-            if(section.site.getTrigger(secUnit) == 0 && 
-                section.site.getTurn(secUnit) == 0)
+            if(section.site.getTrigger(siteCount) == 0 &&
+                section.site.getTurn(siteCount) == 0)
             {
-                //添加人物
+                //添加己方人物
+                saveCache.addUnit(0, saveUnitCount++, section.site.getXY(siteCount), true);
             }
         }
         //根据 section 的unit加载人物到 saveCache
         for(int i = 0; i < section.unit.total(); i++){
-            ;
+            //添加unit人物
+            saveCache.addUnit(section.unit.getCamp(i), section.unit.getId(i), section.unit.getXY(i), false);
         }
     }
 

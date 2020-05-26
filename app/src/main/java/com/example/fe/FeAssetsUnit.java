@@ -33,37 +33,43 @@ public class FeAssetsUnit {
         return getAnimBitmap(profession.getAnim(unit.getProfession(count)));
     }
     // p_ability.txt
+    public int[] getProfessionAbility(int count){
+        return p_ability.getLineIntPlus(profession.getAbility(unit.getProfession(count)), getAdditionAbility(count));
+    }
     public int getProfessionAbilityHp(int count){
-        return p_ability.getHp(profession.getAbility(unit.getProfession(count)))+a_ability.getHp(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getHp(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityHp(count);
     }
     public int getProfessionAbilityStr(int count){
-        return p_ability.getStr(profession.getAbility(unit.getProfession(count)))+a_ability.getStr(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getStr(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityStr(count);
     }
     public int getProfessionAbilityMag(int count){
-        return p_ability.getMag(profession.getAbility(unit.getProfession(count)))+a_ability.getMag(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getMag(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityMag(count);
     }
     public int getProfessionAbilitySkill(int count){
-        return p_ability.getSkill(profession.getAbility(unit.getProfession(count)))+a_ability.getSkill(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getSkill(profession.getAbility(unit.getProfession(count))) + getAdditionAbilitySkill(count);
     }
     public int getProfessionAbilitySpe(int count){
-        return p_ability.getSpe(profession.getAbility(unit.getProfession(count)))+a_ability.getSpe(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getSpe(profession.getAbility(unit.getProfession(count))) + getAdditionAbilitySpe(count);
     }
     public int getProfessionAbilityLuk(int count){
-        return p_ability.getLuk(profession.getAbility(unit.getProfession(count)))+a_ability.getLuk(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getLuk(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityLuk(count);
     }
     public int getProfessionAbilityDef(int count){
-        return p_ability.getDef(profession.getAbility(unit.getProfession(count)))+a_ability.getDef(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getDef(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityDef(count);
     }
     public int getProfessionAbilityMde(int count){
-        return p_ability.getMde(profession.getAbility(unit.getProfession(count)))+a_ability.getMde(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getMde(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityMde(count);
     }
     public int getProfessionAbilityWeig(int count){
-        return p_ability.getWeig(profession.getAbility(unit.getProfession(count)))+a_ability.getWeig(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getWeig(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityWeig(count);
     }
     public int getProfessionAbilityMov(int count){
-        return p_ability.getMov(profession.getAbility(unit.getProfession(count)))+a_ability.getMov(addition.getAbility(unit.getAddition(count)));
+        return p_ability.getMov(profession.getAbility(unit.getProfession(count))) + getAdditionAbilityMov(count);
     }
     // p_upgrade.txt
+    public int[] getProfessionUpgrade(int count){
+        return p_upgrade.getLineInt(profession.getUpgrade(unit.getProfession(count)));
+    }
     public int getProfessionUpgradeHp(int count){
         return p_upgrade.getHp(profession.getUpgrade(unit.getProfession(count)));
     }
@@ -95,62 +101,71 @@ public class FeAssetsUnit {
         return p_upgrade.getMov(profession.getUpgrade(unit.getProfession(count)));
     }
     // p_grow.txt
+    public int[] getProfessionGrow(int count){
+        return p_grow.getLineIntPlus(profession.getGrow(unit.getProfession(count)), getAdditionGrow(count));
+    }
     public int getProfessionGrowHp(int count){
-        return p_grow.getHp(profession.getGrow(unit.getProfession(count)))+a_grow.getHp(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getHp(profession.getGrow(unit.getProfession(count))) + getAdditionGrowHp(count);
     }
     public int getProfessionGrowStr(int count){
-        return p_grow.getStr(profession.getGrow(unit.getProfession(count)))+a_grow.getStr(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getStr(profession.getGrow(unit.getProfession(count))) + getAdditionGrowStr(count);
     }
     public int getProfessionGrowMag(int count){
-        return p_grow.getMag(profession.getGrow(unit.getProfession(count)))+a_grow.getMag(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getMag(profession.getGrow(unit.getProfession(count))) + getAdditionGrowMag(count);
     }
     public int getProfessionGrowSkill(int count){
-        return p_grow.getSkill(profession.getGrow(unit.getProfession(count)))+a_grow.getSkill(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getSkill(profession.getGrow(unit.getProfession(count))) + getAdditionGrowSkill(count);
     }
     public int getProfessionGrowSpe(int count){
-        return p_grow.getSpe(profession.getGrow(unit.getProfession(count)))+a_grow.getSpe(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getSpe(profession.getGrow(unit.getProfession(count))) + getAdditionGrowSpe(count);
     }
     public int getProfessionGrowLuk(int count){
-        return p_grow.getLuk(profession.getGrow(unit.getProfession(count)))+a_grow.getLuk(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getLuk(profession.getGrow(unit.getProfession(count))) + getAdditionGrowLuk(count);
     }
     public int getProfessionGrowDef(int count){
-        return p_grow.getDef(profession.getGrow(unit.getProfession(count)))+a_grow.getDef(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getDef(profession.getGrow(unit.getProfession(count))) + getAdditionGrowDef(count);
     }
     public int getProfessionGrowMde(int count){
-        return p_grow.getMde(profession.getGrow(unit.getProfession(count)))+a_grow.getMde(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getMde(profession.getGrow(unit.getProfession(count))) + getAdditionGrowMde(count);
     }
     public int getProfessionGrowWeig(int count){
-        return p_grow.getWeig(profession.getGrow(unit.getProfession(count)))+a_grow.getWeig(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getWeig(profession.getGrow(unit.getProfession(count))) + getAdditionGrowWeig(count);
     }
     public int getProfessionGrowMov(int count){
-        return p_grow.getMov(profession.getGrow(unit.getProfession(count)))+a_grow.getMov(addition.getGrow(unit.getAddition(count)));
+        return p_grow.getMov(profession.getGrow(unit.getProfession(count))) + getAdditionGrowMov(count);
     }
     // p_skill.txt
+    public int[] getProfessionSkill(int count){
+        return p_skill.getLineIntPlus(profession.getSkill(unit.getProfession(count)), getAdditionSkill(count));
+    }
     public int getProfessionSkillSword(int count){
-        return p_skill.getSword(profession.getSkill(unit.getProfession(count)))+a_skill.getSword(addition.getSkill(unit.getAddition(count)));
+        return p_skill.getSword(profession.getSkill(unit.getProfession(count))) + getAdditionSkillSword(count);
     }
     public int getProfessionSkillGun(int count){
-        return p_skill.getGun(profession.getSkill(unit.getProfession(count)))+a_skill.getGun(addition.getSkill(unit.getAddition(count)));
+        return p_skill.getGun(profession.getSkill(unit.getProfession(count))) + getAdditionSkillGun(count);
     }
     public int getProfessionSkillAxe(int count){
-        return p_skill.getAxe(profession.getSkill(unit.getProfession(count)))+a_skill.getAxe(addition.getSkill(unit.getAddition(count)));
+        return p_skill.getAxe(profession.getSkill(unit.getProfession(count))) + getAdditionSkillAxe(count);
     }
     public int getProfessionSkillArrow(int count){
-        return p_skill.getArrow(profession.getSkill(unit.getProfession(count)))+a_skill.getArrow(addition.getSkill(unit.getAddition(count)));
+        return p_skill.getArrow(profession.getSkill(unit.getProfession(count))) + getAdditionSkillArrow(count);
     }
     public int getProfessionSkillPhy(int count){
-        return p_skill.getPhy(profession.getSkill(unit.getProfession(count)))+a_skill.getPhy(addition.getSkill(unit.getAddition(count)));
+        return p_skill.getPhy(profession.getSkill(unit.getProfession(count))) + getAdditionSkillPhy(count);
     }
     public int getProfessionSkillLight(int count){
-        return p_skill.getLight(profession.getSkill(unit.getProfession(count)))+a_skill.getLight(addition.getSkill(unit.getAddition(count)));
+        return p_skill.getLight(profession.getSkill(unit.getProfession(count))) + getAdditionSkillLight(count);
     }
     public int getProfessionSkillDark(int count){
-        return p_skill.getDark(profession.getSkill(unit.getProfession(count)))+a_skill.getDark(addition.getSkill(unit.getAddition(count)));
+        return p_skill.getDark(profession.getSkill(unit.getProfession(count))) + getAdditionSkillDark(count);
     }
     public int getProfessionSkillStick(int count){
-        return p_skill.getStick(profession.getSkill(unit.getProfession(count)));
+        return p_skill.getStick(profession.getSkill(unit.getProfession(count))) + getAdditionSkillStick(count);
     }
     // p_special.txt
+    public int[] getProfessionSpecial(int count){
+        return p_special.getLineInt(profession.getSpecial(unit.getProfession(count)));
+    }
     public int getProfessionSpecial1(int count){
         return p_special.getSpe1(profession.getSpecial(unit.getProfession(count)));
     }
@@ -168,6 +183,9 @@ public class FeAssetsUnit {
         return profession.getType(unit.getProfession(count));
     }
     // a_ability.txt
+    public int[] getAdditionAbility(int count){
+        return a_ability.getLineInt(addition.getAbility(unit.getAddition(count)));
+    }
     public int getAdditionAbilityHp(int count){
         return a_ability.getHp(addition.getAbility(unit.getAddition(count)));
     }
@@ -199,6 +217,9 @@ public class FeAssetsUnit {
         return a_ability.getMov(addition.getAbility(unit.getAddition(count)));
     }
     // a_grow.txt
+    public int[] getAdditionGrow(int count){
+        return a_grow.getLineInt(addition.getGrow(unit.getAddition(count)));
+    }
     public int getAdditionGrowHp(int count){
         return a_grow.getHp(addition.getGrow(unit.getAddition(count)));
     }
@@ -230,6 +251,9 @@ public class FeAssetsUnit {
         return a_grow.getMov(addition.getGrow(unit.getAddition(count)));
     }
     // a_skill.txt
+    public int[] getAdditionSkill(int count){
+        return a_skill.getLineInt(addition.getSkill(unit.getAddition(count)));
+    }
     public int getAdditionSkillSword(int count){
         return a_skill.getSword(addition.getSkill(unit.getAddition(count)));
     }
@@ -251,7 +275,13 @@ public class FeAssetsUnit {
     public int getAdditionSkillDark(int count){
         return a_skill.getDark(addition.getSkill(unit.getAddition(count)));
     }
+    public int getAdditionSkillStick(int count){
+        return a_skill.getStick(addition.getSkill(unit.getAddition(count)));
+    }
     // a_special.txt
+    public int[] getAdditionSpecial(int count){
+        return a_special.getLineInt(addition.getSpecial(unit.getAddition(count)));
+    }
     public int getAdditionSpecial1(int count){
         return a_special.getSpe1(addition.getSpecial(unit.getAddition(count)));
     }
@@ -269,6 +299,9 @@ public class FeAssetsUnit {
         return unit.getLevel(count);
     }
     // item.txt
+    public int[] getItem(int count){
+        return item.getLineInt(unit.getItem(count));
+    }
     public int getItem1(int count){
         return item.getIt1(unit.getItem(count));
     }
@@ -286,6 +319,9 @@ public class FeAssetsUnit {
     }
     public int getItem6(int count){
         return item.getIt6(unit.getItem(count));
+    }
+    public int getEquip(int count){
+        return item.getEquip(unit.getItem(count));
     }
 
     //----- all file -----
