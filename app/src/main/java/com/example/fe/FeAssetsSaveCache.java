@@ -123,6 +123,41 @@ public class FeAssetsSaveCache {
         }
     }
 
+    /*
+        根据unit.txt信息加载各阵营人物信息camp_x_xxx.txt
+     */
+    public void recoverUnit(){
+        //遍历所有unit
+        for(int i = 0; i < unit.total(); i++)
+        {
+            //获取order和camp
+            int order = unit.getOrder(i);
+            int camp = unit.getCamp(i);
+            //创建文件
+            Camp cp = new Camp(folder, camp, order, ";");
+            //添加到链表
+            Camp target = getCamp(camp);
+            if(target != null)
+                target.add(cp);
+        }
+    }
+
+    /*
+        获得某个阵营(的所有人物信息)
+     */
+    public Camp getCamp(int camp){
+        switch(camp){
+            case 0: return campBlue;
+            case 1: return campRed;
+            case 2: return campGreen;
+            case 3: return campDark;
+            case 4: return campOrange;
+            case 5: return campPurple;
+            case 6: return campCyan;
+        }
+        return null;
+    }
+
     //----- class -----
 
     class Round extends FeReaderFile{

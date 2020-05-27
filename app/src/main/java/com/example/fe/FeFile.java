@@ -16,7 +16,7 @@ import java.io.InputStream;
  */
 public class FeFile{
     //关键路径
-    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
+    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FEX";
 
     /*
         folder: 目标文件夹, 示例 "/unit/" 前后都带斜杠

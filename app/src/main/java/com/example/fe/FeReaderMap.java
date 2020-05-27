@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 class FeReaderMap {
 
     //关键路径
-    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
+    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FEX";
     private String assetsFilePath, sdFilePath;
 
     private class FeFileAllLine{

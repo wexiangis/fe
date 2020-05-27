@@ -6,12 +6,10 @@ package com.example.fe;
  */
 public class FeAssetsSave {
 
-    private FeAssetsUnit _unit;
     private int sXCurrent = 0;//当前档位
-    private FeFile file;
+    private FeFile file;//文件操作工具
 
-    public FeAssetsSave(FeAssetsUnit unit){
-        this._unit = unit;
+    public FeAssetsSave(){
         file = new FeFile();
         //从 /assets/save/last.txt 读取最后存档位置
         sXCurrent = Integer.valueOf(file.readFile("/save/last.txt", "0", 8));
@@ -22,7 +20,7 @@ public class FeAssetsSave {
     /*
         获取最后存档位置
      */
-    public int getLast(){
+    public int getLastSx(){
         return sXCurrent;
     }
 

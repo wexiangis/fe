@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
  */
 public class FeFileRead {
     //关键路径
-    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
+    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FEX";
     private String filePath;
     //各种玄学句柄
     private FileInputStream fis;

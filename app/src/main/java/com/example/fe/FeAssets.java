@@ -10,13 +10,15 @@ public class FeAssets {
     public FeAssetsParam param;
     public FeAssetsUnit unit;
     public FeAssetsSave save;
+    public FeAssetsEvent event;
 
     public FeAssets(){
         map = new FeAssetsMap();
         menu = new FeAssetsMenu();
         param = new FeAssetsParam();
         unit = new FeAssetsUnit();
-        save = new FeAssetsSave(unit);
+        save = new FeAssetsSave();
+        event = new FeAssetsEvent();
     }
 
 }

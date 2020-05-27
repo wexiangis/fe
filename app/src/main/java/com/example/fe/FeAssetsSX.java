@@ -1,19 +1,23 @@
 package com.example.fe;
 
 /*
-    /assets/save/sX 文件夹资源管理器,存档X管理
+    /assets/save/sX 文件夹资源管理器
+    档位X的存档信息管理
  */
 public class FeAssetsSX {
 
-    private FeAssetsUnit _unit;
+    private FeAssetsUnit unit;
     private int sX;
 
     public FeAssetsSaveCache saveCache;
     public FeAssetsSaveUnit saveUnit;
     public FeAssetsSection section;
 
+    /*
+        注意区别 sX 和 当前章节 不是一个东西
+     */
     public FeAssetsSX(FeAssetsUnit unit, int sX){
-        this._unit = unit;
+        this.unit = unit;
         this.sX = sX;
         //sX
         String folder = String.format("/save/s%d/", sX);
@@ -28,10 +32,13 @@ public class FeAssetsSX {
     //----- api -----
 
     /*
-        从中断中回复
+        从中断中恢复
      */
     public void recover(){
-        ;
+        //加载缓存
+        saveCache = new FeAssetsSaveCache(unit, saveUnit, sX);
+        //加载人物信息
+        saveCache.recoverUnit();
     }
 
     /*
@@ -41,9 +48,8 @@ public class FeAssetsSX {
         //删空缓存
         new FeFile().delete(String.format("/save/s%d/cache", sX));
         //建立缓存
-        saveCache = new FeAssetsSaveCache(_unit, saveUnit, sX);
+        saveCache = new FeAssetsSaveCache(unit, saveUnit, sX);
         //根据 section 的site加载 saveUnit 人物到 saveCache
-        //
         for(int siteCount = 0, saveUnitCount = 0;
             siteCount < section.site.total() &&
             saveUnitCount < saveUnit.unit.total();
@@ -58,24 +64,72 @@ public class FeAssetsSX {
             }
         }
         //根据 section 的unit加载人物到 saveCache
-        for(int i = 0; i < section.unit.total(); i++){
-            //添加unit人物
-            saveCache.addUnit(section.unit.getCamp(i), section.unit.getId(i), section.unit.getXY(i), false);
+        for(int i = 0; i < section.unit.total(); i++)
+        {
+            //触发方式为回合触发,且回合为0
+            if(section.unit.getTrigger(i) == 0 &&
+                section.unit.getTurn(i) == 0)
+            {
+                //添加unit人物
+                saveCache.addUnit(section.unit.getCamp(i), section.unit.getId(i), section.unit.getXY(i), false);
+            }
         }
     }
 
     /*
-        回合触发事件
+        回合触发事件(回合turn>0)
      */
     public void eventTurn(int turn, int camp){
-        ;
+
+        // ----- 触发人物增加 -----
+
+        //根据 section 的site加载 saveUnit 人物到 saveCache
+        //为己方阵营
+        if(camp == 0){
+            for(int siteCount = 0, saveUnitCount = 0;
+                siteCount < section.site.total() &&
+                saveUnitCount < saveUnit.unit.total();
+                siteCount++)
+            {
+                //触发方式为回合触发,且回合为turn
+                if(section.site.getTrigger(siteCount) == 0 &&
+                    section.site.getTurn(siteCount) == turn)
+                {
+                    //添加己方人物
+                    saveCache.addUnit(0, saveUnit.unit.getId(saveUnitCount), section.site.getXY(siteCount), true);
+                    //计数,防止当前出击人数超过全部人数
+                    saveUnitCount++;
+                }
+            }
+        }
+        //根据 section 的unit加载人物到 saveCache
+        for(int i = 0; i < section.unit.total(); i++)
+        {
+            //触发方式为回合触发,且回合为turn,且为目标阵营
+            if(section.unit.getTrigger(i) == 0 &&
+                section.unit.getTurn(i) == turn &&
+                section.unit.getCamp(i) == camp)
+            {
+                //添加unit人物
+                saveCache.addUnit(camp, section.unit.getId(i), section.unit.getXY(i), false);
+            }
+        }
+
+        // ----- 触发人物trend变动 -----
+
+
+        // ----- 触发对话 -----
     }
 
     /*
-        到达
+        其他事件
+        camp, order: 触发人物的阵营和序号
      */
+    public void eventXXX(int camp, int order){
+        ;
+    }
     
-    //----- all file -----
+    //----- file -----
 
     public Info info;
     public Setting setting;

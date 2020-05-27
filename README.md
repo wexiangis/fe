@@ -2,7 +2,7 @@
 
 ## 文件结构
 
-* FeAssetsXXX: 管理assets文件资源
+* FeAssetsXXX: assets文件资源管理类
 * FeData: 全局参数(Application)
 * FeEvent: 用户操作和当前状态
 * FeFileXXX: FE定制assets文件读写管理类

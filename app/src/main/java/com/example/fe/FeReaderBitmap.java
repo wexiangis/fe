@@ -18,7 +18,7 @@ import java.io.InputStream;
 class FeReaderBitmap {
 
     //关键路径
-    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FE";
+    private String feSdRootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FEX";
 
     private Bitmap _load_bitmap(String path){
         Bitmap ret = null;
