@@ -29,9 +29,10 @@ public class FeAssetsSave {
         num: 存档槽总数
         返回: int[num][0], 0/表示空 其它表示章节
             int[num][1], 0/表示非中断状态 1/中断
+            int[num][2], 时长,单位秒
      */
     public int[][] getSx(int num){
-        int[][] ret = new int[num][2];
+        int[][] ret = new int[num][3];
         //遍历num个sX文件夹中的info.txt文件
         for(int i = 0; i < num; i++)
         {
@@ -48,6 +49,8 @@ public class FeAssetsSave {
                     ret[i][0] = Integer.valueOf(line[0]);//得到章节数
                     if(line.length > 1)
                         ret[i][1] = Integer.valueOf(line[1]);//得到是否中断
+                    if(line.length > 2)
+                        ret[i][2] = Integer.valueOf(line[2]);//得到时长
                 }
             }
         }

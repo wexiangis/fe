@@ -15,13 +15,19 @@ public class FeData extends Application {
     public static FeHeart feHeart = null;//全局动画心跳
     //结构层
     public static FeFlow feFlow = null;//界面流程管理
-    public static FeLayoutMainTheme feLayoutMainTheme = null;
-    public static FeLayoutSection feLayoutSection = null;
-    //参数合集
     public static FeAssets feAssets = null;//assets文件资源管理
     public static FeEvent feEvent = null;//用户操作事件管理
+    public static FeLayoutSection feLayoutSection = null;
+    //参数合集
     public static FeParamMap feParamMap = null;
     public static FeParamUnit feParamUnit = null;
+    //存档数量
+    public static final int saveNum = 3;
+    //存档状态
+    //[x][0]:章节
+    //[x][1]:是否中断
+    //[x][2]:时长(秒)
+    public static int[][] save;;
 
     public static void start(Activity act){
         //保留activity
