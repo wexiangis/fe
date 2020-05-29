@@ -15,7 +15,8 @@ import android.widget.TextView;
  */
 public class FeLayoutMainTheme extends RelativeLayout {
 
-    private boolean showMenu = false;
+    //当前显示状态: 0/tips 1/menu 2/存档列表
+    private int showStatus = 0;
 
     //“按任意键继续”提示及其layout参数
     private TextView tvPressAnyKey = null;
@@ -57,16 +58,16 @@ public class FeLayoutMainTheme extends RelativeLayout {
                 //点击:空白处
                 else{
                     //菜单显示 -> 移除菜单
-                    if(showMenu) {
-                        removeMenu();
-                        loadTip();
-                        showMenu = false;
-                    }
-                    //没有菜单 -> 显示菜单
-                    else {
+                    if(showStatus == 0) {
                         removeTips();
                         loadMenu();
-                        showMenu = true;
+                        showStatus = 1;
+                    }
+                    //没有菜单 -> 显示菜单
+                    else if(showStatus == 1){
+                        removeMenu();
+                        loadTip();
+                        showStatus = 0;
                     }
                 }
             }
@@ -89,6 +90,10 @@ public class FeLayoutMainTheme extends RelativeLayout {
 
         //加载按任意键提示
         loadTip();
+    }
+
+    public void loadItem(){
+        ;
     }
 
     public void loadTip(){
