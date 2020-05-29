@@ -24,7 +24,7 @@ public class FeViewMark extends View {
         paint = new Paint();
         paint.setColor(Color.BLUE);
         //引入心跳
-        FeData.feHeart.addUnit(heartUnit);
+        FeData.heart.addUnit(heartUnit);
     }
 
     //动画心跳回调
@@ -39,16 +39,16 @@ public class FeViewMark extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_MOVE))
+        if(FeData.event.checkSelectType(FeEvent.EVENT_MOVE))
             return;
 
         if(this.colorMode == 0)
-            paint.setShader(FeData.feParamUnit.getShaderB());
+            paint.setShader(FeData.paramUnit.getShaderB());
         else if(this.colorMode == 1)
-            paint.setShader(FeData.feParamUnit.getShaderR());
+            paint.setShader(FeData.paramUnit.getShaderR());
         else
-            paint.setShader(FeData.feParamUnit.getShaderG());
+            paint.setShader(FeData.paramUnit.getShaderG());
 
-        canvas.drawPath(FeData.feParamMap.selectSite.path, paint);
+        canvas.drawPath(FeData.paramMap.selectSite.path, paint);
     }
 }

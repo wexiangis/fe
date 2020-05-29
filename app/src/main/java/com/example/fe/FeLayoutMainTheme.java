@@ -36,7 +36,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
             {
                 //点击:加载存档
                 if(v == tvLoad){
-                    FeData.feFlow.loadSection(0);
+                    FeData.flow.loadSection(0);
                 }
                 //点击:创建存档
                 else if(v == tvNew){

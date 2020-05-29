@@ -28,10 +28,10 @@ public class FeViewSelect extends View {
 
     public FeViewSelect(Context context){
         super(context);
-        paramMap = FeData.feParamMap;
-        paramUnit = FeData.feParamUnit;
+        paramMap = FeData.paramMap;
+        paramUnit = FeData.paramUnit;
         //
-        bitmapSelect = FeData.feAssets.menu.getMapSelect();
+        bitmapSelect = FeData.assets.menu.getMapSelect();
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
         rectDistSelect = new Rect(0, 0, 0, 0);
         rectSrcSelect = new Rect(0, 0, bitmapSelect.getWidth(), bitmapSelect.getHeight());
@@ -39,7 +39,7 @@ public class FeViewSelect extends View {
         paintSelct = new Paint();
         paintSelct.setColor(Color.BLUE);
         //引入心跳
-        FeData.feHeart.addUnit(heartUnit);
+        FeData.heart.addUnit(heartUnit);
     }
 
     private boolean needRefresh;
@@ -78,12 +78,12 @@ public class FeViewSelect extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_MOVE))
+        if(FeData.event.checkSelectType(FeEvent.EVENT_MOVE))
             return;
 
         //画选中框
-        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_MAP) &&
-                !FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
+        if(FeData.event.checkSelectType(FeEvent.EVENT_HIT_MAP) &&
+                !FeData.event.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
             //计算输出位置
             rectDistSelect.left = paramMap.selectSite.rect.left - paramMap.selectSite.rect.width()/4;
             rectDistSelect.right = paramMap.selectSite.rect.right + paramMap.selectSite.rect.width()/4;
@@ -95,7 +95,7 @@ public class FeViewSelect extends View {
 //            canvas.drawPath(paramMap.selectSite.path, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
-        else if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT)){
+        else if(FeData.event.checkSelectType(FeEvent.EVENT_HIT_UNIT)){
             //计算输出位置
             rectDistSelect.left = paramUnit.selectSite.rect.left - paramUnit.selectSite.rect.width()/4;
             rectDistSelect.right = paramUnit.selectSite.rect.right + paramUnit.selectSite.rect.width()/4;

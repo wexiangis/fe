@@ -49,7 +49,7 @@ public class FeParamMap {
         DisplayMetrics dm = new DisplayMetrics();
         FeData.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         //初始化map参数结构体
-        map = FeData.feAssets.map.getMap(section);
+        map = FeData.assets.map.getMap(section);
         //适配屏幕
         init(dm.widthPixels, dm.heightPixels, map.xGrid, map.yGrid, map.pixelPerGrid);
         //两参数分别为xy缩放比例

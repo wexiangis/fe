@@ -17,7 +17,7 @@ public class FeLayoutMap extends RelativeLayout {
     public FeLayoutMap(Context context, int section) {
         super(context);
         //初始化和地图相关的所有参数
-        FeData.feParamMap = new FeParamMap(section);
+        FeData.paramMap = new FeParamMap(section);
         //
         loadView();
     }

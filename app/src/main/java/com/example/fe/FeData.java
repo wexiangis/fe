@@ -12,15 +12,15 @@ public class FeData extends Application {
     //核心部件
     public static Activity activity = null;
     public static Context context = null;
-    public static FeHeart feHeart = null;//全局动画心跳
+    public static FeHeart heart = null;//全局动画心跳
     //结构层
-    public static FeFlow feFlow = null;//界面流程管理
-    public static FeAssets feAssets = null;//assets文件资源管理
-    public static FeEvent feEvent = null;//用户操作事件管理
-    public static FeLayoutSection feLayoutSection = null;
+    public static FeFlow flow = null;//界面流程管理
+    public static FeAssets assets = null;//assets文件资源管理
+    public static FeEvent event = null;//用户操作事件管理
+    public static FeLayoutSection layoutSection = null;
     //参数合集
-    public static FeParamMap feParamMap = null;
-    public static FeParamUnit feParamUnit = null;
+    public static FeParamMap paramMap = null;
+    public static FeParamUnit paramUnit = null;
     //存档数量
     public static final int saveNum = 3;
     //存档状态
@@ -35,26 +35,26 @@ public class FeData extends Application {
         //获取application的context
         context = activity.getApplicationContext();
         //全局动画心跳
-        feHeart.start();
+        heart.start();
         //开始事件
-        feFlow.start();
+        flow.start();
     }
 
     public static void stop(){
         //关闭timer定时器
-        feHeart.stop();
+        heart.stop();
         //从当前activity中移除界面控件
-        feFlow.stop();
+        flow.stop();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         //初始化
-        feHeart = new FeHeart();
-        feFlow = new FeFlow();
-        feAssets = new FeAssets();
-        feEvent = new FeEvent();
-        feParamUnit = new FeParamUnit();
+        heart = new FeHeart();
+        flow = new FeFlow();
+        assets = new FeAssets();
+        event = new FeEvent();
+        paramUnit = new FeParamUnit();
     }
 }

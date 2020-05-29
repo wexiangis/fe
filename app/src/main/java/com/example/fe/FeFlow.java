@@ -8,16 +8,16 @@ import android.view.ViewGroup;
 public class FeFlow {
 
     public void stop(){
-        if(FeData.feLayoutSection != null &&
-            FeData.feLayoutSection.getParent() != null)
-            ((ViewGroup)FeData.feLayoutSection.getParent()).removeAllViews();
+        if(FeData.layoutSection != null &&
+            FeData.layoutSection.getParent() != null)
+            ((ViewGroup)FeData.layoutSection.getParent()).removeAllViews();
     }
 
     public void start(){
 
         //恢复
-        if(FeData.feLayoutSection != null){
-            FeData.activity.setContentView(FeData.feLayoutSection);
+        if(FeData.layoutSection != null){
+            FeData.activity.setContentView(FeData.layoutSection);
             return;
         }
 
@@ -36,7 +36,7 @@ public class FeFlow {
     //加载主界面
     public void loadMainTheme(){
         //更新存档状态
-        FeData.save = FeData.feAssets.save.getSx(FeData.saveNum);
+        FeData.save = FeData.assets.save.getSx(FeData.saveNum);
         //加载主界面
         FeData.activity.setContentView(new FeLayoutMainTheme(FeData.context));
     }
@@ -44,9 +44,9 @@ public class FeFlow {
     //加载章节大地图
     public void loadSection(int section) {
         //只创建一个sectionLayout
-        if(FeData.feLayoutSection == null)
-            FeData.feLayoutSection = new FeLayoutSection(FeData.context, section);
-        FeData.activity.setContentView(FeData.feLayoutSection);
+        if(FeData.layoutSection == null)
+            FeData.layoutSection = new FeLayoutSection(FeData.context, section);
+        FeData.activity.setContentView(FeData.layoutSection);
     }
 
 }

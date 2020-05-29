@@ -53,14 +53,14 @@ public class FeViewUnit extends View {
         int animMode, int colorMode)
     {
         super(context);
-        paramMap = FeData.feParamMap;
+        paramMap = FeData.paramMap;
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
 //        paint.setAntiAlias(true);
 //        paint.setBitmapFilter(true);
         //图片加载和颜色变换
-        bitmap = FePallet.replace(FeData.feAssets.unit.getProfessionAnim(id), colorMode);
+        bitmap = FePallet.replace(FeData.assets.unit.getProfessionAnim(id), colorMode);
         matrix.postScale(-1, 1);
         //根据动画类型使用对应的心跳
         setAnimMode(animMode);
@@ -77,7 +77,7 @@ public class FeViewUnit extends View {
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
-        FeData.feHeart.addUnit(heartUnit);
+        FeData.heart.addUnit(heartUnit);
         //地图中的位置信息管理结构
         site = new FeInfoGrid();
     }
@@ -85,7 +85,7 @@ public class FeViewUnit extends View {
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FeData.feHeart.removeUnit(heartUnit);
+        FeData.heart.removeUnit(heartUnit);
     }
 
     //人物id
@@ -114,7 +114,7 @@ public class FeViewUnit extends View {
         if(this.colorMode != colorMode) {
             synchronized (paint) {
                 bitmap.recycle();
-                bitmap = FePallet.replace(FeData.feAssets.unit.getProfessionAnim(id), colorMode);
+                bitmap = FePallet.replace(FeData.assets.unit.getProfessionAnim(id), colorMode);
                 this.colorMode = colorMode;
             }
         }

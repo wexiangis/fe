@@ -34,9 +34,9 @@ public class FeViewMapInfo extends View {
 
     public FeViewMapInfo(Context context) {
         super(context);
-        paramMap = FeData.feParamMap;
+        paramMap = FeData.paramMap;
         //
-        bitmapInfo = FeData.feAssets.menu.getMapInfo();
+        bitmapInfo = FeData.assets.menu.getMapInfo();
         //
         pixelPowInfo = paramMap.yGridPixel * 2 / bitmapInfo.getHeight();
         //
@@ -85,7 +85,7 @@ public class FeViewMapInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_MOVE)){
+        if(FeData.event.checkSelectType(FeEvent.EVENT_MOVE)){
             drawInfo = false;
             return;
         }
@@ -104,7 +104,7 @@ public class FeViewMapInfo extends View {
         rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
 
         //画地图信息
-        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_MAP)){
+        if(FeData.event.checkSelectType(FeEvent.EVENT_HIT_MAP)){
             drawInfo = true;
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息

@@ -29,10 +29,10 @@ public class FeViewUnitInfo extends View {
 
     public FeViewUnitInfo(Context context){
         super(context);
-        paramMap = FeData.feParamMap;
-        paramUnit = FeData.feParamUnit;
+        paramMap = FeData.paramMap;
+        paramUnit = FeData.paramUnit;
         //
-        bitmapHeadBg = FeData.feAssets.menu.getMapHeader();
+        bitmapHeadBg = FeData.assets.menu.getMapHeader();
         //
         pixelPowHead = paramMap.yGridPixel*2/bitmapHeadBg.getHeight();
         //
@@ -68,7 +68,7 @@ public class FeViewUnitInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.feEvent.checkSelectType(FeEvent.EVENT_MOVE)){
+        if(FeData.event.checkSelectType(FeEvent.EVENT_MOVE)){
             drawHead = false;
             return;
         }
@@ -83,7 +83,7 @@ public class FeViewUnitInfo extends View {
         }
 
         //画人物头像
-        if(!FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) ||
+        if(!FeData.event.checkSelectType(FeEvent.EVENT_HIT_UNIT) ||
             paramUnit.selectSite.rect.left > paramMap.screenWidth ||
             paramUnit.selectSite.rect.right < 0 ||
             paramUnit.selectSite.rect.top > paramMap.screenHeight ||
@@ -95,12 +95,12 @@ public class FeViewUnitInfo extends View {
             canvas.drawBitmap(bitmapHeadBg, rectSrcHeadBg, rectDistHeadBg, paintHeadBg);
             //填信息
             canvas.drawText(
-                FeData.feAssets.unit.getName(0),
+                FeData.assets.unit.getName(0),
                 rectDistHeadBg.left + rectDistHeadBg.width()/4,
                 rectDistHeadBg.top + rectDistHeadBg.height()/4,
                 paintParam);
             canvas.drawText(
-                    FeData.feAssets.unit.getSummary(0),
+                    FeData.assets.unit.getSummary(0),
                     rectDistHeadBg.left + rectDistHeadBg.width()/4,
                     rectDistHeadBg.top + rectDistHeadBg.height()/2,
                     paintParam);

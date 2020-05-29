@@ -28,15 +28,15 @@ public class FeViewMap extends View {
 
     public FeViewMap(Context context) {
         super(context);
-        paramMap = FeData.feParamMap;
-        paramUnit = FeData.feParamUnit;
+        paramMap = FeData.paramMap;
+        paramUnit = FeData.paramUnit;
         //输入坐标求格子位置
         paramMap.getRectByLocation(0, 0, paramMap.selectSite);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
         //引入心跳
-        FeData.feHeart.addUnit(heartMapMov);
+        FeData.heart.addUnit(heartMapMov);
     }
 
     //动态挪动地图,x>0时地图往右移,y>0时地图往下移
@@ -139,28 +139,28 @@ public class FeViewMap extends View {
                 isMove = false;
                 //
                 xGridErr = yGridErr = 0;
-                FeData.feEvent.cleanSelectType(FeEvent.EVENT_MOVE);
+                FeData.event.cleanSelectType(FeEvent.EVENT_MOVE);
             }
             break;
             case MotionEvent.ACTION_UP: {
                 float tUpX = event.getX();
                 float tUpY = event.getY();
                 //选中方格标志
-                FeData.feEvent.cleanSelectType(FeEvent.EVENT_MOVE);
+                FeData.event.cleanSelectType(FeEvent.EVENT_MOVE);
                 //是否是点击事件
                 if(!isMove) {
-                    FeData.feEvent.setSelectType(FeEvent.EVENT_HIT_MAP);
+                    FeData.event.setSelectType(FeEvent.EVENT_HIT_MAP);
                     //上传click事件
                     ((FeLayoutSection)getParent().getParent()).click(tUpX, tUpY);
                 }
                 else{
-                    FeData.feEvent.cleanSelectType(FeEvent.EVENT_HIT_MAP);
+                    FeData.event.cleanSelectType(FeEvent.EVENT_HIT_MAP);
                 }
                 isMove = false;
                 //输入坐标求格子位置
                 paramMap.getRectByLocation(tUpX, tUpY, paramMap.selectSite);
                 //选中人物太过靠近边界,挪动地图
-                if(FeData.feEvent.checkSelectType(FeEvent.EVENT_HIT_UNIT) &&
+                if(FeData.event.checkSelectType(FeEvent.EVENT_HIT_UNIT) &&
                     !paramMap.srcGridCenter.contains(
                     paramUnit.selectSite.point[0],
                     paramUnit.selectSite.point[1])){
@@ -213,9 +213,9 @@ public class FeViewMap extends View {
                 //调用一次onDraw
                 if (needRefresh) {
                     //清触屏点击
-                    FeData.feEvent.cleanSelectType(FeEvent.EVENT_HIT_MAP);
+                    FeData.event.cleanSelectType(FeEvent.EVENT_HIT_MAP);
                     //设置触屏移动
-                    FeData.feEvent.setSelectType(FeEvent.EVENT_MOVE);
+                    FeData.event.setSelectType(FeEvent.EVENT_MOVE);
                     //输入坐标求格子位置
                     paramMap.getRectByLocation(tMoveX, tMoveY, paramMap.selectSite);
                     //调用一次onDraw
