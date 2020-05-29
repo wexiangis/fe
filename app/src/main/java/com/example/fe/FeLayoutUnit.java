@@ -26,7 +26,7 @@ public class FeLayoutUnit extends RelativeLayout {
                 FeData.event.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
                 if(who_refresh == 1)
                     tmp.setAnimMode(tmp.getAnimMode()+1);
-                paramMap.getRectByGrid(tmp._gridX, tmp._gridY, paramUnit.selectSite);
+                paramMap.getRectByGrid(tmp.gridX, tmp.gridY, paramUnit.selectSite);
             }
             else
                 tmp.setAnimMode(0);

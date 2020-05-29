@@ -73,7 +73,7 @@ public class FeViewUnit extends View {
         moveGridTo(gridX, gridY);
         //图片扣取位置计算
         bitmapBody.left = 0;
-        bitmapBody.top = frameHeight*frameSkipByAnimMode[animMode];
+        bitmapBody.top = frameHeight*frameSkipByAnimMode[this.animMode];
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
@@ -129,7 +129,7 @@ public class FeViewUnit extends View {
     public void setAnimMode(int animMode){
         if(this.animMode != animMode){
             //镜像和恢复
-            if(animMode == 5 || animMode == 5) {
+            if(this.animMode == 5 || animMode == 5) {
                 bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int) bitmap.getWidth(), (int) bitmap.getHeight(), matrix, true);
                 matrix.postScale(1, 1);
             }

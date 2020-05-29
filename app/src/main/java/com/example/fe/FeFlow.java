@@ -15,11 +15,11 @@ public class FeFlow {
 
     public void start(){
 
-        //恢复
-        if(FeData.layoutSection != null){
-            FeData.activity.setContentView(FeData.layoutSection);
-            return;
-        }
+//        //恢复
+//        if(FeData.layoutSection != null){
+//            FeData.activity.setContentView(FeData.layoutSection);
+//            return;
+//        }
 
         //加载OP
         loadOpening();

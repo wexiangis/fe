@@ -28,6 +28,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
     private RelativeLayout.LayoutParams linearLayoutParam = null;
+    private LinearLayout.LayoutParams tvLayoutParams = null;
 
     //主界面触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
@@ -41,7 +42,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
                 }
                 //点击:创建存档
                 else if(v == tvNew){
-                    ;
+                    FeData.flow.loadSection(0);
                 }
                 //点击:复制存档
                 else if(v == tvCopy){
@@ -90,6 +91,9 @@ public class FeLayoutMainTheme extends RelativeLayout {
 
         //加载按任意键提示
         loadTip();
+
+        this.setBackgroundColor(0xFF808080);
+        this.setOnTouchListener(onTouchListener);
     }
 
     public void loadItem(){
@@ -127,27 +131,38 @@ public class FeLayoutMainTheme extends RelativeLayout {
         if(linearLayout == null)
         {
             //菜单各项TXT
-            tvLoad = new TextView(FeData.context);tvLoad.setText("继 续");tvLoad.setTextSize(16);
+            tvLoad = new TextView(FeData.context);
+            tvLoad.setText("继 续");
+            tvLoad.setTextSize(16);
             tvLoad.setOnTouchListener(onTouchListener);
-            tvNew = new TextView(FeData.context);tvNew.setText("新游戏");tvNew.setTextSize(16);
+            tvNew = new TextView(FeData.context);
+            tvNew.setText("新游戏");
+            tvNew.setTextSize(16);
             tvNew.setOnTouchListener(onTouchListener);
-            tvCopy = new TextView(FeData.context);tvCopy.setText("复 制");tvCopy.setTextSize(16);
+            tvCopy = new TextView(FeData.context);
+            tvCopy.setText("复 制");
+            tvCopy.setTextSize(16);
             tvCopy.setOnTouchListener(onTouchListener);
-            tvDel = new TextView(FeData.context);tvCopy.setText("删 除");tvCopy.setTextSize(16);
+            tvDel = new TextView(FeData.context);
+            tvDel.setText("删 除");
+            tvDel.setTextSize(16);
             tvDel.setOnTouchListener(onTouchListener);
-            tvElse = new TextView(FeData.context);tvCopy.setText("附加内容");tvCopy.setTextSize(16);
+            tvElse = new TextView(FeData.context);
+            tvElse.setText("附加内容");
+            tvElse.setTextSize(16);
             tvElse.setOnTouchListener(onTouchListener);
             //创建线性布局窗体
             linearLayout = new LinearLayout(FeData.context);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.setBackgroundColor(0x80008000);
             //创建线性布局窗体参数
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(0,0, 0, 20);
+            tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            tvLayoutParams.setMargins(0,0, 0, 10);
             //线性布局窗体相对主界面位置参数
             linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
             linearLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            linearLayoutParam.setMargins(0, 0, 0, 100);
+            linearLayoutParam.setMargins(0, 0, 0, 200);
             //添加布局参数
             linearLayout.setLayoutParams(linearLayoutParam);
         }
@@ -161,13 +176,13 @@ public class FeLayoutMainTheme extends RelativeLayout {
         }
         //按特定参数添加各项到线性布局
         if(findRecord)
-            linearLayout.addView(tvLoad, layoutParams);
-        linearLayout.addView(tvNew, layoutParams);
+            linearLayout.addView(tvLoad, tvLayoutParams);
+        linearLayout.addView(tvNew, tvLayoutParams);
         if(findRecord)
-            linearLayout.addView(tvCopy, layoutParams);
+            linearLayout.addView(tvCopy, tvLayoutParams);
         if(findRecord)
-            linearLayout.addView(tvDel, layoutParams);
-        linearLayout.addView(tvElse, layoutParams);
+            linearLayout.addView(tvDel, tvLayoutParams);
+        linearLayout.addView(tvElse, tvLayoutParams);
         //添加到主界面
         this.addView(linearLayout);
     }
