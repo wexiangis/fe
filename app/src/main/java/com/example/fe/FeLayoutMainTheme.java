@@ -39,7 +39,7 @@ public class FeLayoutMainTheme extends RelativeLayout {
         //加载按任意键提示
         loadTip(context);
 
-        this.setBackgroundColor(0xFF408040);
+        this.setBackgroundColor(0xFF404040);
         this.setOnTouchListener(onTouchListener);
     }
 

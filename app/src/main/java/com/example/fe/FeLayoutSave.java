@@ -12,16 +12,18 @@ import android.widget.RelativeLayout;
 /*
     存档条列表
  */
-public class FeLayoutSave extends LinearLayout {
+public class FeLayoutSave extends RelativeLayout {
 
     //条目列表
     private Button[] bnSaveList;
+    //菜单线性布局参数
+    private LinearLayout linearLayout = null;
 
     //主界面触屏事件回调函数
     private View.OnClickListener onClickListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            for(int i = 0; i < bnSaveList.lenght; i++){
+            for(int i = 0; i < bnSaveList.length; i++){
                 if(v == bnSaveList[i]){
                     FeData.flow.loadSection(0);
                 }
@@ -36,7 +38,7 @@ public class FeLayoutSave extends LinearLayout {
         button.setTextSize(24);
         button.setGravity(Gravity.CENTER);
         button.setOnClickListener(onClickListener);
-        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_g.png"), null));
+        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_save_g.png"), null));
         return button;
     }
 
@@ -49,22 +51,23 @@ public class FeLayoutSave extends LinearLayout {
         FeData.saveReload();
         //初始化
         bnSaveList = new Button[FeData.saveNum];
-        for(int i = 0; i < bnSaveList.lenght; i++)
+        for(int i = 0; i < bnSaveList.length; i++)
             bnSaveList[i] = buildButtonStyle(context, "item " + i);
         //创建线性布局窗体
-        this.setOrientation(LinearLayout.VERTICAL);
-        this.setBackgroundColor(0x80800000);
+        linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
         LinearLayout.LayoutParams bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        bnLayoutParams.setMargins(0,0, 0, 20);
+        bnLayoutParams.setMargins(0,0, 0, 30);
         //线性布局窗体相对主界面位置参数
         RelativeLayout.LayoutParams linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
         linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
-        //添加布局参数
-        this.setLayoutParams(linearLayoutParam);
         //添加条目到视图
-        for(int i = 0; i < bnSaveList.lenght; i++)
-            this.addView(bnSaveList[i], bnLayoutParams);
+        for(int i = 0; i < bnSaveList.length; i++)
+            linearLayout.addView(bnSaveList[i], bnLayoutParams);
+        //显示列表
+        this.addView(linearLayout, linearLayoutParam);
+        this.setBackgroundColor(0x80404080);
     }
 }

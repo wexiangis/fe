@@ -12,12 +12,13 @@ import android.widget.RelativeLayout;
 /*
     主界面菜单选项,不从属于主界面,它有自己的背景墙
  */
-public class FeLayoutMainMenu extends LinearLayout {
+public class FeLayoutMainMenu extends RelativeLayout {
 
     //菜单信息
     private Button tvLoad = null, tvNew = null, tvCopy = null, tvDel = null, tvElse = null;
 
     //菜单线性布局参数
+    private LinearLayout linearLayout = null;
     private RelativeLayout.LayoutParams linearLayoutParam = null;
     private LinearLayout.LayoutParams tvLayoutParams = null;
 
@@ -50,7 +51,7 @@ public class FeLayoutMainMenu extends LinearLayout {
         button.setTextSize(24);
         button.setGravity(Gravity.CENTER);
         button.setOnClickListener(onClickListener);
-        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item.png"), null));
+        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_b.png"), null));
         return button;
     }
 
@@ -63,19 +64,20 @@ public class FeLayoutMainMenu extends LinearLayout {
         tvDel = buildButtonStyle(context, "删 除");
         tvElse = buildButtonStyle(context, "附加内容");
         //创建线性布局窗体
-        this.setOrientation(LinearLayout.VERTICAL);
-        this.setBackgroundColor(0x80008000);
+        linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
-        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tvLayoutParams.setMargins(0,0, 0, 10);
+        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tvLayoutParams.setMargins(0,0, 0, 20);
         //线性布局窗体相对主界面位置参数
         linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
         linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
-        //添加布局参数
-        this.setLayoutParams(linearLayoutParam);
         //根据存档状态加载条目
         loadMenu();
+        //显示列表
+        this.addView(linearLayout, linearLayoutParam);
+        this.setBackgroundColor(0x80408040);
     }
 
     private void loadMenu(){
@@ -91,12 +93,12 @@ public class FeLayoutMainMenu extends LinearLayout {
         }
         //按特定参数添加各项到线性布局
         if(findRecord)
-            this.addView(tvLoad, tvLayoutParams);
-        this.addView(tvNew, tvLayoutParams);
+            linearLayout.addView(tvLoad, tvLayoutParams);
+        linearLayout.addView(tvNew, tvLayoutParams);
         if(findRecord)
-            this.addView(tvCopy, tvLayoutParams);
+            linearLayout.addView(tvCopy, tvLayoutParams);
         if(findRecord)
-            this.addView(tvDel, tvLayoutParams);
-        this.addView(tvElse, tvLayoutParams);
+            linearLayout.addView(tvDel, tvLayoutParams);
+        linearLayout.addView(tvElse, tvLayoutParams);
     }
 }

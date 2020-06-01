@@ -35,7 +35,6 @@ public class FeFlow {
 
     //加载主界面
     public void loadMainTheme(){
-        //加载主界面
         FeData.activity.setContentView(new FeLayoutMainTheme(FeData.context));
     }
 
@@ -46,19 +45,17 @@ public class FeFlow {
 
     //加载主界面菜单
     public void loadMainMenu(){
-        //加载主界面
         FeData.activity.setContentView(new FeLayoutMainMenu(FeData.context));
     }
 
     //加载存档界面: ctrl 0/新建 1/加载(或继续) 2/删除 3/复制 4/通关存档
     public void loadSave(int ctrl){
-        //加载主界面
         FeData.activity.setContentView(new FeLayoutSave(FeData.context, ctrl));
     }
 
     //加载额外内容
     public void loadExtra(){
-        ;
+        FeData.activity.setContentView(new FeLayoutExtra(FeData.context));
     }
 
     //加载章节大地图
