@@ -3,13 +3,10 @@ package com.example.fe;
 import android.os.Environment;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 /*
     用来创建、查询手机内存FE文件夹中的文件

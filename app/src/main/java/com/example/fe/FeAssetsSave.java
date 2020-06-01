@@ -12,7 +12,7 @@ public class FeAssetsSave {
     public FeAssetsSave(){
         file = new FeFile();
         //从 /assets/save/last.txt 读取最后存档位置
-        sXCurrent = Integer.valueOf(file.readFile("/save/last.txt", "0", 8));
+        sXCurrent = Integer.valueOf(file.readFile("/save/last.txt", "00", 2));
     }
 
     /* ---------- 存档槽位检查 ---------- */
@@ -61,14 +61,14 @@ public class FeAssetsSave {
 
     //创建新存档
     public void newSx(int sX){
-        String rootPath = String.format("/save/s%d", sX);
+        String rootPath = String.format("/save/s%d/", sX);
         //删空档位
         file.delete(rootPath);
         //创建档位,章节0,非中断状态
         file.writeFile(rootPath, "info.txt", "1;0;0;");
         //更新最后存档位置
         sXCurrent = sX;
-        file.writeFile("/save/", "last.txt", String.valueOf(sXCurrent));
+        file.writeFile("/save/", "last.txt", String.format("%02d", sXCurrent));
     }
 
     //删除存档
