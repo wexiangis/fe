@@ -15,11 +15,11 @@ public class FeFlow {
 
     public void start(){
 
-//        //恢复
-//        if(FeData.layoutSection != null){
-//            FeData.activity.setContentView(FeData.layoutSection);
-//            return;
-//        }
+        //恢复
+        if(FeData.layoutSection != null){
+            FeData.activity.setContentView(FeData.layoutSection);
+            return;
+        }
 
         //加载OP
         loadOpening();
@@ -35,10 +35,30 @@ public class FeFlow {
 
     //加载主界面
     public void loadMainTheme(){
-        //更新存档状态
-        FeData.save = FeData.assets.save.getSx(FeData.saveNum);
         //加载主界面
         FeData.activity.setContentView(new FeLayoutMainTheme(FeData.context));
+    }
+
+    //加载职业动画
+    public void loadProfessionAnim(){
+        ;
+    }
+
+    //加载主界面菜单
+    public void loadMainMenu(){
+        //加载主界面
+        FeData.activity.setContentView(new FeLayoutMainMenu(FeData.context));
+    }
+
+    //加载存档界面: ctrl 0/新建 1/加载(或继续) 2/删除 3/复制 4/通关存档
+    public void loadSave(int ctrl){
+        //加载主界面
+        FeData.activity.setContentView(new FeLayoutSave(FeData.context, ctrl));
+    }
+
+    //加载额外内容
+    public void loadExtra(){
+        ;
     }
 
     //加载章节大地图

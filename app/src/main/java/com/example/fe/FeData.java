@@ -27,7 +27,11 @@ public class FeData extends Application {
     //[x][0]:章节
     //[x][1]:是否中断
     //[x][2]:时长(秒)
-    public static int[][] save;;
+    public static int[][] save;
+    //更新存档状态
+    public static void saveReload(){
+        save = assets.save.getSx(saveNum);
+    }
 
     public static void start(Activity act){
         //保留activity

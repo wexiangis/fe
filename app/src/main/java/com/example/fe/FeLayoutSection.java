@@ -72,8 +72,6 @@ public class FeLayoutSection extends RelativeLayout {
         addView(chatLayout);
         //其它图层
         ;
-        //
-//        setBackgroundColor(0xFF00FF00);
     }
 
 }

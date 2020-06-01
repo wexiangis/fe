@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /*
-    主界面菜单选项
+    主界面菜单选项,不从属于主界面,它有自己的背景墙
  */
 public class FeLayoutMainMenu extends LinearLayout {
 
@@ -25,50 +25,46 @@ public class FeLayoutMainMenu extends LinearLayout {
     private View.OnClickListener onClickListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            //点击:加载存档
-            if(v == tvLoad){
-                FeData.flow.loadSection(0);
-            }
             //点击:创建存档
-            else if(v == tvNew){
-                FeData.flow.loadSection(0);
-            }
-            //点击:复制存档
-            else if(v == tvCopy){
-                ;
-            }
+            if(v == tvNew)
+                FeData.flow.loadSave(0);
+            //点击:加载存档
+            else if(v == tvLoad)
+                FeData.flow.loadSave(1);
             //点击:删除存档
-            else if(v == tvDel){
-                ;
-            }
+            else if(v == tvDel)
+                FeData.flow.loadSave(2);
+            //点击:复制存档
+            else if(v == tvCopy)
+                FeData.flow.loadSave(3);
             //点击:附加内容
-            else if(v == tvElse){
-                ;
-            }
+            else if(v == tvElse)
+                FeData.flow.loadExtra();
         }
     };
 
-    private void _setTxetView(Button button, String text){
+    private Button buildButtonStyle(Context context, String text){
+        Button button = new Button(context);
         button.setText(text);
         button.setTextColor(0xFFFFFFFF);
         button.setTextSize(24);
-//        button.setShadowLayer(5, 5, 5, 0x40404040);
         button.setGravity(Gravity.CENTER);
         button.setOnClickListener(onClickListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item.png"), null));
+        return button;
     }
 
     public FeLayoutMainMenu(Context context){
         super(context);
         //菜单各项TXT
-        tvLoad = new Button(FeData.context);_setTxetView(tvLoad, "继 续");
-        tvNew = new Button(FeData.context);_setTxetView(tvNew, "新游戏");
-        tvCopy = new Button(FeData.context);_setTxetView(tvCopy, "复 制");
-        tvDel = new Button(FeData.context);_setTxetView(tvDel, "删 除");
-        tvElse = new Button(FeData.context);_setTxetView(tvElse, "附加内容");
+        tvLoad = buildButtonStyle(context, "继 续");
+        tvNew = buildButtonStyle(context, "新游戏");
+        tvCopy = buildButtonStyle(context, "复 制");
+        tvDel = buildButtonStyle(context, "删 除");
+        tvElse = buildButtonStyle(context, "附加内容");
         //创建线性布局窗体
         this.setOrientation(LinearLayout.VERTICAL);
-        this.setBackgroundColor(0x80808080);
+        this.setBackgroundColor(0x80008000);
         //创建线性布局窗体参数
         tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tvLayoutParams.setMargins(0,0, 0, 10);
@@ -78,11 +74,13 @@ public class FeLayoutMainMenu extends LinearLayout {
         linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
         //添加布局参数
         this.setLayoutParams(linearLayoutParam);
+        //根据存档状态加载条目
+        loadMenu();
     }
 
-    public void reload(){
-        //removeall
-        this.removeAllViews();
+    private void loadMenu(){
+        //更新存档状态(FeData.save[][]的状态)
+        FeData.saveReload();
         //检查是否存在记录
         boolean findRecord = false;
         for(int i = 0; i < FeData.saveNum; i++) {

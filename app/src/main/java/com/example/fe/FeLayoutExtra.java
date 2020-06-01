@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /*
-    存档条列表
+    额外列表
  */
-public class FeLayoutSave extends LinearLayout {
+public class FeLayoutExtra extends LinearLayout {
 
     //条目列表
     private Button[] bnSaveList;
@@ -22,9 +22,8 @@ public class FeLayoutSave extends LinearLayout {
         @Override
         public void onClick(View v) {
             for(int i = 0; i < bnSaveList.lenght; i++){
-                if(v == bnSaveList[i]){
-                    FeData.flow.loadSection(0);
-                }
+                if(v == bnSaveList[i])
+                    ;
             }
         }
     };
@@ -36,27 +35,24 @@ public class FeLayoutSave extends LinearLayout {
         button.setTextSize(24);
         button.setGravity(Gravity.CENTER);
         button.setOnClickListener(onClickListener);
-        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_g.png"), null));
+        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_r.png"), null));
         return button;
     }
 
-    /*
-        ctrl 0/新建 1/加载(或继续) 2/删除 3/复制 4/通关存档
-     */
-    public FeLayoutSave(Context context, int ctrl){
+    public FeLayoutExtra(Context context){
         super(context);
         //更新存档状态(FeData.save[][]的状态)
         FeData.saveReload();
         //初始化
-        bnSaveList = new Button[FeData.saveNum];
-        for(int i = 0; i < bnSaveList.lenght; i++)
-            bnSaveList[i] = buildButtonStyle(context, "item " + i);
+        bnSaveList = new Button[2];
+        bnSaveList[0] = buildButtonStyle(context, "音 乐");
+        bnSaveList[1] = buildButtonStyle(context, "战 绩");
         //创建线性布局窗体
         this.setOrientation(LinearLayout.VERTICAL);
-        this.setBackgroundColor(0x80800000);
+        this.setBackgroundColor(0x80000080);
         //创建线性布局窗体参数
         LinearLayout.LayoutParams bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        bnLayoutParams.setMargins(0,0, 0, 20);
+        bnLayoutParams.setMargins(0,0, 0, 30);
         //线性布局窗体相对主界面位置参数
         RelativeLayout.LayoutParams linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
