@@ -10,7 +10,7 @@ import android.widget.TextView;
 /*
     主界面:背景动画+“按任意键提示”+超时播放职业动画
  */
-public class FeLayoutMainTheme extends RelativeLayout {
+public class FeLayoutMainTheme extends FeLayoutParent {
 
     //主界面触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){

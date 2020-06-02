@@ -7,6 +7,16 @@ import android.view.ViewGroup;
  */
 public class FeFlow {
 
+    private void loadLayout(FeLayoutParent layout){
+        //销毁旧layout
+        if(FeData.layoutCurrent != null && FeData.layoutCurrent instanceof FeLayoutParent.Callback)
+            FeData.layoutCurrent.callback.destory();
+        //记录当前
+        FeData.layoutCurrent = layout;
+        //显示
+        FeData.activity.setContentView(FeData.layoutCurrent);
+    }
+
     public void stop(){
         if(FeData.layoutSection != null &&
             FeData.layoutSection.getParent() != null)
@@ -35,7 +45,7 @@ public class FeFlow {
 
     //加载主界面
     public void loadMainTheme(){
-        FeData.activity.setContentView(new FeLayoutMainTheme(FeData.context));
+        loadLayout(new FeLayoutMainTheme(FeData.context));
     }
 
     //加载职业动画
@@ -45,17 +55,17 @@ public class FeFlow {
 
     //加载主界面菜单
     public void loadMainMenu(){
-        FeData.activity.setContentView(new FeLayoutMainMenu(FeData.context));
+        loadLayout(new FeLayoutMainMenu(FeData.context));
     }
 
     //加载存档界面: ctrl 0/新建 1/加载(或继续) 2/删除 3/复制 4/通关存档
     public void loadSave(int ctrl){
-        FeData.activity.setContentView(new FeLayoutSave(FeData.context, ctrl));
+        loadLayout(new FeLayoutSave(FeData.context, ctrl));
     }
 
     //加载额外内容
     public void loadExtra(){
-        FeData.activity.setContentView(new FeLayoutExtra(FeData.context));
+        loadLayout(new FeLayoutExtra(FeData.context));
     }
 
     //加载章节大地图
@@ -63,7 +73,7 @@ public class FeFlow {
         //只创建一个sectionLayout
         if(FeData.layoutSection == null)
             FeData.layoutSection = new FeLayoutSection(FeData.context, section);
-        FeData.activity.setContentView(FeData.layoutSection);
+        loadLayout(FeData.layoutSection);
     }
 
 }

@@ -17,6 +17,7 @@ public class FeData extends Application {
     public static FeFlow flow = null;//界面流程管理
     public static FeAssets assets = null;//assets文件资源管理
     public static FeEvent event = null;//用户操作事件管理
+    public static FeLayoutParent layoutCurrent = null;
     public static FeLayoutSection layoutSection = null;
     //参数合集
     public static FeParamMap paramMap = null;

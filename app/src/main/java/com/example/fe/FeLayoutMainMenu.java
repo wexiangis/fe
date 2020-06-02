@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 /*
     主界面菜单选项,不从属于主界面,它有自己的背景墙
  */
-public class FeLayoutMainMenu extends RelativeLayout {
+public class FeLayoutMainMenu extends FeLayoutParent {
 
     //菜单信息
     private Button tvLoad = null, tvNew = null, tvCopy = null, tvDel = null, tvElse = null;

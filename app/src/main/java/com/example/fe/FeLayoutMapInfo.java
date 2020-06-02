@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     显示地图光标处的地形信息
  */
-public class FeLayoutMapInfo extends RelativeLayout {
+public class FeLayoutMapInfo extends FeLayoutParent {
 
     public boolean checkHit(float x, float y){
         refresh();

@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     地图上的对话
  */
-public class FeLayoutChat extends RelativeLayout {
+public class FeLayoutChat extends FeLayoutParent {
 
     public boolean checkHit(float x, float y){
         return false;

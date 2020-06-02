@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 /*
     额外列表
  */
-public class FeLayoutExtra extends RelativeLayout {
+public class FeLayoutExtra extends FeLayoutParent {
 
     //条目列表
     private Button[] bnSaveList;

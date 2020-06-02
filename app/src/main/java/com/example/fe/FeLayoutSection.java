@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     章节地图和地图人物动画等信息管理
  */
-public class FeLayoutSection extends RelativeLayout {
+public class FeLayoutSection extends FeLayoutParent {
 
     public FeLayoutMap mapLayout = null;
     public FeLayoutMark markLayout = null;

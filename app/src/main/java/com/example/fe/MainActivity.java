@@ -3,6 +3,7 @@ package com.example.fe;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 
 public class MainActivity extends Activity {
@@ -17,6 +18,18 @@ public class MainActivity extends Activity {
         }
         //半透明系统虚拟按键
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            if(FeData.layoutCurrent != null && FeData.layoutCurrent instanceof FeLayoutParent.Callback)
+                return FeData.layoutCurrent.callback.keyBack();
+            return false;
+        }
+        return false;
     }
 
     @Override

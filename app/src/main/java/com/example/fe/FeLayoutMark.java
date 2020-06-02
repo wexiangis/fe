@@ -5,7 +5,7 @@ import android.graphics.RectF;
 import android.widget.RelativeLayout;
 import android.graphics.Shader;
 
-public class FeLayoutMark extends RelativeLayout {
+public class FeLayoutMark extends FeLayoutParent {
 
     public boolean checkHit(float x, float y){
         return false;

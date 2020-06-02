@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     加载和管理地图及地形动画
  */
-public class FeLayoutMap extends RelativeLayout {
+public class FeLayoutMap extends FeLayoutParent {
 
     public void refresh(){
         //遍历所有子view

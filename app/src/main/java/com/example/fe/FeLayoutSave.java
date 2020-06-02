@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 /*
     存档条列表
  */
-public class FeLayoutSave extends RelativeLayout {
+public class FeLayoutSave extends FeLayoutParent {
 
     private int ctrl;
     //条目列表

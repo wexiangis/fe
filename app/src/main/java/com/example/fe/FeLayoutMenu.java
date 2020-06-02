@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     地图上的系统菜单
  */
-public class FeLayoutMenu extends RelativeLayout {
+public class FeLayoutMenu extends FeLayoutParent {
 
     public boolean checkHit(float x, float y){
         return false;

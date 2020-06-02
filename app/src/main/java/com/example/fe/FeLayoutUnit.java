@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     地图中的人物动画管理
  */
-public class FeLayoutUnit extends RelativeLayout {
+public class FeLayoutUnit extends FeLayoutParent {
 
     private FeParamMap paramMap;
     private FeParamUnit paramUnit;
