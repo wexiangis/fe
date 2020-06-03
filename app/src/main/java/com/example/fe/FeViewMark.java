@@ -39,7 +39,7 @@ public class FeViewMark extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.event.checkSelectType(FeEvent.EVENT_MOVE))
+        if(FeData.section.checkClickState(FeEvent.ON_MOVE))
             return;
 
         if(this.colorMode == 0)

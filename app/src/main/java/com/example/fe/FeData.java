@@ -13,17 +13,23 @@ public class FeData extends Application {
     public static Activity activity = null;
     public static Context context = null;
     public static FeHeart heart = null;//全局动画心跳
+    
     //结构层
     public static FeAssets assets = null;//assets文件资源管理
     public static FeFlow flow = null;//界面流程管理
-    public static FeEvent event = null;//用户操作事件管理
-    public static FeLayoutSection layoutSection = null;
+
+    //章节运转的关键参数,数据+界面
+    public static FeSection section = null;
+    public static FeLayoutSection sectionLayout = null;
+
     //用于系统的界面的定位和跳转
     public static FeLayoutParent layoutCurrent = null;//当前界面
     public static FeChain<FeLayoutParent> layoutChain = null;//历史界面链表(该变量指向最后一个)
+
     //参数合集
     public static FeParamMap paramMap = null;
     public static FeParamUnit paramUnit = null;
+
     //存档数量
     public static final int saveNum = 3;
     //存档状态
@@ -61,7 +67,6 @@ public class FeData extends Application {
         heart = new FeHeart();
         flow = new FeFlow();
         assets = new FeAssets();
-        event = new FeEvent();
         paramUnit = new FeParamUnit();
     }
 }

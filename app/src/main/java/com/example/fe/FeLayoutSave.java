@@ -56,7 +56,7 @@ public class FeLayoutSave extends FeLayoutParent {
                             case 1:
                                 //确认为非空存档
                                 if(bnSaveList[i].getText().toString().indexOf(default_name) != 0)
-                                    FeData.flow.loadSection(0);
+                                    FeData.flow.loadSection(i, 0);
                                 break;
                             //删除
                             case 2:

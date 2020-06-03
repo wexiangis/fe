@@ -23,7 +23,7 @@ public class FeLayoutUnit extends FeLayoutParent {
         for (int i = 0; i < getChildCount(); i++) {
             tmp = (FeViewUnit)getChildAt(i);
             if(hitAnimOrder == i &&
-                FeData.event.checkSelectType(FeEvent.EVENT_HIT_UNIT)) {
+                FeData.section.checkClickState(FeEvent.ON_HIT_UNIT)) {
                 if(who_refresh == 1)
                     tmp.setAnimMode(tmp.getAnimMode()+1);
                 paramMap.getRectByGrid(tmp.gridX, tmp.gridY, paramUnit.selectSite);
@@ -41,7 +41,7 @@ public class FeLayoutUnit extends FeLayoutParent {
             fvu = (FeViewUnit)getChildAt(i);
             if (fvu.checkHit(x, y)) {
                 hitAnimOrder = i;
-                FeData.event.setSelectType(FeEvent.EVENT_HIT_UNIT);
+                FeData.section.setClickState(FeEvent.ON_HIT_UNIT);
                 FeData.paramUnit.selectView = fvu;
                 refresh(1);
                 return true;
@@ -49,7 +49,7 @@ public class FeLayoutUnit extends FeLayoutParent {
         }
         //
         hitAnimOrder = -1;
-        FeData.event.cleanSelectType(FeEvent.EVENT_HIT_UNIT);
+        FeData.section.cleanClickState(FeEvent.ON_HIT_UNIT);
         refresh(0);
         return false;
     }

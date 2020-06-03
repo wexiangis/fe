@@ -3,7 +3,7 @@ package com.example.fe;
 import android.view.ViewGroup;
 
 /*
-    事件管理层: 用于切换 主界面,章节内容,存档界面,等等等
+    流程管理: 用于来回切换各个界面
  */
 public class FeFlow {
 
@@ -25,16 +25,16 @@ public class FeFlow {
     }
 
     public void stop(){
-        if(FeData.layoutSection != null &&
-            FeData.layoutSection.getParent() != null)
-            ((ViewGroup)FeData.layoutSection.getParent()).removeAllViews();
+        if(FeData.sectionLayout != null &&
+            FeData.sectionLayout.getParent() != null)
+            ((ViewGroup)FeData.sectionLayout.getParent()).removeAllViews();
     }
 
     public void start(){
 
         //恢复
-        if(FeData.layoutSection != null){
-            FeData.activity.setContentView(FeData.layoutSection);
+        if(FeData.sectionLayout != null){
+            FeData.activity.setContentView(FeData.sectionLayout);
             return;
         }
 
@@ -45,7 +45,7 @@ public class FeFlow {
     //加载章节片头
     public void loadOpening() {
         //片头播完...
-        
+        ;
         //加载主界面
         loadMainTheme();
     }
@@ -75,12 +75,12 @@ public class FeFlow {
         loadLayout(new FeLayoutExtra(FeData.context));
     }
 
-    //加载章节大地图
-    public void loadSection(int section) {
-        //只创建一个sectionLayout
-        if(FeData.layoutSection == null)
-            FeData.layoutSection = new FeLayoutSection(FeData.context, section);
-        loadLayout(FeData.layoutSection);
+    //加载章节
+    //sX: 存档位置 mode: 0/重新加载 1/中断继续
+    public void loadSection(int sX, int mode) {
+        FeData.section = new FeSection(sXint, mode);
+        FeData.sectionLayout = new FeLayoutSection(FeData.context, FeData.section.data.info.getSection());
+        loadLayout(FeData.sectionLayout);
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了

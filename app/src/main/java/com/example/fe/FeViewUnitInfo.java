@@ -68,7 +68,7 @@ public class FeViewUnitInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.event.checkSelectType(FeEvent.EVENT_MOVE)){
+        if(FeData.section.checkClickState(FeEvent.ON_MOVE)){
             drawHead = false;
             return;
         }
@@ -83,7 +83,7 @@ public class FeViewUnitInfo extends View {
         }
 
         //画人物头像
-        if(!FeData.event.checkSelectType(FeEvent.EVENT_HIT_UNIT) ||
+        if(!FeData.section.checkClickState(FeEvent.ON_HIT_UNIT) ||
             paramUnit.selectSite.rect.left > paramMap.screenWidth ||
             paramUnit.selectSite.rect.right < 0 ||
             paramUnit.selectSite.rect.top > paramMap.screenHeight ||
