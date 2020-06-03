@@ -5,6 +5,7 @@ package com.example.fe;
  */
 public class FeAssets {
 
+    //各个文件夹
     public FeAssetsMap map;
     public FeAssetsMenu menu;
     public FeAssetsParam param;
@@ -17,7 +18,7 @@ public class FeAssets {
         menu = new FeAssetsMenu();
         param = new FeAssetsParam();
         unit = new FeAssetsUnit();
-        save = new FeAssetsSave();
+        save = new FeAssetsSave(unit);
         event = new FeAssetsEvent();
     }
 

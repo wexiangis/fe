@@ -6,10 +6,13 @@ package com.example.fe;
  */
 public class FeAssetsSave {
 
+    private FeAssetsUnit unit;
+
     private int sXCurrent = 0;//当前档位
     private FeFile file;//文件操作工具
 
-    public FeAssetsSave(){
+    public FeAssetsSave(FeAssetsUnit unit){
+        this.unit = unit;
         file = new FeFile();
         //从 /assets/save/last.txt 读取最后存档位置
         sXCurrent = Integer.valueOf(file.readFile("/save/last.txt", "00", 2));
@@ -80,5 +83,25 @@ public class FeAssetsSave {
     public void copySx(int sXDist, int sXSrc){
         file.copy(String.format("/save/s%d", sXDist), String.format("/save/s%d", sXSrc));
     }
+
+    /* ---------- 存档加载和保存 ---------- */
+
+    //通关后存档
+    public void saveSx(FeAssetsSX sX, int nextSection){
+        ;
+    }
     
+    //加载存档
+    public FeAssetsSX loadSx(int sX){
+        FeAssetsSX ret = new FeAssetsSX(unit, sX);
+        ret.init();
+        return ret;
+    }
+
+    //继续中断中的存档
+    public FeAssetsSX recoverSx(int sX){
+        FeAssetsSX ret = new FeAssetsSX(unit, sX);
+        ret.recover();
+        return ret;
+    }
 }

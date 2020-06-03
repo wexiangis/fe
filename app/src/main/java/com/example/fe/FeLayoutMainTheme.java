@@ -12,7 +12,7 @@ import android.widget.TextView;
  */
 public class FeLayoutMainTheme extends FeLayoutParent {
 
-    //主界面触屏事件回调函数
+    //触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
         public boolean onTouch(View v, MotionEvent event) {
             //触屏UP时

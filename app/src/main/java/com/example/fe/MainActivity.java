@@ -25,9 +25,18 @@ public class MainActivity extends Activity {
     {
         if (keyCode == KeyEvent.KEYCODE_BACK )
         {
+            boolean ret = false;
+            //控件食用事件
             if(FeData.layoutCurrent != null && FeData.layoutCurrent instanceof FeLayoutParent.Callback)
-                return FeData.layoutCurrent.callback.keyBack();
-            return false;
+                ret = FeData.layoutCurrent.callback.keyBack();
+            //控件不食用,则由系统食用
+            if(ret == false){
+                //界面返回
+                ;
+                //退出app
+                ;
+            }
+            return ret;
         }
         return false;
     }

@@ -3,6 +3,7 @@ package com.example.fe;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,14 +20,24 @@ public class FeLayoutExtra extends FeLayoutParent {
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
 
-    //主界面触屏事件回调函数
-    private View.OnClickListener onClickListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            for(int i = 0; i < bnSaveList.length; i++){
-                if(v == bnSaveList[i])
-                    ;
+    //触屏事件回调函数
+    private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
+        public boolean onTouch(View v, MotionEvent event) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //按下反馈
+                v.setAlpha(0.5f);
             }
+            else if(event.getAction() == MotionEvent.ACTION_UP) {
+                //松开反馈
+                v.setAlpha(1.0f);
+                //遍历检查目标条目
+                for(int i = 0; i < bnSaveList.length; i++){
+                    if(v == bnSaveList[i])
+                        ;
+                }
+            }
+            //不返回true的话ACTION_DOWN之后的事件都会被丢弃
+            return true;
         }
     };
 
@@ -36,7 +47,7 @@ public class FeLayoutExtra extends FeLayoutParent {
         button.setTextColor(0xFFFFFFFF);
         button.setTextSize(24);
         button.setGravity(Gravity.CENTER);
-        button.setOnClickListener(onClickListener);
+        button.setOnTouchListener(onTouchListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_g.png"), null));
         return button;
     }

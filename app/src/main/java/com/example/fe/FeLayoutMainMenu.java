@@ -3,6 +3,7 @@ package com.example.fe;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,25 +23,34 @@ public class FeLayoutMainMenu extends FeLayoutParent {
     private RelativeLayout.LayoutParams linearLayoutParam = null;
     private LinearLayout.LayoutParams tvLayoutParams = null;
 
-    //主界面触屏事件回调函数
-    private View.OnClickListener onClickListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            //点击:创建存档
-            if(v == tvNew)
-                FeData.flow.loadSave(0);
-            //点击:加载存档
-            else if(v == tvLoad)
-                FeData.flow.loadSave(1);
-            //点击:删除存档
-            else if(v == tvDel)
-                FeData.flow.loadSave(2);
-            //点击:复制存档
-            else if(v == tvCopy)
-                FeData.flow.loadSave(3);
-            //点击:附加内容
-            else if(v == tvElse)
-                FeData.flow.loadExtra();
+    //触屏事件回调函数
+    private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
+        public boolean onTouch(View v, MotionEvent event) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //按下反馈
+                v.setAlpha(0.5f);
+            }
+            else if(event.getAction() == MotionEvent.ACTION_UP) {
+                //松开反馈
+                v.setAlpha(1.0f);
+                //点击:创建存档
+                if(v == tvNew)
+                    FeData.flow.loadSave(0);
+                    //点击:加载存档
+                else if(v == tvLoad)
+                    FeData.flow.loadSave(1);
+                    //点击:删除存档
+                else if(v == tvDel)
+                    FeData.flow.loadSave(2);
+                    //点击:复制存档
+                else if(v == tvCopy)
+                    FeData.flow.loadSave(3);
+                    //点击:附加内容
+                else if(v == tvElse)
+                    FeData.flow.loadExtra();
+            }
+            //不返回true的话ACTION_DOWN之后的事件都会被丢弃
+            return true;
         }
     };
 
@@ -50,7 +60,7 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         button.setTextColor(0xFFFFFFFF);
         button.setTextSize(24);
         button.setGravity(Gravity.CENTER);
-        button.setOnClickListener(onClickListener);
+        button.setOnTouchListener(onTouchListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_b.png"), null));
         return button;
     }

@@ -3,6 +3,7 @@ package com.example.fe;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,43 +21,52 @@ public class FeLayoutSave extends FeLayoutParent {
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
 
-    //主界面触屏事件回调函数
-    private View.OnClickListener onClickListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            //遍历所有存档位置
-            for(int i = 0; i < bnSaveList.length; i++)
-            {
-                if(v == bnSaveList[i])
+    //触屏事件回调函数
+    private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
+        public boolean onTouch(View v, MotionEvent event) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //按下反馈
+                v.setAlpha(0.5f);
+            }
+            else if(event.getAction() == MotionEvent.ACTION_UP) {
+                //松开反馈
+                v.setAlpha(1.0f);
+                //遍历所有存档位置
+                for(int i = 0; i < bnSaveList.length; i++)
                 {
-                    switch(FeLayoutSave.this.ctrl){
-                        case 0: //新建
-                            if(bnSaveList[i].getText().toString().indexOf("未 使 用") == 0){
-                                //新建
-                                FeData.assets.save.newSx(i);
-                                //刷新
-                                refresh();
-                            }
-                        break;
-                        case 1: //加载
-                            if(bnSaveList[i].getText().toString().indexOf("未 使 用") != 0)
-                                FeData.flow.loadSection(0);
-                        break;
-                        case 2: //删除
-                            if(bnSaveList[i].getText().toString().indexOf("未 使 用") != 0){
-                                //删除
-                                FeData.assets.save.delSx(i);
-                                //刷新
-                                refresh();
-                            }
-                        break;
-                        case 3: //复制
-                        break;
-                        case 4: //通关保存
-                        break;
+                    if(v == bnSaveList[i])
+                    {
+                        switch(FeLayoutSave.this.ctrl){
+                            case 0: //新建
+                                if(bnSaveList[i].getText().toString().indexOf("未 使 用") == 0){
+                                    //新建
+                                    FeData.assets.save.newSx(i);
+                                    //刷新
+                                    refresh();
+                                }
+                                break;
+                            case 1: //加载
+                                if(bnSaveList[i].getText().toString().indexOf("未 使 用") != 0)
+                                    FeData.flow.loadSection(0);
+                                break;
+                            case 2: //删除
+                                if(bnSaveList[i].getText().toString().indexOf("未 使 用") != 0){
+                                    //删除
+                                    FeData.assets.save.delSx(i);
+                                    //刷新
+                                    refresh();
+                                }
+                                break;
+                            case 3: //复制
+                                break;
+                            case 4: //通关保存
+                                break;
+                        }
                     }
                 }
             }
+            //不返回true的话ACTION_DOWN之后的事件都会被丢弃
+            return true;
         }
     };
 
@@ -66,7 +76,7 @@ public class FeLayoutSave extends FeLayoutParent {
         button.setTextColor(0xFFFFFFFF);
         button.setTextSize(24);
         button.setGravity(Gravity.CENTER);
-        button.setOnClickListener(onClickListener);
+        button.setOnTouchListener(onTouchListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_save_g.png"), null));
         return button;
     }

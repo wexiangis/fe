@@ -9,10 +9,6 @@ public class FeAssetsSX {
     private FeAssetsUnit unit;
     private int sX;
 
-    public FeAssetsSaveCache saveCache;
-    public FeAssetsSaveUnit saveUnit;
-    public FeAssetsSection section;
-
     /*
         注意区别 sX 和 当前章节 不是一个东西
      */
@@ -29,10 +25,16 @@ public class FeAssetsSX {
         this.saveUnit = new FeAssetsSaveUnit(unit, sX);
     }
 
+    //----- 文件夹 -----
+
+    public FeAssetsSaveCache saveCache;
+    public FeAssetsSaveUnit saveUnit;
+    public FeAssetsSection section;
+
     //----- api -----
 
     /*
-        从中断中恢复
+        从中断中恢复, 与 init() 互斥使用
      */
     public void recover(){
         //加载缓存
@@ -42,7 +44,7 @@ public class FeAssetsSX {
     }
 
     /*
-        初始人物加载
+        初始人物加载, 与 recover() 互斥使用
      */
     public void init(){
         //删空缓存

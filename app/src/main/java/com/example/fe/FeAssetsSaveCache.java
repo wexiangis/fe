@@ -124,7 +124,7 @@ public class FeAssetsSaveCache {
     }
 
     /*
-        根据unit.txt信息加载各阵营人物信息camp_x_xxx.txt
+        根据unit.txt信息加载各阵营人物信息camp_x_xxx.txt到内存
      */
     public void recoverUnit(){
         //遍历所有unit
