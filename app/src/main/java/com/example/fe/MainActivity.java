@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
 
+    private long doubleClickExitTime = 0;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -32,9 +34,20 @@ public class MainActivity extends Activity {
             //控件不食用,则由系统食用
             if(ret == false){
                 //界面返回
-                ;
-                //退出app
-                ;
+                if(false){
+                    ;
+                }
+                //双击返回退出app
+                else{
+                    if(System.currentTimeMillis() - doubleClickExitTime > 1000){
+                        //更新时间
+                        doubleClickExitTime = System.currentTimeMillis();
+                        //提示
+                        Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                        System.exit(0);
+                }
             }
             return ret;
         }
