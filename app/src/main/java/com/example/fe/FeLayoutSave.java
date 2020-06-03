@@ -133,7 +133,7 @@ public class FeLayoutSave extends FeLayoutParent {
             int h = FeData.save[i][2]/3600;
             int m = FeData.save[i][2]%3600/60;
             int s = FeData.save[i][2]%60;
-            if(FeData.save[i][0] > 0)
+            if(FeData.save[i][0] >= 0)
                 bnSaveList[i] = buildButtonStyle(
                     context, String.format("第%d章 XXX %02d:%02d:%02d", FeData.save[i][0], h, m, s));
             else
@@ -168,7 +168,7 @@ public class FeLayoutSave extends FeLayoutParent {
             int h = FeData.save[i][2]/3600;
             int m = FeData.save[i][2]%3600/60;
             int s = FeData.save[i][2]%60;
-            if(FeData.save[i][0] > 0)
+            if(FeData.save[i][0] >= 0)
                 bnSaveList[i].setText(String.format("第%d章 XXX %02d:%02d:%02d", FeData.save[i][0], h, m, s));
             else
                 bnSaveList[i].setText(default_name);

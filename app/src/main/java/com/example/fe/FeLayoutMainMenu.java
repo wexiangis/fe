@@ -96,7 +96,7 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         //检查是否存在记录
         boolean findRecord = false;
         for(int i = 0; i < FeData.saveNum; i++) {
-            if (FeData.save[i][0] > 0) {
+            if (FeData.save[i][0] >= 0) {
                 findRecord = true;
                 break;
             }

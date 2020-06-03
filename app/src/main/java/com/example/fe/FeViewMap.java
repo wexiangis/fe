@@ -139,28 +139,28 @@ public class FeViewMap extends View {
                 isMove = false;
                 //
                 xGridErr = yGridErr = 0;
-                FeData.section.cleanClickState(FeEvent.ON_MOVE);
+                FeData.section.cleanClickState(FeSection.ON_MOVE);
             }
             break;
             case MotionEvent.ACTION_UP: {
                 float tUpX = event.getX();
                 float tUpY = event.getY();
                 //选中方格标志
-                FeData.section.cleanClickState(FeEvent.ON_MOVE);
+                FeData.section.cleanClickState(FeSection.ON_MOVE);
                 //是否是点击事件
                 if(!isMove) {
-                    FeData.section.setClickState(FeEvent.ON_HIT_MAP);
+                    FeData.section.setClickState(FeSection.ON_HIT_MAP);
                     //上传click事件
                     ((FeLayoutSection)getParent().getParent()).click(tUpX, tUpY);
                 }
                 else{
-                    FeData.section.cleanClickState(FeEvent.ON_HIT_MAP);
+                    FeData.section.cleanClickState(FeSection.ON_HIT_MAP);
                 }
                 isMove = false;
                 //输入坐标求格子位置
                 paramMap.getRectByLocation(tUpX, tUpY, paramMap.selectSite);
                 //选中人物太过靠近边界,挪动地图
-                if(FeData.section.checkClickState(FeEvent.ON_HIT_UNIT) &&
+                if(FeData.section.checkClickState(FeSection.ON_HIT_UNIT) &&
                     !paramMap.srcGridCenter.contains(
                     paramUnit.selectSite.point[0],
                     paramUnit.selectSite.point[1])){
@@ -213,9 +213,9 @@ public class FeViewMap extends View {
                 //调用一次onDraw
                 if (needRefresh) {
                     //清触屏点击
-                    FeData.section.cleanClickState(FeEvent.ON_HIT_MAP);
+                    FeData.section.cleanClickState(FeSection.ON_HIT_MAP);
                     //设置触屏移动
-                    FeData.section.setClickState(FeEvent.ON_MOVE);
+                    FeData.section.setClickState(FeSection.ON_MOVE);
                     //输入坐标求格子位置
                     paramMap.getRectByLocation(tMoveX, tMoveY, paramMap.selectSite);
                     //调用一次onDraw

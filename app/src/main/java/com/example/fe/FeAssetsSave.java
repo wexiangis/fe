@@ -30,7 +30,7 @@ public class FeAssetsSave {
     /*
         获取所有存档槽状态
         num: 存档槽总数
-        返回: int[num][0], 0/表示空 其它表示章节
+        返回: int[num][0], -1/表示空 其它表示章节
             int[num][1], 0/表示非中断状态 1/中断
             int[num][2], 时长,单位秒
      */
@@ -42,12 +42,13 @@ public class FeAssetsSave {
             //拼接路径
             String path = String.format("/save/s%d/info.txt", i);
             //默认值,无存档,非中断状态
-            ret[i][0] = ret[i][1] = 0;
+            ret[i][0] = -1;
+            ret[i][1] = ret[i][2] = 0;
             //文件存在
             if(file.exists(path))
             {
                 //读取文件
-                String[] line = file.readFile(path, "0;0;0;", 16).split(";");
+                String[] line = file.readFile(path, "-1;0;0;", 16).split(";");
                 if(line != null){
                     ret[i][0] = Integer.valueOf(line[0]);//得到章节数
                     if(line.length > 1)
@@ -68,7 +69,7 @@ public class FeAssetsSave {
         //删空档位
         file.delete(rootPath);
         //创建档位,章节0,非中断状态
-        file.writeFile(rootPath, "info.txt", "1;0;0;");
+        file.writeFile(rootPath, "info.txt", "0;0;0;");
         //更新最后存档位置
         sXCurrent = sX;
         file.writeFile("/save/", "last.txt", String.format("%02d", sXCurrent));

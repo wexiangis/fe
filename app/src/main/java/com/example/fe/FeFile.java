@@ -142,6 +142,8 @@ public class FeFile{
         File fileParent = new File(feSdRootPath + folder);
         if(!fileParent.exists())
             fileParent.mkdirs();
+        if(file.exists())
+            file.delete();
         try {
             FileOutputStream fos = new FileOutputStream(file.getPath());
             if(fos != null)

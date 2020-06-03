@@ -78,8 +78,11 @@ public class FeFlow {
     //加载章节
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public void loadSection(int sX, int mode) {
-        FeData.section = new FeSection(sXint, mode);
+        //初始化章节数据
+        FeData.section = new FeSection(sX, mode);
+        //初始化章节视图
         FeData.sectionLayout = new FeLayoutSection(FeData.context, FeData.section.data.info.getSection());
+        //显示章节
         loadLayout(FeData.sectionLayout);
     }
 
