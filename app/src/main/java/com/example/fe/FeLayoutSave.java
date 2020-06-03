@@ -15,11 +15,16 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutSave extends FeLayoutParent {
 
+    public static final String default_name = "未 使 用";
+
     private int ctrl;
     //条目列表
     private Button[] bnSaveList;
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
+
+    //复制模式时,记录第一个选中的存档
+    private int currnt_select = -1;
 
     //触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
@@ -37,29 +42,62 @@ public class FeLayoutSave extends FeLayoutParent {
                     if(v == bnSaveList[i])
                     {
                         switch(FeLayoutSave.this.ctrl){
-                            case 0: //新建
-                                if(bnSaveList[i].getText().toString().indexOf("未 使 用") == 0){
+                            //新建
+                            case 0:
+                                //确认为空存档
+                                if(bnSaveList[i].getText().toString().indexOf(default_name) == 0){
                                     //新建
                                     FeData.assets.save.newSx(i);
                                     //刷新
                                     refresh();
                                 }
                                 break;
-                            case 1: //加载
-                                if(bnSaveList[i].getText().toString().indexOf("未 使 用") != 0)
+                            //加载
+                            case 1:
+                                //确认为非空存档
+                                if(bnSaveList[i].getText().toString().indexOf(default_name) != 0)
                                     FeData.flow.loadSection(0);
                                 break;
-                            case 2: //删除
-                                if(bnSaveList[i].getText().toString().indexOf("未 使 用") != 0){
+                            //删除
+                            case 2:
+                                //确认为非空存档
+                                if(bnSaveList[i].getText().toString().indexOf(default_name) != 0){
                                     //删除
                                     FeData.assets.save.delSx(i);
                                     //刷新
                                     refresh();
                                 }
                                 break;
-                            case 3: //复制
+                            //复制
+                            case 3:
+                                //点击被复制项
+                                if(currnt_select < 0){
+                                    //确认为非空存档
+                                    if(bnSaveList[i].getText().toString().indexOf(default_name) != 0){
+                                        //标记
+                                        currnt_select = i;
+                                        v.setAlpha(0.5f);
+                                    }
+                                }
+                                //点击复制到位置
+                                else{
+                                    //不是选中那条
+                                    if(i != currnt_select){
+                                        //复制
+                                        FeData.assets.save.copySx(i, currnt_select);
+                                        //解除标记
+                                        bnSaveList[currnt_select].setAlpha(1.0f);
+                                        currnt_select = -1;
+                                        //刷新
+                                        refresh();
+                                    }
+                                    //点击了选中那条,解除选中状态
+                                    else
+                                        currnt_select = -1;
+                                }
                                 break;
-                            case 4: //通关保存
+                            //通关保存
+                            case 4:
                                 break;
                         }
                     }
@@ -99,7 +137,7 @@ public class FeLayoutSave extends FeLayoutParent {
                 bnSaveList[i] = buildButtonStyle(
                     context, String.format("第%d章 XXX %02d:%02d:%02d", FeData.save[i][0], h, m, s));
             else
-                bnSaveList[i] = buildButtonStyle(context, "未 使 用");
+                bnSaveList[i] = buildButtonStyle(context, default_name);
         }
         //创建线性布局窗体
         linearLayout = new LinearLayout(context);
@@ -133,7 +171,7 @@ public class FeLayoutSave extends FeLayoutParent {
             if(FeData.save[i][0] > 0)
                 bnSaveList[i].setText(String.format("第%d章 XXX %02d:%02d:%02d", FeData.save[i][0], h, m, s));
             else
-                bnSaveList[i].setText("未 使 用");
+                bnSaveList[i].setText(default_name);
         }
     }
 }
