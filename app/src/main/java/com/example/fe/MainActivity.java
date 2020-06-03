@@ -34,11 +34,10 @@ public class MainActivity extends Activity {
             //控件不食用,则由系统食用
             if(ret == false){
                 //界面返回
-                if(false){
-                    ;
-                }
+                ret = FeData.flow.loadLast();
                 //双击返回退出app
-                else{
+                if(ret == false)
+                {
                     if(System.currentTimeMillis() - doubleClickExitTime > 1000){
                         //更新时间
                         doubleClickExitTime = System.currentTimeMillis();

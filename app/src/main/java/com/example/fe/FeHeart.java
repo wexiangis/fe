@@ -15,26 +15,26 @@ public class FeHeart {
     // ---------- 链表部分 ----------
 
     //本地定义一个链表头
-    private FeLink<FeHeartUnit> link = new FeLink<FeHeartUnit>(new FeHeartUnit(0, new FeHeartUnit.TimeOutTask(){
+    private FeChain<FeHeartUnit> chain = new FeChain<FeHeartUnit>(new FeHeartUnit(0, new FeHeartUnit.TimeOutTask(){
         public void run(int c){}
     }));
 
     //添加链表单元的方式申请心跳
     public void addUnit(FeHeartUnit u){
-        FeLink<FeHeartUnit> tmp = link;
+        FeChain<FeHeartUnit> tmp = chain;
         while (tmp.next != null)
             tmp = tmp.next;
-        FeLink<FeHeartUnit> tmp2 = new FeLink<FeHeartUnit>(u);
+        FeChain<FeHeartUnit> tmp2 = new FeChain<FeHeartUnit>(u);
         tmp2.previous = tmp;
         tmp.next = tmp2;
     }
 
     //移除单元
     public void removeUnit(FeHeartUnit u){
-        FeLink<FeHeartUnit> tmp = link.next;
+        FeChain<FeHeartUnit> tmp = chain.next;
         while (tmp != null){
             if(tmp.data == u){
-                FeLink<FeHeartUnit> tmp2 = tmp.next;
+                FeChain<FeHeartUnit> tmp2 = tmp.next;
                 tmp.previous.next = tmp2;
                 if(tmp2 != null)
                     tmp2.previous = tmp.previous;
@@ -45,8 +45,8 @@ public class FeHeart {
     }
 
     //根据type遍历链表,然后回掉接口函数,传参count为当前要播放第几帧
-    private boolean scanLink(int type, int count){
-        FeLink<FeHeartUnit> tmp = link.next;
+    private boolean scanChain(int type, int count){
+        FeChain<FeHeartUnit> tmp = chain.next;
         boolean hit = false;
         try {
             while (tmp != null) {
@@ -62,7 +62,7 @@ public class FeHeart {
                 }
             }
         }catch (java.lang.RuntimeException e){
-            Log.e("Heart: scanLink()", "runtime error");
+            Log.e("Heart: scanChain()", "runtime error");
             return false;
         }
         return hit;
@@ -119,7 +119,7 @@ public class FeHeart {
                         }
                     }
                     //
-                    scanLink(TYPE_ANIM_STAY, circleType1_count);
+                    scanChain(TYPE_ANIM_STAY, circleType1_count);
                 }
             }
         };
@@ -144,7 +144,7 @@ public class FeHeart {
                         }
                     }
                     //
-                    if(!scanLink(TYPE_ANIM_SELECT, circleType2_count)) {
+                    if(!scanChain(TYPE_ANIM_SELECT, circleType2_count)) {
                         //随时就绪,下次有人被选中时从第一帧开始播放
                         circleType2_dir = false;
                         circleType2_count = 1;
@@ -164,7 +164,7 @@ public class FeHeart {
                     if(++circleType3_count >= circleType3.length)
                         circleType3_count = 0;
                     //
-                    scanLink(TYPE_ANIM_MOVE, circleType3_count);
+                    scanChain(TYPE_ANIM_MOVE, circleType3_count);
                 }
             }
         };
@@ -175,7 +175,7 @@ public class FeHeart {
             public void run() {
                 //type 4 TYPE_FRAME_HEART
                 circleType4_count += 1;
-                scanLink(TYPE_FRAME_HEART, circleType4_count);
+                scanChain(TYPE_FRAME_HEART, circleType4_count);
             }
         };
         //

@@ -11,6 +11,13 @@ public class FeFlow {
         //销毁旧layout
         if(FeData.layoutCurrent != null && FeData.layoutCurrent instanceof FeLayoutParent.Callback)
             FeData.layoutCurrent.callback.destory();
+        //入栈
+        if(FeData.layoutCurrent != null){
+            if(FeData.layoutChain == null)
+                FeData.layoutChain = new FeChain<FeLayoutParent>(FeData.layoutCurrent);
+            else
+                FeData.layoutChain = FeData.layoutChain.next = new FeChain<FeLayoutParent>(FeData.layoutCurrent);
+        }
         //记录当前
         FeData.layoutCurrent = layout;
         //显示
@@ -76,4 +83,21 @@ public class FeFlow {
         loadLayout(FeData.layoutSection);
     }
 
+    //系统的界面返回, 返回false表示没有上一级界面了
+    public boolean loadLast(){
+        //链表已空
+        if(FeData.layoutChain == null)
+            return false;
+        //销毁旧layout
+        if(FeData.layoutCurrent != null && FeData.layoutCurrent instanceof FeLayoutParent.Callback)
+            FeData.layoutCurrent.callback.destory();
+        //记录当前
+        FeData.layoutCurrent = FeData.layoutChain.data;
+        //出栈
+        FeData.layoutChain = FeData.layoutChain.previous;
+        //显示
+        FeData.activity.setContentView(FeData.layoutCurrent);
+        
+        return true;
+    }
 }

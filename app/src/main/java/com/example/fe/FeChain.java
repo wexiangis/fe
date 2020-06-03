@@ -3,10 +3,10 @@ package com.example.fe;
 /*
     通用的链表结构
  */
-public class FeLink<U> {
+public class FeChain<U> {
     public U data = null;
-    public FeLink<U> previous = null, next = null;
-    public FeLink(U dat){
+    public FeChain<U> previous = null, next = null;
+    public FeChain(U dat){
         data = dat;
     }
 }
