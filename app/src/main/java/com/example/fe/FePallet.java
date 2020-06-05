@@ -3,7 +3,7 @@ package com.example.fe;
 import android.graphics.Bitmap;
 
 /*
-    调色板
+    bitmap调色板
  */
 public class FePallet {
 

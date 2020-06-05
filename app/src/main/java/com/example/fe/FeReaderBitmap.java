@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /*
-    通用的根据文件夹和id获取图片方法
+    通用图片读取工具
     example:
         FeReaderBitmap bitmapReader = new FeReaderBitmap();
         bitmapReader.load_xxx()
@@ -40,6 +40,10 @@ class FeReaderBitmap {
         return ret;
     }
 
+    /*
+        folder: 示例 "/unit/head/" 前后都带斜杠
+        realName: 示例 "xxx.bmp" 前后都不带斜杠
+     */
     public Bitmap load_bitmap(String folder, String realName) {
         File assetsFilePath = new File("/assets" + folder + realName);
         File sdFileFolderPath = new File(feSdRootPath + folder);

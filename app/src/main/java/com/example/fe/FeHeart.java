@@ -68,7 +68,7 @@ public class FeHeart {
         return hit;
     }
 
-    // ---------- 心跳散播 ----------
+    // ---------- 心跳类型 ----------
 
     //type定义
     public static final int TYPE_ANIM_STAY = 1;//人物原地待机或选中时动画,共3帧,钟摆式循环播放
@@ -76,6 +76,8 @@ public class FeHeart {
     public static final int TYPE_ANIM_MOVE = 3;//人物移动时动画,共4帧,循环播放
     public static final int TYPE_FRAME_HEART = 4;//帧动画心跳,不限帧数,周期100ms
     public static final int TYPE_TOTAL = 4;
+
+    // ---------- 心跳间隔数组和计数 ----------
 
     //type 1 TYPE_ANIM_STAY
     private final int[] circleType1 = new int[]{5, 1, 5};//每帧延时
@@ -93,6 +95,8 @@ public class FeHeart {
 
     //type 4 TYPE_FRAME_HEART
     private int circleType4_count = 0;
+
+    // ---------- 心跳定时器 ----------
 
     //定时器
     private Timer[] timer = new Timer[TYPE_TOTAL];

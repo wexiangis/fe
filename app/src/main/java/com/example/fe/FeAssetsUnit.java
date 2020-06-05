@@ -324,7 +324,7 @@ public class FeAssetsUnit {
         return item.getEquip(unit.getItem(count));
     }
 
-    //----- all file -----
+    //----- file -----
 
     // unit
     public Unit unit = new Unit("/unit/", "unit.txt", ";");
@@ -345,7 +345,7 @@ public class FeAssetsUnit {
     public P_Skill p_skill = new P_Skill("/unit/", "p_skill.txt", ";");
     public P_Special p_special = new P_Special("/unit/", "p_special.txt", ";");
 
-    //----- unit 文件夹 -----
+    //----- 文件夹 -----
 
     private FeReaderBitmap bitmapReader = new FeReaderBitmap();
 
@@ -356,7 +356,7 @@ public class FeAssetsUnit {
         return bitmapReader.load_png_byId("/unit/head/", id);
     }
 
-    //----- unit -----
+    //----- class -----
 
     //人物列表
     class Unit extends FeReaderFile {
@@ -414,8 +414,6 @@ public class FeAssetsUnit {
             super(folder, name, split);
         }
     }
-
-    //----- unit addition -----
 
     //人物加成列表
     class Addition extends FeReaderFile {
@@ -533,8 +531,6 @@ public class FeAssetsUnit {
             super(folder, name, split);
         }
     }
-
-    //----- unit profession -----
 
     //职业列表
     class Profession extends FeReaderFile {

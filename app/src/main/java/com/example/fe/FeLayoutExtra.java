@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /*
-    额外列表
+    额外菜单列表
  */
 public class FeLayoutExtra extends FeLayoutParent {
 

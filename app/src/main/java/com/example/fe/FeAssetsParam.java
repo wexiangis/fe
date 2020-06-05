@@ -114,7 +114,7 @@ public class FeAssetsParam {
         return getTypesBitmap(types.getPicture(id));
     }
 
-    //----- all file -----
+    //----- file -----
 
     public Types types = new Types("/param/", "types.txt", ";");
     public Items items = new Items("/param/", "items.txt", ";");
@@ -122,7 +122,7 @@ public class FeAssetsParam {
     public SkillLevel skillLevel = new SkillLevel("/param/", "skill_level.txt", ";");
     public AbilityLimit abilityLimit = new AbilityLimit("/param/", "ability_limit.txt", ";");
 
-    //----- unit 文件夹 -----
+    //----- 文件夹 -----
 
     private FeReaderBitmap bitmapReader = new FeReaderBitmap();
 
@@ -136,7 +136,7 @@ public class FeAssetsParam {
         return bitmapReader.load_png_byId("/param/item/", id);
     }
 
-    //----- xxx -----
+    //----- class -----
 
     //职业类型列表
     class Types extends FeReaderFile {
