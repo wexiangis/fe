@@ -32,7 +32,7 @@ public class FeFileRead {
     //每次调用 readLine() 后得到的数据
     private String lineContent;//行原始数据
     private String[] content;//按分隔符处理后的行数据
-    private int line = -1;//当前行数
+    private int line = 0;//当前行数
 
     // 返回按分隔符分割好的一行数据
     public String[] getContent(){
@@ -46,15 +46,13 @@ public class FeFileRead {
 
     // 当前读取行号, 从0数起
     public int getLine(){
-        if(line < 0)
-            return 0;
         return line;
     }
 
     // 返回改行 String[count] 的数据
     public int getInt(int count){
         if(content != null && content.length > count)
-            return Integer.valueOf(content[count]);
+            return FeFormat.StringToInt(content[count]);
         return -1;
     }
 
