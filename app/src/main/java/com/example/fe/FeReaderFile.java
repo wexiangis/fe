@@ -73,8 +73,9 @@ public class FeReaderFile {
         }
         //转换数据
         int[] ret = new int[d.content.length];
-        for(int i = 0; i < d.content.length; i++)
-            ret[i] = Integer.valueOf(d.content[i]);
+        for(int i = 0; i < d.content.length; i++){
+            ret[i] = FeFormat.StringToInt(d.content[i]);
+        }
         return ret;
     }
 
@@ -85,17 +86,33 @@ public class FeReaderFile {
             Log.d("FeReaderFile.getLineInt", "data is null");
             return null;
         }
-        if(d.content.length != content.length){
+        if(d.content.length == 0 || content.length == 0){
             Log.d("FeReaderFile.get...Plus",
                 "length err : l/" + line
                     + "Ls/" + d.content.length
                     + "L1/" + content.length);
             return null;
         }
-        //转换数据
-        int[] ret = new int[d.content.length];
-        for(int i = 0; i < d.content.length; i++)
-            ret[i] = Integer.valueOf(d.content[i] + content[i]);
+        //比较谁长谁短
+        int Lmin = d.content.length;
+        if(Lmin > content.length)
+            Lmin = content.length;
+        int Lmax = d.content.length;
+        if(Lmax < content.length)
+            Lmax = content.length;
+        //前段相加
+        int[] ret = new int[Lmax];
+        int i = 0;
+        for(; i < Lmin; i++)
+            ret[i] = FeFormat.StringToInt(d.content[i]) + content[i];
+        //后段谁长用谁的
+        if(Lmax == d.content.length){
+            for(; i < Lmax; i++)
+                ret[i] = FeFormat.StringToInt(d.content[i]);
+        }else{
+            for(; i < Lmax; i++)
+                ret[i] = content[i];
+        }
         return ret;
     }
 
@@ -110,10 +127,11 @@ public class FeReaderFile {
 
     //设置指定行
     public void setLine(int line, int[] content){
+        if(content == null)
+            return;
         Data d = getData(line);
         if(d != null) {
-            if(d.content.length != content.length)
-                d.content = new String[content.length];
+            d.content = new String[content.length];
             //转换数据
             for(int i = 0; i < d.content.length; i++)
                 d.content[i] = String.valueOf(content[i]);
@@ -124,18 +142,33 @@ public class FeReaderFile {
 
     //设置指定行(两行相加)
     public void setLinePlus(int line, int[] content, int[] content2){
+        if(content == null || content2 == null)
+            return;
         Data d = getData(line);
         if(d != null){
-            if(d.content.length != content.length ||
-                    d.content.length != content2.length)
-                Log.d("FeReaderFile.setLine",
-                    "length err : l/" + line
-                        + "Ls/" + d.content.length
-                        + "L1/" + content.length
-                        + "L2/" + content2.length);
-            else{
-                for(int i = 0; i < d.content.length; i++)
-                    d.content[i] = String.valueOf(content[i] + content2[i]);
+            //比较谁长谁短
+            int Lmin = content.length;
+            if(Lmin > content2.length)
+                Lmin = content2.length;
+            int Lmax = content.length;
+            if(Lmax < content2.length)
+                Lmax = content2.length;
+            //不够长则重置
+            if(d.content == null)
+                d.content = new String[Lmax];
+            else if(d.content.length < Lmax)
+                d.content = new String[Lmax];
+            //前段相加
+            int i = 0;
+            for(; i < Lmin; i++)
+                d.content[i] = String.valueOf(content[i] + content2[i]);
+            //后段用长的
+            if(Lmax == content.length){
+                for(; i < Lmax; i++)
+                    d.content[i] = String.valueOf(content[i]);
+            }else{
+                for(; i < Lmax; i++)
+                    d.content[i] = String.valueOf(content2[i]);
             }
         }
         else
@@ -196,7 +229,7 @@ public class FeReaderFile {
             Log.d("FeReaderFile.getInt", "count >= " + d.content.length);
             return 0;
         }
-        return Integer.valueOf(d.content[count]);
+        return FeFormat.StringToInt(d.content[count]);
     }
 
     //设置指定行,指定序号的数据
@@ -213,7 +246,7 @@ public class FeReaderFile {
         FeFileRead ffr = new FeFileRead(folderAndName[0], folderAndName[1]);
         //打开文件失败,创建文件
         if(ffr == null || !ffr.ready())
-            ;//save();
+            line = 0;
         //文件就绪
         else{
             Data datNow = null;
@@ -222,6 +255,7 @@ public class FeReaderFile {
                 if(datNow == null) datNow = data = new Data(ffr.getContent());
                 else datNow = datNow.next = new Data(ffr.getContent());
             }
+            line = ffr.getLine();
             ffr.exit();
         }
     }

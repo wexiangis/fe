@@ -93,6 +93,8 @@ public class FeAssetsSaveCache {
             //行8
             cp.setView(3);
             cp.setViewAdd(0);
+            //保存文件
+            cp.save();
         }
         else{
             //搬迁数据
@@ -120,6 +122,8 @@ public class FeAssetsSaveCache {
             //行8
             cp.setView(3);
             cp.setViewAdd(0);
+            //保存文件
+            cp.save();
         }
     }
 
@@ -412,7 +416,7 @@ public class FeAssetsSaveCache {
                 addLine(new String[]{"0","0","行6:救出状态及其ID"});
                 addLine(new String[]{"0","0","0","0","行7:战绩/战胜/战败"});
                 addLine(new String[]{"0","0","行8:视野/道具加成视野"});
-                save();
+//                save();
             }
         }
     }

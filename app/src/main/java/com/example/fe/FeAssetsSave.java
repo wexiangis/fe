@@ -15,7 +15,7 @@ public class FeAssetsSave {
         this.unit = unit;
         file = new FeFile();
         //从 /assets/save/last.txt 读取最后存档位置
-        sXCurrent = Integer.valueOf(file.readFile("/save/last.txt", "00", 2));
+        sXCurrent = FeFormat.StringToInt(file.readFile("/save/last.txt", "00", 2));
     }
 
     /* ---------- 存档槽位检查 ---------- */
@@ -50,11 +50,11 @@ public class FeAssetsSave {
                 //读取文件
                 String[] line = file.readFile(path, "-1;0;0;", 16).split(";");
                 if(line != null){
-                    ret[i][0] = Integer.valueOf(line[0]);//得到章节数
+                    ret[i][0] = FeFormat.StringToInt(line[0]);//得到章节数
                     if(line.length > 1)
-                        ret[i][1] = Integer.valueOf(line[1]);//得到是否中断
+                        ret[i][1] = FeFormat.StringToInt(line[1]);//得到是否中断
                     if(line.length > 2)
-                        ret[i][2] = Integer.valueOf(line[2]);//得到时长
+                        ret[i][2] = FeFormat.StringToInt(line[2]);//得到时长
                 }
             }
         }

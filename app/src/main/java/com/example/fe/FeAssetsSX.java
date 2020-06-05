@@ -76,6 +76,8 @@ public class FeAssetsSX {
                 saveCache.addUnit(section.unit.getCamp(i), section.unit.getId(i), section.unit.getXY(i), false);
             }
         }
+        //
+        saveCache.unit.save();
     }
 
     /*
