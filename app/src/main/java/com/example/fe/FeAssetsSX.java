@@ -89,7 +89,8 @@ public class FeAssetsSX {
 
         //根据 section 的site加载 saveUnit 人物到 saveCache
         //为己方阵营
-        if(camp == 0){
+        if(camp == 0)
+        {
             for(int siteCount = 0, saveUnitCount = 0;
                 siteCount < section.site.total() &&
                 saveUnitCount < saveUnit.unit.total();
