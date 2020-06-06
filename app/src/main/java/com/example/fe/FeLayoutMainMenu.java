@@ -65,6 +65,15 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         return button;
     }
 
+    public void reload(){
+        //根据存档状态加载条目
+        loadMenu();
+        //显示列表
+        this.removeAllViews();
+        this.addView(linearLayout, linearLayoutParam);
+        this.setBackgroundColor(0x80408040);
+    }
+
     public FeLayoutMainMenu(Context context){
         super(context);
         //菜单各项TXT
@@ -83,11 +92,26 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
         linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
-        //根据存档状态加载条目
-        loadMenu();
-        //显示列表
-        this.addView(linearLayout, linearLayoutParam);
-        this.setBackgroundColor(0x80408040);
+        //加载结构
+        reload();
+
+        //实现父类接口
+        callback = new FeLayoutParent.Callback() {
+            @Override
+            public boolean keyBack() {
+                return false;
+            }
+
+            @Override
+            public boolean destory() {
+                return false;
+            }
+
+            @Override
+            public void reload() {
+                FeLayoutMainMenu.this.reload();
+            }
+        };
     }
 
     private void loadMenu(){
@@ -102,6 +126,7 @@ public class FeLayoutMainMenu extends FeLayoutParent {
             }
         }
         //按特定参数添加各项到线性布局
+        linearLayout.removeAllViews();
         if(findRecord)
             linearLayout.addView(tvLoad, tvLayoutParams);
         linearLayout.addView(tvNew, tvLayoutParams);

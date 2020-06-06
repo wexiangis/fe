@@ -9,7 +9,7 @@ public class FeFlow {
 
     private void loadLayout(FeLayoutParent layout){
         //销毁旧layout
-        if(FeData.layoutCurrent != null && FeData.layoutCurrent instanceof FeLayoutParent.Callback)
+        if(FeData.layoutCurrent != null && FeData.layoutCurrent.callback != null)
             FeData.layoutCurrent.callback.destory();
         //入栈
         if(FeData.layoutCurrent != null){
@@ -92,12 +92,15 @@ public class FeFlow {
         if(FeData.layoutChain == null)
             return false;
         //销毁旧layout
-        if(FeData.layoutCurrent != null && FeData.layoutCurrent instanceof FeLayoutParent.Callback)
+        if(FeData.layoutCurrent != null && FeData.layoutCurrent.callback != null)
             FeData.layoutCurrent.callback.destory();
         //记录当前
         FeData.layoutCurrent = FeData.layoutChain.data;
         //出栈
         FeData.layoutChain = FeData.layoutChain.previous;
+        //有需要reload的
+        if(FeData.layoutCurrent.callback != null)
+            FeData.layoutCurrent.callback.reload();
         //显示
         FeData.activity.setContentView(FeData.layoutCurrent);
         

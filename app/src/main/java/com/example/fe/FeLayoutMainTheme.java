@@ -12,6 +12,9 @@ import android.widget.TextView;
  */
 public class FeLayoutMainTheme extends FeLayoutParent {
 
+    private TextView textView;
+    private RelativeLayout.LayoutParams layoutParams;
+
     //触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
         public boolean onTouch(View v, MotionEvent event) {
@@ -22,6 +25,15 @@ public class FeLayoutMainTheme extends FeLayoutParent {
             return true;
         }
     };
+
+    public void reload(){
+        this.removeAllViews();
+        //添加到主界面
+        this.addView(textView);
+        //背景
+        this.setBackgroundColor(0xFF404040);
+        this.setOnTouchListener(onTouchListener);
+    }
 
     public FeLayoutMainTheme(Context context)
     {
@@ -34,33 +46,40 @@ public class FeLayoutMainTheme extends FeLayoutParent {
         // screenHeight = dm.heightPixels;
 
         //加载背景动画
-        loadTitle(context);
-
-        //加载按任意键提示
-        loadTip(context);
-
-        this.setBackgroundColor(0xFF404040);
-        this.setOnTouchListener(onTouchListener);
-    }
-
-    public void loadTitle(Context context){
         ;
-    }
 
-    public void loadTip(Context context){
         //按任意键继续
-        TextView textView = new TextView(context);
+        textView = new TextView(context);
         textView.setText("按任意键继续");
         textView.setTextColor(0x80FFFFFF);
         textView.setTextSize(24);
         //相对主界面的位置
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.setMargins(0, 0, 0, 100);
         //添加布局参数
         textView.setLayoutParams(layoutParams);
-        //添加到主界面
-        this.addView(textView);
+
+        //加载结构
+        reload();
+
+        //实现父类接口
+        callback = new FeLayoutParent.Callback() {
+            @Override
+            public boolean keyBack() {
+                return false;
+            }
+
+            @Override
+            public boolean destory() {
+                return false;
+            }
+
+            @Override
+            public void reload() {
+                FeLayoutMainTheme.this.reload();
+            }
+        };
     }
 }

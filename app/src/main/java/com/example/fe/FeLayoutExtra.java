@@ -19,6 +19,10 @@ public class FeLayoutExtra extends FeLayoutParent {
     private Button[] bnSaveList;
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
+    //linear布局在主界面中的位置参数
+    RelativeLayout.LayoutParams linearLayoutParam = null;
+    //button在linear中的布局参数
+    LinearLayout.LayoutParams bnLayoutParams = null;
 
     //触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
@@ -41,6 +45,23 @@ public class FeLayoutExtra extends FeLayoutParent {
         }
     };
 
+    public FeLayoutParent.Callback callback = new FeLayoutParent.Callback() {
+        @Override
+        public boolean keyBack() {
+            return false;
+        }
+
+        @Override
+        public boolean destory() {
+            return false;
+        }
+
+        @Override
+        public void reload() {
+            FeLayoutExtra.this.reload();
+        }
+    };
+
     private Button buildButtonStyle(Context context, String text){
         Button button = new Button(context);
         button.setText(text);
@@ -50,6 +71,17 @@ public class FeLayoutExtra extends FeLayoutParent {
         button.setOnTouchListener(onTouchListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_g.png"), null));
         return button;
+    }
+
+    public void reload(){
+        //添加条目到视图
+        linearLayout.removeAllViews();
+        for(int i = 0; i < bnSaveList.length; i++)
+            linearLayout.addView(bnSaveList[i], bnLayoutParams);
+        //显示列表
+        this.removeAllViews();
+        this.addView(linearLayout, linearLayoutParam);
+        this.setBackgroundColor(0x80408040);
     }
 
     public FeLayoutExtra(Context context){
@@ -62,17 +94,31 @@ public class FeLayoutExtra extends FeLayoutParent {
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
-        LinearLayout.LayoutParams bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         bnLayoutParams.setMargins(0,0, 0, 30);
         //线性布局窗体相对主界面位置参数
-        RelativeLayout.LayoutParams linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
         linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
-        //添加条目到视图
-        for(int i = 0; i < bnSaveList.length; i++)
-            linearLayout.addView(bnSaveList[i], bnLayoutParams);
-        //显示列表
-        this.addView(linearLayout, linearLayoutParam);
-        this.setBackgroundColor(0x80408040);
+        //结构加载
+        reload();
+
+        //实现父类接口
+        callback = new FeLayoutParent.Callback() {
+            @Override
+            public boolean keyBack() {
+                return false;
+            }
+
+            @Override
+            public boolean destory() {
+                return false;
+            }
+
+            @Override
+            public void reload() {
+                FeLayoutExtra.this.reload();
+            }
+        };
     }
 }

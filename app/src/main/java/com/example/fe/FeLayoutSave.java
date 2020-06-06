@@ -23,6 +23,9 @@ public class FeLayoutSave extends FeLayoutParent {
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
 
+    private LinearLayout.LayoutParams bnLayoutParams;
+    private RelativeLayout.LayoutParams linearLayoutParam;
+
     //复制模式时,记录第一个选中的存档
     private int currnt_select = -1;
 
@@ -143,10 +146,10 @@ public class FeLayoutSave extends FeLayoutParent {
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
-        LinearLayout.LayoutParams bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         bnLayoutParams.setMargins(0,0, 0, 30);
         //线性布局窗体相对主界面位置参数
-        RelativeLayout.LayoutParams linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
         linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
         //添加条目到视图
@@ -155,6 +158,24 @@ public class FeLayoutSave extends FeLayoutParent {
         //显示列表
         this.addView(linearLayout, linearLayoutParam);
         this.setBackgroundColor(0x80404080);
+
+        //实现父类接口
+        callback = new FeLayoutParent.Callback() {
+            @Override
+            public boolean keyBack() {
+                return false;
+            }
+
+            @Override
+            public boolean destory() {
+                return false;
+            }
+
+            @Override
+            public void reload() {
+                FeLayoutSave.this.refresh();
+            }
+        };
     }
 
     /*
