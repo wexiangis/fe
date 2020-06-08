@@ -36,16 +36,18 @@ public class FeData extends Application {
     public static FeLayoutParent layoutCurrent = null;//当前界面
     public static FeChain<FeLayoutParent> layoutChain = null;//历史界面链表(该变量指向最后一个)
 
-    //存档数量
-    public static final int saveNum = 3;
     //存档状态
     //[x][0]:章节
     //[x][1]:是否中断
     //[x][2]:时长(秒)
     public static int[][] save;
+    //存档槽数量
+    public static int saveNum(){
+        return assets.save.saveNum();
+    }
     //更新存档状态
     public static void saveReload(){
-        save = assets.save.getSx(saveNum);
+        save = assets.save.getSx(saveNum());
     }
 
     public static void start(Activity act){

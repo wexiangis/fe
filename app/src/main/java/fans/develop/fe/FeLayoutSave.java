@@ -131,7 +131,7 @@ public class FeLayoutSave extends FeLayoutParent {
         //更新存档状态(FeData.save[][]的状态)
         FeData.saveReload();
         //初始化
-        bnSaveList = new Button[FeData.saveNum];
+        bnSaveList = new Button[FeData.saveNum()];
         for(int i = 0; i < bnSaveList.length; i++){
             int h = FeData.save[i][2]/3600;
             int m = FeData.save[i][2]%3600/60;

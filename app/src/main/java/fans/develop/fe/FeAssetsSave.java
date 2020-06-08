@@ -9,16 +9,27 @@ public class FeAssetsSave {
     private FeAssetsUnit unit;
 
     private int sXCurrent = 0;//当前档位
+    private int saveNum = 3;//总存档槽数量
+
     private FeFile file;//文件操作工具
 
     public FeAssetsSave(FeAssetsUnit unit){
         this.unit = unit;
         file = new FeFile();
-        //从 /assets/save/last.txt 读取最后存档位置
+        //读取最后存档位置
         sXCurrent = FeFormat.StringToInt(file.readFile("/save/last.txt", "00", 2));
+        //读取存档槽数量
+        saveNum = FeFormat.StringToInt(file.readFile("/save/num.txt", "03", 2));
     }
 
     /* ---------- 存档槽位检查 ---------- */
+
+    /*
+        存档槽数量
+     */
+    public int saveNum(){
+        return saveNum;
+    }
 
     /*
         获取最后存档位置
