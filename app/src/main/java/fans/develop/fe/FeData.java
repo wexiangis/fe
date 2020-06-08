@@ -30,7 +30,6 @@ public class FeData extends Application {
 
     //章节运转的关键参数,数据+界面
     public static FeSection section = null;
-    public static FeLayoutSection sectionLayout = null;
 
     //用于系统的界面的定位和跳转
     public static FeLayoutParent layoutCurrent = null;//当前界面

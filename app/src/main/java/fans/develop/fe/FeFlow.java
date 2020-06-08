@@ -25,16 +25,16 @@ public class FeFlow {
     }
 
     public void stop(){
-        if(FeData.sectionLayout != null &&
-            FeData.sectionLayout.getParent() != null)
-            ((ViewGroup)FeData.sectionLayout.getParent()).removeAllViews();
+        if(FeData.section != null &&
+            FeData.section.getParent() != null)
+            ((ViewGroup)FeData.section.getParent()).removeAllViews();
     }
 
     public void start(){
 
         //恢复
-        if(FeData.sectionLayout != null){
-            FeData.activity.setContentView(FeData.sectionLayout);
+        if(FeData.section != null){
+            FeData.activity.setContentView(FeData.section);
             return;
         }
 
@@ -79,11 +79,9 @@ public class FeFlow {
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public void loadSection(int sX, int mode) {
         //初始化章节数据
-        FeData.section = new FeSection(sX, mode);
-        //初始化章节视图
-        FeData.sectionLayout = new FeLayoutSection(FeData.context, FeData.section.section);
+        FeData.section = new FeSection(FeData.context, sX, mode);
         //显示章节
-        loadLayout(FeData.sectionLayout);
+        loadLayout(FeData.section);
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了

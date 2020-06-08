@@ -2,6 +2,7 @@ package fans.develop.fe;
 
 import android.content.Context;
 import android.widget.RelativeLayout;
+import fans.develop.fe.FeSection.Event;
 
 /*
     加载和管理地图及地形动画
@@ -14,13 +15,9 @@ public class FeLayoutMap extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMap(Context context, int section) {
+    public FeLayoutMap(Context context) {
         super(context);
-        loadView();
-    }
-
-    private void loadView(){
-        addView(new FeViewMap(FeData.context));
+        addView(new FeViewMap(context));
     }
 
 }

@@ -1,9 +1,80 @@
 package fans.develop.fe;
 
+import android.content.Context;
+import android.widget.RelativeLayout;
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
 /*
     章节运行关键参数之数据部分
  */
-public class FeSection {
+public class FeSection extends RelativeLayout{
+
+    /* ---------- 界面布局 ---------- */
+
+    public FeLayoutMap layoutMap = null;
+    public FeLayoutMark layoutMark = null;
+    public FeLayoutUnit layoutUnit = null;
+    public FeLayoutMapInfo layoutMapInfo = null;
+    public FeLayoutUnitMenu layoutUnitMenu = null;
+    public FeLayoutMenu layoutMenu = null;
+    public FeLayoutChat layoutChat = null;
+
+    public void refresh(){
+        //更新标记格
+        layoutMark.refresh();
+        //更新人物动画
+        layoutUnit.refresh(0);
+        //更新地形信息
+        layoutMapInfo.refresh();
+        //更新人物菜单
+        layoutUnitMenu.refresh();
+        //更新系统菜单
+        layoutMenu.refresh();
+        //更新对话
+        layoutChat.refresh();
+    }
+
+    public boolean checkHit(float x, float y){
+        //点击:正在对话?
+        layoutChat.checkHit(x, y);
+        //点击:系统菜单中?
+        layoutMenu.checkHit(x, y);
+        //点击:人物菜单中?
+        layoutUnitMenu.checkHit(x, y);
+        //点击:标记格
+        layoutMark.checkHit(x, y);
+        //点击:选中人物?
+        layoutUnit.checkHit(x, y);
+        //点击:地图信息?
+        layoutMapInfo.checkHit(x, y);
+        return false;
+    }
+
+    private void loadLayout(Context context, int section){
+        //地图图层
+        layoutMap = new FeLayoutMap(context);
+        addView(layoutMap);
+        //标记格图层
+        layoutMark = new FeLayoutMark(context);
+        addView(layoutMark);
+        //人物动画图层
+        layoutUnit = new FeLayoutUnit(context);
+        addView(layoutUnit);
+        //地图地形信息
+        layoutMapInfo = new FeLayoutMapInfo(context);
+        addView(layoutMapInfo);
+        //人物操作菜单图层
+        layoutUnitMenu = new FeLayoutUnitMenu(context);
+        addView(layoutUnitMenu);
+        // 系统菜单图层
+        layoutMenu = new FeLayoutMenu(context);
+        addView(layoutMenu);
+        //人物对话图层
+        layoutChat = new FeLayoutChat(context);
+        addView(layoutChat);
+        //其它图层
+        ;
+    }
 
     /* ---------- 章节数据 ---------- */
 
@@ -12,7 +83,8 @@ public class FeSection {
     public int section = 0;
 
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
-    public FeSection(int sX, int mode){
+    public FeSection(Context context, int sX, int mode){
+        super(context);
         //从文件加载章节存档数据
         if(mode == 1)
             data = FeData.assets.save.recoverSx(sX);
@@ -24,6 +96,8 @@ public class FeSection {
         //初始化参数集
         sectionMap = new FeSectionMap(section);
         sectionUnit = new FeSectionUnit();
+        //加载界面
+        loadLayout(context);
     }
 
     /* ---------- 地图和人员参数合集 ---------- */
@@ -60,6 +134,19 @@ public class FeSection {
 
     public boolean checkClickState(short type){
         return click_type[type];
+    }
+
+    /* ---------- 控件事件回调 ---------- */
+
+    public interface Event{
+        //心跳操作
+        public void addHeartUnit(FeHeartUnit heartUnit);
+        public void removeHeartUnit(FeHeartUnit heartUnit);
+        //参数集
+        public FeSectionMap getSectionMap();
+        public FeSectionUnit getSectionUnit();
+        //刷新全局界面
+        public void refresh();
     }
 
 }

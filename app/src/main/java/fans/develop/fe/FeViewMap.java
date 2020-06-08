@@ -157,7 +157,7 @@ public class FeViewMap extends View {
                 if(!isMove) {
                     FeData.section.setClickState(FeSection.ON_HIT_MAP);
                     //上传click事件
-                    ((FeLayoutSection)getParent().getParent()).click(tUpX, tUpY);
+                    ((FeLayoutSection)getParent().getParent()).checkHit(tUpX, tUpY);
                 }
                 else{
                     FeData.section.cleanClickState(FeSection.ON_HIT_MAP);
