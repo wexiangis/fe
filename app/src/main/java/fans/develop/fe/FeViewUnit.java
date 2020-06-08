@@ -77,7 +77,7 @@ public class FeViewUnit extends View {
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
-        FaData.addHeartUnit(heartUnit);
+        FeData.addHeartUnit(heartUnit);
         //地图中的位置信息管理结构
         site = new FeInfoGrid();
     }
@@ -85,7 +85,7 @@ public class FeViewUnit extends View {
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FaData.removeHeartUnit(heartUnit);
+        FeData.removeHeartUnit(heartUnit);
     }
 
     //人物id

@@ -24,13 +24,13 @@ public class FeViewMark extends View {
         paint = new Paint();
         paint.setColor(Color.BLUE);
         //引入心跳
-        FaData.addHeartUnit(heartUnit);
+        FeData.addHeartUnit(heartUnit);
     }
 
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FaData.removeHeartUnit(heartUnit);
+        FeData.removeHeartUnit(heartUnit);
     }
 
     //动画心跳回调

@@ -47,13 +47,13 @@ public class FeLayoutMark extends FeLayoutParent {
         //
         addView(new FeViewMark(context, 1));
         //引入心跳,让渐变色动起来
-        FaData.addHeartUnit(heartUnit);
+        FeData.addHeartUnit(heartUnit);
     }
 
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FaData.removeHeartUnit(heartUnit);
+        FeData.removeHeartUnit(heartUnit);
     }
     
     //动画心跳回调

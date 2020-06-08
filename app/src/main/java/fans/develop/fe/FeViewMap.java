@@ -36,13 +36,13 @@ public class FeViewMap extends View {
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
         //引入心跳
-        FaData.addHeartUnit(heartMapMov);
+        FeData.addHeartUnit(heartMapMov);
     }
 
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FaData.removeHeartUnit(heartUnit);
+        FeData.removeHeartUnit(heartMapMov);
     }
 
     //动态挪动地图,x>0时地图往右移,y>0时地图往下移
