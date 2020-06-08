@@ -40,15 +40,14 @@ public class FeAssetsSave {
 
     /*
         获取所有存档槽状态
-        num: 存档槽总数
-        返回: int[num][0], -1/表示空 其它表示章节
-            int[num][1], 0/表示非中断状态 1/中断
-            int[num][2], 时长,单位秒
+        返回: int[saveNum][0], -1/表示空 其它表示章节
+            int[saveNum][1], 0/表示非中断状态 1/中断
+            int[saveNum][2], 时长,单位秒
      */
-    public int[][] getSx(int num){
-        int[][] ret = new int[num][3];
-        //遍历num个sX文件夹中的info.txt文件
-        for(int i = 0; i < num; i++)
+    public int[][] getSx(){
+        int[][] ret = new int[saveNum][3];
+        //遍历saveNum个sX文件夹中的info.txt文件
+        for(int i = 0; i < saveNum; i++)
         {
             //拼接路径
             String path = String.format("/save/s%d/info.txt", i);

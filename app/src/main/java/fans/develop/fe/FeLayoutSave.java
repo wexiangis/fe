@@ -128,17 +128,17 @@ public class FeLayoutSave extends FeLayoutParent {
     public FeLayoutSave(Context context, int ctrl){
         super(context);
         this.ctrl = ctrl;
-        //更新存档状态(FeData.save[][]的状态)
-        FeData.saveReload();
+        //更新存档状态(saveState[][]的状态)
+        int[][] saveState = FeData.saveLoad();
         //初始化
         bnSaveList = new Button[FeData.saveNum()];
         for(int i = 0; i < bnSaveList.length; i++){
-            int h = FeData.save[i][2]/3600;
-            int m = FeData.save[i][2]%3600/60;
-            int s = FeData.save[i][2]%60;
-            if(FeData.save[i][0] >= 0)
+            int h = saveState[i][2]/3600;
+            int m = saveState[i][2]%3600/60;
+            int s = saveState[i][2]%60;
+            if(saveState[i][0] >= 0)
                 bnSaveList[i] = buildButtonStyle(
-                    context, String.format("第%d章 XXX %02d:%02d:%02d", FeData.save[i][0], h, m, s));
+                    context, String.format("第%d章 XXX %02d:%02d:%02d", saveState[i][0], h, m, s));
             else
                 bnSaveList[i] = buildButtonStyle(context, default_name);
         }
@@ -182,15 +182,15 @@ public class FeLayoutSave extends FeLayoutParent {
         刷新内容
      */
     public void refresh() {
-        //更新存档状态(FeData.save[][]的状态)
-        FeData.saveReload();
+        //更新存档状态(saveState[][]的状态)
+        int[][] saveState = FeData.saveLoad();
         //更新词条
         for(int i = 0; i < bnSaveList.length; i++){
-            int h = FeData.save[i][2]/3600;
-            int m = FeData.save[i][2]%3600/60;
-            int s = FeData.save[i][2]%60;
-            if(FeData.save[i][0] >= 0)
-                bnSaveList[i].setText(String.format("第%d章 XXX %02d:%02d:%02d", FeData.save[i][0], h, m, s));
+            int h = saveState[i][2]/3600;
+            int m = saveState[i][2]%3600/60;
+            int s = saveState[i][2]%60;
+            if(saveState[i][0] >= 0)
+                bnSaveList[i].setText(String.format("第%d章 XXX %02d:%02d:%02d", saveState[i][0], h, m, s));
             else
                 bnSaveList[i].setText(default_name);
         }

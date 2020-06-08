@@ -115,12 +115,12 @@ public class FeLayoutMainMenu extends FeLayoutParent {
     }
 
     private void loadMenu(){
-        //更新存档状态(FeData.save[][]的状态)
-        FeData.saveReload();
+        //更新存档状态(saveState[][]的状态)
+        int[][] saveState = FeData.saveLoad();
         //检查是否存在记录
         boolean findRecord = false;
         for(int i = 0; i < FeData.saveNum(); i++) {
-            if (FeData.save[i][0] >= 0) {
+            if (saveState[i][0] >= 0) {
                 findRecord = true;
                 break;
             }
