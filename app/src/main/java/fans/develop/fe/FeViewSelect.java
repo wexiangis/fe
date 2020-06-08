@@ -14,8 +14,8 @@ import android.view.View;
  */
 public class FeViewSelect extends View {
 
-    private FeParamMap paramMap;
-    private FeParamUnit paramUnit;
+    private FeSectionMap sectionMap;
+    private FeSectionUnit sectionUnit;
 
     //选中框图片
     private Bitmap bitmapSelect;
@@ -28,8 +28,8 @@ public class FeViewSelect extends View {
 
     public FeViewSelect(Context context){
         super(context);
-        paramMap = FeData.paramMap;
-        paramUnit = FeData.paramUnit;
+        sectionMap = FeData.section.sectionMap;
+        sectionUnit = FeData.section.sectionUnit;
         //
         bitmapSelect = FeData.assets.menu.getMapSelect();
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
@@ -39,7 +39,13 @@ public class FeViewSelect extends View {
         paintSelct = new Paint();
         paintSelct.setColor(Color.BLUE);
         //引入心跳
-        FeData.heart.addUnit(heartUnit);
+        FaData.addHeartUnit(heartUnit);
+    }
+
+    //删除人物,之后需自行 removeView()
+    public void delete(){
+        //解除心跳注册
+        FaData.removeHeartUnit(heartUnit);
     }
 
     private boolean needRefresh;
@@ -85,29 +91,29 @@ public class FeViewSelect extends View {
         if(FeData.section.checkClickState(FeSection.ON_HIT_MAP) &&
                 !FeData.section.checkClickState(FeSection.ON_HIT_UNIT)) {
             //计算输出位置
-            rectDistSelect.left = paramMap.selectSite.rect.left - paramMap.selectSite.rect.width()/4;
-            rectDistSelect.right = paramMap.selectSite.rect.right + paramMap.selectSite.rect.width()/4;
-            rectDistSelect.top = paramMap.selectSite.rect.top - paramMap.selectSite.rect.height()/4;
-            rectDistSelect.bottom = paramMap.selectSite.rect.bottom + paramMap.selectSite.rect.height()/4;
+            rectDistSelect.left = sectionMap.selectSite.rect.left - sectionMap.selectSite.rect.width()/4;
+            rectDistSelect.right = sectionMap.selectSite.rect.right + sectionMap.selectSite.rect.width()/4;
+            rectDistSelect.top = sectionMap.selectSite.rect.top - sectionMap.selectSite.rect.height()/4;
+            rectDistSelect.bottom = sectionMap.selectSite.rect.bottom + sectionMap.selectSite.rect.height()/4;
             //抗锯齿
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
             //画图
-//            canvas.drawPath(paramMap.selectSite.path, paintSelct);
+//            canvas.drawPath(sectionMap.selectSite.path, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
         else if(FeData.section.checkClickState(FeSection.ON_HIT_UNIT)){
             //计算输出位置
-            rectDistSelect.left = paramUnit.selectSite.rect.left - paramUnit.selectSite.rect.width()/4;
-            rectDistSelect.right = paramUnit.selectSite.rect.right + paramUnit.selectSite.rect.width()/4;
-            rectDistSelect.top = paramUnit.selectSite.rect.top - paramUnit.selectSite.rect.height()/2;
-            rectDistSelect.bottom = paramUnit.selectSite.rect.bottom;
+            rectDistSelect.left = sectionUnit.selectSite.rect.left - sectionUnit.selectSite.rect.width()/4;
+            rectDistSelect.right = sectionUnit.selectSite.rect.right + sectionUnit.selectSite.rect.width()/4;
+            rectDistSelect.top = sectionUnit.selectSite.rect.top - sectionUnit.selectSite.rect.height()/2;
+            rectDistSelect.bottom = sectionUnit.selectSite.rect.bottom;
             //使用大框
             rectSrcSelect.top = 0;
             rectSrcSelect.bottom = bitmapSelectFrameHeight;
             //抗锯齿
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
             //画图
-//            canvas.drawPath(paramMap.selectSite.path, paintSelct);
+//            canvas.drawPath(sectionMap.selectSite.path, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
     }

@@ -16,9 +16,6 @@ public class FeLayoutMap extends FeLayoutParent {
 
     public FeLayoutMap(Context context, int section) {
         super(context);
-        //初始化和地图相关的所有参数
-        FeData.paramMap = new FeParamMap(section);
-        //
         loadView();
     }
 

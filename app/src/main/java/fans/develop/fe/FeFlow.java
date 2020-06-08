@@ -81,7 +81,7 @@ public class FeFlow {
         //初始化章节数据
         FeData.section = new FeSection(sX, mode);
         //初始化章节视图
-        FeData.sectionLayout = new FeLayoutSection(FeData.context, FeData.section.data.info.getSection());
+        FeData.sectionLayout = new FeLayoutSection(FeData.context, FeData.section.section);
         //显示章节
         loadLayout(FeData.sectionLayout);
     }

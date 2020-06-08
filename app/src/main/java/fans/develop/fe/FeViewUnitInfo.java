@@ -14,8 +14,8 @@ import android.view.View;
  */
 public class FeViewUnitInfo extends View {
 
-    private FeParamMap paramMap;
-    private FeParamUnit paramUnit;
+    private FeSectionMap sectionMap;
+    private FeSectionUnit sectionUnit;
 
     //头像背景框图片源位置和输出位置
     private Rect rectSrcHeadBg, rectDistHeadBg;
@@ -29,19 +29,19 @@ public class FeViewUnitInfo extends View {
 
     public FeViewUnitInfo(Context context){
         super(context);
-        paramMap = FeData.paramMap;
-        paramUnit = FeData.paramUnit;
+        sectionMap = FeData.section.sectionMap;
+        sectionUnit = FeData.section.sectionUnit;
         //
         bitmapHeadBg = FeData.assets.menu.getMapHeader();
         //
-        pixelPowHead = paramMap.yGridPixel*2/bitmapHeadBg.getHeight();
+        pixelPowHead = sectionMap.yGridPixel*2/bitmapHeadBg.getHeight();
         //
         rectSrcHeadBg = new Rect(0, 0, bitmapHeadBg.getWidth(), bitmapHeadBg.getHeight());
         rectDistHeadBg = new Rect(
-                (int)(paramMap.xGridPixel/4),
-                (int)(paramMap.yGridPixel/4),
-                (int)(paramMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead),
-                (int)(paramMap.yGridPixel/4 + bitmapHeadBg.getHeight()*pixelPowHead));
+                (int)(sectionMap.xGridPixel/4),
+                (int)(sectionMap.yGridPixel/4),
+                (int)(sectionMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead),
+                (int)(sectionMap.yGridPixel/4 + bitmapHeadBg.getHeight()*pixelPowHead));
         //
         paintHeadBg = new Paint();
         paintHeadBg.setColor(0xE00000FF);//半透明
@@ -74,20 +74,20 @@ public class FeViewUnitInfo extends View {
         }
 
         //图像位置自动调整
-        if(paramUnit.selectSite.rect.right > paramMap.screenWidth/2){ //放到左边
-            rectDistHeadBg.left = (int)(paramMap.xGridPixel/4);
-            rectDistHeadBg.right = (int)(paramMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead);
+        if(sectionUnit.selectSite.rect.right > sectionMap.screenWidth/2){ //放到左边
+            rectDistHeadBg.left = (int)(sectionMap.xGridPixel/4);
+            rectDistHeadBg.right = (int)(sectionMap.xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead);
         }else{ //放到右边
-            rectDistHeadBg.left = (int)(paramMap.screenWidth - paramMap.xGridPixel/4 - bitmapHeadBg.getWidth()*pixelPowHead);
-            rectDistHeadBg.right = (int)(paramMap.screenWidth - paramMap.xGridPixel/4);
+            rectDistHeadBg.left = (int)(sectionMap.screenWidth - sectionMap.xGridPixel/4 - bitmapHeadBg.getWidth()*pixelPowHead);
+            rectDistHeadBg.right = (int)(sectionMap.screenWidth - sectionMap.xGridPixel/4);
         }
 
         //画人物头像
         if(!FeData.section.checkClickState(FeSection.ON_HIT_UNIT) ||
-            paramUnit.selectSite.rect.left > paramMap.screenWidth ||
-            paramUnit.selectSite.rect.right < 0 ||
-            paramUnit.selectSite.rect.top > paramMap.screenHeight ||
-            paramUnit.selectSite.rect.bottom < 0){
+            sectionUnit.selectSite.rect.left > sectionMap.screenWidth ||
+            sectionUnit.selectSite.rect.right < 0 ||
+            sectionUnit.selectSite.rect.top > sectionMap.screenHeight ||
+            sectionUnit.selectSite.rect.bottom < 0){
             drawHead = false;
         }else {
             drawHead = true;

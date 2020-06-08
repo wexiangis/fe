@@ -12,7 +12,17 @@ public class FeData extends Application {
     //核心部件
     public static Activity activity = null;
     public static Context context = null;
-    public static FeHeart heart = null;//全局动画心跳
+
+    //全局动画心跳(注意: addHeartUnit 过的控件销毁时要先 removeHeartUnit )
+    private static FeHeart heart = null;
+    public static void addHeartUnit(FeHeartUnit heartUnit){
+        if(heart != null)
+            heart.addUnit(heartUnit);
+    }
+    public static void removeHeartUnit(FeHeartUnit heartUnit){
+        if(heart != null)
+            heart.removeUnit(heartUnit);
+    }
     
     //结构层
     public static FeAssets assets = null;//assets文件资源管理
@@ -25,10 +35,6 @@ public class FeData extends Application {
     //用于系统的界面的定位和跳转
     public static FeLayoutParent layoutCurrent = null;//当前界面
     public static FeChain<FeLayoutParent> layoutChain = null;//历史界面链表(该变量指向最后一个)
-
-    //参数合集
-    public static FeParamMap paramMap = null;
-    public static FeParamUnit paramUnit = null;
 
     //存档数量
     public static final int saveNum = 3;
@@ -67,6 +73,5 @@ public class FeData extends Application {
         heart = new FeHeart();
         flow = new FeFlow();
         assets = new FeAssets();
-        paramUnit = new FeParamUnit();
     }
 }

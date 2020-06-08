@@ -3,7 +3,10 @@ package fans.develop.fe;
 import android.view.ViewGroup;
 import android.graphics.LinearGradient;
 
-public class FeParamUnit {
+/*
+    人物列表参数管理
+ */
+public class FeSectionUnit {
 
     // ----------- 选中信息 -----------
 

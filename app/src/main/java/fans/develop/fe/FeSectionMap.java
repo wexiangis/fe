@@ -10,7 +10,7 @@ import android.util.DisplayMetrics;
 /*
     加载地图后所产生的一系列关键参数,用于传递给地图上的人物动画
  */
-public class FeParamMap {
+public class FeSectionMap {
 
     public int section;
 
@@ -42,7 +42,7 @@ public class FeParamMap {
     //横纵向动画初始偏移
     public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
 
-    public FeParamMap(int feSection)
+    public FeSectionMap(int feSection)
     {
         section = feSection;
         //获取屏幕参数

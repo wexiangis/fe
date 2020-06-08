@@ -8,8 +8,8 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutUnit extends FeLayoutParent {
 
-    private FeParamMap paramMap;
-    private FeParamUnit paramUnit;
+    private FeSectionMap sectionMap;
+    private FeSectionUnit sectionUnit;
     private int hitAnimOrder = -1;
 
     /*
@@ -26,7 +26,7 @@ public class FeLayoutUnit extends FeLayoutParent {
                 FeData.section.checkClickState(FeSection.ON_HIT_UNIT)) {
                 if(who_refresh == 1)
                     tmp.setAnimMode(tmp.getAnimMode()+1);
-                paramMap.getRectByGrid(tmp.gridX, tmp.gridY, paramUnit.selectSite);
+                sectionMap.getRectByGrid(tmp.gridX, tmp.gridY, sectionUnit.selectSite);
             }
             else
                 tmp.setAnimMode(0);
@@ -42,7 +42,7 @@ public class FeLayoutUnit extends FeLayoutParent {
             if (fvu.checkHit(x, y)) {
                 hitAnimOrder = i;
                 FeData.section.setClickState(FeSection.ON_HIT_UNIT);
-                FeData.paramUnit.selectView = fvu;
+                FeData.section.sectionUnit.selectView = fvu;
                 refresh(1);
                 return true;
             }
@@ -56,10 +56,10 @@ public class FeLayoutUnit extends FeLayoutParent {
 
     public FeLayoutUnit(Context context) {
         super(context);
-        paramMap = FeData.paramMap;
-        paramUnit = FeData.paramUnit;
+        sectionMap = FeData.section.sectionMap;
+        sectionUnit = FeData.section.sectionUnit;
 
-        FeData.paramUnit.group = this;
+        FeData.section.sectionUnit.group = this;
 
 //        loadView(0, 1, 0);
 //        loadView(1, 2, 1);

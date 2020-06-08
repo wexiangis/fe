@@ -9,13 +9,28 @@ public class FeSection {
 
     public FeAssetsSX data;
 
+    public int section = 0;
+
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public FeSection(int sX, int mode){
+        //从文件加载章节存档数据
         if(mode == 1)
             data = FeData.assets.save.recoverSx(sX);
         else
             data = FeData.assets.save.loadSx(sX);
+        //章节
+        if(data != null)
+            section = data.info.getSection();
+        //初始化参数集
+        sectionMap = new FeSectionMap(section);
+        sectionUnit = new FeSectionUnit();
     }
+
+    /* ---------- 地图和人员参数合集 ---------- */
+
+    public FeSectionMap sectionMap;
+
+    public FeSectionUnit sectionUnit;
 
     /* ---------- 触屏产生的各种状态 ---------- */
 
