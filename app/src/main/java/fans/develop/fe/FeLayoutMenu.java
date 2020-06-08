@@ -1,7 +1,6 @@
 package fans.develop.fe;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
 
 /*
     地图上的系统菜单
@@ -18,7 +17,7 @@ public class FeLayoutMenu extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMenu(Context context) {
+    public FeLayoutMenu(Context context, FeSection.Callback callback) {
         super(context);
     }
 }

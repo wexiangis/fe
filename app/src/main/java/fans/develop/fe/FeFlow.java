@@ -25,16 +25,16 @@ public class FeFlow {
     }
 
     public void stop(){
-        if(FeData.section != null &&
-            FeData.section.getParent() != null)
-            ((ViewGroup)FeData.section.getParent()).removeAllViews();
+        if(FeData.layoutSection != null &&
+            FeData.layoutSection.getParent() != null)
+            ((ViewGroup)FeData.layoutSection.getParent()).removeAllViews();
     }
 
     public void start(){
 
         //恢复
-        if(FeData.section != null){
-            FeData.activity.setContentView(FeData.section);
+        if(FeData.layoutSection != null){
+            FeData.activity.setContentView(FeData.layoutSection);
             return;
         }
 
@@ -80,8 +80,9 @@ public class FeFlow {
     public void loadSection(int sX, int mode) {
         //初始化章节数据
         FeData.section = new FeSection(FeData.context, sX, mode);
+        FeData.layoutSection = new FeLayoutSection(FeData.context, FeData.section.callback);
         //显示章节
-        loadLayout(FeData.section);
+        loadLayout(FeData.layoutSection);
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了

@@ -1,15 +1,13 @@
 package fans.develop.fe;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
 
 /*
     地图中的人物动画管理
  */
 public class FeLayoutUnit extends FeLayoutParent {
 
-    private FeSectionMap sectionMap;
-    private FeSectionUnit sectionUnit;
+    private FeSection.Callback callback;
     private int hitAnimOrder = -1;
 
     /*
@@ -23,10 +21,10 @@ public class FeLayoutUnit extends FeLayoutParent {
         for (int i = 0; i < getChildCount(); i++) {
             tmp = (FeViewUnit)getChildAt(i);
             if(hitAnimOrder == i &&
-                FeData.section.checkClickState(FeSection.ON_HIT_UNIT)) {
+                callback.checkClickState(FeSection.ON_HIT_UNIT)) {
                 if(who_refresh == 1)
                     tmp.setAnimMode(tmp.getAnimMode()+1);
-                sectionMap.getRectByGrid(tmp.gridX, tmp.gridY, sectionUnit.selectSite);
+                callback.getSectionMap().getRectByGrid(tmp.gridX, tmp.gridY, callback.getSectionUnit().selectSite);
             }
             else
                 tmp.setAnimMode(0);
@@ -41,64 +39,61 @@ public class FeLayoutUnit extends FeLayoutParent {
             fvu = (FeViewUnit)getChildAt(i);
             if (fvu.checkHit(x, y)) {
                 hitAnimOrder = i;
-                FeData.section.setClickState(FeSection.ON_HIT_UNIT);
-                FeData.section.sectionUnit.selectView = fvu;
+                callback.setClickState(FeSection.ON_HIT_UNIT);
+                callback.getSectionUnit().selectView = fvu;
                 refresh(1);
                 return true;
             }
         }
         //
         hitAnimOrder = -1;
-        FeData.section.cleanClickState(FeSection.ON_HIT_UNIT);
+        callback.cleanClickState(FeSection.ON_HIT_UNIT);
         refresh(0);
         return false;
     }
 
-    public FeLayoutUnit(Context context) {
+    public FeLayoutUnit(Context context, FeSection.Callback callback) {
         super(context);
-        sectionMap = FeData.section.sectionMap;
-        sectionUnit = FeData.section.sectionUnit;
+        this.callback = callback;
 
-        FeData.section.sectionUnit.group = this;
+//        loadView(context, 0, 1, 0, callback);
+//        loadView(context, 1, 2, 1, callback);
+//        loadView(context, 2, 3, 0, callback);
+//        loadView(context, 3, 4, 1, callback);
+//        loadView(context, 4, 5, 0, callback);
+//        loadView(context, 5, 6, 1, callback);
+        loadView(context, 6, 7, 0, callback);
+        loadView(context, 7, 8, 1, callback);
+//        loadView(context, 8, 9, 0, callback);
+//        loadView(context, 9, 10, 1, callback);
+//        loadView(context, 10, 11, 0, callback);
+//        loadView(context, 11, 12, 1, callback);
+//        loadView(context, 12, 13, 0, callback);
+//        loadView(context, 13, 14, 1, callback);
 
-//        loadView(0, 1, 0);
-//        loadView(1, 2, 1);
-//        loadView(2, 3, 0);
-//        loadView(3, 4, 1);
-//        loadView(4, 5, 0);
-//        loadView(5, 6, 1);
-        loadView(6, 7, 0);
-        loadView(7, 8, 1);
-//        loadView(8, 9, 0);
-//        loadView(9, 10, 1);
-//        loadView(10, 11, 0);
-//        loadView(11, 12, 1);
-//        loadView(12, 13, 0);
-//        loadView(13, 14, 1);
-
-//        loadView(14, 1, 12);
-//        loadView(15, 2, 13);
-//        loadView(16, 3, 12);
-//        loadView(17, 4, 13);
-        loadView(18, 5, 12);
-        loadView(19, 6, 13);
-//        loadView(20, 7, 12);
-//        loadView(21, 8, 13);
-//        loadView(22, 9, 12);
-//        loadView(23, 10, 13);
-//        loadView(24, 11, 12);
-//        loadView(25, 12, 13);
-//        loadView(26, 13, 12);
-//        loadView(27, 14, 13);
+//        loadView(context, 14, 1, 12, callback);
+//        loadView(context, 15, 2, 13, callback);
+//        loadView(context, 16, 3, 12, callback);
+//        loadView(context, 17, 4, 13, callback);
+        loadView(context, 18, 5, 12, callback);
+        loadView(context, 19, 6, 13, callback);
+//        loadView(context, 20, 7, 12, callback);
+//        loadView(context, 21, 8, 13, callback);
+//        loadView(context, 22, 9, 12, callback);
+//        loadView(context, 23, 10, 13, callback);
+//        loadView(context, 24, 11, 12, callback);
+//        loadView(context, 25, 12, 13, callback);
+//        loadView(context, 26, 13, 12, callback);
+//        loadView(context, 27, 14, 13, callback);
     }
 
-    private void loadView(int id, int y, int x){
-        addView(new FeViewUnit(FeData.context, id, x, y, 0, 0));
-        addView(new FeViewUnit(FeData.context, id, x+2, y, 1, 1));
-        addView(new FeViewUnit(FeData.context, id, x+4, y, 2, 2));
-        addView(new FeViewUnit(FeData.context, id, x+6, y, 3, 3));
-        addView(new FeViewUnit(FeData.context, id, x+8, y, 4, 4));
-        addView(new FeViewUnit(FeData.context, id, x+10, y, 5, 5));
-        addView(new FeViewUnit(FeData.context, id, x+12, y, 6, 6));
+    private void loadView(Context context, int id, int y, int x, FeSection.Callback callback){
+        addView(new FeViewUnit(context, id, x, y, 0, 0, callback));
+        addView(new FeViewUnit(context, id, x+2, y, 1, 1, callback));
+        addView(new FeViewUnit(context, id, x+4, y, 2, 2, callback));
+        addView(new FeViewUnit(context, id, x+6, y, 3, 3, callback));
+        addView(new FeViewUnit(context, id, x+8, y, 4, 4, callback));
+        addView(new FeViewUnit(context, id, x+10, y, 5, 5, callback));
+        addView(new FeViewUnit(context, id, x+12, y, 6, 6, callback));
     }
 }

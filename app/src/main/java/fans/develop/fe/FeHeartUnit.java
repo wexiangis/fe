@@ -8,7 +8,7 @@ public class FeHeartUnit {
     //接口(回掉函数)定义
     public interface TimeOutTask{
         //count: 根据type类型告诉当前动画应该切到第几帧
-        public void run(int count);
+        void run(int count);
     }
 
     //心跳类型,可以随时切换,具体定义看FeHeart.TYPE_ANIM_XXX

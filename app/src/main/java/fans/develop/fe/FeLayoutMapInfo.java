@@ -1,7 +1,6 @@
 package fans.develop.fe;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
 
 /*
     显示地图光标处的地形信息
@@ -19,11 +18,11 @@ public class FeLayoutMapInfo extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMapInfo(Context context) {
+    public FeLayoutMapInfo(Context context, FeSection.Callback callback) {
         super(context);
         //
-        addView(new FeViewSelect(context));
-        addView(new FeViewMapInfo(context));
-        addView(new FeViewUnitInfo(context));
+        addView(new FeViewSelect(context, callback));
+        addView(new FeViewMapInfo(context, callback));
+        addView(new FeViewUnitInfo(context, callback));
     }
 }

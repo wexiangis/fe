@@ -45,22 +45,7 @@ public class FeLayoutExtra extends FeLayoutParent {
         }
     };
 
-    public FeLayoutParent.Callback callback = new FeLayoutParent.Callback() {
-        @Override
-        public boolean keyBack() {
-            return false;
-        }
-
-        @Override
-        public boolean destory() {
-            return false;
-        }
-
-        @Override
-        public void reload() {
-            FeLayoutExtra.this.reload();
-        }
-    };
+    public FeLayoutParent.Callback callback;
 
     private Button buildButtonStyle(Context context, String text){
         Button button = new Button(context);

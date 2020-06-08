@@ -11,26 +11,28 @@ import android.view.View;
  */
 public class FeViewMark extends View {
 
+    private FeSection.Callback callback;
     private Paint paint;
     private int colorMode;
 
     /*
         colorMode: 0/蓝色 1/红色 2/绿色
      */
-    public FeViewMark(Context context, int colorMode){
+    public FeViewMark(Context context, int colorMode, FeSection.Callback callback){
         super(context);
         this.colorMode = colorMode;
+        this.callback = callback;
         //画笔
         paint = new Paint();
         paint.setColor(Color.BLUE);
         //引入心跳
-        FeData.addHeartUnit(heartUnit);
+        callback.addHeartUnit(heartUnit);
     }
 
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FeData.removeHeartUnit(heartUnit);
+        callback.removeHeartUnit(heartUnit);
     }
 
     //动画心跳回调
@@ -45,16 +47,16 @@ public class FeViewMark extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.section.checkClickState(FeSection.ON_MOVE))
+        if(callback.checkClickState(FeSection.ON_MOVE))
             return;
 
         if(this.colorMode == 0)
-            paint.setShader(FeData.section.sectionUnit.getShaderB());
+            paint.setShader(callback.getSectionUnit().getShaderB());
         else if(this.colorMode == 1)
-            paint.setShader(FeData.section.sectionUnit.getShaderR());
+            paint.setShader(callback.getSectionUnit().getShaderR());
         else
-            paint.setShader(FeData.section.sectionUnit.getShaderG());
+            paint.setShader(callback.getSectionUnit().getShaderG());
 
-        canvas.drawPath(FeData.section.sectionMap.selectSite.path, paint);
+        canvas.drawPath(callback.getSectionMap().selectSite.path, paint);
     }
 }

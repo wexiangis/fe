@@ -14,8 +14,7 @@ import android.view.View;
  */
 public class FeViewSelect extends View {
 
-    private FeSectionMap sectionMap;
-    private FeSectionUnit sectionUnit;
+    private FeSection.Callback callback;
 
     //选中框图片
     private Bitmap bitmapSelect;
@@ -26,12 +25,11 @@ public class FeViewSelect extends View {
     //
     private Paint paintSelct;
 
-    public FeViewSelect(Context context){
+    public FeViewSelect(Context context, FeSection.Callback callback){
         super(context);
-        sectionMap = FeData.section.sectionMap;
-        sectionUnit = FeData.section.sectionUnit;
+        this.callback = callback;
         //
-        bitmapSelect = FeData.assets.menu.getMapSelect();
+        bitmapSelect = callback.getAssets().menu.getMapSelect();
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
         rectDistSelect = new Rect(0, 0, 0, 0);
         rectSrcSelect = new Rect(0, 0, bitmapSelect.getWidth(), bitmapSelect.getHeight());
@@ -39,13 +37,13 @@ public class FeViewSelect extends View {
         paintSelct = new Paint();
         paintSelct.setColor(Color.BLUE);
         //引入心跳
-        FeData.addHeartUnit(heartUnit);
+        callback.addHeartUnit(heartUnit);
     }
 
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FeData.removeHeartUnit(heartUnit);
+        callback.removeHeartUnit(heartUnit);
     }
 
     private boolean needRefresh;
@@ -84,36 +82,36 @@ public class FeViewSelect extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(FeData.section.checkClickState(FeSection.ON_MOVE))
+        if(callback.checkClickState(FeSection.ON_MOVE))
             return;
 
         //画选中框
-        if(FeData.section.checkClickState(FeSection.ON_HIT_MAP) &&
-                !FeData.section.checkClickState(FeSection.ON_HIT_UNIT)) {
+        if(callback.checkClickState(FeSection.ON_HIT_MAP) &&
+                !callback.checkClickState(FeSection.ON_HIT_UNIT)) {
             //计算输出位置
-            rectDistSelect.left = sectionMap.selectSite.rect.left - sectionMap.selectSite.rect.width()/4;
-            rectDistSelect.right = sectionMap.selectSite.rect.right + sectionMap.selectSite.rect.width()/4;
-            rectDistSelect.top = sectionMap.selectSite.rect.top - sectionMap.selectSite.rect.height()/4;
-            rectDistSelect.bottom = sectionMap.selectSite.rect.bottom + sectionMap.selectSite.rect.height()/4;
+            rectDistSelect.left = callback.getSectionMap().selectSite.rect.left - callback.getSectionMap().selectSite.rect.width()/4;
+            rectDistSelect.right = callback.getSectionMap().selectSite.rect.right + callback.getSectionMap().selectSite.rect.width()/4;
+            rectDistSelect.top = callback.getSectionMap().selectSite.rect.top - callback.getSectionMap().selectSite.rect.height()/4;
+            rectDistSelect.bottom = callback.getSectionMap().selectSite.rect.bottom + callback.getSectionMap().selectSite.rect.height()/4;
             //抗锯齿
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
             //画图
-//            canvas.drawPath(sectionMap.selectSite.path, paintSelct);
+//            canvas.drawPath(callback.getSectionMap().selectSite.path, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
-        else if(FeData.section.checkClickState(FeSection.ON_HIT_UNIT)){
+        else if(callback.checkClickState(FeSection.ON_HIT_UNIT)){
             //计算输出位置
-            rectDistSelect.left = sectionUnit.selectSite.rect.left - sectionUnit.selectSite.rect.width()/4;
-            rectDistSelect.right = sectionUnit.selectSite.rect.right + sectionUnit.selectSite.rect.width()/4;
-            rectDistSelect.top = sectionUnit.selectSite.rect.top - sectionUnit.selectSite.rect.height()/2;
-            rectDistSelect.bottom = sectionUnit.selectSite.rect.bottom;
+            rectDistSelect.left = callback.getSectionUnit().selectSite.rect.left - callback.getSectionUnit().selectSite.rect.width()/4;
+            rectDistSelect.right = callback.getSectionUnit().selectSite.rect.right + callback.getSectionUnit().selectSite.rect.width()/4;
+            rectDistSelect.top = callback.getSectionUnit().selectSite.rect.top - callback.getSectionUnit().selectSite.rect.height()/2;
+            rectDistSelect.bottom = callback.getSectionUnit().selectSite.rect.bottom;
             //使用大框
             rectSrcSelect.top = 0;
             rectSrcSelect.bottom = bitmapSelectFrameHeight;
             //抗锯齿
             canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
             //画图
-//            canvas.drawPath(sectionMap.selectSite.path, paintSelct);
+//            canvas.drawPath(callback.getSectionMap().selectSite.path, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
     }

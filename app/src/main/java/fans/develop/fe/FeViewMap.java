@@ -12,8 +12,7 @@ import android.view.View;
  */
 public class FeViewMap extends View {
 
-    private FeSectionMap sectionMap;
-    private FeSectionUnit sectionUnit;
+    private FeSection.Callback callback;
 
     //地图移动格子数
     private int xGridErr = 0, yGridErr = 0;
@@ -26,23 +25,22 @@ public class FeViewMap extends View {
     //画笔
     private Paint paintMap;
 
-    public FeViewMap(Context context) {
+    public FeViewMap(Context context, FeSection.Callback callback) {
         super(context);
-        sectionMap = FeData.section.sectionMap;
-        sectionUnit = FeData.section.sectionUnit;
+        this.callback = callback;
         //输入坐标求格子位置
-        sectionMap.getRectByLocation(0, 0, sectionMap.selectSite);
+        callback.getSectionMap().getRectByLocation(0, 0, callback.getSectionMap().selectSite);
         //画笔
         paintMap = new Paint();
         paintMap.setColor(Color.BLUE);
         //引入心跳
-        FeData.addHeartUnit(heartMapMov);
+        callback.addHeartUnit(heartMapMov);
     }
 
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FeData.removeHeartUnit(heartMapMov);
+        callback.removeHeartUnit(heartMapMov);
     }
 
     //动态挪动地图,x>0时地图往右移,y>0时地图往下移
@@ -56,8 +54,8 @@ public class FeViewMap extends View {
         //先把挪动停止
         xGridErr = yGridErr = 0;
         //居中比较
-        xGridErr = x - sectionMap.srcGridCenter.centerX();
-        yGridErr = y - sectionMap.srcGridCenter.centerY();
+        xGridErr = x - callback.getSectionMap().srcGridCenter.centerX();
+        yGridErr = y - callback.getSectionMap().srcGridCenter.centerY();
     }
 
     //设置(x,y)所在格子为地图中心
@@ -65,17 +63,17 @@ public class FeViewMap extends View {
         //先把挪动停止
         xGridErr = yGridErr = 0;
         //居中比较
-        sectionMap.xGridErr += x - sectionMap.srcGridCenter.centerX();
-        sectionMap.yGridErr += y - sectionMap.srcGridCenter.centerY();
+        callback.getSectionMap().xGridErr += x - callback.getSectionMap().srcGridCenter.centerX();
+        callback.getSectionMap().yGridErr += y - callback.getSectionMap().srcGridCenter.centerY();
         //防止把地图移出屏幕
-        if (sectionMap.xGridErr < 0)
-            sectionMap.xGridErr = 0;
-        else if (sectionMap.xGridErr + sectionMap.screenXGrid > sectionMap.map.xGrid)
-            sectionMap.xGridErr = sectionMap.map.xGrid - sectionMap.screenXGrid;
-        if (sectionMap.yGridErr < 0)
-            sectionMap.yGridErr = 0;
-        else if (sectionMap.yGridErr + sectionMap.screenYGrid > sectionMap.map.yGrid)
-            sectionMap.yGridErr = sectionMap.map.yGrid - sectionMap.screenYGrid;
+        if (callback.getSectionMap().xGridErr < 0)
+            callback.getSectionMap().xGridErr = 0;
+        else if (callback.getSectionMap().xGridErr + callback.getSectionMap().screenXGrid > callback.getSectionMap().map.xGrid)
+            callback.getSectionMap().xGridErr = callback.getSectionMap().map.xGrid - callback.getSectionMap().screenXGrid;
+        if (callback.getSectionMap().yGridErr < 0)
+            callback.getSectionMap().yGridErr = 0;
+        else if (callback.getSectionMap().yGridErr + callback.getSectionMap().screenYGrid > callback.getSectionMap().map.yGrid)
+            callback.getSectionMap().yGridErr = callback.getSectionMap().map.yGrid - callback.getSectionMap().screenYGrid;
     }
 
     //动画心跳回调
@@ -87,31 +85,31 @@ public class FeViewMap extends View {
                 //每次移动一格
                 if(xGridErr > 0) {
                     xGridErr -= 1;
-                    sectionMap.xGridErr += 1;
+                    callback.getSectionMap().xGridErr += 1;
                 }else if(xGridErr < 0) {
                     xGridErr += 1;
-                    sectionMap.xGridErr -= 1;
+                    callback.getSectionMap().xGridErr -= 1;
                 }
                 if(yGridErr > 0) {
                     yGridErr -= 1;
-                    sectionMap.yGridErr += 1;
+                    callback.getSectionMap().yGridErr += 1;
                 }else if(yGridErr < 0) {
                     yGridErr += 1;
-                    sectionMap.yGridErr -= 1;
+                    callback.getSectionMap().yGridErr -= 1;
                 }
                 //防止地图移出屏幕
-                if (sectionMap.xGridErr < 0){
-                    sectionMap.xGridErr = 0;
+                if (callback.getSectionMap().xGridErr < 0){
+                    callback.getSectionMap().xGridErr = 0;
                     xGridErr = 0;
-                }else if (sectionMap.xGridErr + sectionMap.screenXGrid > sectionMap.map.xGrid){
-                    sectionMap.xGridErr = sectionMap.map.xGrid - sectionMap.screenXGrid;
+                }else if (callback.getSectionMap().xGridErr + callback.getSectionMap().screenXGrid > callback.getSectionMap().map.xGrid){
+                    callback.getSectionMap().xGridErr = callback.getSectionMap().map.xGrid - callback.getSectionMap().screenXGrid;
                     xGridErr = 0;
                 }
-                if (sectionMap.yGridErr < 0){
-                    sectionMap.yGridErr = 0;
+                if (callback.getSectionMap().yGridErr < 0){
+                    callback.getSectionMap().yGridErr = 0;
                     yGridErr = 0;
-                }else if (sectionMap.yGridErr + sectionMap.screenYGrid > sectionMap.map.yGrid){
-                    sectionMap.yGridErr = sectionMap.map.yGrid - sectionMap.screenYGrid;
+                }else if (callback.getSectionMap().yGridErr + callback.getSectionMap().screenYGrid > callback.getSectionMap().map.yGrid){
+                    callback.getSectionMap().yGridErr = callback.getSectionMap().map.yGrid - callback.getSectionMap().screenYGrid;
                     yGridErr = 0;
                 }
                 //调用一次onDraw
@@ -124,16 +122,16 @@ public class FeViewMap extends View {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //相对布局位置偏移
-        sectionMap.mapDist.left = (int)this.getTranslationX() - (int)(sectionMap.xGridErr*sectionMap.xGridPixel);
-        sectionMap.mapDist.top = (int)this.getTranslationY() - (int)(sectionMap.yGridErr*sectionMap.yGridPixel);
-        sectionMap.mapDist.right = sectionMap.mapDist.left + sectionMap.width;
-        sectionMap.mapDist.bottom = sectionMap.mapDist.top + sectionMap.height;
+        callback.getSectionMap().mapDist.left = (int)this.getTranslationX() - (int)(callback.getSectionMap().xGridErr*callback.getSectionMap().xGridPixel);
+        callback.getSectionMap().mapDist.top = (int)this.getTranslationY() - (int)(callback.getSectionMap().yGridErr*callback.getSectionMap().yGridPixel);
+        callback.getSectionMap().mapDist.right = callback.getSectionMap().mapDist.left + callback.getSectionMap().width;
+        callback.getSectionMap().mapDist.bottom = callback.getSectionMap().mapDist.top + callback.getSectionMap().height;
         //梯形变换
-        sectionMap.getMatrix();
+        callback.getSectionMap().getMatrix();
         //显示地图
-        canvas.drawBitmap(sectionMap.bitmap, sectionMap.matrix, paintMap);
+        canvas.drawBitmap(callback.getSectionMap().bitmap, callback.getSectionMap().matrix, paintMap);
         //地图移动了,刷新其他信息
-        ((FeLayoutSection)getParent().getParent()).refresh();
+        callback.refresh();
     }
 
     //
@@ -145,42 +143,42 @@ public class FeViewMap extends View {
                 isMove = false;
                 //
                 xGridErr = yGridErr = 0;
-                FeData.section.cleanClickState(FeSection.ON_MOVE);
+                callback.cleanClickState(FeSection.ON_MOVE);
             }
             break;
             case MotionEvent.ACTION_UP: {
                 float tUpX = event.getX();
                 float tUpY = event.getY();
                 //选中方格标志
-                FeData.section.cleanClickState(FeSection.ON_MOVE);
+                callback.cleanClickState(FeSection.ON_MOVE);
                 //是否是点击事件
                 if(!isMove) {
-                    FeData.section.setClickState(FeSection.ON_HIT_MAP);
+                    callback.setClickState(FeSection.ON_HIT_MAP);
                     //上传click事件
-                    ((FeLayoutSection)getParent().getParent()).checkHit(tUpX, tUpY);
+                    callback.checkHit(tUpX, tUpY);
                 }
                 else{
-                    FeData.section.cleanClickState(FeSection.ON_HIT_MAP);
+                    callback.cleanClickState(FeSection.ON_HIT_MAP);
                 }
                 isMove = false;
                 //输入坐标求格子位置
-                sectionMap.getRectByLocation(tUpX, tUpY, sectionMap.selectSite);
+                callback.getSectionMap().getRectByLocation(tUpX, tUpY, callback.getSectionMap().selectSite);
                 //选中人物太过靠近边界,挪动地图
-                if(FeData.section.checkClickState(FeSection.ON_HIT_UNIT) &&
-                    !sectionMap.srcGridCenter.contains(
-                    sectionUnit.selectSite.point[0],
-                    sectionUnit.selectSite.point[1])){
+                if(callback.checkClickState(FeSection.ON_HIT_UNIT) &&
+                    !callback.getSectionMap().srcGridCenter.contains(
+                    callback.getSectionUnit().selectSite.point[0],
+                    callback.getSectionUnit().selectSite.point[1])){
 //                    //挪动地图,把选中点居中
-//                    moveCenter(sectionUnit.selectSite.point[0], sectionUnit.selectSite.point[1]);
+//                    moveCenter(callback.getSectionUnit().selectSite.point[0], callback.getSectionUnit().selectSite.point[1]);
                     //把需要移动的量先记到xGridErr,yGridErr, 动画心跳回调会慢慢把这些差值吃掉
-                    if(sectionUnit.selectSite.point[0] < sectionMap.srcGridCenter.left)
-                        xGridErr = sectionUnit.selectSite.point[0] - sectionMap.srcGridCenter.left;
-                    else if(sectionUnit.selectSite.point[0] > sectionMap.srcGridCenter.right)
-                        xGridErr = sectionUnit.selectSite.point[0] - sectionMap.srcGridCenter.right;
-                    if(sectionUnit.selectSite.point[1] < sectionMap.srcGridCenter.top)
-                        yGridErr = sectionUnit.selectSite.point[1] - sectionMap.srcGridCenter.top;
-                    else if(sectionUnit.selectSite.point[1] > sectionMap.srcGridCenter.bottom)
-                        yGridErr = sectionUnit.selectSite.point[1] - sectionMap.srcGridCenter.bottom;
+                    if(callback.getSectionUnit().selectSite.point[0] < callback.getSectionMap().srcGridCenter.left)
+                        xGridErr = callback.getSectionUnit().selectSite.point[0] - callback.getSectionMap().srcGridCenter.left;
+                    else if(callback.getSectionUnit().selectSite.point[0] > callback.getSectionMap().srcGridCenter.right)
+                        xGridErr = callback.getSectionUnit().selectSite.point[0] - callback.getSectionMap().srcGridCenter.right;
+                    if(callback.getSectionUnit().selectSite.point[1] < callback.getSectionMap().srcGridCenter.top)
+                        yGridErr = callback.getSectionUnit().selectSite.point[1] - callback.getSectionMap().srcGridCenter.top;
+                    else if(callback.getSectionUnit().selectSite.point[1] > callback.getSectionMap().srcGridCenter.bottom)
+                        yGridErr = callback.getSectionUnit().selectSite.point[1] - callback.getSectionMap().srcGridCenter.bottom;
                 }
             }
             break;
@@ -192,38 +190,38 @@ public class FeViewMap extends View {
                 float xErr = tMoveX - tDownX;
                 float yErr = tMoveY - tDownY;
                 //横向移动是否满一格像素,是就移动一格
-                if (Math.abs(xErr) > sectionMap.xGridPixel) {
-                    if (xErr > 0) sectionMap.xGridErr -= 1;
-                    else sectionMap.xGridErr += 1;
+                if (Math.abs(xErr) > callback.getSectionMap().xGridPixel) {
+                    if (xErr > 0) callback.getSectionMap().xGridErr -= 1;
+                    else callback.getSectionMap().xGridErr += 1;
                     tDownX = tMoveX;
                     needRefresh = true;
                     isMove = true;
                 }
                 //纵向移动是否满一格像素,是就移动一格
-                if (Math.abs(yErr) > sectionMap.yGridPixel) {
-                    if (yErr > 0) sectionMap.yGridErr -= 1;
-                    else sectionMap.yGridErr += 1;
+                if (Math.abs(yErr) > callback.getSectionMap().yGridPixel) {
+                    if (yErr > 0) callback.getSectionMap().yGridErr -= 1;
+                    else callback.getSectionMap().yGridErr += 1;
                     tDownY = tMoveY;
                     needRefresh = true;
                     isMove = true;
                 }
                 //防止把地图移出屏幕
-                if (sectionMap.xGridErr < 0)
-                    sectionMap.xGridErr = 0;
-                else if (sectionMap.xGridErr + sectionMap.screenXGrid > sectionMap.map.xGrid)
-                    sectionMap.xGridErr = sectionMap.map.xGrid - sectionMap.screenXGrid;
-                if (sectionMap.yGridErr < 0)
-                    sectionMap.yGridErr = 0;
-                else if (sectionMap.yGridErr + sectionMap.screenYGrid > sectionMap.map.yGrid)
-                    sectionMap.yGridErr = sectionMap.map.yGrid - sectionMap.screenYGrid;
+                if (callback.getSectionMap().xGridErr < 0)
+                    callback.getSectionMap().xGridErr = 0;
+                else if (callback.getSectionMap().xGridErr + callback.getSectionMap().screenXGrid > callback.getSectionMap().map.xGrid)
+                    callback.getSectionMap().xGridErr = callback.getSectionMap().map.xGrid - callback.getSectionMap().screenXGrid;
+                if (callback.getSectionMap().yGridErr < 0)
+                    callback.getSectionMap().yGridErr = 0;
+                else if (callback.getSectionMap().yGridErr + callback.getSectionMap().screenYGrid > callback.getSectionMap().map.yGrid)
+                    callback.getSectionMap().yGridErr = callback.getSectionMap().map.yGrid - callback.getSectionMap().screenYGrid;
                 //调用一次onDraw
                 if (needRefresh) {
                     //清触屏点击
-                    FeData.section.cleanClickState(FeSection.ON_HIT_MAP);
+                    callback.cleanClickState(FeSection.ON_HIT_MAP);
                     //设置触屏移动
-                    FeData.section.setClickState(FeSection.ON_MOVE);
+                    callback.setClickState(FeSection.ON_MOVE);
                     //输入坐标求格子位置
-                    sectionMap.getRectByLocation(tMoveX, tMoveY, sectionMap.selectSite);
+                    callback.getSectionMap().getRectByLocation(tMoveX, tMoveY, callback.getSectionMap().selectSite);
                     //调用一次onDraw
                     invalidate();
                 }

@@ -2,11 +2,11 @@ package fans.develop.fe;
 
 import android.content.Context;
 import android.graphics.RectF;
-import android.widget.RelativeLayout;
 import android.graphics.Shader;
 
 public class FeLayoutMark extends FeLayoutParent {
 
+    private FeSection.Callback callback;
     public boolean checkHit(float x, float y){
         return false;
     }
@@ -17,10 +17,11 @@ public class FeLayoutMark extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMark(Context context) {
+    public FeLayoutMark(Context context, FeSection.Callback callback) {
         super(context);
+        this.callback = callback;
         //初始化着色器列表
-        FeData.section.sectionUnit.shaderR = new FeShader(
+        callback.getSectionUnit().shaderR = new FeShader(
             new RectF(0, 0, FeData.section.sectionMap.xGridPixel, FeData.section.sectionMap.yGridPixel),
             (int)(FeData.section.sectionMap.xGridPixel/10), 1,
             20,
@@ -28,7 +29,7 @@ public class FeLayoutMark extends FeLayoutParent {
             new float[] {0.25F, 0.5F, 7.5F },
             Shader.TileMode.REPEAT
         );
-        FeData.section.sectionUnit.shaderG = new FeShader(
+        callback.getSectionUnit().shaderG = new FeShader(
             new RectF(0, 0, FeData.section.sectionMap.xGridPixel, FeData.section.sectionMap.yGridPixel),
             (int)(FeData.section.sectionMap.xGridPixel/10), 1,
             20,
@@ -36,7 +37,7 @@ public class FeLayoutMark extends FeLayoutParent {
             new float[] {0.25F, 0.5F, 7.5F },
             Shader.TileMode.REPEAT
         );
-        FeData.section.sectionUnit.shaderB = new FeShader(
+        callback.getSectionUnit().shaderB = new FeShader(
             new RectF(0, 0, FeData.section.sectionMap.xGridPixel, FeData.section.sectionMap.yGridPixel),
             (int)(FeData.section.sectionMap.xGridPixel/10), 1,
             20,
@@ -45,7 +46,7 @@ public class FeLayoutMark extends FeLayoutParent {
             Shader.TileMode.REPEAT
         );
         //
-        addView(new FeViewMark(context, 1));
+        addView(new FeViewMark(context, 1, callback));
         //引入心跳,让渐变色动起来
         FeData.addHeartUnit(heartUnit);
     }
@@ -60,10 +61,10 @@ public class FeLayoutMark extends FeLayoutParent {
     private FeHeartUnit heartUnit = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
             //让渐变色动起来
-            if(FeData.section.sectionUnit.shaderCount + 1 < FeData.section.sectionUnit.shaderR.xCount())
-                FeData.section.sectionUnit.shaderCount += 1;
+            if(callback.getSectionUnit().shaderCount + 1 < callback.getSectionUnit().shaderR.xCount())
+                callback.getSectionUnit().shaderCount += 1;
             else
-                FeData.section.sectionUnit.shaderCount = 0;
+                callback.getSectionUnit().shaderCount = 0;
         }
     });
 }

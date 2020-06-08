@@ -13,14 +13,14 @@ public class FeLayoutParent extends RelativeLayout{
 
         //按键返回
         //返回: true表示有使用到, false时将由系统决定退回界面或退出
-        public boolean keyBack();
+        boolean keyBack();
 
         //即将注销该layout,请在这里做收尾操作
         //返回: false表示未准备好, 将不注销
-        public boolean destory();
+        boolean destory();
 
         //重新加载界面
-        public void reload();
+        void reload();
     }
     
     public FeLayoutParent.Callback callback = null;

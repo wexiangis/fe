@@ -2,7 +2,6 @@ package fans.develop.fe;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 

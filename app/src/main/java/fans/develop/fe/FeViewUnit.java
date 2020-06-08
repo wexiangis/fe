@@ -16,7 +16,7 @@ import android.view.View;
  */
 public class FeViewUnit extends View {
 
-    private FeSectionMap sectionMap;
+    private FeSection.Callback callback;
 
     //动画相对地图的偏移量
     private float leftMargin = 0, topMargin = 0;
@@ -50,17 +50,18 @@ public class FeViewUnit extends View {
      */
     public FeViewUnit(Context context, 
         int id, int gridX, int gridY, 
-        int animMode, int colorMode)
+        int animMode, int colorMode,
+        FeSection.Callback callback)
     {
         super(context);
-        sectionMap = FeData.section.sectionMap;
+        this.callback = callback;
         //画笔初始化
         paint = new Paint();
         paint.setColor(Color.GREEN);
 //        paint.setAntiAlias(true);
 //        paint.setBitmapFilter(true);
         //图片加载和颜色变换
-        bitmap = FePallet.replace(FeData.assets.unit.getProfessionAnim(id), colorMode);
+        bitmap = FePallet.replace(callback.getAssets().unit.getProfessionAnim(id), colorMode);
         matrix.postScale(-1, 1);
         //根据动画类型使用对应的心跳
         setAnimMode(animMode);
@@ -77,7 +78,7 @@ public class FeViewUnit extends View {
         bitmapBody.right = bitmap.getWidth();
         bitmapBody.bottom = bitmapBody.top + frameHeight;
         //引入心跳
-        FeData.addHeartUnit(heartUnit);
+        callback.addHeartUnit(heartUnit);
         //地图中的位置信息管理结构
         site = new FeInfoGrid();
     }
@@ -85,7 +86,7 @@ public class FeViewUnit extends View {
     //删除人物,之后需自行 removeView()
     public void delete(){
         //解除心跳注册
-        FeData.removeHeartUnit(heartUnit);
+        callback.removeHeartUnit(heartUnit);
     }
 
     //人物id
@@ -97,16 +98,16 @@ public class FeViewUnit extends View {
     public void setGrid(int x, int y){
         gridX += x;
         gridY += y;
-        leftMargin += x*sectionMap.xGridPixel;
-        topMargin += y*sectionMap.yGridPixel;
+        leftMargin += x*callback.getSectionMap().xGridPixel;
+        topMargin += y*callback.getSectionMap().yGridPixel;
     }
 
     //移动到方格
     public void moveGridTo(int x, int y){
         gridX = x;
         gridY = y;
-        leftMargin = x*sectionMap.xGridPixel;
-        topMargin = y*sectionMap.yGridPixel;
+        leftMargin = x*callback.getSectionMap().xGridPixel;
+        topMargin = y*callback.getSectionMap().yGridPixel;
     }
 
     //颜色模式: 0/原色 1/绿色 2/红色 3/灰色 4/橙色 5/紫色 6/不蓝不绿
@@ -114,7 +115,7 @@ public class FeViewUnit extends View {
         if(this.colorMode != colorMode) {
             synchronized (paint) {
                 bitmap.recycle();
-                bitmap = FePallet.replace(FeData.assets.unit.getProfessionAnim(id), colorMode);
+                bitmap = FePallet.replace(callback.getAssets().unit.getProfessionAnim(id), colorMode);
                 this.colorMode = colorMode;
             }
         }
@@ -188,7 +189,7 @@ public class FeViewUnit extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         //跟地图要位置
-        sectionMap.getRectByGrid(gridX, gridY, site);
+        callback.getSectionMap().getRectByGrid(gridX, gridY, site);
         //扩大矩阵的上、左、右边界
         bitmapDist.left = site.rect.left - site.rect.width()/2;
         bitmapDist.right = site.rect.right + site.rect.width()/2;

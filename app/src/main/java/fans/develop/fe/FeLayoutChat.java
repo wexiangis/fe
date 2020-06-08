@@ -1,7 +1,6 @@
 package fans.develop.fe;
 
 import android.content.Context;
-import android.widget.RelativeLayout;
 
 /*
     地图上的对话
@@ -18,7 +17,7 @@ public class FeLayoutChat extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutChat(Context context) {
+    public FeLayoutChat(Context context, FeSection.Callback callback) {
         super(context);
     }
 }
