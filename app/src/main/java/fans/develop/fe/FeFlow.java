@@ -28,16 +28,16 @@ public class FeFlow {
     }
 
     public void stop(){
-        if(FeData.layoutSection != null &&
-            FeData.layoutSection.getParent() != null)
-            ((ViewGroup)FeData.layoutSection.getParent()).removeAllViews();
+        if(FeData.layoutCurrent != null &&
+            FeData.layoutCurrent.getParent() != null)
+            ((ViewGroup)FeData.layoutCurrent.getParent()).removeAllViews();
     }
 
     public void start(){
 
         //恢复
-        if(FeData.layoutSection != null){
-            FeData.activity.setContentView(FeData.layoutSection);
+        if(FeData.layoutCurrent != null){
+            FeData.activity.setContentView(FeData.layoutCurrent);
             return;
         }
 
