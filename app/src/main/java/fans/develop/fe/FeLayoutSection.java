@@ -14,7 +14,6 @@ public class FeLayoutSection extends FeLayoutParent {
 
     public FeLayoutSection(Context context, FeSection.Callback callback){
         super(context);
-        callback.setLayoutSection(this);
         //地图图层
         layoutMap = new FeLayoutMap(context, callback);
         addView(layoutMap);

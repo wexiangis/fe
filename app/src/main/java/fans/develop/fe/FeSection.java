@@ -7,11 +7,6 @@ import android.content.Context;
  */
 public class FeSection{
 
-    /* ---------- 章节数据 ---------- */
-
-    public FeAssetsSX data;
-    public int section = 0;
-
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public FeSection(Context context, int sX, int mode){
         //从文件加载章节存档数据
@@ -27,8 +22,13 @@ public class FeSection{
         sectionUnit = new FeSectionUnit();
     }
 
+    /* ---------- 章节数据 ---------- */
+
+    private FeAssetsSX data;
+
     /* ---------- 参数合集 ---------- */
 
+    public int section = 0;
     public FeLayoutSection layoutSection;
     public FeSectionMap sectionMap;
     public FeSectionUnit sectionUnit;
@@ -47,7 +47,8 @@ public class FeSection{
 
     /* ---------- 控件事件回调 ---------- */
 
-    public FeSection.Callback callback = new FeSection.Callback(){
+    public FeSection.Callback callback = new FeSection.Callback()
+    {
         public void addHeartUnit(FeHeartUnit heartUnit){
             FeData.addHeartUnit(heartUnit);
         }

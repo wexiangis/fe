@@ -83,9 +83,9 @@ public class FeFlow {
     public void loadSection(int sX, int mode) {
         //初始化章节数据
         FeData.section = new FeSection(FeData.context, sX, mode);
-        FeData.layoutSection = new FeLayoutSection(FeData.context, FeData.section.callback);
+        FeData.section.layoutSection = new FeLayoutSection(FeData.context, FeData.section.callback);
         //显示章节
-        loadLayout(FeData.layoutSection);
+        loadLayout(FeData.section.layoutSection);
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了
