@@ -15,8 +15,11 @@ public class FeFlow {
         if(FeData.layoutCurrent != null){
             if(FeData.layoutChain == null)
                 FeData.layoutChain = new FeChain<FeLayoutParent>(FeData.layoutCurrent);
-            else
-                FeData.layoutChain = FeData.layoutChain.next = new FeChain<FeLayoutParent>(FeData.layoutCurrent);
+            else {
+                FeData.layoutChain.next = new FeChain<FeLayoutParent>(FeData.layoutCurrent);
+                FeData.layoutChain.next.previous = FeData.layoutChain;
+                FeData.layoutChain = FeData.layoutChain.next;
+            }
         }
         //记录当前
         FeData.layoutCurrent = layout;
