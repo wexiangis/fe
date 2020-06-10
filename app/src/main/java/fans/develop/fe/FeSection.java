@@ -113,6 +113,11 @@ public class FeSection{
         public void setLayoutSection(FeLayoutSection layout){
             layoutSection = layout;
         }
+        //界面就绪,开始程序
+        public void start(){
+            //人物加载
+            ;
+        }
     };
 
     public interface Callback{
@@ -128,5 +133,7 @@ public class FeSection{
         void setClickState(short type);
         boolean checkClickState(short type);
         void setLayoutSection(FeLayoutSection layout);
+        //界面就绪,开始程序
+        void start();
     }
 }
