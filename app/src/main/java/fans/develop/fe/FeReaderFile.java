@@ -187,7 +187,7 @@ public class FeReaderFile {
             Data dat = data;
             while (dat != null && dat.next != null){
                 dat = dat.next;
-                count += 0;
+                count += 1;
             }
             dat.next = new Data(strings);
             line = count;

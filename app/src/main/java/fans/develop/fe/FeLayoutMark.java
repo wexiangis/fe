@@ -70,7 +70,7 @@ public class FeLayoutMark extends FeLayoutParent {
         关闭全部人物的mark范围
      */
     public void hideAllUnit(){
-        this.removeAllView();
+        this.removeAllViews();
     }
 
     //删除之前需自行 removeView()
