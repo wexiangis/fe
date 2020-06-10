@@ -6,6 +6,7 @@ import android.graphics.Shader;
 
 public class FeLayoutMark extends FeLayoutParent {
 
+    private Context context;
     private FeSection.Callback callback;
     
     public boolean checkHit(float x, float y){
@@ -20,6 +21,7 @@ public class FeLayoutMark extends FeLayoutParent {
 
     public FeLayoutMark(Context context, FeSection.Callback callback) {
         super(context);
+        this.context = context;
         this.callback = callback;
         //初始化着色器列表
         callback.getSectionUnit().shaderR = new FeShader(
@@ -46,13 +48,32 @@ public class FeLayoutMark extends FeLayoutParent {
             new float[] {0.1F, 0.5F, 0.9F },
             Shader.TileMode.REPEAT
         );
-        //
-        addView(new FeViewMark(context, 1, callback));
         //引入心跳,让渐变色动起来
         FeData.addHeartUnit(heartUnit);
     }
 
-    //删除人物,之后需自行 removeView()
+    /*
+        显示特定人物的mark范围
+     */
+    public void showUnit(int id){
+        addView(new FeViewMark(context, 1, callback));
+    }
+
+    /*
+        关闭特定人物的mark范围
+     */
+    public void hideUnit(int id){
+        ;
+    }
+
+    /*
+        关闭全部人物的mark范围
+     */
+    public void hideAllUnit(){
+        this.removeAllView();
+    }
+
+    //删除之前需自行 removeView()
     public void delete(){
         //解除心跳注册
         FeData.removeHeartUnit(heartUnit);

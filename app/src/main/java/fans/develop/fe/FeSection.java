@@ -116,7 +116,13 @@ public class FeSection{
         //界面就绪,开始程序
         public void start(){
             //人物加载
-            ;
+            for(int i = 0; i < data.saveCache.unit.total(); i++){
+                layoutSection.layoutUnit.loadView(
+                    data.saveCache.unit.getId(i),
+                    data.saveCache.unit.getX(i),
+                    data.saveCache.unit.getY(i),
+                    data.saveCache.unit.getCamp(i));
+            }
         }
     };
 
