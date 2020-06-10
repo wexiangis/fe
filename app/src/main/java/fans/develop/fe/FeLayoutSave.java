@@ -29,6 +29,8 @@ public class FeLayoutSave extends FeLayoutParent {
     //复制模式时,记录第一个选中的存档
     private int currnt_select = -1;
 
+    int[][] saveState;
+
     //触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
         public boolean onTouch(View v, MotionEvent event) {
@@ -55,14 +57,21 @@ public class FeLayoutSave extends FeLayoutParent {
                                     refresh();
                                 }
                                 break;
-                            //加载
+                            //继续游戏
                             case 1:
+                                //确认为非空存档且为中断记录
+                                if(bnSaveList[i].getText().toString().indexOf(default_name) != 0
+                                    && saveState[i][1] > 0)
+                                    FeData.flow.loadSection(i, 1);
+                                break;
+                            //读取记录
+                            case 2:
                                 //确认为非空存档
                                 if(bnSaveList[i].getText().toString().indexOf(default_name) != 0)
                                     FeData.flow.loadSection(i, 0);
                                 break;
                             //删除
-                            case 2:
+                            case 3:
                                 //确认为非空存档
                                 if(bnSaveList[i].getText().toString().indexOf(default_name) != 0){
                                     //删除
@@ -72,7 +81,7 @@ public class FeLayoutSave extends FeLayoutParent {
                                 }
                                 break;
                             //复制
-                            case 3:
+                            case 4:
                                 //点击被复制项
                                 if(currnt_select < 0){
                                     //确认为非空存档
@@ -100,7 +109,7 @@ public class FeLayoutSave extends FeLayoutParent {
                                 }
                                 break;
                             //通关保存
-                            case 4:
+                            case 5:
                                 break;
                         }
                     }
@@ -123,13 +132,13 @@ public class FeLayoutSave extends FeLayoutParent {
     }
 
     /*
-        ctrl 0/新建 1/加载(或继续) 2/删除 3/复制 4/通关保存
+        ctrl 0/新建 1/继续 2/加载(或继续) 3/删除 4/复制 5/通关存档
      */
     public FeLayoutSave(Context context, int ctrl){
         super(context);
         this.ctrl = ctrl;
         //更新存档状态(saveState[][]的状态)
-        int[][] saveState = FeData.saveLoad();
+        saveState = FeData.saveLoad();
         //初始化
         bnSaveList = new Button[FeData.saveNum()];
         for(int i = 0; i < bnSaveList.length; i++){
@@ -183,7 +192,7 @@ public class FeLayoutSave extends FeLayoutParent {
      */
     public void refresh() {
         //更新存档状态(saveState[][]的状态)
-        int[][] saveState = FeData.saveLoad();
+        saveState = FeData.saveLoad();
         //更新词条
         for(int i = 0; i < bnSaveList.length; i++){
             int h = saveState[i][2]/3600;

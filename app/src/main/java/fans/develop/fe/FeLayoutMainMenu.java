@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 public class FeLayoutMainMenu extends FeLayoutParent {
 
     //菜单信息
-    private Button tvLoad = null, tvNew = null, tvCopy = null, tvDel = null, tvElse = null;
+    private Button tvContinue = null, tvLoad = null, tvNew = null, tvCopy = null, tvDel = null, tvElse = null;
 
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
@@ -36,15 +36,18 @@ public class FeLayoutMainMenu extends FeLayoutParent {
                 //点击:创建存档
                 if(v == tvNew)
                     FeData.flow.loadSave(0);
-                    //点击:加载存档
-                else if(v == tvLoad)
+                //点击:继续
+                else if(v == tvContinue)
                     FeData.flow.loadSave(1);
+                //点击:加载存档
+                else if(v == tvLoad)
+                    FeData.flow.loadSave(2);
                     //点击:删除存档
                 else if(v == tvDel)
-                    FeData.flow.loadSave(2);
+                    FeData.flow.loadSave(3);
                     //点击:复制存档
                 else if(v == tvCopy)
-                    FeData.flow.loadSave(3);
+                    FeData.flow.loadSave(4);
                     //点击:附加内容
                 else if(v == tvElse)
                     FeData.flow.loadExtra();
@@ -77,7 +80,8 @@ public class FeLayoutMainMenu extends FeLayoutParent {
     public FeLayoutMainMenu(Context context){
         super(context);
         //菜单各项TXT
-        tvLoad = buildButtonStyle(context, "继 续");
+        tvContinue = buildButtonStyle(context, "继续游戏");
+        tvLoad = buildButtonStyle(context, "读取记录");
         tvNew = buildButtonStyle(context, "新游戏");
         tvCopy = buildButtonStyle(context, "复 制");
         tvDel = buildButtonStyle(context, "删 除");
@@ -118,15 +122,19 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         //更新存档状态(saveState[][]的状态)
         int[][] saveState = FeData.saveLoad();
         //检查是否存在记录
-        boolean findRecord = false;
+        boolean findRecord = false, findContinue = false;
         for(int i = 0; i < FeData.saveNum(); i++) {
             if (saveState[i][0] >= 0) {
                 findRecord = true;
+                if(saveState[i][1] > 0)
+                    findContinue = true;
                 break;
             }
         }
         //按特定参数添加各项到线性布局
         linearLayout.removeAllViews();
+        if(findContinue)
+            linearLayout.addView(tvContinue, tvLayoutParams);
         if(findRecord)
             linearLayout.addView(tvLoad, tvLayoutParams);
         linearLayout.addView(tvNew, tvLayoutParams);

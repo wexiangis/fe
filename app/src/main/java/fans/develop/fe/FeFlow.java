@@ -68,7 +68,7 @@ public class FeFlow {
         loadLayout(new FeLayoutMainMenu(FeData.context));
     }
 
-    //加载存档界面: ctrl 0/新建 1/加载(或继续) 2/删除 3/复制 4/通关存档
+    //加载存档界面: ctrl 0/新建 1/继续 2/加载(或继续) 3/删除 4/复制 5/通关存档
     public void loadSave(int ctrl){
         loadLayout(new FeLayoutSave(FeData.context, ctrl));
     }
