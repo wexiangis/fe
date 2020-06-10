@@ -8,9 +8,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /*
-    主界面:背景动画+“按任意键提示”+超时播放职业动画
+    主题曲界面
  */
-public class FeLayoutMainTheme extends FeLayoutParent {
+public class FeLayoutTheme extends FeLayoutParent {
 
     private TextView textView;
     private RelativeLayout.LayoutParams layoutParams;
@@ -35,7 +35,7 @@ public class FeLayoutMainTheme extends FeLayoutParent {
         this.setOnTouchListener(onTouchListener);
     }
 
-    public FeLayoutMainTheme(Context context)
+    public FeLayoutTheme(Context context)
     {
         super(context);
 
@@ -50,7 +50,7 @@ public class FeLayoutMainTheme extends FeLayoutParent {
 
         //按任意键继续
         textView = new TextView(context);
-        textView.setText("按任意键继续");
+        textView.setText("任意触屏键继续");
         textView.setTextColor(0x80FFFFFF);
         textView.setTextSize(24);
         //相对主界面的位置
@@ -78,7 +78,7 @@ public class FeLayoutMainTheme extends FeLayoutParent {
 
             @Override
             public void reload() {
-                FeLayoutMainTheme.this.reload();
+                FeLayoutTheme.this.reload();
             }
         };
     }

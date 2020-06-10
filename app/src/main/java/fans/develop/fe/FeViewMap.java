@@ -77,7 +77,7 @@ public class FeViewMap extends View {
     }
 
     //动画心跳回调
-    private FeHeartUnit heartMapMov = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
+    private FeHeartUnit heartMapMov = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART_QUICK, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
             //需要挪图?
             if(xGridErr != 0 || yGridErr != 0)

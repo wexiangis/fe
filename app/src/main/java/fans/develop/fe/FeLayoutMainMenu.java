@@ -35,22 +35,22 @@ public class FeLayoutMainMenu extends FeLayoutParent {
                 v.setAlpha(1.0f);
                 //点击:创建存档
                 if(v == tvNew)
-                    FeData.flow.loadSave(0);
+                    FeData.flow.loadSaveMenu(0);
                 //点击:继续
                 else if(v == tvContinue)
-                    FeData.flow.loadSave(1);
+                    FeData.flow.loadSaveMenu(1);
                 //点击:加载存档
                 else if(v == tvLoad)
-                    FeData.flow.loadSave(2);
+                    FeData.flow.loadSaveMenu(2);
                     //点击:删除存档
                 else if(v == tvDel)
-                    FeData.flow.loadSave(3);
+                    FeData.flow.loadSaveMenu(3);
                     //点击:复制存档
                 else if(v == tvCopy)
-                    FeData.flow.loadSave(4);
+                    FeData.flow.loadSaveMenu(4);
                     //点击:附加内容
                 else if(v == tvElse)
-                    FeData.flow.loadExtra();
+                    FeData.flow.loadExtraMenu();
             }
             //不返回true的话ACTION_DOWN之后的事件都会被丢弃
             return true;

@@ -8,6 +8,8 @@ public class FeLayoutMark extends FeLayoutParent {
 
     private Context context;
     private FeSection.Callback callback;
+    //着色器心跳启动标志
+    private Boolean shaderHeartStartFlag = false;
     
     public boolean checkHit(float x, float y){
         return false;
@@ -23,39 +25,14 @@ public class FeLayoutMark extends FeLayoutParent {
         super(context);
         this.context = context;
         this.callback = callback;
-        //初始化着色器列表
-        callback.getSectionUnit().shaderR = new FeShader(
-            new RectF(0, 0, FeData.section.sectionMap.xGridPixel, FeData.section.sectionMap.yGridPixel),
-            (int)(FeData.section.sectionMap.xGridPixel/10), 1,
-            20,
-            new int[]{0x80FF8080, 0x80FF2020, 0x80FF8080},
-            new float[] {0.25F, 0.5F, 7.5F },
-            Shader.TileMode.REPEAT
-        );
-        callback.getSectionUnit().shaderG = new FeShader(
-            new RectF(0, 0, FeData.section.sectionMap.xGridPixel, FeData.section.sectionMap.yGridPixel),
-            (int)(FeData.section.sectionMap.xGridPixel/10), 1,
-            20,
-            new int[]{0x8060FF60, 0x8020FF20, 0x8060F60F},
-            new float[] {0.25F, 0.5F, 7.5F },
-            Shader.TileMode.REPEAT
-        );
-        callback.getSectionUnit().shaderB = new FeShader(
-            new RectF(0, 0, FeData.section.sectionMap.xGridPixel, FeData.section.sectionMap.yGridPixel),
-            (int)(FeData.section.sectionMap.xGridPixel/10), 1,
-            20,
-            new int[]{0x808080FF, 0x802020FF, 0x808080FF},
-            new float[] {0.1F, 0.5F, 0.9F },
-            Shader.TileMode.REPEAT
-        );
-        //引入心跳,让渐变色动起来
-        FeData.addHeartUnit(heartUnit);
     }
 
     /*
         显示特定人物的mark范围
      */
     public void showUnit(int id){
+        if(!shaderHeartStartFlag)
+            shaderHeartStart();
         addView(new FeViewMark(context, 1, callback));
     }
 
@@ -75,8 +52,46 @@ public class FeLayoutMark extends FeLayoutParent {
 
     //删除之前需自行 removeView()
     public void delete(){
+        //没有启动就没有关闭
+        if(!shaderHeartStartFlag)
+            return;
         //解除心跳注册
-        FeData.removeHeartUnit(heartUnit);
+        callback.removeHeartUnit(heartUnit);
+    }
+
+    private void shaderHeartStart(){
+        //只启动一次
+        if(shaderHeartStartFlag)
+            return;
+        //初始化着色器列表
+        callback.getSectionUnit().shaderR = new FeShader(
+                new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
+                (int)(callback.getSectionMap().xGridPixel/10), 1,
+                20,
+                new int[]{0x80FF8080, 0x80FF2020, 0x80FF8080},
+                new float[] {0.25F, 0.5F, 7.5F },
+                Shader.TileMode.REPEAT
+        );
+        callback.getSectionUnit().shaderG = new FeShader(
+                new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
+                (int)(callback.getSectionMap().xGridPixel/10), 1,
+                20,
+                new int[]{0x8060FF60, 0x8020FF20, 0x8060F60F},
+                new float[] {0.25F, 0.5F, 7.5F },
+                Shader.TileMode.REPEAT
+        );
+        callback.getSectionUnit().shaderB = new FeShader(
+                new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
+                (int)(callback.getSectionMap().xGridPixel/10), 1,
+                20,
+                new int[]{0x808080FF, 0x802020FF, 0x808080FF},
+                new float[] {0.1F, 0.5F, 0.9F },
+                Shader.TileMode.REPEAT
+        );
+        //引入心跳,让渐变色动起来
+        callback.addHeartUnit(heartUnit);
+        //只启动一次
+        shaderHeartStartFlag = true;
     }
     
     //动画心跳回调

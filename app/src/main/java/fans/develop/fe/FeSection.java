@@ -18,20 +18,34 @@ public class FeSection{
         if(data != null)
             section = data.info.getSection();
         //初始化参数集
-        sectionMap = new FeSectionMap(section);
+//        sectionMap = new FeSectionMap(section);//在加载地图的时候初始化"layoutSection.layoutMap.loadMap(section);"
         sectionUnit = new FeSectionUnit();
+        //界面
+        layoutSection = new FeLayoutSection(context, callback);
     }
-
-    /* ---------- 章节数据 ---------- */
-
-    private FeAssetsSX data;
+    //界面就绪,开始程序
+    public void start(){
+        //加载地图
+        layoutSection.layoutMap.loadMap(section);
+        //人物加载
+        for(int i = 0; i < data.saveCache.unit.total(); i++){
+            layoutSection.layoutUnit.loadView(
+                    data.saveCache.unit.getId(i),
+                    data.saveCache.unit.getX(i),
+                    data.saveCache.unit.getY(i),
+                    data.saveCache.unit.getCamp(i));
+        }
+        //启动地图信息显示
+        layoutSection.layoutMapInfo.on();
+    }
 
     /* ---------- 参数合集 ---------- */
 
-    public int section = 0;
+    private FeAssetsSX data;
+    private int section = 0;
+    private FeSectionMap sectionMap;
+    private FeSectionUnit sectionUnit;
     public FeLayoutSection layoutSection;
-    public FeSectionMap sectionMap;
-    public FeSectionUnit sectionUnit;
 
     /* ---------- 触屏产生的各种状态 ---------- */
 
@@ -113,16 +127,8 @@ public class FeSection{
         public void setLayoutSection(FeLayoutSection layout){
             layoutSection = layout;
         }
-        //界面就绪,开始程序
-        public void start(){
-            //人物加载
-            for(int i = 0; i < data.saveCache.unit.total(); i++){
-                layoutSection.layoutUnit.loadView(
-                    data.saveCache.unit.getId(i),
-                    data.saveCache.unit.getX(i),
-                    data.saveCache.unit.getY(i),
-                    data.saveCache.unit.getCamp(i));
-            }
+        public void setSectionMap(FeSectionMap sm){
+            sectionMap = sm;
         }
     };
 
@@ -139,7 +145,6 @@ public class FeSection{
         void setClickState(short type);
         boolean checkClickState(short type);
         void setLayoutSection(FeLayoutSection layout);
-        //界面就绪,开始程序
-        void start();
+        void setSectionMap(FeSectionMap sectionMap);
     }
 }

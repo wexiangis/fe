@@ -77,6 +77,10 @@ public class FeHeart {
     public static final int TYPE_FRAME_HEART = 4;//帧动画心跳,不限帧数,周期100ms
     public static final int TYPE_TOTAL = 4;
 
+    //高速type定义
+    public static final int TYPE_FRAME_HEART_QUICK = 11;//高速帧动画心跳,不限帧数,周期30ms
+    public static final int TYPE_QUICK_TOTAL = 1;
+
     // ---------- 心跳间隔数组和计数 ----------
 
     //type 1 TYPE_ANIM_STAY
@@ -96,18 +100,26 @@ public class FeHeart {
     //type 4 TYPE_FRAME_HEART
     private int circleType4_count = 0;
 
+    //type 11 TYPE_FRAME_HEART_QUICK
+    private int circleType11_count = 0;
+
     // ---------- 心跳定时器 ----------
 
     //定时器
+    private final int TIMER_PERIOD = 100;//定时器周期ms
     private Timer[] timer = new Timer[TYPE_TOTAL];
     private TimerTask[] timerTask = new TimerTask[TYPE_TOTAL];
+    //高速定时器
+    private final int TIMER_QUICK_PERIOD = 30;//高速定时器周期ms
+    private Timer[] timerQuick = new Timer[TYPE_QUICK_TOTAL];
+    private TimerTask[] timerTaskQuick = new TimerTask[TYPE_QUICK_TOTAL];
 
     public void start(){
+        /* ----- type 1 TYPE_ANIM_STAY ----- */
         timer[0] = new Timer();
         timerTask[0] = new TimerTask() {
             @Override
             public void run() {
-                //type 1 TYPE_ANIM_STAY
                 if(++circleType1_timerCount > circleType1[circleType1_count]){
                     circleType1_timerCount = 1;
                     //
@@ -127,12 +139,11 @@ public class FeHeart {
                 }
             }
         };
-        //
+        /* ----- type 2 TYPE_ANIM_SELECT ----- */
         timer[1] = new Timer();
         timerTask[1] = new TimerTask() {
             @Override
             public void run() {
-                //type 2 TYPE_ANIM_SELECT
                 if(++circleType2_timerCount > circleType2[circleType2_count]){
                     circleType2_timerCount = 1;
                     //
@@ -156,12 +167,11 @@ public class FeHeart {
                 }
             }
         };
-        //
+        /* ----- type 3 TYPE_ANIM_MOVE ----- */
         timer[2] = new Timer();
         timerTask[2] = new TimerTask() {
             @Override
             public void run() {
-                //type 3 TYPE_ANIM_MOVE
                 if(++circleType3_timerCount > circleType3[circleType3_count]){
                     circleType3_timerCount = 1;
                     //
@@ -172,28 +182,45 @@ public class FeHeart {
                 }
             }
         };
-        //
+        /* ----- type 4 TYPE_FRAME_HEART ----- */
         timer[3] = new Timer();
         timerTask[3] = new TimerTask() {
             @Override
             public void run() {
-                //type 4 TYPE_FRAME_HEART
                 circleType4_count += 1;
                 scanChain(TYPE_FRAME_HEART, circleType4_count);
             }
         };
-        //
+        /* ----- type 11 TYPE_FRAME_HEART_QUICK ----- */
+        timerQuick[0] = new Timer();
+        timerTaskQuick[0] = new TimerTask() {
+            @Override
+            public void run() {
+                circleType11_count += 1;
+                scanChain(TYPE_FRAME_HEART_QUICK, circleType11_count);
+            }
+        };
+        // all initialize
         for (int i = 0; i < timer.length; i++)
-            timer[i].schedule(timerTask[i], 200, 100);
+            timer[i].schedule(timerTask[i], 200, TIMER_PERIOD);
+        for (int i = 0; i < timerQuick.length; i++)
+            timer[i].schedule(timerTaskQuick[i], 200, TIMER_QUICK_PERIOD);
     }
 
     public void stop(){
         if(timer != null){
+            // all cancel
             for (int i = 0; i < timer.length; i++){
                 timerTask[i].cancel();
                 timerTask[i] = null;
                 timer[i].cancel();
                 timer[i] = null;
+            }
+            for (int i = 0; i < timerQuick.length; i++){
+                timerTaskQuick[i].cancel();
+                timerTaskQuick[i] = null;
+                timerQuick[i].cancel();
+                timerQuick[i] = null;
             }
         }
     }

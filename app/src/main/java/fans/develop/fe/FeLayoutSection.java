@@ -38,7 +38,5 @@ public class FeLayoutSection extends FeLayoutParent {
         addView(layoutChat);
         //其它图层
         ;
-        //界面就绪,开始回合
-        callback.start();
     }
 }

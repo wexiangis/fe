@@ -50,12 +50,12 @@ public class FeFlow {
         //片头播完...
         ;
         //加载主界面
-        loadMainTheme();
+        loadTheme();
     }
 
     //加载主界面
-    public void loadMainTheme(){
-        loadLayout(new FeLayoutMainTheme(FeData.context));
+    public void loadTheme(){
+        loadLayout(new FeLayoutTheme(FeData.context));
     }
 
     //加载职业动画
@@ -69,12 +69,12 @@ public class FeFlow {
     }
 
     //加载存档界面: ctrl 0/新建 1/继续 2/加载(或继续) 3/删除 4/复制 5/通关存档
-    public void loadSave(int ctrl){
+    public void loadSaveMenu(int ctrl){
         loadLayout(new FeLayoutSave(FeData.context, ctrl));
     }
 
     //加载额外内容
-    public void loadExtra(){
+    public void loadExtraMenu(){
         loadLayout(new FeLayoutExtra(FeData.context));
     }
 
@@ -83,8 +83,10 @@ public class FeFlow {
     public void loadSection(int sX, int mode) {
         //初始化章节数据
         FeData.section = new FeSection(FeData.context, sX, mode);
-        //显示章节
-        loadLayout(new FeLayoutSection(FeData.context, FeData.section.callback));
+        //显示界面
+        loadLayout(FeData.section.layoutSection);
+        //开始流程
+        FeData.section.start();
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了
