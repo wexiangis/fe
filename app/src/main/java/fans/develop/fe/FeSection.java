@@ -1,6 +1,7 @@
 package fans.develop.fe;
 
 import android.content.Context;
+// import android.os.Handler;
 
 /*
     章节运行关键参数之数据部分
@@ -35,6 +36,35 @@ public class FeSection{
                     data.saveCache.unit.getY(i),
                     data.saveCache.unit.getCamp(i));
         }
+//        new Thread() {
+//            Handler handler = new Handler();
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(1000);
+//                    handler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            layoutSection.layoutUnit.loadView(
+//                                    data.saveCache.unit.getId(0),
+//                                    data.saveCache.unit.getX(0),
+//                                    data.saveCache.unit.getY(0),
+//                                    data.saveCache.unit.getCamp(0));
+//                        }
+//                    });
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            layoutSection.layoutUnit.loadView(
+//                                    data.saveCache.unit.getId(1),
+//                                    data.saveCache.unit.getX(1),
+//                                    data.saveCache.unit.getY(1),
+//                                    data.saveCache.unit.getCamp(1));
+//                        }
+//                    }, 1000);
+//                }catch (java.lang.InterruptedException e){}
+//            }
+//        }.start();
         //启动地图信息显示
         layoutSection.layoutMapInfo.on();
     }
