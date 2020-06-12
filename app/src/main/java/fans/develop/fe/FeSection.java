@@ -23,6 +23,7 @@ public class FeSection{
         //界面
         layoutSection = new FeLayoutSection(context, callback);
     }
+    
     //界面就绪,开始程序
     public void start(){
         //加载地图
