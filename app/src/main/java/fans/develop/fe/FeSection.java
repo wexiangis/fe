@@ -1,7 +1,7 @@
 package fans.develop.fe;
 
 import android.content.Context;
-// import android.os.Handler;
+import android.os.Handler;
 
 /*
     章节运行关键参数之数据部分
@@ -29,14 +29,16 @@ public class FeSection{
     public void start(){
         //加载地图
         layoutSection.layoutMap.loadMap(section);
+
         //人物加载
-        for(int i = 0; i < data.saveCache.unit.total(); i++){
-            layoutSection.layoutUnit.loadView(
-                    data.saveCache.unit.getId(i),
-                    data.saveCache.unit.getX(i),
-                    data.saveCache.unit.getY(i),
-                    data.saveCache.unit.getCamp(i));
-        }
+//        for(int i = 0; i < data.saveCache.unit.total(); i++){
+//            layoutSection.layoutUnit.loadView(
+//                    data.saveCache.unit.getId(i),
+//                    data.saveCache.unit.getX(i),
+//                    data.saveCache.unit.getY(i),
+//                    data.saveCache.unit.getCamp(i));
+//        }
+
 //        new Thread() {
 //            Handler handler = new Handler();
 //            @Override
@@ -66,6 +68,49 @@ public class FeSection{
 //                }catch (java.lang.InterruptedException e){}
 //            }
 //        }.start();
+
+        new FeThread(new int[]{0, 1000, 2000, 3000},
+            new Runnable() {
+                @Override
+                public void run() {
+                    layoutSection.layoutUnit.loadView(
+                            data.saveCache.unit.getId(0),
+                            data.saveCache.unit.getX(0),
+                            data.saveCache.unit.getY(0),
+                            data.saveCache.unit.getCamp(0));
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    layoutSection.layoutUnit.loadView(
+                            data.saveCache.unit.getId(1),
+                            data.saveCache.unit.getX(1),
+                            data.saveCache.unit.getY(1),
+                            data.saveCache.unit.getCamp(1));
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    layoutSection.layoutUnit.loadView(
+                            data.saveCache.unit.getId(2),
+                            data.saveCache.unit.getX(2),
+                            data.saveCache.unit.getY(2),
+                            data.saveCache.unit.getCamp(2));
+                }
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    layoutSection.layoutUnit.loadView(
+                            data.saveCache.unit.getId(3),
+                            data.saveCache.unit.getX(3),
+                            data.saveCache.unit.getY(3),
+                            data.saveCache.unit.getCamp(3));
+                }
+            }).start();
+
         //启动地图信息显示
         layoutSection.layoutMapInfo.on();
     }
