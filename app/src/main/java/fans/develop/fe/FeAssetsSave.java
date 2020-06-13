@@ -7,10 +7,8 @@ package fans.develop.fe;
 public class FeAssetsSave {
 
     private FeAssetsUnit unit;
-
-    private int sXCurrent = 0;//当前档位
-    private int saveNum = 3;//总存档槽数量
-
+    private int sXCurrent;//当前档位
+    private int saveNum;//总存档槽数量
     private FeFile file;//文件操作工具
 
     public FeAssetsSave(FeAssetsUnit unit){
@@ -19,7 +17,7 @@ public class FeAssetsSave {
         //读取最后存档位置
         sXCurrent = FeFormat.StringToInt(file.readFile("/save/last.txt", "00", 2));
         //读取存档槽数量
-        saveNum = FeFormat.StringToInt(file.readFile("/save/num.txt", "03", 2));
+        saveNum = FeFormat.StringToInt(file.readFile("/save/num.txt", "05", 2));
     }
 
     /* ---------- 存档槽位检查 ---------- */

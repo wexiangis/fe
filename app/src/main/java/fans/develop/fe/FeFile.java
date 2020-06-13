@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /*
-    用来创建、查询手机内存FE文件夹中的文件
+    用来创建、查询手机内存FE文件夹中的文件(注意不包括assets文件夹)
  */
 public class FeFile{
     //关键路径
