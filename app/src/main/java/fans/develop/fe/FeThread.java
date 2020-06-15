@@ -3,7 +3,7 @@ package fans.develop.fe;
 import android.os.Handler;
 
 /*
-    批量延迟UI操作
+    批量异步线程操作
  */
 public class FeThread extends Thread{
 
@@ -11,9 +11,23 @@ public class FeThread extends Thread{
     private Handler handler;
     private int[] delay;
 
+    /*
+        UI线程
+     */
     public FeThread(int[] delay, Runnable ... runnables){
-        handler = new Handler();
+        this.handler = new Handler();
         this.delay = delay;
+        this.runnables = new Runnable[runnables.length];
+        for(int i = 0; i < runnables.length && i < delay.length; i++)
+            this.runnables[i] = runnables[i];
+    }
+
+    /*
+        普通线程(可以使用join()等待所有任务结束)
+     */
+    public FeThread(Runnable ... runnables){
+        this.handler = null;
+        this.delay = null;
         this.runnables = new Runnable[runnables.length];
         for(int i = 0; i < runnables.length && i < delay.length; i++)
             this.runnables[i] = runnables[i];
@@ -21,7 +35,25 @@ public class FeThread extends Thread{
 
     @Override
     public void run(){
-        for(int i = 0; i < runnables.length; i++)
-            handler.postDelayed(this.runnables[i], delay[i]);
+        if(delay != null)
+        {
+            for(int i = 0; i < runnables.length; i++)
+                handler.postDelayed(runnables[i], delay[i]);
+        }
+        else
+        {
+            Thread[] threads = new Thread[runnables.length];
+            //start
+            for(int i = 0; i < runnables.length; i++) {
+                threads[i] = new Thread(runnables[i]);
+                threads[i].start();
+            }
+            //wait all
+            for(int i = 0; i < runnables.length; i++) {
+                try {
+                    threads[i].join();
+                }catch (java.lang.InterruptedException e){}
+            }
+        }
     }
 }

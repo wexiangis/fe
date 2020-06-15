@@ -1,0 +1,122 @@
+package fans.develop.fe;
+
+import android.content.Context;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+/*
+    进度加载界面
+ */
+public class FeLayoutLoading extends FeLayoutParent{
+
+    /*
+        界面类型
+     */
+    public static final int TYPE_NORMAL = 0;
+
+    /*
+        进度设置接口(用户调用)
+     */
+    public void setPercent(int percent){
+        asyncTask.setPercent(percent);
+    }
+
+    /*
+        后台运行任务(用户实现,期间通过percent.set(xxx),告知UI进度情况)
+        返回: 成功返回null, 失败返回提示
+     */
+    public interface DoInBackground<U>{
+        public String run(U obj, FeLayoutLoading layoutLoading);
+    }
+
+    /*
+        UI任务(用户实现)
+     */
+    public interface DoInFinal<U>{
+        public void run(U obj, String result);
+    }
+
+    /*
+        public 为了能在callback中调用
+     */
+    public Context context;
+    public FeAsyncTask asyncTask;
+    public int type;
+    public Object obj;
+    public FeLayoutLoading.DoInBackground doInBackground;
+    public FeLayoutLoading.DoInFinal doInFinal;
+
+    /*
+        type: 加载动画类型
+        obj: 私有数据,传到 doInBackground、doInFinal 中的参数之一
+        doInBackground:
+            1.后台任务,由使用者定义;
+            2.其携带参数 layoutLoading,用于修改UI进度,调用 layoutLoading.setPercent(xx)
+            3.返回: null/表示正常 其它/表示错误,将以弹窗形式提示用户
+        doInFinal:
+            1.doInBackground 结束后的UI任务,用于界面跳转
+            2.携带参数 result 为 doInBackground 最后的返回
+     */
+    public FeLayoutLoading(Context context, int type, Object obj, FeLayoutLoading.DoInBackground doInBackground, FeLayoutLoading.DoInFinal doInFinal){
+        super(context);
+
+        this.context = context;
+        this.type = type;
+        this.obj = obj;
+        this.doInBackground = doInBackground;
+        this.doInFinal = doInFinal;
+
+        asyncTask = new FeAsyncTask(this, new FeAsyncTask.Callback<FeLayoutLoading>() {
+
+            private TextView textView;
+
+            @Override
+            public void onPreExecute(FeLayoutLoading layoutLoading) {
+                //
+                textView = new TextView(layoutLoading.context);
+                textView.setText("wait");
+                textView.setTextSize(32);
+                textView.setTextColor(0xFFFF0000);
+                //相对主界面的位置
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                layoutParams.setMargins(0, 0, 0, 100);
+                //
+                layoutLoading.addView(textView, layoutParams);
+                layoutLoading.setBackgroundColor(0x80008080);
+            }
+
+            @Override
+            public String doInBackground(FeLayoutLoading layoutLoading, Integer... integers) {
+                if(layoutLoading.doInBackground != null)
+                    return layoutLoading.doInBackground.run(layoutLoading.obj, layoutLoading);
+                else
+                    return null;
+            }
+
+            @Override
+            public Integer onProgressUpdate(FeLayoutLoading layoutLoading, Integer... values) {
+                if(values.length > 0)
+                    textView.setText(String.valueOf(values[0]));
+                else
+                    textView.setText("error percent !!");
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(FeLayoutLoading layoutLoading, String result) {
+                if(result != null){
+                    //弹窗
+                    ;
+                }
+                if(layoutLoading.doInFinal != null)
+                    layoutLoading.doInFinal.run(layoutLoading.obj, result);
+            }
+        });
+
+        asyncTask.execute(0);
+    }
+
+}

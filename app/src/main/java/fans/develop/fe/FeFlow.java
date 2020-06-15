@@ -65,7 +65,28 @@ public class FeFlow {
 
     //加载主界面菜单
     public void loadMainMenu(){
-        loadLayout(new FeLayoutMainMenu(FeData.context));
+//        loadLayout(new FeLayoutMainMenu(FeData.context));
+        FeData.activity.setContentView(new FeLayoutLoading(FeData.context, 0, null,
+                new FeLayoutLoading.DoInBackground() {
+                    @Override
+                    public String run(Object obj, FeLayoutLoading layoutLoading) {
+                        try {
+                            Thread.sleep(500);
+                            for (int i = 0; i < 100; i++) {
+                                layoutLoading.setPercent(i);
+                                Thread.sleep(20);
+                            }
+                        } catch (java.lang.InterruptedException e) { }
+                        return null;
+                    }
+                },
+                new FeLayoutLoading.DoInFinal() {
+                    @Override
+                    public void run(Object obj, String result) {
+                        loadLayout(new FeLayoutMainMenu(FeData.context));
+                    }
+                }
+        ));
     }
 
     //加载存档界面: ctrl 0/新建 1/继续 2/加载(或继续) 3/删除 4/复制 5/通关存档
