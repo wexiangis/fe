@@ -102,8 +102,8 @@ public class FeLayoutSection extends FeLayoutParent{
 
                             layoutLoading.setPercent(55);//百分比进度
 
-                            //其它图层
-                            ;
+                            //debug图层
+                            layoutDebug = new FeLayoutDebug(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(60);//百分比进度
 
@@ -157,8 +157,8 @@ public class FeLayoutSection extends FeLayoutParent{
                         obj.addView(layoutMenu);
                         //人物对话图层
                         obj.addView(layoutChat);
-                        //其它图层
-                        ;
+                        //debug图层
+                        obj.addView(layoutDebug);
 
                         /* ----- 启动后台线程 ----- */
 
@@ -181,6 +181,7 @@ public class FeLayoutSection extends FeLayoutParent{
     public FeLayoutUnitMenu layoutUnitMenu = null;
     public FeLayoutMenu layoutMenu = null;
     public FeLayoutChat layoutChat = null;
+    public FeLayoutDebug layoutDebug = null;
 
     /* ---------- 触屏产生的各种状态 ---------- */
 
@@ -220,6 +221,9 @@ public class FeLayoutSection extends FeLayoutParent{
         public FeAssets getAssets(){
             return feData.assets;
         }
+        public Context getContext(){
+            return feData.context;
+        }
         public void refresh(){
             //更新标记格
             layoutMark.refresh();
@@ -233,6 +237,8 @@ public class FeLayoutSection extends FeLayoutParent{
             layoutMenu.refresh();
             //更新对话
             layoutChat.refresh();
+            //debug图层
+            layoutDebug.refresh();
         }
         public boolean checkHit(float x, float y){
             //点击:正在对话?
@@ -271,6 +277,7 @@ public class FeLayoutSection extends FeLayoutParent{
         FeSectionUnit getSectionUnit();
         void refreshSectionMap(int section);
         FeAssets getAssets();
+        Context getContext();
         void refresh();
         boolean checkHit(float x, float y);
         void cleanClickState(short type);
