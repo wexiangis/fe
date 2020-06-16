@@ -68,7 +68,7 @@ public class FeLayoutTheme extends FeLayoutParent {
 
             @Override
             public boolean destory() {
-                return false;
+                return true;
             }
 
             @Override

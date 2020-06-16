@@ -213,7 +213,7 @@ public class FeLayoutSave extends FeLayoutParent {
 
             @Override
             public boolean destory() {
-                return false;
+                return true;
             }
 
             @Override

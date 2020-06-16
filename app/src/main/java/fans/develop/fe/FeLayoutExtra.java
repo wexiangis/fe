@@ -1,6 +1,5 @@
 package fans.develop.fe;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -15,6 +14,7 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutExtra extends FeLayoutParent {
 
+    private FeData feData;
     //条目列表
     private Button[] bnSaveList;
     //菜单线性布局参数
@@ -47,8 +47,8 @@ public class FeLayoutExtra extends FeLayoutParent {
 
     public FeLayoutParent.Callback callback;
 
-    private Button buildButtonStyle(Context context, String text){
-        Button button = new Button(context);
+    private Button buildButtonStyle(String text){
+        Button button = new Button(feData.context);
         button.setText(text);
         button.setTextColor(0xFFFFFFFF);
         button.setTextSize(24);
@@ -59,24 +59,17 @@ public class FeLayoutExtra extends FeLayoutParent {
     }
 
     public void reload(){
-        //添加条目到视图
-        linearLayout.removeAllViews();
-        for(int i = 0; i < bnSaveList.length; i++)
-            linearLayout.addView(bnSaveList[i], bnLayoutParams);
-        //显示列表
-        this.removeAllViews();
-        this.addView(linearLayout, linearLayoutParam);
-        this.setBackgroundColor(0x80408040);
-    }
 
-    public FeLayoutExtra(Context context){
-        super(context);
+        this.removeAllViews();
+
+        /* ----- 数据初始化 -----*/
+
         //初始化
         bnSaveList = new Button[2];
-        bnSaveList[0] = buildButtonStyle(context, "音 乐");
-        bnSaveList[1] = buildButtonStyle(context, "战 绩");
+        bnSaveList[0] = buildButtonStyle("音 乐");
+        bnSaveList[1] = buildButtonStyle("战 绩");
         //创建线性布局窗体
-        linearLayout = new LinearLayout(context);
+        linearLayout = new LinearLayout(feData.context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
         bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -85,8 +78,23 @@ public class FeLayoutExtra extends FeLayoutParent {
         linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
         linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
-        //结构加载
-        reload();
+
+        //添加条目到视图
+        linearLayout.removeAllViews();
+        for(int i = 0; i < bnSaveList.length; i++)
+            linearLayout.addView(bnSaveList[i], bnLayoutParams);
+
+        /* ----- 装载界面 -----*/
+
+        //显示列表
+        this.removeAllViews();
+        this.addView(linearLayout, linearLayoutParam);
+        this.setBackgroundColor(0x80408040);
+    }
+
+    public FeLayoutExtra(FeData feData){
+        super(feData.context);
+        this.feData = feData;
 
         //实现父类接口
         callback = new FeLayoutParent.Callback() {
@@ -97,7 +105,7 @@ public class FeLayoutExtra extends FeLayoutParent {
 
             @Override
             public boolean destory() {
-                return false;
+                return true;
             }
 
             @Override

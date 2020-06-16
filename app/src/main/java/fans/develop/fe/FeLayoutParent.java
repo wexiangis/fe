@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 public class FeLayoutParent extends RelativeLayout{
 
     //接口(回掉函数)定义
+    //当前界面想要在按返回键时不被销毁,要么keyBack()返回true，要么destory()返回false
     public interface Callback{
 
         //按键返回
@@ -19,7 +20,8 @@ public class FeLayoutParent extends RelativeLayout{
         //返回: false表示未准备好, 将不注销
         boolean destory();
 
-        //重新加载界面
+        //重新加载界面及其数据
+        //子类可以在这里添加自己的loading界面
         void reload();
     }
     
