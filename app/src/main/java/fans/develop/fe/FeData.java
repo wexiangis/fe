@@ -70,7 +70,7 @@ public class FeData extends Application {
         super.onCreate();
         //初始化
         heart = new FeHeart();
-        flow = new FeFlow();
+        flow = new FeFlow(this);
         assets = new FeAssets();
     }
 }

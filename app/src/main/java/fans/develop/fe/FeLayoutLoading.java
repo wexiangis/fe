@@ -58,7 +58,7 @@ public class FeLayoutLoading extends FeLayoutParent{
             1.doInBackground 结束后的UI任务,用于界面跳转
             2.携带参数 result 为 doInBackground 最后的返回
      */
-    public FeLayoutLoading(Context context, int type, Object obj, FeLayoutLoading.DoInBackground doInBackground, FeLayoutLoading.DoInFinal doInFinal){
+    public FeLayoutLoading(Context context, final int type, Object obj, FeLayoutLoading.DoInBackground doInBackground, FeLayoutLoading.DoInFinal doInFinal){
         super(context);
 
         this.context = context;
@@ -73,18 +73,25 @@ public class FeLayoutLoading extends FeLayoutParent{
 
             @Override
             public void onPreExecute(FeLayoutLoading layoutLoading) {
-                //
+
                 textView = new TextView(layoutLoading.context);
                 textView.setText("wait");
                 textView.setTextSize(32);
                 textView.setTextColor(0xFFFF0000);
-                //相对主界面的位置
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                layoutParams.setMargins(0, 0, 0, 100);
-                //
-                layoutLoading.addView(textView, layoutParams);
+
+                //text相对主界面的位置
+                RelativeLayout.LayoutParams tvLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                tvLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                tvLayoutParams.setMargins(0, 0, 0, 100);
+                textView.setLayoutParams(tvLayoutParams);
+
+                //loading相对主界面的位置
+                RelativeLayout.LayoutParams ldLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                ldLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                layoutLoading.setLayoutParams(ldLayoutParams);
+
+                layoutLoading.addView(textView);
                 layoutLoading.setBackgroundColor(0x80008080);
             }
 

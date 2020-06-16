@@ -1,6 +1,5 @@
 package fans.develop.fe;
 
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.TextView;
  */
 public class FeLayoutTheme extends FeLayoutParent {
 
+    private FeData feData;
     private TextView textView;
     private RelativeLayout.LayoutParams layoutParams;
 
@@ -20,36 +20,20 @@ public class FeLayoutTheme extends FeLayoutParent {
         public boolean onTouch(View v, MotionEvent event) {
             //触屏UP时
             if(event.getAction() == MotionEvent.ACTION_UP)
-                FeData.flow.loadMainMenu();
+                feData.flow.loadMainMenu();
             //不返回true的话ACTION_DOWN之后的事件都会被丢弃
             return true;
         }
     };
 
     public void reload(){
+
         this.removeAllViews();
-        //添加到主界面
-        this.addView(textView);
-        //背景
-        this.setBackgroundColor(0xFF404040);
-        this.setOnTouchListener(onTouchListener);
-    }
 
-    public FeLayoutTheme(Context context)
-    {
-        super(context);
-
-        // //获取屏幕参数
-        // DisplayMetrics dm = new DisplayMetrics();
-        // FeData.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        // screenWidth = dm.widthPixels;
-        // screenHeight = dm.heightPixels;
-
-        //加载背景动画
-        ;
+        /* ----- 数据初始化 -----*/
 
         //按任意键继续
-        textView = new TextView(context);
+        textView = new TextView(feData.context);
         textView.setText("任意触屏键继续");
         textView.setTextColor(0x80FFFFFF);
         textView.setTextSize(24);
@@ -61,8 +45,19 @@ public class FeLayoutTheme extends FeLayoutParent {
         //添加布局参数
         textView.setLayoutParams(layoutParams);
 
-        //加载结构
-        reload();
+        /* ----- 界面装载 -----*/
+
+        //添加到主界面
+        this.addView(textView);
+        //背景
+        this.setBackgroundColor(0xFF404040);
+        this.setOnTouchListener(onTouchListener);
+    }
+
+    public FeLayoutTheme(FeData feData)
+    {
+        super(feData.context);
+        this.feData = feData;
 
         //实现父类接口
         callback = new FeLayoutParent.Callback() {

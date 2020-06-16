@@ -15,9 +15,9 @@ import android.widget.RelativeLayout;
  */
 public class FeLayoutMainMenu extends FeLayoutParent {
 
+    private FeData feData;
     //菜单信息
     private Button tvContinue = null, tvLoad = null, tvNew = null, tvCopy = null, tvDel = null, tvElse = null;
-
     //菜单线性布局参数
     private LinearLayout linearLayout = null;
     private RelativeLayout.LayoutParams linearLayoutParam = null;
@@ -35,95 +35,34 @@ public class FeLayoutMainMenu extends FeLayoutParent {
                 v.setAlpha(1.0f);
                 //点击:创建存档
                 if(v == tvNew)
-                    FeData.flow.loadSaveMenu(0);
+                    feData.flow.loadSaveMenu(0);
                 //点击:继续
                 else if(v == tvContinue)
-                    FeData.flow.loadSaveMenu(1);
+                    feData.flow.loadSaveMenu(1);
                 //点击:加载存档
                 else if(v == tvLoad)
-                    FeData.flow.loadSaveMenu(2);
+                    feData.flow.loadSaveMenu(2);
                     //点击:删除存档
                 else if(v == tvDel)
-                    FeData.flow.loadSaveMenu(3);
+                    feData.flow.loadSaveMenu(3);
                     //点击:复制存档
                 else if(v == tvCopy)
-                    FeData.flow.loadSaveMenu(4);
+                    feData.flow.loadSaveMenu(4);
                     //点击:附加内容
                 else if(v == tvElse)
-                    FeData.flow.loadExtraMenu();
+                    feData.flow.loadExtraMenu();
             }
             //不返回true的话ACTION_DOWN之后的事件都会被丢弃
             return true;
         }
     };
 
-    private Button buildButtonStyle(Context context, String text){
-        Button button = new Button(context);
-        button.setText(text);
-        button.setTextColor(0xFFFFFFFF);
-        button.setTextSize(24);
-        button.setGravity(Gravity.CENTER);
-        button.setOnTouchListener(onTouchListener);
-        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_b.png"), null));
-        return button;
-    }
-
-    public void reload(){
-        //根据存档状态加载条目
-        loadMenu();
-        //显示列表
-        this.removeAllViews();
-        this.addView(linearLayout, linearLayoutParam);
-        this.setBackgroundColor(0x80408040);
-    }
-
-    public FeLayoutMainMenu(Context context){
-        super(context);
-        //菜单各项TXT
-        tvContinue = buildButtonStyle(context, "继续游戏");
-        tvLoad = buildButtonStyle(context, "读取记录");
-        tvNew = buildButtonStyle(context, "新游戏");
-        tvCopy = buildButtonStyle(context, "复 制");
-        tvDel = buildButtonStyle(context, "删 除");
-        tvElse = buildButtonStyle(context, "附加内容");
-        //创建线性布局窗体
-        linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        //创建线性布局窗体参数
-        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tvLayoutParams.setMargins(0,0, 0, 30);
-        //线性布局窗体相对主界面位置参数
-        linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
-        //加载结构
-        reload();
-
-        //实现父类接口
-        callback = new FeLayoutParent.Callback() {
-            @Override
-            public boolean keyBack() {
-                return false;
-            }
-
-            @Override
-            public boolean destory() {
-                return false;
-            }
-
-            @Override
-            public void reload() {
-                FeLayoutMainMenu.this.reload();
-            }
-        };
-    }
-
     private void loadMenu(){
         //更新存档状态(saveState[][]的状态)
-        int[][] saveState = FeData.saveLoad();
+        int[][] saveState = feData.saveLoad();
         //检查是否存在记录
         boolean findRecord = false, findContinue = false;
-        for(int i = 0; i < FeData.saveNum(); i++) {
+        for(int i = 0; i < feData.saveNum(); i++) {
             if (saveState[i][0] >= 0) {
                 findRecord = true;
                 if(saveState[i][1] > 0)
@@ -143,5 +82,128 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         if(findRecord)
             linearLayout.addView(tvDel, tvLayoutParams);
         linearLayout.addView(tvElse, tvLayoutParams);
+    }
+
+    private Button buildButtonStyle(String text){
+        Button button = new Button(feData.context);
+        button.setText(text);
+        button.setTextColor(0xFFFFFFFF);
+        button.setTextSize(24);
+        button.setGravity(Gravity.CENTER);
+        button.setOnTouchListener(onTouchListener);
+        button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_b.png"), null));
+        return button;
+    }
+
+    public void reload(){
+
+        this.removeAllViews();
+
+        this.addView(new FeLayoutLoading(feData.context, 0, this,
+                new FeLayoutLoading.DoInBackground<FeLayoutMainMenu>() {
+                    @Override
+                    public String run(FeLayoutMainMenu obj, FeLayoutLoading layoutLoading) {
+                        try {
+                            Thread.sleep(100);
+                            //菜单各项TXT
+                            tvContinue = buildButtonStyle("继续游戏");
+                            tvLoad = buildButtonStyle("读取记录");
+                            tvNew = buildButtonStyle("新游戏");
+                            tvCopy = buildButtonStyle("复 制");
+                            tvDel = buildButtonStyle("删 除");
+                            tvElse = buildButtonStyle("附加内容");
+                            layoutLoading.setPercent(20);
+                            Thread.sleep(100);
+                            //创建线性布局窗体
+                            linearLayout = new LinearLayout(feData.context);
+                            linearLayout.setOrientation(LinearLayout.VERTICAL);
+                            layoutLoading.setPercent(50);
+                            Thread.sleep(100);
+                            //创建线性布局窗体参数
+                            tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            tvLayoutParams.setMargins(0,0, 0, 30);
+                            layoutLoading.setPercent(70);
+                            Thread.sleep(100);
+                            //线性布局窗体相对主界面位置参数
+                            linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                            linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
+                            layoutLoading.setPercent(85);
+                            Thread.sleep(100);
+
+                            //根据存档状态加载条目
+                            loadMenu();
+
+                            layoutLoading.setPercent(100);
+                            Thread.sleep(100);
+
+                        } catch (java.lang.InterruptedException e) { }
+                        return null;
+                    }
+                },
+                new FeLayoutLoading.DoInFinal<FeLayoutMainMenu>() {
+                    @Override
+                    public void run(FeLayoutMainMenu obj, String result) {
+                        obj.removeAllViews();
+                        //显示列表
+                        obj.removeAllViews();
+                        obj.addView(linearLayout, linearLayoutParam);
+                        obj.setBackgroundColor(0x80408040);
+                    }
+                }
+        ));
+
+//        /* ----- 数据初始化 -----*/
+//
+//        //菜单各项TXT
+//        tvContinue = buildButtonStyle("继续游戏");
+//        tvLoad = buildButtonStyle("读取记录");
+//        tvNew = buildButtonStyle("新游戏");
+//        tvCopy = buildButtonStyle("复 制");
+//        tvDel = buildButtonStyle("删 除");
+//        tvElse = buildButtonStyle("附加内容");
+//        //创建线性布局窗体
+//        linearLayout = new LinearLayout(feData.context);
+//        linearLayout.setOrientation(LinearLayout.VERTICAL);
+//        //创建线性布局窗体参数
+//        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        tvLayoutParams.setMargins(0,0, 0, 30);
+//        //线性布局窗体相对主界面位置参数
+//        linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        linearLayoutParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//        linearLayoutParam.addRule(RelativeLayout.CENTER_VERTICAL);
+//
+//        //根据存档状态加载条目
+//        loadMenu();
+//
+//        /* ----- 装载界面 -----*/
+//
+//        //显示列表
+//        this.removeAllViews();
+//        this.addView(linearLayout, linearLayoutParam);
+//        this.setBackgroundColor(0x80408040);
+    }
+
+    public FeLayoutMainMenu(FeData feData){
+        super(feData.context);
+        this.feData = feData;
+
+        //实现父类接口
+        callback = new FeLayoutParent.Callback() {
+            @Override
+            public boolean keyBack() {
+                return false;
+            }
+
+            @Override
+            public boolean destory() {
+                return false;
+            }
+
+            @Override
+            public void reload() {
+                FeLayoutMainMenu.this.reload();
+            }
+        };
     }
 }

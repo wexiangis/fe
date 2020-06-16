@@ -17,6 +17,7 @@ public class FeLayoutSave extends FeLayoutParent {
 
     public static final String default_name = "未 使 用";
 
+    private FeData feData;
     private int ctrl;
     //条目列表
     private Button[] bnSaveList;
@@ -52,7 +53,7 @@ public class FeLayoutSave extends FeLayoutParent {
                                 //确认为空存档
                                 if(bnSaveList[i].getText().toString().indexOf(default_name) == 0){
                                     //新建
-                                    FeData.assets.save.newSx(i);
+                                    feData.assets.save.newSx(i);
                                     //刷新
                                     refresh();
                                 }
@@ -62,20 +63,20 @@ public class FeLayoutSave extends FeLayoutParent {
                                 //确认为非空存档且为中断记录
                                 if(bnSaveList[i].getText().toString().indexOf(default_name) != 0
                                     && saveState[i][1] > 0)
-                                    FeData.flow.loadSection(i, 1);
+                                    feData.flow.loadSection(i, 1);
                                 break;
                             //读取记录
                             case 2:
                                 //确认为非空存档
                                 if(bnSaveList[i].getText().toString().indexOf(default_name) != 0)
-                                    FeData.flow.loadSection(i, 0);
+                                    feData.flow.loadSection(i, 0);
                                 break;
                             //删除
                             case 3:
                                 //确认为非空存档
                                 if(bnSaveList[i].getText().toString().indexOf(default_name) != 0){
                                     //删除
-                                    FeData.assets.save.delSx(i);
+                                    feData.assets.save.delSx(i);
                                     //刷新
                                     refresh();
                                 }
@@ -96,12 +97,12 @@ public class FeLayoutSave extends FeLayoutParent {
                                     //不是选中那条
                                     if(i != currnt_select){
                                         //复制
-                                        FeData.assets.save.copySx(i, currnt_select);
+                                        feData.assets.save.copySx(i, currnt_select);
                                         //解除标记
                                         bnSaveList[currnt_select].setAlpha(1.0f);
                                         currnt_select = -1;
                                         //刷新
-                                        refresh();
+                                        reload();
                                     }
                                     //点击了选中那条,解除选中状态
                                     else
@@ -132,27 +133,47 @@ public class FeLayoutSave extends FeLayoutParent {
     }
 
     /*
-        ctrl 0/新建 1/继续 2/加载(或继续) 3/删除 4/复制 5/通关存档
+        刷新按键内容
      */
-    public FeLayoutSave(Context context, int ctrl){
-        super(context);
-        this.ctrl = ctrl;
+    public void refresh(){
         //更新存档状态(saveState[][]的状态)
-        saveState = FeData.saveLoad();
+        saveState = feData.saveLoad();
+        //更新词条
+        for(int i = 0; i < bnSaveList.length; i++){
+            int h = saveState[i][2]/3600;
+            int m = saveState[i][2]%3600/60;
+            int s = saveState[i][2]%60;
+            if(saveState[i][0] >= 0)
+                bnSaveList[i].setText(String.format("第%d章 XXX %02d:%02d:%02d", saveState[i][0], h, m, s));
+            else
+                bnSaveList[i].setText(default_name);
+        }
+    }
+
+    /*
+        刷新内容
+     */
+    public void reload() {
+
+        this.removeAllViews();
+
+        /* ----- 数据初始化 -----*/
+        //更新存档状态(saveState[][]的状态)
+        saveState = feData.saveLoad();
         //初始化
-        bnSaveList = new Button[FeData.saveNum()];
+        bnSaveList = new Button[feData.saveNum()];
         for(int i = 0; i < bnSaveList.length; i++){
             int h = saveState[i][2]/3600;
             int m = saveState[i][2]%3600/60;
             int s = saveState[i][2]%60;
             if(saveState[i][0] >= 0)
                 bnSaveList[i] = buildButtonStyle(
-                    context, String.format("第%d章 XXX %02d:%02d:%02d", saveState[i][0], h, m, s));
+                        feData.context, String.format("第%d章 XXX %02d:%02d:%02d", saveState[i][0], h, m, s));
             else
-                bnSaveList[i] = buildButtonStyle(context, default_name);
+                bnSaveList[i] = buildButtonStyle(feData.context, default_name);
         }
         //创建线性布局窗体
-        linearLayout = new LinearLayout(context);
+        linearLayout = new LinearLayout(feData.context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
         bnLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -164,9 +185,24 @@ public class FeLayoutSave extends FeLayoutParent {
         //添加条目到视图
         for(int i = 0; i < bnSaveList.length; i++)
             linearLayout.addView(bnSaveList[i], bnLayoutParams);
+
+        //刷新按键内容
+        refresh();
+
+        /* ----- 界面装载 -----*/
+
         //显示列表
         this.addView(linearLayout, linearLayoutParam);
         this.setBackgroundColor(0x80404080);
+    }
+
+    /*
+        ctrl 0/新建 1/继续 2/加载(或继续) 3/删除 4/复制 5/通关存档
+     */
+    public FeLayoutSave(FeData feData, int ctrl){
+        super(feData.context);
+        this.feData = feData;
+        this.ctrl = ctrl;
 
         //实现父类接口
         callback = new FeLayoutParent.Callback() {
@@ -182,26 +218,8 @@ public class FeLayoutSave extends FeLayoutParent {
 
             @Override
             public void reload() {
-                FeLayoutSave.this.refresh();
+                FeLayoutSave.this.reload();
             }
         };
-    }
-
-    /*
-        刷新内容
-     */
-    public void refresh() {
-        //更新存档状态(saveState[][]的状态)
-        saveState = FeData.saveLoad();
-        //更新词条
-        for(int i = 0; i < bnSaveList.length; i++){
-            int h = saveState[i][2]/3600;
-            int m = saveState[i][2]%3600/60;
-            int s = saveState[i][2]%60;
-            if(saveState[i][0] >= 0)
-                bnSaveList[i].setText(String.format("第%d章 XXX %02d:%02d:%02d", saveState[i][0], h, m, s));
-            else
-                bnSaveList[i].setText(default_name);
-        }
     }
 }

@@ -7,37 +7,46 @@ import android.view.ViewGroup;
  */
 public class FeFlow {
 
+    private FeData feData;
+
+    public FeFlow(FeData feData){
+        this.feData = feData;
+    }
+
     private void loadLayout(FeLayoutParent layout){
         //销毁旧layout
-        if(FeData.layoutCurrent != null && FeData.layoutCurrent.callback != null)
-            FeData.layoutCurrent.callback.destory();
+        if(feData.layoutCurrent != null && feData.layoutCurrent.callback != null)
+            feData.layoutCurrent.callback.destory();
         //入栈
-        if(FeData.layoutCurrent != null){
-            if(FeData.layoutChain == null)
-                FeData.layoutChain = new FeChain<FeLayoutParent>(FeData.layoutCurrent);
+        if(feData.layoutCurrent != null){
+            if(feData.layoutChain == null)
+                feData.layoutChain = new FeChain<FeLayoutParent>(feData.layoutCurrent);
             else {
-                FeData.layoutChain.next = new FeChain<FeLayoutParent>(FeData.layoutCurrent);
-                FeData.layoutChain.next.previous = FeData.layoutChain;
-                FeData.layoutChain = FeData.layoutChain.next;
+                feData.layoutChain.next = new FeChain<FeLayoutParent>(feData.layoutCurrent);
+                feData.layoutChain.next.previous = feData.layoutChain;
+                feData.layoutChain = feData.layoutChain.next;
             }
         }
         //记录当前
-        FeData.layoutCurrent = layout;
+        feData.layoutCurrent = layout;
+        //需要的reload
+        if(feData.layoutCurrent.callback != null)
+            feData.layoutCurrent.callback.reload();
         //显示
-        FeData.activity.setContentView(FeData.layoutCurrent);
+        feData.activity.setContentView(feData.layoutCurrent);
     }
 
     public void stop(){
-        if(FeData.layoutCurrent != null &&
-            FeData.layoutCurrent.getParent() != null)
-            ((ViewGroup)FeData.layoutCurrent.getParent()).removeAllViews();
+        if(feData.layoutCurrent != null &&
+            feData.layoutCurrent.getParent() != null)
+            ((ViewGroup)feData.layoutCurrent.getParent()).removeAllViews();
     }
 
     public void start(){
 
         //恢复
-        if(FeData.layoutCurrent != null){
-            FeData.activity.setContentView(FeData.layoutCurrent);
+        if(feData.layoutCurrent != null){
+            feData.activity.setContentView(feData.layoutCurrent);
             return;
         }
 
@@ -55,7 +64,7 @@ public class FeFlow {
 
     //加载主界面
     public void loadTheme(){
-        loadLayout(new FeLayoutTheme(FeData.context));
+        loadLayout(new FeLayoutTheme(feData));
     }
 
     //加载职业动画
@@ -65,68 +74,47 @@ public class FeFlow {
 
     //加载主界面菜单
     public void loadMainMenu(){
-//        loadLayout(new FeLayoutMainMenu(FeData.context));
-        FeData.activity.setContentView(new FeLayoutLoading(FeData.context, 0, null,
-                new FeLayoutLoading.DoInBackground() {
-                    @Override
-                    public String run(Object obj, FeLayoutLoading layoutLoading) {
-                        try {
-                            Thread.sleep(500);
-                            for (int i = 0; i < 100; i++) {
-                                layoutLoading.setPercent(i);
-                                Thread.sleep(20);
-                            }
-                        } catch (java.lang.InterruptedException e) { }
-                        return null;
-                    }
-                },
-                new FeLayoutLoading.DoInFinal() {
-                    @Override
-                    public void run(Object obj, String result) {
-                        loadLayout(new FeLayoutMainMenu(FeData.context));
-                    }
-                }
-        ));
+        loadLayout(new FeLayoutMainMenu(feData));
     }
 
     //加载存档界面: ctrl 0/新建 1/继续 2/加载(或继续) 3/删除 4/复制 5/通关存档
     public void loadSaveMenu(int ctrl){
-        loadLayout(new FeLayoutSave(FeData.context, ctrl));
+        loadLayout(new FeLayoutSave(feData, ctrl));
     }
 
     //加载额外内容
     public void loadExtraMenu(){
-        loadLayout(new FeLayoutExtra(FeData.context));
+        loadLayout(new FeLayoutExtra(feData));
     }
 
     //加载章节
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public void loadSection(int sX, int mode) {
         //初始化章节数据
-        FeData.section = new FeSection(FeData.context, sX, mode);
+        feData.section = new FeSection(feData.context, sX, mode);
         //显示界面
-        loadLayout(FeData.section.layoutSection);
+        loadLayout(feData.section.layoutSection);
         //开始流程
-        FeData.section.start();
+        feData.section.start();
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了
     public boolean loadLast(){
         //链表已空
-        if(FeData.layoutChain == null)
+        if(feData.layoutChain == null)
             return false;
         //销毁旧layout
-        if(FeData.layoutCurrent != null && FeData.layoutCurrent.callback != null)
-            FeData.layoutCurrent.callback.destory();
+        if(feData.layoutCurrent != null && feData.layoutCurrent.callback != null)
+            feData.layoutCurrent.callback.destory();
         //记录当前
-        FeData.layoutCurrent = FeData.layoutChain.data;
+        feData.layoutCurrent = feData.layoutChain.data;
         //出栈
-        FeData.layoutChain = FeData.layoutChain.previous;
+        feData.layoutChain = feData.layoutChain.previous;
         //有需要reload的
-        if(FeData.layoutCurrent.callback != null)
-            FeData.layoutCurrent.callback.reload();
+        if(feData.layoutCurrent.callback != null)
+            feData.layoutCurrent.callback.reload();
         //显示
-        FeData.activity.setContentView(FeData.layoutCurrent);
+        feData.activity.setContentView(feData.layoutCurrent);
         
         return true;
     }
