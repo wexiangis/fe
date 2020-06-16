@@ -14,7 +14,7 @@ import android.view.View;
  */
 public class FeViewSelect extends View {
 
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
 
     //选中框图片
     private Bitmap bitmapSelect;
@@ -25,7 +25,7 @@ public class FeViewSelect extends View {
     //
     private Paint paintSelct;
 
-    public FeViewSelect(Context context, FeSection.Callback callback){
+    public FeViewSelect(Context context, FeLayoutSection.Callback callback){
         super(context);
         this.callback = callback;
         //

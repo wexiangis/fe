@@ -11,14 +11,14 @@ import android.view.View;
  */
 public class FeViewMark extends View {
 
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
     private Paint paint;
     private int colorMode;
 
     /*
         colorMode: 0/蓝色 1/红色 2/绿色
      */
-    public FeViewMark(Context context, int colorMode, FeSection.Callback callback){
+    public FeViewMark(Context context, int colorMode, FeLayoutSection.Callback callback){
         super(context);
         this.colorMode = colorMode;
         this.callback = callback;

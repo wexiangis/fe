@@ -8,7 +8,7 @@ import android.content.Context;
 public class FeLayoutUnit extends FeLayoutParent {
 
     private Context context;
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
     private int hitAnimOrder = -1;
 
     /*
@@ -53,7 +53,7 @@ public class FeLayoutUnit extends FeLayoutParent {
         return false;
     }
 
-    public FeLayoutUnit(Context context, FeSection.Callback callback) {
+    public FeLayoutUnit(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.context = context;
         this.callback = callback;

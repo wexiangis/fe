@@ -28,9 +28,6 @@ public class FeData extends Application {
     public static FeAssets assets = null;//assets文件资源管理
     public static FeFlow flow = null;//界面流程管理
 
-    //章节运转的关键参数,数据+界面
-    public static FeSection section = null;
-
     //用于系统的界面的定位和跳转
     public static FeLayoutParent layoutCurrent = null;//当前界面
     public static FeChain<FeLayoutParent> layoutChain = null;//历史界面链表(该变量指向最后一个)

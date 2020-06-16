@@ -12,7 +12,7 @@ import android.view.View;
  */
 public class FeViewMap extends View {
 
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
 
     //地图移动格子数
     private int xGridErr = 0, yGridErr = 0;
@@ -25,7 +25,7 @@ public class FeViewMap extends View {
     //画笔
     private Paint paintMap;
 
-    public FeViewMap(Context context, FeSection.Callback callback) {
+    public FeViewMap(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.callback = callback;
         //输入坐标求格子位置

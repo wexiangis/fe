@@ -8,7 +8,7 @@ import android.content.Context;
 public class FeLayoutMapInfo extends FeLayoutParent {
 
     private Context context;
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
     private Boolean onFlag = false;
 
     public boolean checkHit(float x, float y){
@@ -22,7 +22,7 @@ public class FeLayoutMapInfo extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMapInfo(Context context, FeSection.Callback callback) {
+    public FeLayoutMapInfo(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.context = context;
         this.callback = callback;

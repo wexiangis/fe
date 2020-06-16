@@ -7,7 +7,7 @@ import android.graphics.Shader;
 public class FeLayoutMark extends FeLayoutParent {
 
     private Context context;
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
     //着色器心跳启动标志
     private Boolean shaderHeartStartFlag = false;
     
@@ -21,7 +21,7 @@ public class FeLayoutMark extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMark(Context context, FeSection.Callback callback) {
+    public FeLayoutMark(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.context = context;
         this.callback = callback;

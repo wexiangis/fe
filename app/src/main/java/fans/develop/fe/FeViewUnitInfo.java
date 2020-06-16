@@ -14,7 +14,7 @@ import android.view.View;
  */
 public class FeViewUnitInfo extends View {
 
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
 
     //头像背景框图片源位置和输出位置
     private Rect rectSrcHeadBg, rectDistHeadBg;
@@ -26,7 +26,7 @@ public class FeViewUnitInfo extends View {
     private float pixelPowHead;
     private boolean drawHead = false;
 
-    public FeViewUnitInfo(Context context, FeSection.Callback callback){
+    public FeViewUnitInfo(Context context, FeLayoutSection.Callback callback){
         super(context);
         this.callback = callback;
         //

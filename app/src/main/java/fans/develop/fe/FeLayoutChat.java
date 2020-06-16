@@ -17,7 +17,7 @@ public class FeLayoutChat extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutChat(Context context, FeSection.Callback callback) {
+    public FeLayoutChat(Context context, FeLayoutSection.Callback callback) {
         super(context);
     }
 }

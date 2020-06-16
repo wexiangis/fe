@@ -3,7 +3,6 @@ package fans.develop.fe;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.DisplayMetrics;
 
 
 /*
@@ -15,7 +14,7 @@ public class FeSectionMap {
 
     public Matrix matrix = new Matrix();
 
-    public FeInfoMap map;
+    public FeInfoMap mapInfo;
 
     public Bitmap bitmap = null;
 
@@ -41,26 +40,22 @@ public class FeSectionMap {
     //横纵向动画初始偏移
     public int xAnimOffsetPixel = 48, yAnimOffsetPixel = 54;
 
-    public FeSectionMap(int feSection)
+    public FeSectionMap(int section, FeInfoMap mapInfo, int screenWidth, int screenHeight)
     {
-        section = feSection;
-        //获取屏幕参数
-        DisplayMetrics dm = new DisplayMetrics();
-        FeData.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        //初始化map参数结构体
-        map = FeData.assets.map.getMap(section);
+        this.section = feSection;
+        this.mapInfo = mapInfo;
         //适配屏幕
-        init(dm.widthPixels, dm.heightPixels, map.xGrid, map.yGrid, map.pixelPerGrid);
+        init(screenWidth, screenHeight, mapInfo.xGrid, mapInfo.yGrid, mapInfo.pixelPerGrid);
         //两参数分别为xy缩放比例
-        float xp = (float)width/map.bitmap.getWidth()/2;
+        float xp = (float)width/mapInfo.bitmap.getWidth()/2;
         if(xp > 1.5f)
             xp = 1.5f;
-        float yp = (float)height/map.bitmap.getHeight()/2;
+        float yp = (float)height/mapInfo.bitmap.getHeight()/2;
         if(yp > 1.5f)
             yp = 1.5f;
         matrix.postScale(xp, yp);
-        bitmap = Bitmap.createBitmap(map.bitmap, 0, 0,
-                (int)map.bitmap.getWidth(), (int)map.bitmap.getHeight(), matrix, true);
+        bitmap = Bitmap.createBitmap(mapInfo.bitmap, 0, 0,
+                (int)mapInfo.bitmap.getWidth(), (int)mapInfo.bitmap.getHeight(), matrix, true);
     }
 
     //地图适配屏幕
@@ -72,11 +67,11 @@ public class FeSectionMap {
         screenXGrid = screenXSixe/pixelPG;
         screenYGrid = screenYSize/pixelPG;
         //关键参数备份
-        map.pixelPerGrid = pixelPG;
+        mapInfo.pixelPerGrid = pixelPG;
         screenWidth = screenXSixe;
         screenHeight = screenYSize;
-        map.xGrid = mapXGrid;
-        map.yGrid = mapYGrid;
+        mapInfo.xGrid = mapXGrid;
+        mapInfo.yGrid = mapYGrid;
         //屏幕的长高比例大于地图,地图参照屏幕长来缩放
         if(screenXDivY > mapXDivY){
             //得到屏幕横向实际显示格数
@@ -112,7 +107,7 @@ public class FeSectionMap {
                 mapDist.left = screenWidth - width;
             else{
                 mapDist.left -= (width - (mapDist.right - mapDist.left))/2;
-                mapDist.left = (int)((int)((float)mapDist.left/width*map.xGrid)*xGridPixel);
+                mapDist.left = (int)((int)((float)mapDist.left/width*mapInfo.xGrid)*xGridPixel);
             }
             mapDist.right = width - mapDist.left;
             //
@@ -120,7 +115,7 @@ public class FeSectionMap {
                 mapDist.top = screenHeight - height;
             else{
                 mapDist.top -= (height - (mapDist.bottom - mapDist.top))/2;
-                mapDist.top = (int)((int)((float)mapDist.top/height*map.yGrid)*yGridPixel);
+                mapDist.top = (int)((int)((float)mapDist.top/height*mapInfo.yGrid)*yGridPixel);
             }
             mapDist.bottom = height - mapDist.top;
         }

@@ -17,7 +17,7 @@ public class FeLayoutUnitMenu extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutUnitMenu(Context context, FeSection.Callback callback) {
+    public FeLayoutUnitMenu(Context context, FeLayoutSection.Callback callback) {
         super(context);
     }
 }

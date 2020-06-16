@@ -45,8 +45,6 @@ public class FeLayoutExtra extends FeLayoutParent {
         }
     };
 
-    public FeLayoutParent.Callback callback;
-
     private Button buildButtonStyle(String text){
         Button button = new Button(feData.context);
         button.setText(text);

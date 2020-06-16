@@ -9,7 +9,7 @@ import android.view.View;
 public class FeLayoutMap extends FeLayoutParent {
 
     private Context context;
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
     private View viewMap = null, viewBackground = null;
 
     public void refresh(){
@@ -18,7 +18,7 @@ public class FeLayoutMap extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutMap(Context context, FeSection.Callback callback) {
+    public FeLayoutMap(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.context = context;
         this.callback = callback;
@@ -32,7 +32,7 @@ public class FeLayoutMap extends FeLayoutParent {
         if(viewMap != null)
             removeView(viewMap);
         //更换了地图,重新初始化参数
-        callback.setSectionMap(new FeSectionMap(section));
+        callback.refreshSectionMap(section);
         //添加地图view
         viewMap = new FeViewMap(context, callback);
         addView(viewMap);

@@ -15,7 +15,7 @@ import android.view.View;
  */
 public class FeViewMapInfo extends View {
 
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
 
     //背景框图片
     private Bitmap bitmapInfo;
@@ -32,7 +32,7 @@ public class FeViewMapInfo extends View {
     private float pixelPowInfo;
     private boolean drawInfo = false;
 
-    public FeViewMapInfo(Context context, FeSection.Callback callback) {
+    public FeViewMapInfo(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.callback = callback;
         //

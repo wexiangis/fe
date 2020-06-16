@@ -16,7 +16,7 @@ import android.view.View;
  */
 public class FeViewUnit extends View {
 
-    private FeSection.Callback callback;
+    private FeLayoutSection.Callback callback;
 
     //动画相对地图的偏移量
     private float leftMargin = 0, topMargin = 0;
@@ -51,7 +51,7 @@ public class FeViewUnit extends View {
     public FeViewUnit(Context context, 
         int id, int gridX, int gridY, 
         int animMode, int colorMode,
-        FeSection.Callback callback)
+        FeLayoutSection.Callback callback)
     {
         super(context);
         this.callback = callback;

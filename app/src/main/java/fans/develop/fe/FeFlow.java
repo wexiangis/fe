@@ -67,12 +67,7 @@ public class FeFlow {
     //加载章节
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public void loadSection(int sX, int mode) {
-        //初始化章节数据
-        feData.section = new FeSection(feData.context, sX, mode);
-        //显示界面
-        loadNext(feData.section.layoutSection);
-        //开始流程
-        feData.section.start();
+        loadNext(new FeSection(feData, sX, mode));
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了
