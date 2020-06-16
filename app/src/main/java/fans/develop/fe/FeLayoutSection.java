@@ -1,6 +1,8 @@
 package fans.develop.fe;
 
+import android.content.Context;
 import android.util.DisplayMetrics;
+import android.widget.TextView;
 
 /*
     章节运行关键参数之数据部分
@@ -126,6 +128,12 @@ public class FeLayoutSection extends FeLayoutParent{
                             //启动地图信息显示
                             layoutMapInfo.on();
 
+                            layoutLoading.setPercent(75);//百分比进度
+
+                            //debug
+                            dbTouchXY = layoutDebug.addInfo(0x80800000, false);
+                            dbTouchGridXY = layoutDebug.addInfo(0x80000080, false);
+
                             layoutLoading.setPercent(100);//百分比进度
 
                             Thread.sleep(100);
@@ -182,6 +190,10 @@ public class FeLayoutSection extends FeLayoutParent{
     public FeLayoutMenu layoutMenu = null;
     public FeLayoutChat layoutChat = null;
     public FeLayoutDebug layoutDebug = null;
+
+    //debug
+    public TextView dbTouchXY;
+    public TextView dbTouchGridXY;
 
     /* ---------- 触屏产生的各种状态 ---------- */
 
@@ -253,6 +265,11 @@ public class FeLayoutSection extends FeLayoutParent{
             layoutUnit.checkHit(x, y);
             //点击:地图信息?
             layoutMapInfo.checkHit(x, y);
+
+            //debug
+            dbTouchXY.setText(String.format("Touch XY: %.2f, %.2f", x, y));
+            dbTouchGridXY.setText(String.format("Touch Grid XY: %d, %d", sectionMap.selectSite.point[0], sectionMap.selectSite.point[1]));
+
             return false;
         }
         public void cleanClickState(short type){
