@@ -68,37 +68,37 @@ public class FeLayoutSection extends FeLayoutParent{
                             layoutLoading.setPercent(20);//百分比进度
 
                             //地图图层
-                            layoutMap = new FeLayoutMap(context, sectionCallback);
+                            layoutMap = new FeLayoutMap(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(25);//百分比进度
 
                             //标记格图层
-                            layoutMark = new FeLayoutMark(context, sectionCallback);
+                            layoutMark = new FeLayoutMark(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(30);//百分比进度
 
                             //人物动画图层
-                            layoutUnit = new FeLayoutUnit(context, sectionCallback);
+                            layoutUnit = new FeLayoutUnit(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(35);//百分比进度
 
                             //地图地形信息
-                            layoutMapInfo = new FeLayoutMapInfo(context, sectionCallback);
+                            layoutMapInfo = new FeLayoutMapInfo(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(40);//百分比进度
 
                             //人物操作菜单图层
-                            layoutUnitMenu = new FeLayoutUnitMenu(context, sectionCallback);
+                            layoutUnitMenu = new FeLayoutUnitMenu(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(45);//百分比进度
 
                             // 系统菜单图层
-                            layoutMenu = new FeLayoutMenu(context, sectionCallback);
+                            layoutMenu = new FeLayoutMenu(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(50);//百分比进度
 
                             //人物对话图层
-                            layoutChat = new FeLayoutChat(context, sectionCallback);
+                            layoutChat = new FeLayoutChat(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(55);//百分比进度
 
@@ -221,8 +221,6 @@ public class FeLayoutSection extends FeLayoutParent{
             return feData.assets;
         }
         public void refresh(){
-            if(layoutSection == null)
-                return;
             //更新标记格
             layoutMark.refresh();
             //更新人物动画
@@ -237,8 +235,6 @@ public class FeLayoutSection extends FeLayoutParent{
             layoutChat.refresh();
         }
         public boolean checkHit(float x, float y){
-            if(layoutSection == null)
-                return false;
             //点击:正在对话?
             layoutChat.checkHit(x, y);
             //点击:系统菜单中?

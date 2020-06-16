@@ -82,12 +82,12 @@ public class FeViewSelect extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(callback.checkClickState(FeSection.ON_MOVE))
+        if(callback.checkClickState(FeLayoutSection.ON_MOVE))
             return;
 
         //画选中框
-        if(callback.checkClickState(FeSection.ON_HIT_MAP) &&
-                !callback.checkClickState(FeSection.ON_HIT_UNIT)) {
+        if(callback.checkClickState(FeLayoutSection.ON_HIT_MAP) &&
+                !callback.checkClickState(FeLayoutSection.ON_HIT_UNIT)) {
             //计算输出位置
             rectDistSelect.left = callback.getSectionMap().selectSite.rect.left - callback.getSectionMap().selectSite.rect.width()/4;
             rectDistSelect.right = callback.getSectionMap().selectSite.rect.right + callback.getSectionMap().selectSite.rect.width()/4;
@@ -99,7 +99,7 @@ public class FeViewSelect extends View {
 //            canvas.drawPath(callback.getSectionMap().selectSite.path, paintSelct);
             canvas.drawBitmap(bitmapSelect, rectSrcSelect, rectDistSelect, paintSelct);
         }
-        else if(callback.checkClickState(FeSection.ON_HIT_UNIT)){
+        else if(callback.checkClickState(FeLayoutSection.ON_HIT_UNIT)){
             //计算输出位置
             rectDistSelect.left = callback.getSectionUnit().selectSite.rect.left - callback.getSectionUnit().selectSite.rect.width()/4;
             rectDistSelect.right = callback.getSectionUnit().selectSite.rect.right + callback.getSectionUnit().selectSite.rect.width()/4;

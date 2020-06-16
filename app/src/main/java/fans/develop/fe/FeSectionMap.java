@@ -42,7 +42,7 @@ public class FeSectionMap {
 
     public FeSectionMap(int section, FeInfoMap mapInfo, int screenWidth, int screenHeight)
     {
-        this.section = feSection;
+        this.section = section;
         this.mapInfo = mapInfo;
         //适配屏幕
         init(screenWidth, screenHeight, mapInfo.xGrid, mapInfo.yGrid, mapInfo.pixelPerGrid);

@@ -85,7 +85,7 @@ public class FeViewMapInfo extends View {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(callback.checkClickState(FeSection.ON_MOVE)){
+        if(callback.checkClickState(FeLayoutSection.ON_MOVE)){
             drawInfo = false;
             return;
         }
@@ -104,16 +104,16 @@ public class FeViewMapInfo extends View {
         rectPaintInfo.right = (int)(rectDistInfo.right - rectDistInfo.width()/5);
 
         //画地图信息
-        if(callback.checkClickState(FeSection.ON_HIT_MAP)){
+        if(callback.checkClickState(FeLayoutSection.ON_HIT_MAP)){
             drawInfo = true;
             canvas.drawBitmap(bitmapInfo, rectSrcInfo, rectDistInfo, paintBitmap);
             //选中方格会提供一个序号,用来检索地图类型信息
-            int mapInfoOrder = callback.getSectionMap().map.grid
+            int mapInfoOrder = callback.getSectionMap().mapInfo.grid
                     [callback.getSectionMap().selectSite.point[1]]
                     [callback.getSectionMap().selectSite.point[0]];
             //填地形信息
             canvas.drawText(
-                    callback.getSectionMap().map.name[mapInfoOrder],
+                    callback.getSectionMap().mapInfo.name[mapInfoOrder],
                     rectDistInfo.left + rectDistInfo.width()/2,
                     rectDistInfo.top + rectDistInfo.height()/2 - pixelPowInfo*1,
                     paintInfoName);
@@ -131,11 +131,11 @@ public class FeViewMapInfo extends View {
             //地形参数数据
             paintInfoParam.setColor(Color.BLACK);
             paintInfoParam.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(String.valueOf(callback.getSectionMap().map.defend[mapInfoOrder]),
+            canvas.drawText(String.valueOf(callback.getSectionMap().mapInfo.defend[mapInfoOrder]),
                     rectPaintInfo.right,
                     rectPaintInfo.top + paintInfoParam.getTextSize(),
                     paintInfoParam);
-            canvas.drawText(String.valueOf(callback.getSectionMap().map.avoid[mapInfoOrder]),
+            canvas.drawText(String.valueOf(callback.getSectionMap().mapInfo.avoid[mapInfoOrder]),
                     rectPaintInfo.right,
                     rectPaintInfo.bottom,
                     paintInfoParam);

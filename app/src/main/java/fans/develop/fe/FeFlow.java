@@ -67,7 +67,7 @@ public class FeFlow {
     //加载章节
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public void loadSection(int sX, int mode) {
-        loadNext(new FeSection(feData, sX, mode));
+        loadNext(new FeLayoutSection(feData, sX, mode));
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了
@@ -79,7 +79,7 @@ public class FeFlow {
         if(feData.layoutCurrent != null && feData.layoutCurrent.callback != null){
             //返回false时表示控件未准备好,不继续操作
             if(feData.layoutCurrent.callback.destory() == false)
-                return;
+                return true;
         }
         //记录当前
         feData.layoutCurrent = feData.layoutChain.data;
