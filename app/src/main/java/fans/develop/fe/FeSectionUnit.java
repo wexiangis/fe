@@ -16,11 +16,6 @@ public class FeSectionUnit {
     //当前选中的unit
     public FeViewUnit selectView = null;
 
-    // ----------- unit集合 -----------
-
-    //当前unit数组
-    public ViewGroup group = null;
-
     // ----------- 渐变色着色器 -----------
 
     //3种颜色的渐变色着色器列表
@@ -36,5 +31,22 @@ public class FeSectionUnit {
     }
     public LinearGradient getShaderB(){
         return shaderB.getLinearGradient(shaderCount, 0);
+    }
+
+    // ----------- unit集合 -----------
+
+    public void addCamp(int camp, FeViewUnit view){
+        ;
+    }
+
+    public void removeCamp(int camp, int order){
+        ;
+    }
+
+    public class Camp{
+
+        public Camp(){
+            ;
+        }
     }
 }

@@ -59,7 +59,9 @@ public class FeLayoutUnit extends FeLayoutParent {
         this.callback = callback;
     }
 
-    public void loadView(int id, int y, int x, int camp){
-        addView(new FeViewUnit(context, id, x, y, 0, camp, callback));
+    public FeViewUnit addView(int id, int y, int x, int camp){
+        FeViewUnit view = new FeViewUnit(context, id, x, y, 0, camp, callback)
+        addView(view);
+        return view;
     }
 }

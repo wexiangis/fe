@@ -52,15 +52,15 @@ public class FeLayoutSection extends FeLayoutParent{
 
                             //从文件加载章节存档数据
                             if(mode == 1)
-                                data = feData.assets.save.recoverSx(sX);
+                                saveX = feData.assets.save.recoverSx(sX);
                             else
-                                data = feData.assets.save.loadSx(sX);
+                                saveX = feData.assets.save.loadSx(sX);
 
                             layoutLoading.setPercent(10);//百分比进度
 
                             //章节解析
-                            if(data != null)
-                                section = data.info.getSection();
+                            if(saveX != null)
+                                section = saveX.info.getSection();
 
                             layoutLoading.setPercent(15);//百分比进度
 
@@ -115,12 +115,12 @@ public class FeLayoutSection extends FeLayoutParent{
                             layoutLoading.setPercent(65);//百分比进度
 
                             //人物加载
-                            for(int i = 0; i < data.saveCache.unit.total(); i++){
-                                layoutUnit.loadView(
-                                        data.saveCache.unit.getId(i),
-                                        data.saveCache.unit.getX(i),
-                                        data.saveCache.unit.getY(i),
-                                        data.saveCache.unit.getCamp(i));
+                            for(int i = 0; i < saveX.saveCache.unit.total(); i++){
+                                layoutUnit.addView(
+                                        saveX.saveCache.unit.getId(i),
+                                        saveX.saveCache.unit.getX(i),
+                                        saveX.saveCache.unit.getY(i),
+                                        saveX.saveCache.unit.getCamp(i));
                             }
 
                             layoutLoading.setPercent(70);//百分比进度
@@ -177,23 +177,23 @@ public class FeLayoutSection extends FeLayoutParent{
 
     /* ---------- 参数合集 ---------- */
 
-    private FeAssetsSX data;
+    private FeAssetsSX saveX;
     private int section = 0;
     private FeSectionMap sectionMap;
     private FeSectionUnit sectionUnit;
 
-    public FeLayoutMap layoutMap = null;
-    public FeLayoutMark layoutMark = null;
-    public FeLayoutUnit layoutUnit = null;
-    public FeLayoutMapInfo layoutMapInfo = null;
-    public FeLayoutUnitMenu layoutUnitMenu = null;
-    public FeLayoutMenu layoutMenu = null;
-    public FeLayoutChat layoutChat = null;
-    public FeLayoutDebug layoutDebug = null;
+    private FeLayoutMap layoutMap = null;
+    private FeLayoutMark layoutMark = null;
+    private FeLayoutUnit layoutUnit = null;
+    private FeLayoutMapInfo layoutMapInfo = null;
+    private FeLayoutUnitMenu layoutUnitMenu = null;
+    private FeLayoutMenu layoutMenu = null;
+    private FeLayoutChat layoutChat = null;
+    private FeLayoutDebug layoutDebug = null;
 
     //debug
-    public TextView dbTouchXY;
-    public TextView dbTouchGridXY;
+    private TextView dbTouchXY;
+    private TextView dbTouchGridXY;
 
     /* ---------- 触屏产生的各种状态 ---------- */
 
@@ -217,41 +217,34 @@ public class FeLayoutSection extends FeLayoutParent{
         public void removeHeartUnit(FeHeartUnit heartUnit){
             feData.removeHeartUnit(heartUnit);
         }
+
         public FeSectionMap getSectionMap(){
             return sectionMap;
         }
         public FeSectionUnit getSectionUnit(){
             return sectionUnit;
         }
-        public void refreshSectionMap(int section){
+        public void reloadSectionMap(int section){
             //获取屏幕宽高信息
             DisplayMetrics dm = new DisplayMetrics();
             feData.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
             //重新初始化map
             sectionMap = new FeSectionMap(section, feData.assets.map.getMap(section), dm.widthPixels, dm.heightPixels);
         }
+
         public FeAssets getAssets(){
             return feData.assets;
         }
         public Context getContext(){
             return feData.context;
         }
-        public void refresh(){
-            //更新标记格
-            layoutMark.refresh();
-            //更新人物动画
-            layoutUnit.refresh(0);
-            //更新地形信息
-            layoutMapInfo.refresh();
-            //更新人物菜单
-            layoutUnitMenu.refresh();
-            //更新系统菜单
-            layoutMenu.refresh();
-            //更新对话
-            layoutChat.refresh();
-            //debug图层
-            layoutDebug.refresh();
+        public FeAssetsSX getSaveX(){
+            return saveX;
         }
+        public int section(){
+            return section;
+        }
+        
         public boolean checkHit(float x, float y){
             //点击:正在对话?
             layoutChat.checkHit(x, y);
@@ -285,21 +278,76 @@ public class FeLayoutSection extends FeLayoutParent{
         public boolean checkClickState(short type){
             return click_type[type];
         }
+
+        public FeLayoutMap getLayoutMap(){
+            return layoutMap;
+        }
+        public FeLayoutMark getLayoutMark(){
+            return layoutMark;
+        }
+        public FeLayoutUnit getLayoutUnit(){
+            return layoutUnit;
+        }
+        public FeLayoutMapInfo getLayoutMapInfo(){
+            return layoutMapInfo;
+        }
+        public FeLayoutUnitMenu getLayoutUnitMenu(){
+            return layoutUnitMenu;
+        }
+        public FeLayoutMenu getLayoutMenu(){
+            return layoutMenu;
+        }
+        public FeLayoutChat getLayoutChat(){
+            return layoutChat;
+        }
+        public FeLayoutDebug getLayoutDebug(){
+            return layoutDebug;
+        }
+        public void refresh(){
+            //更新标记格
+            layoutMark.refresh();
+            //更新人物动画
+            layoutUnit.refresh(0);
+            //更新地形信息
+            layoutMapInfo.refresh();
+            //更新人物菜单
+            layoutUnitMenu.refresh();
+            //更新系统菜单
+            layoutMenu.refresh();
+            //更新对话
+            layoutChat.refresh();
+            //debug图层
+            layoutDebug.refresh();
+        }
     };
 
     public interface Callback{
         void addHeartUnit(FeHeartUnit heartUnit);
         void removeHeartUnit(FeHeartUnit heartUnit);
+
         FeSectionMap getSectionMap();
         FeSectionUnit getSectionUnit();
-        void refreshSectionMap(int section);
+        void reloadSectionMap(int section);
+        
         FeAssets getAssets();
         Context getContext();
-        void refresh();
+        FeAssetsSX getSaveX();
+        int section();
+
         boolean checkHit(float x, float y);
         void cleanClickState(short type);
         void cleanClickStateAll(short type);
         void setClickState(short type);
         boolean checkClickState(short type);
+
+        FeLayoutMap getLayoutMap();
+        FeLayoutMark getLayoutMark();
+        FeLayoutUnit getLayoutUnit();
+        FeLayoutMapInfo getLayoutMapInfo();
+        FeLayoutUnitMenu getLayoutUnitMenu();
+        FeLayoutMenu getLayoutMenu();
+        FeLayoutChat getLayoutChat();
+        FeLayoutDebug getLayoutDebug();
+        void refresh();
     }
 }
