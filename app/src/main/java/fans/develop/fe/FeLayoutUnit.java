@@ -60,7 +60,7 @@ public class FeLayoutUnit extends FeLayoutParent {
     }
 
     public FeViewUnit addView(int id, int y, int x, int camp){
-        FeViewUnit view = new FeViewUnit(context, id, x, y, 0, camp, callback)
+        FeViewUnit view = new FeViewUnit(context, id, x, y, 0, camp, callback);
         addView(view);
         return view;
     }

@@ -163,7 +163,7 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         linearLayout = new LinearLayout(feData.context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
-        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tvLayoutParams.setMargins(0,0, 0, 30);
         //线性布局窗体相对主界面位置参数
         linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
