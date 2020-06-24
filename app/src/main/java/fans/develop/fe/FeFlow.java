@@ -31,12 +31,10 @@ public class FeFlow {
         loadOpening();
     }
 
-    //加载章节片头
+    //加载片头
     public void loadOpening() {
-        //片头播完...
-        // loadNext(new FeLayoutOpening(feData));
-        //加载主界面
-        loadTheme();
+        //播放片头
+        loadNext(new FeLayoutOpening(feData));
     }
 
     //加载主界面

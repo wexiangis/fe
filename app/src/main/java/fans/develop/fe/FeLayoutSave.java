@@ -129,7 +129,8 @@ public class FeLayoutSave extends FeLayoutParent {
         button.setGravity(Gravity.CENTER);
         button.setOnTouchListener(onTouchListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_save_g.png"), null));
-        return button;
+        button.setPadding(80, 0, 80, 0);
+		return button;
     }
 
     /*

@@ -32,7 +32,7 @@ public class FeLayoutMap extends FeLayoutParent {
         if(viewMap != null)
             removeView(viewMap);
         //更换了地图,重新初始化参数
-        callback.reloadSectionMap(section);
+        callback.refreshSectionMap(section);
         //添加地图view
         viewMap = new FeViewMap(context, callback);
         addView(viewMap);

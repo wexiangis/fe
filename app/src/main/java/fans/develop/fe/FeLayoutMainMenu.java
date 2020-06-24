@@ -1,6 +1,5 @@
 package fans.develop.fe;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -92,7 +91,9 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         button.setGravity(Gravity.CENTER);
         button.setOnTouchListener(onTouchListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_b.png"), null));
-        return button;
+        //button.setBackgroundDrawable(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_b.png"), null));
+		button.setPadding(80, 0, 80, 0);
+		return button;
     }
 
     public void reload(){
@@ -163,7 +164,7 @@ public class FeLayoutMainMenu extends FeLayoutParent {
         linearLayout = new LinearLayout(feData.context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         //创建线性布局窗体参数
-        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tvLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         tvLayoutParams.setMargins(0,0, 0, 30);
         //线性布局窗体相对主界面位置参数
         linearLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

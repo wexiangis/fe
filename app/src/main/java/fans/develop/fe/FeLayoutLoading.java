@@ -15,6 +15,20 @@ public class FeLayoutLoading extends FeLayoutParent{
      */
     public static final int TYPE_NORMAL = 0;
 
+	/*
+		提前结束loading界面
+	 */
+	public void cancel(boolean b){
+		asyncTask.cancel(b);
+	}
+	
+	/*
+	 	检查结束标志
+	 */
+	public boolean isCancelled(){
+		return asyncTask.isCancelled();
+	}
+	
     /*
         进度设置接口(用户调用)
      */

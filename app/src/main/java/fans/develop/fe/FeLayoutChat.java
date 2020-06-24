@@ -7,6 +7,8 @@ import android.content.Context;
  */
 public class FeLayoutChat extends FeLayoutParent {
 
+	private FeLayoutSection.Callback callback;
+	
     public boolean checkHit(float x, float y){
         return false;
     }
@@ -19,5 +21,6 @@ public class FeLayoutChat extends FeLayoutParent {
 
     public FeLayoutChat(Context context, FeLayoutSection.Callback callback) {
         super(context);
+		this.callback = callback;
     }
 }
