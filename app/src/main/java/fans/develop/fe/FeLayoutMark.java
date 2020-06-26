@@ -33,7 +33,7 @@ public class FeLayoutMark extends FeLayoutParent {
     public void showUnit(int id){
         if(!shaderHeartStartFlag)
             shaderHeartStart();
-        addView(new FeViewMark(context, 1, callback));
+        addView(new FeViewMark(context, 1, 10, 10, callback));
     }
 
     /*

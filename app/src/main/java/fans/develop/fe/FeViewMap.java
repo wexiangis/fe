@@ -136,6 +136,11 @@ public class FeViewMap extends View {
 
     //
     public boolean onTouchEvent(MotionEvent event) {
+		if(callback.touchForbid()){
+			callback.cleanClickState(FeLayoutSection.ON_MOVE);
+			callback.cleanClickState(FeLayoutSection.ON_HIT_MAP);
+			return super.onTouchEvent(event);
+		}
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
                 tDownX = event.getX();
@@ -228,8 +233,7 @@ public class FeViewMap extends View {
             }
             break;
         }
-        return true;
-//        return super.onTouchEvent(event);
+        return true;//否则触屏移动和松开事件不会进来
     }
 }
 

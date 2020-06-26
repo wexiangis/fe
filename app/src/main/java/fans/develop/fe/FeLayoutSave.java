@@ -1,14 +1,9 @@
 package fans.develop.fe;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.content.*;
+import android.graphics.drawable.*;
+import android.view.*;
+import android.widget.*;
 
 /*
     存档条列表
@@ -56,6 +51,12 @@ public class FeLayoutSave extends FeLayoutParent {
                                     feData.assets.save.newSx(i);
                                     //刷新
                                     refresh();
+									//检查创建结果
+									if(bnSaveList[i].getText().toString().indexOf(default_name) == 0){
+										//提示缺少存储权限
+										Toast.makeText(feData.activity, "缺少存储权限,无法创建文件", Toast.LENGTH_SHORT).show();
+										Toast.makeText(feData.activity, "请到设置->应用管理启用存储权限", Toast.LENGTH_SHORT).show();
+									}
                                 }
                                 break;
                             //继续游戏

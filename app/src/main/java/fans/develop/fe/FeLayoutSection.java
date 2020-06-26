@@ -133,6 +133,9 @@ public class FeLayoutSection extends FeLayoutParent{
 
                             //启动地图信息显示
                             layoutMapInfo.on();
+							
+							//启动地图信息显示
+                            layoutMark.showUnit(0);
 
                             layoutLoading.setPercent(80);//百分比进度
 
@@ -207,7 +210,7 @@ public class FeLayoutSection extends FeLayoutParent{
     /* ---------- 触屏产生的各种状态 ---------- */
 
     //选中事件状态[9]
-    private boolean[] click_type = new boolean[9];
+    private boolean[] click_type = new boolean[20];
     //select type
     public static short ON_MOVE = 0;//移动中
     public static short ON_HIT_MAP = 1;//选中地图
@@ -215,6 +218,7 @@ public class FeLayoutSection extends FeLayoutParent{
     public static short ON_HIT_MAPINFO = 3;//选中地图信息
     public static short ON_HIT_UNIT_MENU = 4;//选中人物菜单
     public static short ON_HIT_SYS_MENU = 5;//选中系统菜单
+	public static short ON_TOUCH_FORBID = 10;//系统任务中，禁止触屏操作
 
     /* ---------- 控件事件回调 ---------- */
 
@@ -294,6 +298,9 @@ public class FeLayoutSection extends FeLayoutParent{
         public boolean checkClickState(short type){
             return click_type[type];
         }
+		public boolean touchForbid(){
+			return click_type[ON_TOUCH_FORBID];
+		}
     };
 
     public interface Callback{
@@ -310,5 +317,6 @@ public class FeLayoutSection extends FeLayoutParent{
         void cleanClickStateAll(short type);
         void setClickState(short type);
         boolean checkClickState(short type);
+		boolean touchForbid();
     }
 }

@@ -1,5 +1,6 @@
 package fans.develop.fe;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.MotionEvent;
