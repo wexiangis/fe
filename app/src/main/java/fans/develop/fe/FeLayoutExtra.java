@@ -94,23 +94,16 @@ public class FeLayoutExtra extends FeLayoutParent {
     public FeLayoutExtra(FeData feData){
         super(feData.context);
         this.feData = feData;
+    }
 
-        //实现父类接口
-        callback = new FeLayoutParent.Callback() {
-            @Override
-            public boolean keyBack() {
-                return false;
-            }
-
-            @Override
-            public boolean destory() {
-                return true;
-            }
-
-            @Override
-            public void reload() {
-                FeLayoutExtra.this.reload();
-            }
-        };
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        this.reload();
     }
 }

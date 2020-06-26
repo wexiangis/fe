@@ -74,31 +74,25 @@ public class FeFlow {
         if(feData.layoutChain == null)
             return false;
         //销毁旧layout
-        if(feData.layoutCurrent != null && feData.layoutCurrent.callback != null){
-            //返回false时表示控件未准备好,不继续操作
-            if(feData.layoutCurrent.callback.destory() == false)
-                return true;
-        }
+        //返回false时表示控件未准备好,不继续操作
+        if(feData.layoutCurrent.onDestory() == false)
+            return true;
         //记录当前
         feData.layoutCurrent = feData.layoutChain.data;
         //出栈
         feData.layoutChain = feData.layoutChain.previous;
         //有需要reload的
-        if(feData.layoutCurrent.callback != null)
-            feData.layoutCurrent.callback.reload();
+        feData.layoutCurrent.onReload();
         //显示
         feData.activity.setContentView(feData.layoutCurrent);
-        
         return true;
     }
 
     public void loadNext(FeLayoutParent layout){
         //销毁旧layout
-        if(feData.layoutCurrent != null && feData.layoutCurrent.callback != null){
-            //返回false时表示控件未准备好,不继续操作
-            if(feData.layoutCurrent.callback.destory() == false)
-                return;
-        }
+        //返回false时表示控件未准备好,不继续操作
+        if(feData.layoutCurrent != null && feData.layoutCurrent.onDestory() == false)
+            return;
         //入栈
         if(feData.layoutCurrent != null){
             if(feData.layoutChain == null)
@@ -112,8 +106,7 @@ public class FeFlow {
         //记录当前
         feData.layoutCurrent = layout;
         //需要的reload
-        if(feData.layoutCurrent.callback != null)
-            feData.layoutCurrent.callback.reload();
+        feData.layoutCurrent.onReload();
         //显示
         feData.activity.setContentView(feData.layoutCurrent);
     }

@@ -205,23 +205,16 @@ public class FeLayoutSave extends FeLayoutParent {
         super(feData.context);
         this.feData = feData;
         this.ctrl = ctrl;
+    }
 
-        //实现父类接口
-        callback = new FeLayoutParent.Callback() {
-            @Override
-            public boolean keyBack() {
-                return false;
-            }
-
-            @Override
-            public boolean destory() {
-                return true;
-            }
-
-            @Override
-            public void reload() {
-                FeLayoutSave.this.reload();
-            }
-        };
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        this.reload();
     }
 }

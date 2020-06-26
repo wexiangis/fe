@@ -44,8 +44,7 @@ public class MainActivity extends Activity {
         {
             boolean ret = false;
             //控件食用事件
-            if(FeData.layoutCurrent != null && FeData.layoutCurrent.callback != null)
-                ret = FeData.layoutCurrent.callback.keyBack();
+            ret = FeData.layoutCurrent.onKeyBack();
             //控件不食用,则由系统食用
             if(ret == false){
                 //界面返回

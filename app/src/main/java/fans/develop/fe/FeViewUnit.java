@@ -8,13 +8,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
-import android.view.View;
 
 /*
     电影胶片式播放动画,针对地图人物动画管理而封装;
     统一管理人物的待机、选中、上下左右移动时的动画
  */
-public class FeViewUnit extends View {
+public class FeViewUnit extends FeViewParent {
 
     private FeLayoutSection.Callback callback;
 
@@ -42,6 +41,11 @@ public class FeViewUnit extends View {
 
     //扣取图片位置
     private Rect bitmapBody = new Rect(0,0,0,0);
+
+    public void onDestory(){
+        //解除心跳注册
+        callback.removeHeartUnit(heartUnit);
+    }
 
     /*
         id: 人物唯一id
@@ -81,12 +85,6 @@ public class FeViewUnit extends View {
         callback.addHeartUnit(heartUnit);
         //地图中的位置信息管理结构
         site = new FeInfoGrid();
-    }
-
-    //删除人物,之后需自行 removeView()
-    public void delete(){
-        //解除心跳注册
-        callback.removeHeartUnit(heartUnit);
     }
 
     //人物id

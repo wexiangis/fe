@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.View;
 
 /*
     带动态渐变色的标记方格
  */
-public class FeViewMark extends View {
+public class FeViewMark extends FeViewParent {
 
     private FeLayoutSection.Callback callback;
     private Paint paint;
@@ -17,6 +16,11 @@ public class FeViewMark extends View {
     private int colorMode;
 	private int xGrid, yGrid;
 	private FeInfoGrid gridInfo;
+
+    public void onDestory(){
+        //解除心跳注册
+        callback.removeHeartUnit(heartUnit);
+    }
 
     /*
         colorMode: 0/蓝色 1/红色 2/绿色
@@ -39,12 +43,6 @@ public class FeViewMark extends View {
 		gridInfo = new FeInfoGrid();
         //引入心跳
         callback.addHeartUnit(heartUnit);
-    }
-
-    //删除人物,之后需自行 removeView()
-    public void delete(){
-        //解除心跳注册
-        callback.removeHeartUnit(heartUnit);
     }
 	
 	public void setColorMode(int colorMode){

@@ -48,4 +48,15 @@ public class FeLayoutMapInfo extends FeLayoutParent {
         removeAllViews();
         onFlag = false;
     }
+
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

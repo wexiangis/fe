@@ -8,6 +8,16 @@ public class FeLayoutProfessionAnim extends FeLayoutParent {
     public FeLayoutProfessionAnim(Context context){
         super(context);
         //
+    }
 
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
     }
 }

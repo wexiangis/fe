@@ -62,4 +62,15 @@ public class FeLayoutUnit extends FeLayoutParent {
     public void loadView(int id, int y, int x, int camp){
         addView(new FeViewUnit(context, id, x, y, 0, camp, callback));
     }
+
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

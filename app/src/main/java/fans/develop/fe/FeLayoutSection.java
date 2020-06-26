@@ -19,24 +19,17 @@ public class FeLayoutSection extends FeLayoutParent{
         this.feData = feData;
         this.sX = sX;
         this.mode = mode;
+    }
 
-		//实现父类方法
-        callback = new FeLayoutParent.Callback() {
-            @Override
-            public boolean keyBack() {
-                return false;
-            }
-
-            @Override
-            public boolean destory() {
-                return true;
-            }
-
-            @Override
-            public void reload() {
-                FeLayoutSection.this.reload();
-            }
-        };
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        this.reload();
     }
 
     public void reload(){

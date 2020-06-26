@@ -7,12 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
-import android.view.View;
 
 /*
     光标动画
  */
-public class FeViewSelect extends View {
+public class FeViewSelect extends FeViewParent {
 
     private FeLayoutSection.Callback callback;
 
@@ -24,6 +23,11 @@ public class FeViewSelect extends View {
     private int bitmapSelectFrameHeight;
     //
     private Paint paintSelct;
+
+    public void onDestory(){
+        //解除心跳注册
+        callback.removeHeartUnit(heartUnit);
+    }
 
     public FeViewSelect(Context context, FeLayoutSection.Callback callback){
         super(context);
@@ -38,12 +42,6 @@ public class FeViewSelect extends View {
         paintSelct.setColor(Color.BLUE);
         //引入心跳
         callback.addHeartUnit(heartUnit);
-    }
-
-    //删除人物,之后需自行 removeView()
-    public void delete(){
-        //解除心跳注册
-        callback.removeHeartUnit(heartUnit);
     }
 
     private boolean needRefresh;

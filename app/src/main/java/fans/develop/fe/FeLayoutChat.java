@@ -23,4 +23,15 @@ public class FeLayoutChat extends FeLayoutParent {
         super(context);
 		this.callback = callback;
     }
+
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

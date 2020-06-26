@@ -50,4 +50,14 @@ public class FeLayoutMap extends FeLayoutParent {
         addView(viewBackground);
     }
 
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

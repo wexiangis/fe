@@ -30,4 +30,15 @@ public class FeLayoutInterlude extends FeLayoutParent
 	public void tips(String tips){
 		;
 	}
+
+	/* ---------- abstract interface ---------- */
+	public boolean onKeyBack(){
+		return false;
+	}
+	public boolean onDestory(){
+		return true;
+	}
+	public void onReload(){
+		;
+	}
 }

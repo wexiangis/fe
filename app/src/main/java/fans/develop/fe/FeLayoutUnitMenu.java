@@ -20,4 +20,15 @@ public class FeLayoutUnitMenu extends FeLayoutParent {
     public FeLayoutUnitMenu(Context context, FeLayoutSection.Callback callback) {
         super(context);
     }
+
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

@@ -33,6 +33,9 @@ public class FeLayoutMark extends FeLayoutParent {
     public void showUnit(int id){
         if(!shaderHeartStartFlag)
             shaderHeartStart();
+        //计算范围
+        ;
+        //显示范围
         addView(new FeViewMark(context, 1, 10, 10, callback));
     }
 
@@ -48,15 +51,6 @@ public class FeLayoutMark extends FeLayoutParent {
      */
     public void hideAllUnit(){
         this.removeAllViews();
-    }
-
-    //删除之前需自行 removeView()
-    public void delete(){
-        //没有启动就没有关闭
-        if(!shaderHeartStartFlag)
-            return;
-        //解除心跳注册
-        callback.removeHeartUnit(heartUnit);
     }
 
     private void shaderHeartStart(){
@@ -104,4 +98,20 @@ public class FeLayoutMark extends FeLayoutParent {
                 callback.getSectionUnit().shaderCount = 0;
         }
     });
+
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        //没有启动就没有关闭
+        if(!shaderHeartStartFlag)
+            return true;
+        //解除心跳注册
+        callback.removeHeartUnit(heartUnit);
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

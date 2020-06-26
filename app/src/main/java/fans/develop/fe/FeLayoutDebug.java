@@ -77,4 +77,14 @@ public class FeLayoutDebug extends FeLayoutParent {
         linearLayoutR.removeView(textView);
     }
 
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

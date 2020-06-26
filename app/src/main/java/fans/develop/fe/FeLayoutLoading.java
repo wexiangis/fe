@@ -140,4 +140,14 @@ public class FeLayoutLoading extends FeLayoutParent{
         asyncTask.execute(0);
     }
 
+    /* ---------- abstract interface ---------- */
+    public boolean onKeyBack(){
+        return false;
+    }
+    public boolean onDestory(){
+        return true;
+    }
+    public void onReload(){
+        ;
+    }
 }

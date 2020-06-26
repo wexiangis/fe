@@ -7,12 +7,11 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.view.View;
 
 /*
     地图上的人物头像等信息框
  */
-public class FeViewUnitInfo extends View {
+public class FeViewUnitInfo extends FeViewParent {
 
     private FeLayoutSection.Callback callback;
 
@@ -25,6 +24,10 @@ public class FeViewUnitInfo extends View {
     //
     private float pixelPowHead;
     private boolean drawHead = false;
+
+    public void onDestory(){
+        ;
+    }
 
     public FeViewUnitInfo(Context context, FeLayoutSection.Callback callback){
         super(context);

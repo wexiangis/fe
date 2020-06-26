@@ -5,12 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
-import android.view.View;
 
 /*
     地图绘制和全局触屏回调管理
  */
-public class FeViewMap extends View {
+public class FeViewMap extends FeViewParent {
 
     private FeLayoutSection.Callback callback;
 
@@ -25,6 +24,11 @@ public class FeViewMap extends View {
     //画笔
     private Paint paintMap;
 
+    public void onDestory(){
+        //解除心跳注册
+        callback.removeHeartUnit(heartMapMov);
+    }
+
     public FeViewMap(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.callback = callback;
@@ -35,12 +39,6 @@ public class FeViewMap extends View {
         paintMap.setColor(Color.BLUE);
         //引入心跳
         callback.addHeartUnit(heartMapMov);
-    }
-
-    //删除人物,之后需自行 removeView()
-    public void delete(){
-        //解除心跳注册
-        callback.removeHeartUnit(heartMapMov);
     }
 
     //动态挪动地图,x>0时地图往右移,y>0时地图往下移

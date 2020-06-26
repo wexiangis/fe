@@ -8,12 +8,11 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.view.View;
 
 /*
     地图上的地图类型等信息框
  */
-public class FeViewMapInfo extends View {
+public class FeViewMapInfo extends FeViewParent {
 
     private FeLayoutSection.Callback callback;
 
@@ -31,6 +30,10 @@ public class FeViewMapInfo extends View {
     //
     private float pixelPowInfo;
     private boolean drawInfo = false;
+
+    public void onDestory(){
+        ;
+    }
 
     public FeViewMapInfo(Context context, FeLayoutSection.Callback callback) {
         super(context);
