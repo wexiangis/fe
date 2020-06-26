@@ -8,6 +8,7 @@ import android.view.View;
  */
 public abstract class FeViewParent extends View {
 
+    //即将销毁该view,在这里释放各种内存句柄
     public abstract void onDestory();
 
     public FeViewParent(Context context){

@@ -89,7 +89,7 @@ public class FeLayoutSection extends FeLayoutParent{
                             layoutLoading.setPercent(45);//百分比进度
 
                             // 系统菜单图层
-                            layoutMenu = new FeLayoutMenu(feData.context, sectionCallback);
+                            layoutSysMenu = new FeLayoutSysMenu(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(50);//百分比进度
 
@@ -164,7 +164,7 @@ public class FeLayoutSection extends FeLayoutParent{
                         //人物操作菜单图层
                         obj.addView(layoutUnitMenu);
                         // 系统菜单图层
-                        obj.addView(layoutMenu);
+                        obj.addView(layoutSysMenu);
                         //人物对话图层
                         obj.addView(layoutChat);
 						//过场动画图层
@@ -191,7 +191,7 @@ public class FeLayoutSection extends FeLayoutParent{
     public FeLayoutUnit layoutUnit = null;
     public FeLayoutMapInfo layoutMapInfo = null;
     public FeLayoutUnitMenu layoutUnitMenu = null;
-    public FeLayoutMenu layoutMenu = null;
+    public FeLayoutSysMenu layoutSysMenu = null;
     public FeLayoutChat layoutChat = null;
 	public FeLayoutInterlude layoutInterlude = null;
     public FeLayoutDebug layoutDebug = null;
@@ -252,7 +252,7 @@ public class FeLayoutSection extends FeLayoutParent{
             //更新人物菜单
             layoutUnitMenu.refresh();
             //更新系统菜单
-            layoutMenu.refresh();
+            layoutSysMenu.refresh();
             //更新对话
             layoutChat.refresh();
             //debug图层
@@ -262,7 +262,7 @@ public class FeLayoutSection extends FeLayoutParent{
             //点击:正在对话?
             layoutChat.checkHit(x, y);
             //点击:系统菜单中?
-            layoutMenu.checkHit(x, y);
+            layoutSysMenu.checkHit(x, y);
             //点击:人物菜单中?
             layoutUnitMenu.checkHit(x, y);
             //点击:标记格

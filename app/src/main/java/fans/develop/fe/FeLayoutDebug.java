@@ -1,6 +1,7 @@
 package fans.develop.fe;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -82,6 +83,12 @@ public class FeLayoutDebug extends FeLayoutParent {
         return false;
     }
     public boolean onDestory(){
+        //释放子view
+        for (int i = 0; i < getChildCount(); i++) {
+            View v = getChildAt(i);
+            if (v instanceof FeViewParent)
+                ((FeViewParent)v).onDestory();
+        }
         return true;
     }
     public void onReload(){

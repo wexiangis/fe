@@ -7,6 +7,7 @@ import android.graphics.Shader;
 /*
     针对FE封装的LinearGradient列表, 
     通过不断切换列表中的shader实现“渐变色”+“移动”的效果
+    如: getLinearGradient(x++, y++)
  */
 public class FeShader {
 

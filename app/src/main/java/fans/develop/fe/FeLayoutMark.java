@@ -3,6 +3,7 @@ package fans.develop.fe;
 import android.content.Context;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.view.View;
 
 public class FeLayoutMark extends FeLayoutParent {
 
@@ -104,6 +105,12 @@ public class FeLayoutMark extends FeLayoutParent {
         return false;
     }
     public boolean onDestory(){
+        //释放子view
+        for (int i = 0; i < getChildCount(); i++) {
+            View v = getChildAt(i);
+            if (v instanceof FeViewParent)
+                ((FeViewParent)v).onDestory();
+        }
         //没有启动就没有关闭
         if(!shaderHeartStartFlag)
             return true;

@@ -1,6 +1,7 @@
 package fans.develop.fe;
 
 import android.content.*;
+import android.view.View;
 
 /*
 	过场动画图层(例如轮到一方阵营回合过场动画)
@@ -36,6 +37,12 @@ public class FeLayoutInterlude extends FeLayoutParent
 		return false;
 	}
 	public boolean onDestory(){
+		//释放子view
+		for (int i = 0; i < getChildCount(); i++) {
+			View v = getChildAt(i);
+			if (v instanceof FeViewParent)
+				((FeViewParent)v).onDestory();
+		}
 		return true;
 	}
 	public void onReload(){

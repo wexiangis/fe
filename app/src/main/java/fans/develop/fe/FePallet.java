@@ -11,7 +11,7 @@ public class FePallet {
     public static Bitmap replace(Bitmap oldBitmap, int type){
         if(type == 0)   //使用原色
             return oldBitmap;
-        //相关说明可参考 http://xys289187120.blog.51cto.com/3361352/657590/
+        //转换格式
         Bitmap mBitmap = oldBitmap.copy(Bitmap.Config.ARGB_8888, true);
         //循环获得bitmap所有像素点
         int mBitmapWidth = mBitmap.getWidth();
