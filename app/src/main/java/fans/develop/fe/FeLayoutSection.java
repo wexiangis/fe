@@ -115,7 +115,7 @@ public class FeLayoutSection extends FeLayoutParent{
 
                             //人物加载
                             for(int i = 0; i < data.saveCache.unit.total(); i++){
-                                layoutUnit.loadView(
+                                layoutUnit.addView(
                                         data.saveCache.unit.getId(i),
                                         data.saveCache.unit.getX(i),
                                         data.saveCache.unit.getY(i),
