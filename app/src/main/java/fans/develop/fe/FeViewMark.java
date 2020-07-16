@@ -8,7 +8,7 @@ import android.graphics.Paint;
 /*
     带动态渐变色的标记方格
  */
-public class FeViewMark extends FeViewParent {
+public class FeViewMark extends FeView {
 
     private FeLayoutSection.Callback callback;
     private Paint paint;
@@ -68,11 +68,11 @@ public class FeViewMark extends FeViewParent {
 		callback.getSectionMap().getRectByGrid(xGrid, yGrid, gridInfo);
 
         if(colorMode == 0)
-            paint.setShader(callback.getSectionUnit().getShaderB());
+            paint.setShader(callback.getSectionShader().getShaderB());
         else if(colorMode == 1)
-            paint.setShader(callback.getSectionUnit().getShaderR());
+            paint.setShader(callback.getSectionShader().getShaderR());
         else
-            paint.setShader(callback.getSectionUnit().getShaderG());
+            paint.setShader(callback.getSectionShader().getShaderG());
 
         canvas.drawPath(gridInfo.path, paint);
     }

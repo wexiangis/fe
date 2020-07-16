@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 /*
     主界面菜单选项,不从属于主界面,它有自己的背景墙
  */
-public class FeLayoutMainMenu extends FeLayoutParent {
+public class FeLayoutMainMenu extends FeLayout {
 
     private FeData feData;
     //菜单信息

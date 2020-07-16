@@ -1,8 +1,7 @@
 package fans.develop.fe;
 
 /*
-    /assets/save/sX 文件夹资源管理器
-    档位X的存档信息管理
+    /assets/save/sX 文件夹资源管理器, 档位X的存档信息管理
  */
 public class FeAssetsSX {
 
@@ -20,6 +19,12 @@ public class FeAssetsSX {
         //file
         this.info = new Info(folder, "info.txt", ";");
         this.setting = new Setting(folder, "setting.txt", ";");
+        this.site = new Site(folder, "site.txt", ";");
+        //布局文件不存在,则从section拷贝过来
+        if(this.site.line() < 1){
+            this.site.reLoad(String.format("/section/section%02d/", this.info.getSection()), "site.txt");
+            this.site.rename(folder, "site.txt");
+        }
         //子文件夹
         this.section = new FeAssetsSection(unit, info.getSection());
         this.saveUnit = new FeAssetsSaveUnit(unit, sX);
@@ -138,6 +143,7 @@ public class FeAssetsSX {
 
     public Info info;
     public Setting setting;
+    public Site site;
 
     //----- class -----
 
@@ -165,6 +171,22 @@ public class FeAssetsSX {
     class Setting extends FeReaderFile{
         
         public Setting(String folder, String name, String split){
+            super(folder, name, split);
+        }
+    }
+
+    class Site extends FeReaderFile{
+
+        public int getTrigger(int line){ return getInt(line, 0); }
+        public int getTurn(int line){ return getInt(line, 1); }
+        public int getXY(int line){ return getInt(line, 2); }
+        public int getX(int line){ return getInt(line, 2)/1000; }
+        public int getY(int line){ return getInt(line, 2)%1000; }
+        public int getFix(int line){ return getInt(line, 3); }
+        public int getId(int line){ return getInt(line, 4); }
+        
+        public int total(){ return line(); }
+        public Site(String folder, String name, String split){
             super(folder, name, split);
         }
     }

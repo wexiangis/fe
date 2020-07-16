@@ -13,7 +13,7 @@ import android.graphics.Rect;
     电影胶片式播放动画,针对地图人物动画管理而封装;
     统一管理人物的待机、选中、上下左右移动时的动画
  */
-public class FeViewUnit extends FeViewParent {
+public class FeViewUnit extends FeView {
 
     private FeLayoutSection.Callback callback;
 

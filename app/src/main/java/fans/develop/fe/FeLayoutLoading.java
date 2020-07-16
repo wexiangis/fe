@@ -8,7 +8,7 @@ import android.widget.TextView;
 /*
     进度加载界面
  */
-public class FeLayoutLoading extends FeLayoutParent{
+public class FeLayoutLoading extends FeLayout{
 
     /*
         界面类型
@@ -67,7 +67,7 @@ public class FeLayoutLoading extends FeLayoutParent{
         doInBackground:
             1.后台任务,由使用者定义;
             2.其携带参数 layoutLoading,用于修改UI进度,调用 layoutLoading.setPercent(xx)
-            3.返回: null/表示正常 其它/表示错误,将以弹窗形式提示用户
+            3.返回: 将作为 doInFinal 的传入参数
         doInFinal:
             1.doInBackground 结束后的UI任务,用于界面跳转
             2.携带参数 result 为 doInBackground 最后的返回
@@ -128,10 +128,6 @@ public class FeLayoutLoading extends FeLayoutParent{
 
             @Override
             public void onPostExecute(FeLayoutLoading layoutLoading, String result) {
-                if(result != null){
-                    //弹窗
-                    ;
-                }
                 if(layoutLoading.doInFinal != null)
                     layoutLoading.doInFinal.run(layoutLoading.obj, result);
             }

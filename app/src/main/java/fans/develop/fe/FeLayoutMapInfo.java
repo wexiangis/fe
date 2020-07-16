@@ -6,11 +6,20 @@ import android.view.View;
 /*
     显示地图光标处的地形信息
  */
-public class FeLayoutMapInfo extends FeLayoutParent {
+public class FeLayoutMapInfo extends FeLayout {
 
     private Context context;
     private FeLayoutSection.Callback callback;
     private Boolean onFlag = false;
+
+    public FeLayoutMapInfo(Context context, FeLayoutSection.Callback callback) {
+        super(context);
+        this.context = context;
+        this.callback = callback;
+
+    }
+
+    /* ---------- function ---------- */
 
     public boolean checkHit(float x, float y){
         refresh();
@@ -21,13 +30,6 @@ public class FeLayoutMapInfo extends FeLayoutParent {
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++)
             getChildAt(i).invalidate();
-    }
-
-    public FeLayoutMapInfo(Context context, FeLayoutSection.Callback callback) {
-        super(context);
-        this.context = context;
-        this.callback = callback;
-
     }
 
     /*
@@ -51,6 +53,7 @@ public class FeLayoutMapInfo extends FeLayoutParent {
     }
 
     /* ---------- abstract interface ---------- */
+
     public boolean onKeyBack(){
         return false;
     }
@@ -58,8 +61,8 @@ public class FeLayoutMapInfo extends FeLayoutParent {
         //释放子view
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            if (v instanceof FeViewParent)
-                ((FeViewParent)v).onDestory();
+            if (v instanceof FeView)
+                ((FeView)v).onDestory();
         }
         return true;
     }

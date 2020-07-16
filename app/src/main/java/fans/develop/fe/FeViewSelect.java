@@ -11,7 +11,7 @@ import android.graphics.Rect;
 /*
     光标动画
  */
-public class FeViewSelect extends FeViewParent {
+public class FeViewSelect extends FeView {
 
     private FeLayoutSection.Callback callback;
 

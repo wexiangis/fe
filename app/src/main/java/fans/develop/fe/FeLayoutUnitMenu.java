@@ -6,7 +6,13 @@ import android.view.View;
 /*
     地图上的人物菜单
  */
-public class FeLayoutUnitMenu extends FeLayoutParent {
+public class FeLayoutUnitMenu extends FeLayout {
+
+    public FeLayoutUnitMenu(Context context, FeLayoutSection.Callback callback) {
+        super(context);
+    }
+
+    /* ---------- function ---------- */
 
     public boolean checkHit(float x, float y){
         return false;
@@ -18,11 +24,8 @@ public class FeLayoutUnitMenu extends FeLayoutParent {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutUnitMenu(Context context, FeLayoutSection.Callback callback) {
-        super(context);
-    }
-
     /* ---------- abstract interface ---------- */
+
     public boolean onKeyBack(){
         return false;
     }
@@ -30,8 +33,8 @@ public class FeLayoutUnitMenu extends FeLayoutParent {
         //释放子view
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            if (v instanceof FeViewParent)
-                ((FeViewParent)v).onDestory();
+            if (v instanceof FeView)
+                ((FeView)v).onDestory();
         }
         return true;
     }

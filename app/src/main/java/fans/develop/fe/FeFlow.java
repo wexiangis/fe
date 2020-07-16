@@ -88,7 +88,7 @@ public class FeFlow {
         return true;
     }
 
-    public void loadNext(FeLayoutParent layout){
+    public void loadNext(FeLayout layout){
         //销毁旧layout
         //返回false时表示控件未准备好,不继续操作
         if(feData.layoutCurrent != null && feData.layoutCurrent.onDestory() == false)
@@ -96,9 +96,9 @@ public class FeFlow {
         //入栈
         if(feData.layoutCurrent != null){
             if(feData.layoutChain == null)
-                feData.layoutChain = new FeChain<FeLayoutParent>(feData.layoutCurrent);
+                feData.layoutChain = new FeChain<FeLayout>(feData.layoutCurrent);
             else {
-                feData.layoutChain.next = new FeChain<FeLayoutParent>(feData.layoutCurrent);
+                feData.layoutChain.next = new FeChain<FeLayout>(feData.layoutCurrent);
                 feData.layoutChain.next.previous = feData.layoutChain;
                 feData.layoutChain = feData.layoutChain.next;
             }

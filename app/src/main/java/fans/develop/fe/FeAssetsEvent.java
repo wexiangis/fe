@@ -1,5 +1,8 @@
 package fans.develop.fe;
 
+/*
+    /assets/event 文件夹资源管理器
+ */
 public class FeAssetsEvent {
     
     //----- file -----

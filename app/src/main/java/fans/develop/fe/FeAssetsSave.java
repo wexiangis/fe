@@ -2,7 +2,7 @@ package fans.develop.fe;
 
 
 /*
-    /assets/save/sX 文件夹资源管理器
+    /assets/save 文件夹资源管理器
  */
 public class FeAssetsSave {
 

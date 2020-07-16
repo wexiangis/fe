@@ -6,22 +6,36 @@ import android.view.View;
 /*
     加载和管理地图及地形动画
  */
-public class FeLayoutMap extends FeLayoutParent {
+public class FeLayoutMap extends FeLayout {
 
     private Context context;
     private FeLayoutSection.Callback callback;
-    private View viewMap = null, viewBackground = null;
 
-    public void refresh(){
-        //遍历所有子view
-        for (int i = 0; i < getChildCount(); i++)
-            getChildAt(i).invalidate();
-    }
+    // 同时只显示一张地图
+    private FeViewMap viewMap = null;
+    // 同时只显示一张背景
+    private View viewBackground = null;
+    // 同时只显示一张地图背景
+    // private FeViewMap viewMapBackground = null;
 
     public FeLayoutMap(Context context, FeLayoutSection.Callback callback) {
         super(context);
         this.context = context;
         this.callback = callback;
+    }
+
+    /* ---------- function ---------- */
+    
+    public boolean checkHit(float x, float y){
+        return false;
+    }
+    
+    /*
+        刷新,一般在移动地图之后
+     */
+    public void refresh(){
+        for (int i = 0; i < getChildCount(); i++)
+            getChildAt(i).invalidate();
     }
 
     /*
@@ -50,7 +64,19 @@ public class FeLayoutMap extends FeLayoutParent {
         addView(viewBackground);
     }
 
+    /*
+        捕捉,保持指定人物或地点在地图显示的中心
+        id = -1 释放
+     */
+    public void catchUnit(int id){
+        ;
+    }
+    public void catchPoint(int xGrid, int yGrid){
+        ;
+    }
+
     /* ---------- abstract interface ---------- */
+
     public boolean onKeyBack(){
         return false;
     }
@@ -58,8 +84,8 @@ public class FeLayoutMap extends FeLayoutParent {
         //释放子view
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            if (v instanceof FeViewParent)
-                ((FeViewParent)v).onDestory();
+            if (v instanceof FeView)
+                ((FeView)v).onDestory();
         }
         return true;
     }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 /*
     放置于界面最上层,用于打印调试信息
  */
-public class FeLayoutDebug extends FeLayoutParent {
+public class FeLayoutDebug extends FeLayout {
 
     private FeLayoutSection.Callback callback;
 
@@ -86,8 +86,8 @@ public class FeLayoutDebug extends FeLayoutParent {
         //释放子view
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            if (v instanceof FeViewParent)
-                ((FeViewParent)v).onDestory();
+            if (v instanceof FeView)
+                ((FeView)v).onDestory();
         }
         return true;
     }

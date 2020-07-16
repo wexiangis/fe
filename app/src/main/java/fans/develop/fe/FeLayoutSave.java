@@ -8,7 +8,7 @@ import android.widget.*;
 /*
     存档条列表
  */
-public class FeLayoutSave extends FeLayoutParent {
+public class FeLayoutSave extends FeLayout {
 
     public static final String default_name = "未 使 用";
 

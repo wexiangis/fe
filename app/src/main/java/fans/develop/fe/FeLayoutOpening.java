@@ -6,7 +6,7 @@ import android.widget.*;
 /*
     片头动画
  */
-public class FeLayoutOpening extends FeLayoutParent {
+public class FeLayoutOpening extends FeLayout {
 
 
     private FeData feData;

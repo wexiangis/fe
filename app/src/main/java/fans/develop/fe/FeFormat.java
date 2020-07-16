@@ -1,7 +1,7 @@
 package fans.develop.fe;
 
 /*
-    自己把控数据类型转换
+    自己把控的数据类型转换
  */
 public class FeFormat {
 

@@ -24,6 +24,29 @@ public class FeReaderFile {
         load();
     }
 
+    /*
+        重命名路径,并保存
+        
+        folder: 目标文件夹, 示例 "/unit/" 前后都带斜杠
+        name: 目标名称, 示例 "test.txt" 没有斜杠
+     */
+    public void rename(String folder, String name)
+    {
+        this.folderAndName = new String[] {folder, name};
+    }
+
+    /*
+        通过判断"line() == 0"断定没有文件后,可以重新选择文件加载
+
+        folder: 目标文件夹, 示例 "/unit/" 前后都带斜杠
+        name: 目标名称, 示例 "test.txt" 没有斜杠
+     */
+    public void reLoad(String folder, String name)
+    {
+        this.folderAndName = new String[] {folder, name};
+        load();
+    }
+
     //链表数据结构,一行数据占用一个Data
     private Data data;
     public class Data{

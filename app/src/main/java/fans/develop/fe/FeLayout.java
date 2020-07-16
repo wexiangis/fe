@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 /*
     所有layout的父类,用于提供一些统一的接口或方法,比如返回键事件处理接口
  */
-public abstract class FeLayoutParent extends RelativeLayout{
+public abstract class FeLayout extends RelativeLayout{
 
     //按键返回
     //返回: true表示有使用到, false时将由系统决定退回界面或退出
@@ -20,7 +20,7 @@ public abstract class FeLayoutParent extends RelativeLayout{
     //子类可以在这里添加自己的loading界面
     public abstract void onReload();
 
-    public FeLayoutParent(Context context){
+    public FeLayout(Context context){
         super(context);
     }
 }

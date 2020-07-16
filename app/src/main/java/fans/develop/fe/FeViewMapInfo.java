@@ -12,7 +12,7 @@ import android.graphics.Typeface;
 /*
     地图上的地图类型等信息框
  */
-public class FeViewMapInfo extends FeViewParent {
+public class FeViewMapInfo extends FeView {
 
     private FeLayoutSection.Callback callback;
 

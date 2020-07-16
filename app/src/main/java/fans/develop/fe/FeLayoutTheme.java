@@ -9,7 +9,7 @@ import android.widget.TextView;
 /*
     主题曲界面
  */
-public class FeLayoutTheme extends FeLayoutParent {
+public class FeLayoutTheme extends FeLayout {
 
     private FeData feData;
     private TextView textView;

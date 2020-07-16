@@ -1,6 +1,5 @@
 package fans.develop.fe;
 
-
 import android.graphics.Bitmap;
 
 /*

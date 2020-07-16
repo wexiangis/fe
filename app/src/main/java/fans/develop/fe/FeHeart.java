@@ -191,7 +191,7 @@ public class FeHeart {
                 scanChain(TYPE_FRAME_HEART, circleType4_count);
             }
         };
-        /* ----- type 11 TYPE_FRAME_HEART_QUICK ----- */
+        /* ----- type 1 TYPE_FRAME_HEART_QUICK ----- */
         timerQuick[0] = new Timer();
         timerTaskQuick[0] = new TimerTask() {
             @Override

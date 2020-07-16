@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+    private long doubleClickExitTime = 0;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,6 @@ public class MainActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
     }
 
-    private long doubleClickExitTime = 0;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -76,11 +77,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        FeData.stop();
+        FeData.pause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        FeData.destory();
     }
 }

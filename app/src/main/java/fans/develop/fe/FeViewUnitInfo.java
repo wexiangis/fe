@@ -11,7 +11,7 @@ import android.graphics.Typeface;
 /*
     地图上的人物头像等信息框
  */
-public class FeViewUnitInfo extends FeViewParent {
+public class FeViewUnitInfo extends FeView {
 
     private FeLayoutSection.Callback callback;
 

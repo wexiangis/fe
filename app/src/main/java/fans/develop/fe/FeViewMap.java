@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 /*
     地图绘制和全局触屏回调管理
  */
-public class FeViewMap extends FeViewParent {
+public class FeViewMap extends FeView {
 
     private FeLayoutSection.Callback callback;
 
@@ -54,6 +54,21 @@ public class FeViewMap extends FeViewParent {
         //居中比较
         xGridErr = x - callback.getSectionMap().srcGridCenter.centerX();
         yGridErr = y - callback.getSectionMap().srcGridCenter.centerY();
+    }
+
+    //动态挪动地图,设置(x,y)所在格子到地图能包围到
+    public void moveInclude(int x, int y){
+        //先把挪动停止
+        // xGridErr = yGridErr = 0;
+        //把需要移动的量先记到xGridErr,yGridErr, 动画心跳回调会慢慢把这些差值吃掉
+        if(x < callback.getSectionMap().srcGridCenter.left)
+            xGridErr = x - callback.getSectionMap().srcGridCenter.left;
+        else if(x > callback.getSectionMap().srcGridCenter.right)
+            xGridErr = x - callback.getSectionMap().srcGridCenter.right;
+        if(y < callback.getSectionMap().srcGridCenter.top)
+            yGridErr = y - callback.getSectionMap().srcGridCenter.top;
+        else if(y > callback.getSectionMap().srcGridCenter.bottom)
+            yGridErr = y - callback.getSectionMap().srcGridCenter.bottom;
     }
 
     //设置(x,y)所在格子为地图中心
@@ -124,8 +139,8 @@ public class FeViewMap extends FeViewParent {
         callback.getSectionMap().mapDist.top = (int)this.getTranslationY() - (int)(callback.getSectionMap().yGridErr*callback.getSectionMap().yGridPixel);
         callback.getSectionMap().mapDist.right = callback.getSectionMap().mapDist.left + callback.getSectionMap().width;
         callback.getSectionMap().mapDist.bottom = callback.getSectionMap().mapDist.top + callback.getSectionMap().height;
-        //梯形变换
-        callback.getSectionMap().getMatrix();
+        //更新梯形变换信息
+        callback.getSectionMap().upgradeMatrix();
         //显示地图
         canvas.drawBitmap(callback.getSectionMap().bitmap, callback.getSectionMap().matrix, paintMap);
         //地图移动了,刷新其他信息
@@ -134,11 +149,13 @@ public class FeViewMap extends FeViewParent {
 
     //
     public boolean onTouchEvent(MotionEvent event) {
+        //触屏禁止时间
 		if(callback.touchForbid()){
 			callback.cleanClickState(FeLayoutSection.ON_MOVE);
 			callback.cleanClickState(FeLayoutSection.ON_HIT_MAP);
 			return super.onTouchEvent(event);
-		}
+        }
+        //
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN: {
                 tDownX = event.getX();
@@ -160,9 +177,8 @@ public class FeViewMap extends FeViewParent {
                     //上传click事件
                     callback.checkHit(tUpX, tUpY);
                 }
-                else{
+                else
                     callback.cleanClickState(FeLayoutSection.ON_HIT_MAP);
-                }
                 isMove = false;
                 //输入坐标求格子位置
                 callback.getSectionMap().getRectByLocation(tUpX, tUpY, callback.getSectionMap().selectSite);
@@ -171,17 +187,9 @@ public class FeViewMap extends FeViewParent {
                     !callback.getSectionMap().srcGridCenter.contains(
                     callback.getSectionUnit().selectSite.point[0],
                     callback.getSectionUnit().selectSite.point[1])){
-//                    //挪动地图,把选中点居中
-//                    moveCenter(callback.getSectionUnit().selectSite.point[0], callback.getSectionUnit().selectSite.point[1]);
-                    //把需要移动的量先记到xGridErr,yGridErr, 动画心跳回调会慢慢把这些差值吃掉
-                    if(callback.getSectionUnit().selectSite.point[0] < callback.getSectionMap().srcGridCenter.left)
-                        xGridErr = callback.getSectionUnit().selectSite.point[0] - callback.getSectionMap().srcGridCenter.left;
-                    else if(callback.getSectionUnit().selectSite.point[0] > callback.getSectionMap().srcGridCenter.right)
-                        xGridErr = callback.getSectionUnit().selectSite.point[0] - callback.getSectionMap().srcGridCenter.right;
-                    if(callback.getSectionUnit().selectSite.point[1] < callback.getSectionMap().srcGridCenter.top)
-                        yGridErr = callback.getSectionUnit().selectSite.point[1] - callback.getSectionMap().srcGridCenter.top;
-                    else if(callback.getSectionUnit().selectSite.point[1] > callback.getSectionMap().srcGridCenter.bottom)
-                        yGridErr = callback.getSectionUnit().selectSite.point[1] - callback.getSectionMap().srcGridCenter.bottom;
+                    // //挪动地图,把选中点居中
+                    // moveCenter(callback.getSectionUnit().selectSite.point[0], callback.getSectionUnit().selectSite.point[1]);
+                    moveInclude(callback.getSectionUnit().selectSite.point[0], callback.getSectionUnit().selectSite.point[1]);
                 }
             }
             break;

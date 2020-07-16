@@ -5,22 +5,15 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.view.View;
 
-public class FeLayoutMark extends FeLayoutParent {
+/*
+    地板标记图层,显示各个人物的行动范围
+ */
+public class FeLayoutMark extends FeLayout {
 
     private Context context;
     private FeLayoutSection.Callback callback;
     //着色器心跳启动标志
     private Boolean shaderHeartStartFlag = false;
-    
-    public boolean checkHit(float x, float y){
-        return false;
-    }
-
-    public void refresh(){
-        //遍历所有子view
-        for (int i = 0; i < getChildCount(); i++)
-            getChildAt(i).invalidate();
-    }
 
     public FeLayoutMark(Context context, FeLayoutSection.Callback callback) {
         super(context);
@@ -28,38 +21,12 @@ public class FeLayoutMark extends FeLayoutParent {
         this.callback = callback;
     }
 
-    /*
-        显示特定人物的mark范围
-     */
-    public void showUnit(int id){
-        if(!shaderHeartStartFlag)
-            shaderHeartStart();
-        //计算范围
-        ;
-        //显示范围
-        addView(new FeViewMark(context, 1, 10, 10, callback));
-    }
-
-    /*
-        关闭特定人物的mark范围
-     */
-    public void hideUnit(int id){
-        ;
-    }
-
-    /*
-        关闭全部人物的mark范围
-     */
-    public void hideAllUnit(){
-        this.removeAllViews();
-    }
-
     private void shaderHeartStart(){
         //只启动一次
         if(shaderHeartStartFlag)
             return;
         //初始化着色器列表
-        callback.getSectionUnit().shaderR = new FeShader(
+        callback.getSectionShader().shaderR = new FeShader(
                 new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
                 (int)(callback.getSectionMap().xGridPixel/10), 1,
                 20,
@@ -67,7 +34,7 @@ public class FeLayoutMark extends FeLayoutParent {
                 new float[] {0.25F, 0.5F, 7.5F },
                 Shader.TileMode.REPEAT
         );
-        callback.getSectionUnit().shaderG = new FeShader(
+        callback.getSectionShader().shaderG = new FeShader(
                 new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
                 (int)(callback.getSectionMap().xGridPixel/10), 1,
                 20,
@@ -75,7 +42,7 @@ public class FeLayoutMark extends FeLayoutParent {
                 new float[] {0.25F, 0.5F, 7.5F },
                 Shader.TileMode.REPEAT
         );
-        callback.getSectionUnit().shaderB = new FeShader(
+        callback.getSectionShader().shaderB = new FeShader(
                 new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
                 (int)(callback.getSectionMap().xGridPixel/10), 1,
                 20,
@@ -93,14 +60,53 @@ public class FeLayoutMark extends FeLayoutParent {
     private FeHeartUnit heartUnit = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
             //让渐变色动起来
-            if(callback.getSectionUnit().shaderCount + 1 < callback.getSectionUnit().shaderR.xCount())
-                callback.getSectionUnit().shaderCount += 1;
+            if(callback.getSectionShader().shaderCount + 1 < callback.getSectionShader().shaderR.xCount())
+                callback.getSectionShader().shaderCount += 1;
             else
-                callback.getSectionUnit().shaderCount = 0;
+                callback.getSectionShader().shaderCount = 0;
         }
     });
 
+    /* ---------- function ---------- */
+    
+    public boolean checkHit(float x, float y){
+        return false;
+    }
+
+    public void refresh(){
+        for (int i = 0; i < getChildCount(); i++)
+            getChildAt(i).invalidate();
+    }
+
+    /*
+        显示特定人物的mark范围
+     */
+    public void markUnit(int id){
+        if(!shaderHeartStartFlag)
+            shaderHeartStart();
+        //计算范围
+        ;
+        //显示范围
+        addView(new FeViewMark(context, 1, 10, 10, callback));
+    }
+
+    /*
+        关闭特定人物的mark范围
+     */
+    public void cleanUnit(int id){
+        ;
+    }
+
+    /*
+        关闭全部人物的mark范围
+     */
+    public void cleanAllUnit(){
+        this.removeAllViews();
+    }
+    
+
     /* ---------- abstract interface ---------- */
+
     public boolean onKeyBack(){
         return false;
     }
@@ -108,8 +114,8 @@ public class FeLayoutMark extends FeLayoutParent {
         //释放子view
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            if (v instanceof FeViewParent)
-                ((FeViewParent)v).onDestory();
+            if (v instanceof FeView)
+                ((FeView)v).onDestory();
         }
         //没有启动就没有关闭
         if(!shaderHeartStartFlag)

@@ -6,7 +6,8 @@ import android.graphics.Rect;
 
 
 /*
-    加载地图后所产生的一系列关键参数,用于传递给地图上的人物动画
+    加载地图、地图移动和变形后所产生的一系列关键参数, 各个
+    图层在绘图时获取某个方格位置、方格和地图长宽都从这里来.
  */
 public class FeSectionMap {
 
@@ -44,22 +45,23 @@ public class FeSectionMap {
     {
         this.section = section;
         this.mapInfo = mapInfo;
-        //适配屏幕
+        //屏幕长、高格子数适配屏幕分辨率,得到地图实际显示长高(width、height)
         init(screenWidth, screenHeight, mapInfo.xGrid, mapInfo.yGrid, mapInfo.pixelPerGrid);
-        //两参数分别为xy缩放比例
+        //xp、yp分别为xy缩放比例(原始长、高缩放到实际显示长、高)
         float xp = (float)width/mapInfo.bitmap.getWidth()/2;
         if(xp > 1.5f)
             xp = 1.5f;
         float yp = (float)height/mapInfo.bitmap.getHeight()/2;
         if(yp > 1.5f)
             yp = 1.5f;
+        //用缩放后的矩阵初始化bitmap,缩放效果较好
         matrix.postScale(xp, yp);
         bitmap = Bitmap.createBitmap(mapInfo.bitmap, 0, 0,
                 (int)mapInfo.bitmap.getWidth(), (int)mapInfo.bitmap.getHeight(), matrix, true);
     }
 
     //地图适配屏幕
-    public void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int pixelPG){
+    private void init(int screenXSixe, int screenYSize, int mapXGrid, int mapYGrid, int pixelPG){
         //比较屏幕和地图长和高比例
         float screenXDivY = (float)screenXSixe/screenYSize;
         float mapXDivY = (float)mapXGrid/mapYGrid;
@@ -145,7 +147,7 @@ public class FeSectionMap {
     private int transferGrid = 4;
 
     //获取梯形转换矩阵,用于绘制
-    public void getMatrix(){
+    public void upgradeMatrix(){
         srcPoint[0] = -mapDist.left;
         srcPoint[1] = -mapDist.top;
         srcPoint[2] = -mapDist.left;

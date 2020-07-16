@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 /*
     额外菜单列表
  */
-public class FeLayoutExtra extends FeLayoutParent {
+public class FeLayoutExtra extends FeLayout {
 
     private FeData feData;
     //条目列表

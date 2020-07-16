@@ -1,18 +1,42 @@
 package fans.develop.fe;
 
+import android.view.MotionEvent;
+
 /*
-    场地及人员信息
+    事件操作大全
  */
 public class FeSectionOperation {
 
-    private FeInfoMap map;
+    private FeLayoutSection.Callback callback;
 
-    //网格人员id, 无则0
-    public short[][] unit;
-
-    public FeSectionOperation(FeInfoMap map){
-        this.map = map;
-        this.unit = new short[map.xGrid][map.yGrid];
+    public FeSectionOperation(FeLayoutSection.Callback callback){
+        this.callback = callback;
     }
 
+    /*
+        一切事件的源头皆来自触屏
+     */
+    public void onTouchEvent(MotionEvent event)
+    {
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN: {
+                //检查点击都命中了谁?
+                FeFlagHit flag = callback.checkHit(event.getX(), event.getY());
+                //正在对话
+                if(flag.checkFlag(FeFlagHit.HIT_CHAT))
+                    ;
+            }
+            break;
+            case MotionEvent.ACTION_UP: {
+                float tUpX = event.getX();
+                float tUpY = event.getY();
+            }
+            break;
+            case MotionEvent.ACTION_MOVE: {
+                float tMoveX = event.getX();
+                float tMoveY = event.getY();
+            }
+            break;
+        }
+    }
 }

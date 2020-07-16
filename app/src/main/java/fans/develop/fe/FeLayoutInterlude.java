@@ -7,7 +7,7 @@ import android.view.View;
 	过场动画图层(例如轮到一方阵营回合过场动画)
 	动画进行中禁止触屏操作
  */
-public class FeLayoutInterlude extends FeLayoutParent
+public class FeLayoutInterlude extends FeLayout
 {
 	private FeLayoutSection.Callback callback;
 	
@@ -15,6 +15,8 @@ public class FeLayoutInterlude extends FeLayoutParent
 		super(context);
 		this.callback = callback;
 	}
+
+    /* ---------- function ---------- */
 	
 	/*
 		阵营切换动画
@@ -33,6 +35,7 @@ public class FeLayoutInterlude extends FeLayoutParent
 	}
 
 	/* ---------- abstract interface ---------- */
+
 	public boolean onKeyBack(){
 		return false;
 	}
@@ -40,8 +43,8 @@ public class FeLayoutInterlude extends FeLayoutParent
 		//释放子view
 		for (int i = 0; i < getChildCount(); i++) {
 			View v = getChildAt(i);
-			if (v instanceof FeViewParent)
-				((FeViewParent)v).onDestory();
+			if (v instanceof FeView)
+				((FeView)v).onDestory();
 		}
 		return true;
 	}

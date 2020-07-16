@@ -3,7 +3,7 @@ package fans.develop.fe;
 import android.content.Context;
 import android.widget.RelativeLayout;
 
-public class FeLayoutProfessionAnim extends FeLayoutParent {
+public class FeLayoutProfessionAnim extends FeLayout {
 
     public FeLayoutProfessionAnim(Context context){
         super(context);
@@ -11,6 +11,7 @@ public class FeLayoutProfessionAnim extends FeLayoutParent {
     }
 
     /* ---------- abstract interface ---------- */
+    
     public boolean onKeyBack(){
         return false;
     }
