@@ -6,7 +6,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /*
-    进度加载界面
+    进度加载界面,作为子view在各任务中显示
  */
 public class FeLayoutLoading extends FeLayout{
 

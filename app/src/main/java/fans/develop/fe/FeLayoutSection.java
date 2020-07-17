@@ -198,10 +198,10 @@ public class FeLayoutSection extends FeLayout{
                         obj.addView(layoutMapInfo);
                         //人物操作菜单图层
                         obj.addView(layoutUnitMenu);
-                        // 系统菜单图层
-                        obj.addView(layoutSysMenu);
                         //人物对话图层
                         obj.addView(layoutChat);
+                        // 系统菜单图层
+                        obj.addView(layoutSysMenu);
 						//过场动画图层
 						obj.addView(layoutInterlude);
                         //debug图层
@@ -218,14 +218,14 @@ public class FeLayoutSection extends FeLayout{
     /* ---------- 触屏回调,提取事件 ---------- */
 
     public boolean onTouchEvent(MotionEvent event) {
-        if(sectionOperation)
-            sectionOperation.onTouchEvent(event);
-        return true;//否则触屏移动和松开事件不会进来
+        if(sectionOperation != null)
+            return sectionOperation.onTouchEvent(event);
+        return false;
     }
 
     /* ---------- 控件事件回调 ---------- */
 
-    public FeLayoutSection.Callback sectionCallback = new FeLayoutSection.Callback()
+    public FeSectionCallback sectionCallback = new FeSectionCallback()
     {
         public void addHeartUnit(FeHeartUnit heartUnit){
             feData.addHeartUnit(heartUnit);
@@ -249,15 +249,15 @@ public class FeLayoutSection extends FeLayout{
             //更新标记格
             layoutMark.refresh();
             //更新人物动画
-            layoutUnit.refresh(0);
+            layoutUnit.refresh();
             //更新地形信息
             layoutMapInfo.refresh();
             //更新人物菜单
             layoutUnitMenu.refresh();
-            //更新系统菜单
-            layoutSysMenu.refresh();
             //更新对话
             layoutChat.refresh();
+            //更新系统菜单
+            layoutSysMenu.refresh();
             //debug图层
             // layoutDebug.refresh();
         }
@@ -265,12 +265,12 @@ public class FeLayoutSection extends FeLayout{
             FeFlagHit flag = new FeFlagHit();
             //先清空
             flag.cleanFlagAll();
-            //点击:正在对话?
-            if(layoutChat.checkHit(x, y))
-                flag.setFlag(FeFlagHit.HIT_CHAT);
             //点击:系统菜单中?
             if(layoutSysMenu.checkHit(x, y))
                 flag.setFlag(FeFlagHit.HIT_SYS_MENU);
+            //点击:正在对话?
+            if(layoutChat.checkHit(x, y))
+                flag.setFlag(FeFlagHit.HIT_CHAT);
             //点击:人物菜单中?
             if(layoutUnitMenu.checkHit(x, y))
                 flag.setFlag(FeFlagHit.HIT_UNIT_MENU);
@@ -327,11 +327,11 @@ public class FeLayoutSection extends FeLayout{
         public FeLayoutUnitMenu getLayoutUnitMenu(){
             return layoutUnitMenu;
         }
-        public FeLayoutSysMenu getLayoutSysMenu(){
-            return layoutSysMenu;
-        }
         public FeLayoutChat getLayoutChat(){
             return layoutChat;
+        }
+        public FeLayoutSysMenu getLayoutSysMenu(){
+            return layoutSysMenu;
         }
         public FeLayoutInterlude getLayoutInterlude(){
             return layoutInterlude;
@@ -339,30 +339,39 @@ public class FeLayoutSection extends FeLayout{
         public FeLayoutDebug getLayoutDebug(){
             return layoutDebug;
         }
-    };
 
-    public interface Callback{
-        void addHeartUnit(FeHeartUnit heartUnit);
-        void removeHeartUnit(FeHeartUnit heartUnit);
         /* ------------------------------- */
-        void refreshSectionMap(int section);
-        void refresh();
-        FeFlagHit checkHit(float x, float y);
-        /* ------------------------------- */
-        FeAssets getAssets();
-        Context getContext();
-        FeSectionMap getSectionMap();
-        FeSectionUnit getSectionUnit();
-        FeSectionShader getSectionShader();
-        /* ------------------------------- */
-        FeLayoutMap getLayoutMap();
-        FeLayoutMark getLayoutMark();
-        FeLayoutUnit getLayoutUnit();
-        FeLayoutMapInfo getLayoutMapInfo();
-        FeLayoutUnitMenu getLayoutUnitMenu();
-        FeLayoutSysMenu getLayoutSysMenu();
-        FeLayoutChat getLayoutChat();
-        FeLayoutInterlude getLayoutInterlude();
-        FeLayoutDebug getLayoutDebug();
-    }
+
+        private Boolean _onTouchEnable = true;
+        public void onTouchEnable(Boolean on){
+            _onTouchEnable = on;
+        }
+        public Boolean onTouchEnable(){
+            return _onTouchEnable;
+        }
+
+        private Boolean _onMapMove = false;
+        public void onMapMove(Boolean on){
+            _onMapMove = on;
+        }
+        public Boolean onMapMove(){
+            return _onMapMove;
+        }
+
+        private Boolean _onMapHit = false;
+        public void onMapHit(Boolean on){
+            _onMapHit = on;
+        }
+        public Boolean onMapHit(){
+            return _onMapHit;
+        }
+
+        private Boolean _onUnitSelect = false;
+        public void onUnitSelect(Boolean on){
+            _onUnitSelect = on;
+        }
+        public Boolean onUnitSelect(){
+            return _onUnitSelect;
+        }
+    };
 }

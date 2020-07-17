@@ -62,10 +62,30 @@ public class FeFlow {
         loadNext(new FeLayoutExtra(feData));
     }
 
+    //加载章节片头
+    public void loadSectionTheme(int sX){
+        loadNext(new FeLayoutSectionTheme(feData, sX));
+    }
+
+    //加载章节初始剧情
+    public void loadSectionPlot(FeAssetsSX sxData){
+        loadNext(new FeLayoutSectionPlot(feData, sxData));
+    }
+
     //加载章节
     //sX: 存档位置 mode: 0/重新加载 1/中断继续
     public void loadSection(int sX, int mode) {
         loadNext(new FeLayoutSection(feData, sX, mode));
+    }
+
+    //加载章节结束剧情
+    public void loadSectionPlotEnding(FeAssetsSX sxData){
+        loadNext(new FeLayoutSectionPlotEnding(feData, sxData));
+    }
+
+    //加载GameOver
+    public void loadGameOver(){
+        loadNext(new FeLayoutGameOver(feData));
     }
 
     //系统的界面返回, 返回false表示没有上一级界面了

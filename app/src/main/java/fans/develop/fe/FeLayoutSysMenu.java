@@ -9,12 +9,12 @@ import android.view.View;
 public class FeLayoutSysMenu extends FeLayout {
 
     private Context context;
-    private FeLayoutSection.Callback callback;
+    private FeSectionCallback sectionCallback;
 
-    public FeLayoutSysMenu(Context context, FeLayoutSection.Callback callback) {
+    public FeLayoutSysMenu(Context context, FeSectionCallback sectionCallback) {
         super(context);
         this.context = context;
-        this.callback = callback;
+        this.sectionCallback = sectionCallback;
     }
 
     /* ---------- function ---------- */
@@ -27,6 +27,13 @@ public class FeLayoutSysMenu extends FeLayout {
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++)
             getChildAt(i).invalidate();
+    }
+
+    /*
+        接收点击事件
+     */
+    public void click(float x, float y){
+        ;
     }
 
     /* ---------- abstract interface ---------- */

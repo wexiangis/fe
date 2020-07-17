@@ -8,7 +8,7 @@ import android.view.View;
  */
 public class FeLayoutUnitMenu extends FeLayout {
 
-    public FeLayoutUnitMenu(Context context, FeLayoutSection.Callback callback) {
+    public FeLayoutUnitMenu(Context context, FeSectionCallback sectionCallback) {
         super(context);
     }
 
@@ -22,6 +22,13 @@ public class FeLayoutUnitMenu extends FeLayout {
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++)
             getChildAt(i).invalidate();
+    }
+
+    /*
+        接收点击事件
+     */
+    public void click(float x, float y){
+        ;
     }
 
     /* ---------- abstract interface ---------- */

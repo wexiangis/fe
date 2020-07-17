@@ -11,14 +11,14 @@ import android.view.View;
 public class FeLayoutMark extends FeLayout {
 
     private Context context;
-    private FeLayoutSection.Callback callback;
+    private FeSectionCallback sectionCallback;
     //着色器心跳启动标志
     private Boolean shaderHeartStartFlag = false;
 
-    public FeLayoutMark(Context context, FeLayoutSection.Callback callback) {
+    public FeLayoutMark(Context context, FeSectionCallback sectionCallback) {
         super(context);
         this.context = context;
-        this.callback = callback;
+        this.sectionCallback = sectionCallback;
     }
 
     private void shaderHeartStart(){
@@ -26,32 +26,32 @@ public class FeLayoutMark extends FeLayout {
         if(shaderHeartStartFlag)
             return;
         //初始化着色器列表
-        callback.getSectionShader().shaderR = new FeShader(
-                new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
-                (int)(callback.getSectionMap().xGridPixel/10), 1,
+        sectionCallback.getSectionShader().shaderR = new FeShader(
+                new RectF(0, 0, sectionCallback.getSectionMap().xGridPixel, sectionCallback.getSectionMap().yGridPixel),
+                (int)(sectionCallback.getSectionMap().xGridPixel/10), 1,
                 20,
                 new int[]{0x80FF8080, 0x80FF2020, 0x80FF8080},
                 new float[] {0.25F, 0.5F, 7.5F },
                 Shader.TileMode.REPEAT
         );
-        callback.getSectionShader().shaderG = new FeShader(
-                new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
-                (int)(callback.getSectionMap().xGridPixel/10), 1,
+        sectionCallback.getSectionShader().shaderG = new FeShader(
+                new RectF(0, 0, sectionCallback.getSectionMap().xGridPixel, sectionCallback.getSectionMap().yGridPixel),
+                (int)(sectionCallback.getSectionMap().xGridPixel/10), 1,
                 20,
                 new int[]{0x8060FF60, 0x8020FF20, 0x8060F60F},
                 new float[] {0.25F, 0.5F, 7.5F },
                 Shader.TileMode.REPEAT
         );
-        callback.getSectionShader().shaderB = new FeShader(
-                new RectF(0, 0, callback.getSectionMap().xGridPixel, callback.getSectionMap().yGridPixel),
-                (int)(callback.getSectionMap().xGridPixel/10), 1,
+        sectionCallback.getSectionShader().shaderB = new FeShader(
+                new RectF(0, 0, sectionCallback.getSectionMap().xGridPixel, sectionCallback.getSectionMap().yGridPixel),
+                (int)(sectionCallback.getSectionMap().xGridPixel/10), 1,
                 20,
                 new int[]{0x808080FF, 0x802020FF, 0x808080FF},
                 new float[] {0.1F, 0.5F, 0.9F },
                 Shader.TileMode.REPEAT
         );
         //引入心跳,让渐变色动起来
-        callback.addHeartUnit(heartUnit);
+        sectionCallback.addHeartUnit(heartUnit);
         //只启动一次
         shaderHeartStartFlag = true;
     }
@@ -60,10 +60,10 @@ public class FeLayoutMark extends FeLayout {
     private FeHeartUnit heartUnit = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
             //让渐变色动起来
-            if(callback.getSectionShader().shaderCount + 1 < callback.getSectionShader().shaderR.xCount())
-                callback.getSectionShader().shaderCount += 1;
+            if(sectionCallback.getSectionShader().shaderCount + 1 < sectionCallback.getSectionShader().shaderR.xCount())
+                sectionCallback.getSectionShader().shaderCount += 1;
             else
-                callback.getSectionShader().shaderCount = 0;
+                sectionCallback.getSectionShader().shaderCount = 0;
         }
     });
 
@@ -87,7 +87,7 @@ public class FeLayoutMark extends FeLayout {
         //计算范围
         ;
         //显示范围
-        addView(new FeViewMark(context, 1, 10, 10, callback));
+        addView(new FeViewMark(context, 1, 10, 10, sectionCallback));
     }
 
     /*
@@ -103,7 +103,13 @@ public class FeLayoutMark extends FeLayout {
     public void cleanAllUnit(){
         this.removeAllViews();
     }
-    
+
+    /*
+        接收点击事件
+     */
+    public void click(float x, float y){
+        ;
+    }
 
     /* ---------- abstract interface ---------- */
 
@@ -121,7 +127,7 @@ public class FeLayoutMark extends FeLayout {
         if(!shaderHeartStartFlag)
             return true;
         //解除心跳注册
-        callback.removeHeartUnit(heartUnit);
+        sectionCallback.removeHeartUnit(heartUnit);
         return true;
     }
     public void onReload(){

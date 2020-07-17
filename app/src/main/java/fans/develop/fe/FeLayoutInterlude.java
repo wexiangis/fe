@@ -9,11 +9,11 @@ import android.view.View;
  */
 public class FeLayoutInterlude extends FeLayout
 {
-	private FeLayoutSection.Callback callback;
+	private FeSectionCallback sectionCallback;
 	
-	public FeLayoutInterlude(Context context, FeLayoutSection.Callback callback){
+	public FeLayoutInterlude(Context context, FeSectionCallback sectionCallback){
 		super(context);
-		this.callback = callback;
+		this.sectionCallback = sectionCallback;
 	}
 
     /* ---------- function ---------- */
@@ -22,9 +22,9 @@ public class FeLayoutInterlude extends FeLayout
 		阵营切换动画
 	 */
 	public void campSwitch(int camp){
-		callback.setClickState(FeLayoutSection.ON_TOUCH_FORBID);
+		sectionCallback.onTouchEnable(false);
 		;
-		callback.cleanClickState(FeLayoutSection.ON_TOUCH_FORBID);
+		sectionCallback.onTouchEnable(true);
 	}
 	
 	/*

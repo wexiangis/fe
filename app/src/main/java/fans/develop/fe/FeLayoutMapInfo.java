@@ -9,20 +9,19 @@ import android.view.View;
 public class FeLayoutMapInfo extends FeLayout {
 
     private Context context;
-    private FeLayoutSection.Callback callback;
+    private FeSectionCallback sectionCallback;
     private Boolean onFlag = false;
 
-    public FeLayoutMapInfo(Context context, FeLayoutSection.Callback callback) {
+    public FeLayoutMapInfo(Context context, FeSectionCallback sectionCallback) {
         super(context);
         this.context = context;
-        this.callback = callback;
+        this.sectionCallback = sectionCallback;
 
     }
 
     /* ---------- function ---------- */
 
     public boolean checkHit(float x, float y){
-        refresh();
         return false;
     }
 
@@ -38,9 +37,9 @@ public class FeLayoutMapInfo extends FeLayout {
     public void on(){
         if(onFlag)
             return;
-        addView(new FeViewSelect(context, callback));
-        addView(new FeViewMapInfo(context, callback));
-        addView(new FeViewUnitInfo(context, callback));
+        addView(new FeViewSelect(context, sectionCallback));
+        addView(new FeViewMapInfo(context, sectionCallback));
+        addView(new FeViewUnitInfo(context, sectionCallback));
         onFlag = true;
     }
 
@@ -50,6 +49,13 @@ public class FeLayoutMapInfo extends FeLayout {
     public void off(){
         removeAllViews();
         onFlag = false;
+    }
+
+    /*
+        接收点击事件
+     */
+    public void click(float x, float y){
+        ;
     }
 
     /* ---------- abstract interface ---------- */

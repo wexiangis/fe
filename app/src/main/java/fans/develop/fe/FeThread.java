@@ -23,7 +23,7 @@ public class FeThread extends Thread{
     }
 
     /*
-        普通线程(可以使用join()等待所有任务结束)
+        普通线程
      */
     public FeThread(Runnable ... runnables){
         this.handler = null;
@@ -48,7 +48,7 @@ public class FeThread extends Thread{
                 threads[i] = new Thread(runnables[i]);
                 threads[i].start();
             }
-            //wait all
+            //使用join()等待所有任务结束
             for(int i = 0; i < runnables.length; i++) {
                 try {
                     threads[i].join();

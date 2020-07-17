@@ -8,11 +8,11 @@ import android.view.View;
  */
 public class FeLayoutChat extends FeLayout {
 
-	private FeLayoutSection.Callback callback;
+	private FeSectionCallback sectionCallback;
 
-    public FeLayoutChat(Context context, FeLayoutSection.Callback callback) {
+    public FeLayoutChat(Context context, FeSectionCallback sectionCallback) {
         super(context);
-		this.callback = callback;
+		this.sectionCallback = sectionCallback;
     }
 
     /* ---------- function ---------- */
@@ -25,6 +25,13 @@ public class FeLayoutChat extends FeLayout {
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++)
             getChildAt(i).invalidate();
+    }
+
+    /*
+        接收点击事件
+     */
+    public void click(float x, float y){
+        ;
     }
 
     /* ---------- abstract interface ---------- */

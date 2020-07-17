@@ -13,7 +13,7 @@ import android.graphics.Typeface;
  */
 public class FeViewUnitInfo extends FeView {
 
-    private FeLayoutSection.Callback callback;
+    private FeSectionCallback sectionCallback;
 
     //头像背景框图片源位置和输出位置
     private Rect rectSrcHeadBg, rectDistHeadBg;
@@ -29,20 +29,20 @@ public class FeViewUnitInfo extends FeView {
         ;
     }
 
-    public FeViewUnitInfo(Context context, FeLayoutSection.Callback callback){
+    public FeViewUnitInfo(Context context, FeSectionCallback sectionCallback){
         super(context);
-        this.callback = callback;
+        this.sectionCallback = sectionCallback;
         //
-        bitmapHeadBg = callback.getAssets().menu.getMapHeader();
+        bitmapHeadBg = sectionCallback.getAssets().menu.getMapHeader();
         //
-        pixelPowHead = callback.getSectionMap().yGridPixel*2/bitmapHeadBg.getHeight();
+        pixelPowHead = sectionCallback.getSectionMap().yGridPixel*2/bitmapHeadBg.getHeight();
         //
         rectSrcHeadBg = new Rect(0, 0, bitmapHeadBg.getWidth(), bitmapHeadBg.getHeight());
         rectDistHeadBg = new Rect(
-                (int)(callback.getSectionMap().xGridPixel/4),
-                (int)(callback.getSectionMap().yGridPixel/4),
-                (int)(callback.getSectionMap().xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead),
-                (int)(callback.getSectionMap().yGridPixel/4 + bitmapHeadBg.getHeight()*pixelPowHead));
+                (int)(sectionCallback.getSectionMap().xGridPixel/4),
+                (int)(sectionCallback.getSectionMap().yGridPixel/4),
+                (int)(sectionCallback.getSectionMap().xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead),
+                (int)(sectionCallback.getSectionMap().yGridPixel/4 + bitmapHeadBg.getHeight()*pixelPowHead));
         //
         paintHeadBg = new Paint();
         paintHeadBg.setColor(0xE00000FF);//半透明
@@ -69,26 +69,26 @@ public class FeViewUnitInfo extends FeView {
         super.onDraw(canvas);
 
         //移动中不绘制
-        if(callback.checkClickState(FeLayoutSection.ON_MOVE)){
+        if(sectionCallback.onMapMove()){
             drawHead = false;
             return;
         }
 
         //图像位置自动调整
-        if(callback.getSectionUnit().selectSite.rect.right > callback.getSectionMap().screenWidth/2){ //放到左边
-            rectDistHeadBg.left = (int)(callback.getSectionMap().xGridPixel/4);
-            rectDistHeadBg.right = (int)(callback.getSectionMap().xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead);
+        if(sectionCallback.getSectionUnit().selectSite.rect.right > sectionCallback.getSectionMap().screenWidth/2){ //放到左边
+            rectDistHeadBg.left = (int)(sectionCallback.getSectionMap().xGridPixel/4);
+            rectDistHeadBg.right = (int)(sectionCallback.getSectionMap().xGridPixel/4 + bitmapHeadBg.getWidth()*pixelPowHead);
         }else{ //放到右边
-            rectDistHeadBg.left = (int)(callback.getSectionMap().screenWidth - callback.getSectionMap().xGridPixel/4 - bitmapHeadBg.getWidth()*pixelPowHead);
-            rectDistHeadBg.right = (int)(callback.getSectionMap().screenWidth - callback.getSectionMap().xGridPixel/4);
+            rectDistHeadBg.left = (int)(sectionCallback.getSectionMap().screenWidth - sectionCallback.getSectionMap().xGridPixel/4 - bitmapHeadBg.getWidth()*pixelPowHead);
+            rectDistHeadBg.right = (int)(sectionCallback.getSectionMap().screenWidth - sectionCallback.getSectionMap().xGridPixel/4);
         }
 
         //画人物头像
-        if(!callback.checkClickState(FeLayoutSection.ON_HIT_UNIT) ||
-            callback.getSectionUnit().selectSite.rect.left > callback.getSectionMap().screenWidth ||
-            callback.getSectionUnit().selectSite.rect.right < 0 ||
-            callback.getSectionUnit().selectSite.rect.top > callback.getSectionMap().screenHeight ||
-            callback.getSectionUnit().selectSite.rect.bottom < 0){
+        if(!sectionCallback.onMapHit() ||
+            sectionCallback.getSectionUnit().selectSite.rect.left > sectionCallback.getSectionMap().screenWidth ||
+            sectionCallback.getSectionUnit().selectSite.rect.right < 0 ||
+            sectionCallback.getSectionUnit().selectSite.rect.top > sectionCallback.getSectionMap().screenHeight ||
+            sectionCallback.getSectionUnit().selectSite.rect.bottom < 0){
             drawHead = false;
         }else {
             drawHead = true;
@@ -96,12 +96,12 @@ public class FeViewUnitInfo extends FeView {
             canvas.drawBitmap(bitmapHeadBg, rectSrcHeadBg, rectDistHeadBg, paintHeadBg);
             //填信息
             canvas.drawText(
-                callback.getAssets().unit.getName(0),
+                sectionCallback.getAssets().unit.getName(0),
                 rectDistHeadBg.left + rectDistHeadBg.width()/4,
                 rectDistHeadBg.top + rectDistHeadBg.height()/4,
                 paintParam);
             canvas.drawText(
-                    callback.getAssets().unit.getSummary(0),
+                    sectionCallback.getAssets().unit.getSummary(0),
                     rectDistHeadBg.left + rectDistHeadBg.width()/4,
                     rectDistHeadBg.top + rectDistHeadBg.height()/2,
                     paintParam);

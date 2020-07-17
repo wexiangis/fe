@@ -12,7 +12,7 @@ import android.widget.TextView;
  */
 public class FeLayoutDebug extends FeLayout {
 
-    private FeLayoutSection.Callback callback;
+    private FeSectionCallback sectionCallback;
 
     //左右屏打印区域
     private LinearLayout linearLayoutL, linearLayoutR;
@@ -31,9 +31,9 @@ public class FeLayoutDebug extends FeLayout {
             getChildAt(i).invalidate();
     }
 
-    public FeLayoutDebug(Context context, FeLayoutSection.Callback callback) {
+    public FeLayoutDebug(Context context, FeSectionCallback sectionCallback) {
         super(context);
-        this.callback = callback;
+        this.sectionCallback = sectionCallback;
 
         linearLayoutL = new LinearLayout(context);
         linearLayoutL.setOrientation(LinearLayout.VERTICAL);
@@ -63,7 +63,7 @@ public class FeLayoutDebug extends FeLayout {
     /* ----- debug 条目的增、删、 ----- */
 
     public TextView addInfo(int color, boolean right){
-        TextView textView = new TextView(callback.getContext());
+        TextView textView = new TextView(sectionCallback.getContext());
         textView.setTextColor(color);
         textView.setTextSize(16);
         if(right)

@@ -10,7 +10,7 @@ import android.graphics.Paint;
  */
 public class FeViewMark extends FeView {
 
-    private FeLayoutSection.Callback callback;
+    private FeSectionCallback sectionCallback;
     private Paint paint;
 	
     private int colorMode;
@@ -19,7 +19,7 @@ public class FeViewMark extends FeView {
 
     public void onDestory(){
         //解除心跳注册
-        callback.removeHeartUnit(heartUnit);
+        sectionCallback.removeHeartUnit(heartUnit);
     }
 
     /*
@@ -29,20 +29,20 @@ public class FeViewMark extends FeView {
 			int colorMode, 
 			int xGird, 
 			int yGrid,
-			FeLayoutSection.Callback callback)
+			FeSectionCallback sectionCallback)
 	{
         super(context);
         this.colorMode = colorMode;
 		this.xGrid = xGird;
 		this.yGrid = yGrid;
-        this.callback = callback;
+        this.sectionCallback = sectionCallback;
         //画笔
         paint = new Paint();
         paint.setColor(Color.BLUE);
 		//
 		gridInfo = new FeInfoGrid();
         //引入心跳
-        callback.addHeartUnit(heartUnit);
+        sectionCallback.addHeartUnit(heartUnit);
     }
 	
 	public void setColorMode(int colorMode){
@@ -65,14 +65,14 @@ public class FeViewMark extends FeView {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
-		callback.getSectionMap().getRectByGrid(xGrid, yGrid, gridInfo);
+		sectionCallback.getSectionMap().getRectByGrid(xGrid, yGrid, gridInfo);
 
         if(colorMode == 0)
-            paint.setShader(callback.getSectionShader().getShaderB());
+            paint.setShader(sectionCallback.getSectionShader().getShaderB());
         else if(colorMode == 1)
-            paint.setShader(callback.getSectionShader().getShaderR());
+            paint.setShader(sectionCallback.getSectionShader().getShaderR());
         else
-            paint.setShader(callback.getSectionShader().getShaderG());
+            paint.setShader(sectionCallback.getSectionShader().getShaderG());
 
         canvas.drawPath(gridInfo.path, paint);
     }
