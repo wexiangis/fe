@@ -11,6 +11,7 @@ public class FeLayoutUnit extends FeLayout {
 
     private Context context;
     private FeSectionCallback sectionCallback;
+    private FeViewUnit selectView = null;
 
     public FeLayoutUnit(Context context, FeSectionCallback sectionCallback) {
         super(context);
@@ -112,38 +113,58 @@ public class FeLayoutUnit extends FeLayout {
     /*
         清所有人物选中状态
      */
-    public void selectView(FeViewUnit target){
+    public void setAnim(FeViewUnit target, int animMode){
         FeViewUnit viewUnit;
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++) {
             viewUnit = (FeViewUnit)getChildAt(i);
             if(viewUnit == target)
-                viewUnit.setAnimMode(1);
-            else if (viewUnit.getAnimMode() == 1)
+                viewUnit.setAnimMode(animMode);
+            else if (viewUnit.getAnimMode() != 0)
                 viewUnit.setAnimMode(0);
         }
     }
 
     /*
         接收点击事件
+        hitThis: 点击目标为当前控件
+        hitType: 具体点击目标,查看 FeFlagHit.java
      */
-    public void click(float x, float y){
-        //目标人物选中
-        selectView(sectionCallback.getSectionUnit().selectView);
+    public void click(float x, float y, Boolean hitThis, int hitType){
+        if(sectionCallback.getSectionUnit().selectView == null){
+            sectionCallback.onUnitSelect(false);
+            sectionCallback.onUnitMove(false);
+            return;
+        }
+        //点击非己,清选中状态
+        if(!hitThis){
+            sectionCallback.getSectionUnit().selectView.setAnimMode(0);
+            sectionCallback.onUnitSelect(false);
+            sectionCallback.onUnitMove(false);
+            return;
+        }
+        //目标人物选中 或 和上次选中的不是同一个人
+        if(!sectionCallback.onUnitSelect() || sectionCallback.getSectionUnit().selectView != selectView){
+            setAnim(sectionCallback.getSectionUnit().selectView, 1);
+            sectionCallback.onUnitSelect(true);
+            sectionCallback.onUnitMove(false);
+        }
+        //二次选中
+        else{
+            setAnim(sectionCallback.getSectionUnit().selectView, 3);
+            sectionCallback.onUnitMove(true);
+        }
+        //缓存当前选中
+        selectView = sectionCallback.getSectionUnit().selectView;
         //输入坐标求格子位置,更新人物选中点信息
-        sectionCallback.getSectionMap().getRectByLocation(x, y, sectionCallback.getSectionUnit().selectSite);
+        FeInfoGrid site = sectionCallback.getSectionUnit().selectView.getSite();
+        sectionCallback.getSectionMap().getRectByLocation(x, y, site);
         //选中人物太过靠近边界,挪动地图
-        if(!sectionCallback.getSectionMap().srcGridCenter.contains(
-            sectionCallback.getSectionUnit().selectSite.point[0],
-            sectionCallback.getSectionUnit().selectSite.point[1])){
+        if(!sectionCallback.getSectionMap().srcGridCenter.contains(site.point[0], site.point[1])){
             //移至居中
-            // sectionCallback.getLayoutMap().moveCenter(
-            //     sectionCallback.getSectionUnit().selectSite.point[0],
-            //     sectionCallback.getSectionUnit().selectSite.point[1]);
+            sectionCallback.getLayoutMap().moveCenter(site.point[0], site.point[1]);
             //移至包含
-            sectionCallback.getLayoutMap().moveInclude(
-                sectionCallback.getSectionUnit().selectSite.point[0],
-                sectionCallback.getSectionUnit().selectSite.point[1]);
+            // sectionCallback.getLayoutMap().moveInclude(site.point[0], site.point[1]);
         }
         //刷新动画状态
         refresh();

@@ -11,15 +11,19 @@ public class FeLayoutOpening extends FeLayout {
 
     private FeData feData;
     private TextView textView;
-	private FeAsyncTask asyncTask;
+	private FeAsyncTask asyncTask = null;
 
     //触屏事件回调函数
     private View.OnTouchListener onTouchListener  = new View.OnTouchListener (){
         public boolean onTouch(View v, MotionEvent event) {
-            //触屏UP时
+            //触屏UP时, 跳过openning动画
             if(event.getAction() == MotionEvent.ACTION_UP){
+				//关闭后台线程
 				asyncTask.cancel(true);
-                feData.flow.loadTheme();
+				//界面跳转
+				feData.flow.loadTheme();
+				//内存回收
+				asyncTask = null;
 			}
             //不返回true的话ACTION_DOWN之后的事件都会被丢弃
             return true;
@@ -60,11 +64,13 @@ public class FeLayoutOpening extends FeLayout {
 					try{
 						for(int i = 0; i < 100; i++){
 							if(asyncTask.isCancelled())
-								return null;
+								return "break";
 							Thread.sleep(10);
 							asyncTask.setPercent(i);
 						}
-					}catch(java.lang.InterruptedException e) { }
+					}catch(java.lang.InterruptedException e) {
+						return "break";
+					}
 					return null;
 				}
 
@@ -79,7 +85,8 @@ public class FeLayoutOpening extends FeLayout {
 
 				@Override
 				public void onPostExecute(FeLayoutOpening layoutOpening, String result) {
-					feData.flow.loadTheme();
+					if(result != "break")
+						feData.flow.loadTheme();
 				}
 			});
 
