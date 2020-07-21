@@ -11,7 +11,8 @@ public class FeLayoutUnit extends FeLayout {
 
     private Context context;
     private FeSectionCallback sectionCallback;
-    private FeViewUnit selectView = null;
+	//缓存checkHit选中
+	private FeViewUnit hitViewUnit = null;
 
     public FeLayoutUnit(Context context, FeSectionCallback sectionCallback) {
         super(context);
@@ -33,7 +34,7 @@ public class FeLayoutUnit extends FeLayout {
         for (int i = 0; i < getChildCount(); i++) {
             viewUnit = (FeViewUnit)getChildAt(i);
             if (viewUnit.checkHit(x, y)) {
-                sectionCallback.getSectionUnit().selectView = viewUnit;
+                hitViewUnit = viewUnit;
                 return true;
             }
         }
@@ -43,8 +44,8 @@ public class FeLayoutUnit extends FeLayout {
     /*
         人员增删
      */
-    public void addUnit(int id, int y, int x, int camp){
-        addView(new FeViewUnit(context, id, x, y, 0, camp, sectionCallback));
+    public void addUnit(int id, int y, int x, FeCamp camp){
+        addView(new FeViewUnit(context, id, x, y, camp, sectionCallback));
     }
     public void removeUnit(int id){
         ;
@@ -77,7 +78,7 @@ public class FeLayoutUnit extends FeLayout {
     /*
         人员阵营
      */
-    public void setCamp(int id, int camp){
+    public void setCamp(int id, FeCamp camp){
         ;
     }
 
@@ -106,22 +107,22 @@ public class FeLayoutUnit extends FeLayout {
         人员动画
         animMode: 0/待机 1/选中 2,3,4,5/上,下,左,右
      */
-    public void setAnim(int id, int animMode){
+    public void setAnim(int id, FeAnim anim){
         ;
     }
 
     /*
         清所有人物选中状态
      */
-    public void setAnim(FeViewUnit target, int animMode){
+    public void setAnim(FeViewUnit target, FeAnim anim){
         FeViewUnit viewUnit;
         //遍历所有子view
         for (int i = 0; i < getChildCount(); i++) {
             viewUnit = (FeViewUnit)getChildAt(i);
             if(viewUnit == target)
-                viewUnit.setAnimMode(animMode);
-            else if (viewUnit.getAnimMode() != 0)
-                viewUnit.setAnimMode(0);
+                viewUnit.setAnim(anim);
+            else if (viewUnit.getAnim() != FeAnim.STAY)
+                viewUnit.setAnim(FeAnim.STAY);
         }
     }
 
@@ -131,31 +132,51 @@ public class FeLayoutUnit extends FeLayout {
         hitType: 具体点击目标,查看 FeFlagHit.java
      */
     public void click(float x, float y, Boolean hitThis, int hitType){
-        if(sectionCallback.getSectionUnit().selectView == null){
+        if(hitViewUnit == null){
             sectionCallback.onUnitSelect(false);
             sectionCallback.onUnitMove(false);
             return;
         }
         //点击非己,清选中状态
         if(!hitThis){
-            sectionCallback.getSectionUnit().selectView.setAnimMode(0);
+			if(sectionCallback.getSectionUnit().selectView != null)
+                sectionCallback.getSectionUnit().selectView.setAnim(FeAnim.STAY);
+            hitViewUnit = null;
             sectionCallback.onUnitSelect(false);
             sectionCallback.onUnitMove(false);
             return;
         }
-        //目标人物选中 或 和上次选中的不是同一个人
-        if(!sectionCallback.onUnitSelect() || sectionCallback.getSectionUnit().selectView != selectView){
-            setAnim(sectionCallback.getSectionUnit().selectView, 1);
+        //一次选中, 目标人物选中 或 和上次选中的不是同一个人
+        if(!sectionCallback.onUnitSelect() ||
+			hitViewUnit != sectionCallback.getSectionUnit().selectView){
+            //自己阵营?
+            if(hitViewUnit.getCamp() == FeCamp.BLUE)
+                setAnim(hitViewUnit, FeAnim.ACTIVITY);
+            else
+                setAnim(hitViewUnit, FeAnim.STAY);
             sectionCallback.onUnitSelect(true);
             sectionCallback.onUnitMove(false);
         }
-        //二次选中
-        else{
-            setAnim(sectionCallback.getSectionUnit().selectView, 3);
+        //二次选中, 显示移动范围
+        else if(!sectionCallback.onUnitMove()){
+            //自己阵营?
+            if(hitViewUnit.getCamp() == FeCamp.BLUE)
+                setAnim(hitViewUnit, FeAnim.DOWN);
+            else
+                setAnim(hitViewUnit, FeAnim.STAY);
             sectionCallback.onUnitMove(true);
         }
+        //三次选中, 人物菜单(己方阵营), 关闭移动范围(其它阵营)
+        else{
+            //自己阵营?
+            if(hitViewUnit.getCamp() == FeCamp.BLUE)
+                setAnim(hitViewUnit, FeAnim.ACTIVITY);
+            else
+                setAnim(hitViewUnit, FeAnim.STAY);
+            sectionCallback.onUnitMove(false);
+        }
         //缓存当前选中
-        selectView = sectionCallback.getSectionUnit().selectView;
+        sectionCallback.getSectionUnit().selectView = hitViewUnit;
         //输入坐标求格子位置,更新人物选中点信息
         FeInfoGrid site = sectionCallback.getSectionUnit().selectView.getSite();
         sectionCallback.getSectionMap().getRectByLocation(x, y, site);
