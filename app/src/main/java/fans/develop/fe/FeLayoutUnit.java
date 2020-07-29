@@ -11,8 +11,8 @@ public class FeLayoutUnit extends FeLayout {
 
     private Context context;
     private FeSectionCallback sectionCallback;
-	//缓存checkHit选中
-	private FeViewUnit hitViewUnit = null;
+    //缓存checkHit选中
+    private FeViewUnit hitViewUnit = null;
 
     public FeLayoutUnit(Context context, FeSectionCallback sectionCallback) {
         super(context);
@@ -39,6 +39,30 @@ public class FeLayoutUnit extends FeLayout {
             }
         }
         return false;
+    }
+
+    /*
+        根据id找人物
+     */
+    public FeViewUnit getViewUnit(int id){
+        FeViewUnit viewUnit;
+        //遍历所有子view
+        for (int i = 0; i < getChildCount(); i++) {
+            viewUnit = (FeViewUnit)getChildAt(i);
+            if (viewUnit.getId() == id)
+                return viewUnit;
+        }
+        return null;
+    }
+
+    /*
+        根据id找人物位置
+     */
+    public FeInfoSite getUnitSite(int id){
+        FeViewUnit viewUnit = getViewUnit(id);
+        if(viewUnit == null)
+            return null;
+        return viewUnit.getSite();
     }
 
     /*
@@ -159,7 +183,7 @@ public class FeLayoutUnit extends FeLayout {
             setAnim(hitViewUnit, FeTypeAnim.DOWN);
             //移至居中
             sectionCallback.getLayoutMap().moveCenter(
-                hitViewUnit.getSite().point[0], hitViewUnit.getSite().point[1]);
+                hitViewUnit.getSite().xGrid, hitViewUnit.getSite().yGrid);
         }
         else
             setAnim(hitViewUnit, FeTypeAnim.STAY);
@@ -167,13 +191,12 @@ public class FeLayoutUnit extends FeLayout {
         sectionCallback.getSectionUnit().viewUnit = hitViewUnit;
         //置标志
         sectionCallback.onUnitMove(true);
-        //更新移动范围
-        sectionCallback.getSectionUnit().mov =
-            sectionCallback.getAssets().unit.getProfessionAbilityMov(hitViewUnit.getId());
+        //得到移动范围
+        int mov = sectionCallback.getAssets().unit.getProfessionAbilityMov(hitViewUnit.getId());
         //显示移动范围
         FeLayoutMark layoutMark = sectionCallback.getLayoutMark();
         if(layoutMark != null)
-            layoutMark.markUnit();
+            layoutMark.markUnit(hitViewUnit.getId(), mov, FeTypeMark.RED);
     }
 
     /*
@@ -197,7 +220,7 @@ public class FeLayoutUnit extends FeLayout {
         //关闭移动范围
         FeLayoutMark layoutMark = sectionCallback.getLayoutMark();
         if(layoutMark != null)
-            layoutMark.removeAllViews();
+            layoutMark._removeViewAll(this);
     }
 
     /*
@@ -253,11 +276,7 @@ public class FeLayoutUnit extends FeLayout {
     }
     public boolean onDestory(){
         //释放子view
-        for (int i = 0; i < getChildCount(); i++) {
-            View v = getChildAt(i);
-            if (v instanceof FeView)
-                ((FeView)v).onDestory();
-        }
+        _removeViewAll(this);
         return true;
     }
     public void onReload(){

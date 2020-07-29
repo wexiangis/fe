@@ -11,24 +11,33 @@ import android.graphics.Rect;
  */
 public class FeSectionMap {
 
+    //----- 关键结构 -----
+
+    //对应章节数
     public int section;
-
+    //地图缩放、梯形变换矩阵
     public Matrix matrix = new Matrix();
-
+    //地图信息
     public FeInfoMap mapInfo;
-
+    //地图
     public Bitmap bitmap = null;
+
+    //----- mark记录 -----
+
+    //mark点覆盖情况,用于避免重复标记同一格,标记值为上面id号
+    //敌军范围: [mapHeigth][mapEidth][3]: [0]/移动范围,[1]/攻击范围,[2]/特效范围,值为id
+    public int[][][] markEnemyMap;
+    //选中人物范围: 值为id
+    public int[][] markMap;
 
     //----- 地图基本信息 -----
 
     //屏幕实际宽高
     public int screenWidth = 1920, screenHeight = 1080;
-
     //地图实际显示区域
     public Rect mapDist = null;
     //地图移动格子数
     public int xGridErr = 0, yGridErr = 0;
-
     //地图实际显示宽高像素
     public int width = 1920, height = 1080;
     //屏幕横纵向格数
@@ -46,7 +55,7 @@ public class FeSectionMap {
         this.section = section;
         this.mapInfo = mapInfo;
         //屏幕长、高格子数适配屏幕分辨率,得到地图实际显示长高(width、height)
-        init(screenWidth, screenHeight, mapInfo.xGrid, mapInfo.yGrid, mapInfo.pixelPerGrid);
+        init(screenWidth, screenHeight, mapInfo.width, mapInfo.height, mapInfo.pixelPerGrid);
         //xp、yp分别为xy缩放比例(原始长、高缩放到实际显示长、高)
         float xp = (float)width/mapInfo.bitmap.getWidth();
         float yp = (float)height/mapInfo.bitmap.getHeight();
@@ -54,6 +63,10 @@ public class FeSectionMap {
         matrix.postScale(xp, yp);
         bitmap = Bitmap.createBitmap(mapInfo.bitmap, 0, 0,
                 (int)mapInfo.bitmap.getWidth(), (int)mapInfo.bitmap.getHeight(), matrix, true);
+
+        //mark点覆盖情况,用于避免重复标记同一格,标记值为上面id号
+        markEnemyMap = new int[mapInfo.height][mapInfo.width][3];
+        markMap = new int[mapInfo.height][mapInfo.width];
     }
 
     //地图适配屏幕
@@ -68,8 +81,8 @@ public class FeSectionMap {
         mapInfo.pixelPerGrid = pixelPG;
         screenWidth = screenXSixe;
         screenHeight = screenYSize;
-        mapInfo.xGrid = mapXGrid;
-        mapInfo.yGrid = mapYGrid;
+        mapInfo.width = mapXGrid;
+        mapInfo.height = mapYGrid;
         //屏幕的长高比例大于地图,地图参照屏幕长来缩放
         if(screenXDivY > mapXDivY){
             //得到屏幕横向实际显示格数
@@ -105,7 +118,7 @@ public class FeSectionMap {
                 mapDist.left = screenWidth - width;
             else{
                 mapDist.left -= (width - (mapDist.right - mapDist.left))/2;
-                mapDist.left = (int)((int)((float)mapDist.left/width*mapInfo.xGrid)*xGridPixel);
+                mapDist.left = (int)((int)((float)mapDist.left/width*mapInfo.width)*xGridPixel);
             }
             mapDist.right = width - mapDist.left;
             //
@@ -113,7 +126,7 @@ public class FeSectionMap {
                 mapDist.top = screenHeight - height;
             else{
                 mapDist.top -= (height - (mapDist.bottom - mapDist.top))/2;
-                mapDist.top = (int)((int)((float)mapDist.top/height*mapInfo.yGrid)*yGridPixel);
+                mapDist.top = (int)((int)((float)mapDist.top/height*mapInfo.height)*yGridPixel);
             }
             mapDist.bottom = height - mapDist.top;
         }
@@ -247,15 +260,15 @@ public class FeSectionMap {
 
     //----- 求梯形中的某一格子 -----
 
-    public FeInfoGrid selectSite = new FeInfoGrid();
+    public FeInfoSite selectSite = new FeInfoSite();
 
     //输入格子求位置
-    public void getRectByGrid(int xG, int yG, FeInfoGrid fig){
+    public void getRectByGrid(int xG, int yG, FeInfoSite fig){
         //多边形路径缩进(显示移动范围的网格相邻缝隙大小)
         int edge = 1;
         //默认值
-        fig.point[0] = xG;
-        fig.point[1] = yG;
+        fig.xGrid = xG;
+        fig.yGrid = yG;
         fig.path.reset();
         //在屏幕范围内
         if(xG >= srcGridXStart &&
@@ -296,28 +309,28 @@ public class FeSectionMap {
         }
     }
 
-    public FeInfoGrid getRectByGrid(int xG, int yG){
-        FeInfoGrid ret = new FeInfoGrid();
+    public FeInfoSite getRectByGrid(int xG, int yG){
+        FeInfoSite ret = new FeInfoSite();
         getRectByGrid(xG, yG, ret);
         return ret;
     }
 
     //输入坐标求格子位置
-    public void getRectByLocation(float x, float y, FeInfoGrid fig) {
+    public void getRectByLocation(float x, float y, FeInfoSite fig) {
         for(int yCount = 0; yCount < srcGridY; yCount++){
             if(y < srcGridLine[yCount][1]){
-                fig.point[1] = yCount + srcGridYStart;
-                fig.point[0] = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
+                fig.yGrid = yCount + srcGridYStart;
+                fig.xGrid = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
                 //
-                getRectByGrid(fig.point[0], fig.point[1], fig);
+                getRectByGrid(fig.xGrid, fig.yGrid, fig);
                 return;
             }
         }
         getRectByGrid(-1, -1 + srcGridXStart, fig);
     }
 
-    public FeInfoGrid getRectByLocation(float x, float y){
-        FeInfoGrid ret = new FeInfoGrid();
+    public FeInfoSite getRectByLocation(float x, float y){
+        FeInfoSite ret = new FeInfoSite();
         getRectByLocation(x, y, ret);
         return ret;
     }

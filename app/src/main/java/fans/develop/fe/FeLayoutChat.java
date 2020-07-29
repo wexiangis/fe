@@ -8,15 +8,15 @@ import android.view.View;
  */
 public class FeLayoutChat extends FeLayout {
 
-	private FeSectionCallback sectionCallback;
+    private FeSectionCallback sectionCallback;
 
     public FeLayoutChat(Context context, FeSectionCallback sectionCallback) {
         super(context);
-		this.sectionCallback = sectionCallback;
+        this.sectionCallback = sectionCallback;
     }
 
     /* ---------- function ---------- */
-	
+    
     public boolean checkHit(float x, float y){
         return false;
     }
@@ -43,11 +43,7 @@ public class FeLayoutChat extends FeLayout {
     }
     public boolean onDestory(){
         //释放子view
-        for (int i = 0; i < getChildCount(); i++) {
-            View v = getChildAt(i);
-            if (v instanceof FeView)
-                ((FeView)v).onDestory();
-        }
+        _removeViewAll(this);
         return true;
     }
     public void onReload(){

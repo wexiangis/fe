@@ -2,8 +2,8 @@ package fans.develop.fe;
 
 import android.content.*;
 import android.util.*;
+import android.view.*;
 import android.widget.*;
-import android.view.MotionEvent;
 
 /*
     章节运行关键参数之数据部分
@@ -26,13 +26,14 @@ public class FeLayoutSection extends FeLayout{
     private FeSectionOperation sectionOperation = null;
     // 所有图层
     private FeLayoutMap layoutMap = null;
+    private FeLayoutMarkEnemy layoutMarkEnemy = null;
     private FeLayoutMark layoutMark = null;
     private FeLayoutUnit layoutUnit = null;
     private FeLayoutMapInfo layoutMapInfo = null;
     private FeLayoutUnitMenu layoutUnitMenu = null;
     private FeLayoutSysMenu layoutSysMenu = null;
     private FeLayoutChat layoutChat = null;
-	private FeLayoutInterlude layoutInterlude = null;
+    private FeLayoutInterlude layoutInterlude = null;
     private FeLayoutDebug layoutDebug = null;
     //debug
     private TextView dbTouchXY = null;
@@ -51,6 +52,8 @@ public class FeLayoutSection extends FeLayout{
         return false;
     }
     public boolean onDestory(){
+        //释放子view
+        _removeViewAll(this);
         return true;
     }
     public void onReload(){
@@ -60,7 +63,7 @@ public class FeLayoutSection extends FeLayout{
     public void reload(){
 
         sectionOperation = null;
-        this.removeAllViews();
+        this._removeViewAll(this);
 
         //显示loading界面
         this.addView(new FeLayoutLoading(feData.context, 0, this,
@@ -87,8 +90,9 @@ public class FeLayoutSection extends FeLayout{
                             layoutLoading.setPercent(15);//百分比进度
 
                             //初始化参数集
+                            sectionCallback.refreshSectionMap(section);//sectionMap
                             sectionUnit = new FeSectionUnit();
-                            sectionShader = new FeSectionShader();
+                            sectionShader = new FeSectionShader(sectionCallback);
 
                             layoutLoading.setPercent(20);//百分比进度
 
@@ -96,6 +100,9 @@ public class FeLayoutSection extends FeLayout{
                             layoutMap = new FeLayoutMap(feData.context, sectionCallback);
 
                             layoutLoading.setPercent(25);//百分比进度
+
+                            //敌军标记格图层
+                            layoutMarkEnemy = new FeLayoutMarkEnemy(feData.context, sectionCallback);
 
                             //标记格图层
                             layoutMark = new FeLayoutMark(feData.context, sectionCallback);
@@ -175,7 +182,7 @@ public class FeLayoutSection extends FeLayout{
                     public void run(FeLayoutSection obj, String result) {
 
                         //移除loading界面
-                        obj.removeAllViews();
+                        obj._removeViewAll(obj);
 
                         //初始化失败
                         if(result != null){
@@ -188,6 +195,8 @@ public class FeLayoutSection extends FeLayout{
                         //地图图层
                         obj.addView(layoutMap);
                         //标记格图层
+                        obj.addView(layoutMarkEnemy);
+                        //标记格图层
                         obj.addView(layoutMark);
                         //人物动画图层
                         obj.addView(layoutUnit);
@@ -199,8 +208,8 @@ public class FeLayoutSection extends FeLayout{
                         obj.addView(layoutChat);
                         // 系统菜单图层
                         obj.addView(layoutSysMenu);
-						//过场动画图层
-						obj.addView(layoutInterlude);
+                        //过场动画图层
+                        obj.addView(layoutInterlude);
                         //debug图层
                         obj.addView(layoutDebug);
 
@@ -234,6 +243,10 @@ public class FeLayoutSection extends FeLayout{
         /* ------------------------------- */
 
         public void refreshSectionMap(int section){
+            //不重复初始化
+            if(sectionMap != null)
+                if(sectionMap.section == section)
+                    return;
             //获取屏幕宽高信息
             DisplayMetrics dm = new DisplayMetrics();
             feData.activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -243,6 +256,8 @@ public class FeLayoutSection extends FeLayout{
         public void refresh(){
             //更新地图
             layoutMap.refresh();
+            //更新标记格
+            layoutMarkEnemy.refresh();
             //更新标记格
             layoutMark.refresh();
             //更新人物动画
@@ -271,12 +286,15 @@ public class FeLayoutSection extends FeLayout{
             //点击:人物菜单中?
             if(layoutUnitMenu.checkHit(x, y))
                 flag.setFlag(FeFlagHit.HIT_UNIT_MENU);
-            //点击:标记格
-            if(layoutMark.checkHit(x, y))
-                flag.setFlag(FeFlagHit.HIT_MARK);
             //点击:选中人物?
             if(layoutUnit.checkHit(x, y))
                 flag.setFlag(FeFlagHit.HIT_UNIT);
+            //点击:标记格
+            if(layoutMark.checkHit(x, y))
+                flag.setFlag(FeFlagHit.HIT_MARK);
+            //点击:敌军标记格
+            if(layoutMarkEnemy.checkHit(x, y))
+                flag.setFlag(FeFlagHit.HIT_MARK_ENEMY);
             //点击:地图信息?
             if(layoutMapInfo.checkHit(x, y))
                 flag.setFlag(FeFlagHit.HIT_MAP_INFO);
@@ -285,7 +303,7 @@ public class FeLayoutSection extends FeLayout{
                 flag.setFlag(FeFlagHit.HIT_MAP);
             //debug
             // dbTouchXY.setText(String.format("Touch XY: %.2f, %.2f", x, y));
-            // dbTouchGridXY.setText(String.format("Touch Grid XY: %d, %d", sectionMap.selectSite.point[0], sectionMap.selectSite.point[1]));
+            // dbTouchGridXY.setText(String.format("Touch Grid XY: %d, %d", sectionMap.selectSite.xGrid, sectionMap.selectSite.yGrid));
             return flag;
         }
 
@@ -311,6 +329,9 @@ public class FeLayoutSection extends FeLayout{
 
         public FeLayoutMap getLayoutMap(){
             return layoutMap;
+        }
+        public FeLayoutMarkEnemy getLayoutMarkEnemy(){
+            return layoutMarkEnemy;
         }
         public FeLayoutMark getLayoutMark(){
             return layoutMark;

@@ -46,7 +46,7 @@ public class FeLayoutMap extends FeLayout {
     public void loadMap(int section){
         //只容存在一张地图
         if(viewMap != null)
-            removeView(viewMap);
+            _removeView(this, viewMap);
         //更换了地图,重新初始化参数
         sectionCallback.refreshSectionMap(section);
         //添加地图view
@@ -60,7 +60,7 @@ public class FeLayoutMap extends FeLayout {
     public void loadBackground(){
         //只容存在一张背景
         if(viewBackground != null)
-            removeView(viewBackground);
+            _removeView(this, viewBackground);
         //添加view
         viewBackground = new View(context);
         addView(viewBackground);
@@ -117,12 +117,12 @@ public class FeLayoutMap extends FeLayout {
             //防止把地图移出屏幕
             if (sectionMap.xGridErr < 0)
                 sectionMap.xGridErr = 0;
-            else if (sectionMap.xGridErr + sectionMap.screenXGrid > sectionMap.mapInfo.xGrid)
-                sectionMap.xGridErr = sectionMap.mapInfo.xGrid - sectionMap.screenXGrid;
+            else if (sectionMap.xGridErr + sectionMap.screenXGrid > sectionMap.mapInfo.width)
+                sectionMap.xGridErr = sectionMap.mapInfo.width - sectionMap.screenXGrid;
             if (sectionMap.yGridErr < 0)
                 sectionMap.yGridErr = 0;
-            else if (sectionMap.yGridErr + sectionMap.screenYGrid > sectionMap.mapInfo.yGrid)
-                sectionMap.yGridErr = sectionMap.mapInfo.yGrid - sectionMap.screenYGrid;
+            else if (sectionMap.yGridErr + sectionMap.screenYGrid > sectionMap.mapInfo.height)
+                sectionMap.yGridErr = sectionMap.mapInfo.height - sectionMap.screenYGrid;
             //输入坐标求格子位置,更新地图选中点信息
             sectionCallback.getSectionMap().getRectByGrid(xGridErr, yGridErr, sectionCallback.getSectionMap().selectSite);
             //置标记
@@ -158,11 +158,7 @@ public class FeLayoutMap extends FeLayout {
     }
     public boolean onDestory(){
         //释放子view
-        for (int i = 0; i < getChildCount(); i++) {
-            View v = getChildAt(i);
-            if (v instanceof FeView)
-                ((FeView)v).onDestory();
-        }
+        _removeViewAll(this);
         return true;
     }
     public void onReload(){

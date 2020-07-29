@@ -51,12 +51,12 @@ public class FeLayoutSave extends FeLayout {
                                     feData.assets.save.newSx(i);
                                     //刷新
                                     refresh();
-									//检查创建结果
-									if(bnSaveList[i].getText().toString().indexOf(default_name) == 0){
-										//提示缺少存储权限
-										Toast.makeText(feData.activity, "缺少存储权限,无法创建文件", Toast.LENGTH_SHORT).show();
-										Toast.makeText(feData.activity, "请到设置->应用管理启用存储权限", Toast.LENGTH_SHORT).show();
-									}
+                                    //检查创建结果
+                                    if(bnSaveList[i].getText().toString().indexOf(default_name) == 0){
+                                        //提示缺少存储权限
+                                        Toast.makeText(feData.activity, "缺少存储权限,无法创建文件", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(feData.activity, "请到设置->应用管理启用存储权限", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                                 break;
                             //继续游戏
@@ -131,7 +131,7 @@ public class FeLayoutSave extends FeLayout {
         button.setOnTouchListener(onTouchListener);
         button.setBackground(Drawable.createFromStream(getClass().getResourceAsStream("/assets/menu/item/item_save_g.png"), null));
         button.setPadding(80, 0, 80, 0);
-		return button;
+        return button;
     }
 
     /*
@@ -157,7 +157,7 @@ public class FeLayoutSave extends FeLayout {
      */
     public void reload() {
 
-        this.removeAllViews();
+        this._removeViewAll(this);
 
         /* ----- 数据初始化 -----*/
         //更新存档状态(saveState[][]的状态)
@@ -212,6 +212,8 @@ public class FeLayoutSave extends FeLayout {
         return false;
     }
     public boolean onDestory(){
+        //释放子view
+        _removeViewAll(this);
         return true;
     }
     public void onReload(){

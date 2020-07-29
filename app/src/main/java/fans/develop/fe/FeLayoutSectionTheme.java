@@ -49,16 +49,12 @@ public class FeLayoutSectionTheme extends FeLayout{
             return true;
         //等待数据加载完毕
         try{
-			thread.join();
-		}
-		catch (InterruptedException e)
-		{}
-        //释放子view
-        for (int i = 0; i < getChildCount(); i++) {
-            View v = getChildAt(i);
-            if (v instanceof FeView)
-                ((FeView)v).onDestory();
+            thread.join();
         }
+        catch (InterruptedException e)
+        {}
+        //释放子view
+        _removeViewAll(this);
         //解除心跳注册
         feData.removeHeartUnit(heartAnim);
         //清标志

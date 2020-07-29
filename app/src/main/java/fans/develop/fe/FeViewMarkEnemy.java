@@ -8,18 +8,16 @@ import android.graphics.Paint;
 /*
     敌军攻击范围、特效范围标记
  */
-public class FeViewMark extends FeView {
+public class FeViewMarkEnemy extends FeView {
 
     private FeSectionCallback sectionCallback;
 
-    //画笔,蓝色、红色、绿色,分别用于画移动范围、攻击范围、特效范围
-    private Paint paintB, paintR, paintG;
+    //画笔
+    private Paint paint;
     //颜色模式
     private FeTypeMark typeMark;
     //标记unit的id
     private int id;
-    //标记unit的mov
-    private int mov;
     //人物的移动、攻击、特效范围
     private FeInfoSite[] siteMov;
     private FeInfoSite[] siteHit;
@@ -31,21 +29,17 @@ public class FeViewMark extends FeView {
         typeMark: 颜色模式
         id: 人员
      */
-    public FeViewMark(Context context,
+    public FeViewMarkEnemy(Context context,
             FeTypeMark typeMark,
             int id,
-            int mov,
             FeSectionCallback sectionCallback)
     {
         super(context);
         this.typeMark = typeMark;
         this.id = id;
-        this.mov = mov;
         this.sectionCallback = sectionCallback;
         //画笔
-        paintB = new Paint();
-        paintR = new Paint();
-        paintG = new Paint();
+        paint = new Paint();
         //引入心跳
         sectionCallback.addHeartUnit(heartUnit);
     }
@@ -58,45 +52,31 @@ public class FeViewMark extends FeView {
         return typeMark;
     }
 
-    public void setMov(int mov){
-        this.mov = mov;
-    }
-
-    public int getMov(){
-        return mov;
-    }
-
     public int getId(){
         return id;
     }
 
     public FeInfoSite checkHit(int xGrid, int yGrid){
-        //非移动范围
-        if(typeMark != FeTypeMark.BLUE || siteMov == null)
-            return null;
-        //遍历 siteMov
-        for(int i = 0; i < siteMov.length; i++)
-            if(siteMov[i].xGrid == xGrid && siteMov[i].yGrid == yGrid)
-                return siteMov[i];
         return null;
     }
 
     //动画心跳回调
     private FeHeartUnit heartUnit = new FeHeartUnit(FeHeart.TYPE_FRAME_HEART, new FeHeartUnit.TimeOutTask(){
         public void run(int count){
-            FeViewMark.this.invalidate();
+            FeViewMarkEnemy.this.invalidate();
         }
     });
 
     /*
-        擦除自己画过的格子
+        擦除自己画过的格子(每一层)
      */
     private void cleanMarkMap(){
-        int[][] markMap = sectionCallback.getSectionMap().markMap;
-        for(int x = 0; x < markMap[0].length; x++)
-            for(int y = 0; y < markMap.length; y++)
-                if(markMap[y][x] == id)
-                    markMap[y][x] = 0;
+        int[][][] markEnemyMap = sectionCallback.getSectionMap().markEnemyMap;
+        for(int x = 0; x < markEnemyMap[0].length; x++)
+            for(int y = 0; y < markEnemyMap.length; y++)
+                for(int i = 0; i < markEnemyMap[0][0].length; i++)
+                    if(markEnemyMap[y][x][i] == id)
+                        markEnemyMap[y][x][i] = 0;
     }
 
     //绘图回调
@@ -122,7 +102,7 @@ public class FeViewMark extends FeView {
             FeMark mark = new FeMark(
                 siteUnit.xGrid, siteUnit.yGrid,
                 sectionCallback.getSectionMap().mapInfo,
-                mov,
+                sectionCallback.getAssets().unit.getProfessionAbilityMov(id),
                 sectionCallback.getAssets().unit.getProfessionType(id),
                 1, 0, 2);
             //获取位置数组
@@ -131,36 +111,39 @@ public class FeViewMark extends FeView {
             siteSpecial = mark.rangeSpecial.getGridInfo(sectionCallback.getSectionMap());
         }
 
-        //按颜色取渲染
-        paintB.setShader(sectionCallback.getSectionShader().getShaderB());
-        paintR.setShader(sectionCallback.getSectionShader().getShaderR());
-        paintG.setShader(sectionCallback.getSectionShader().getShaderG());
+        //按颜色取渲染、取位置数组
+        int _typeMark = 0;
+        FeInfoSite[] siteTarget = siteMov;
+        if(typeMark == FeTypeMark.BLUE){
+            paint.setShader(sectionCallback.getSectionShader().getShaderB());
+            siteTarget = siteMov;
+            _typeMark = 0;
+        }
+        else if(typeMark == FeTypeMark.RED){
+            paint.setShader(sectionCallback.getSectionShader().getShaderR());
+            siteTarget = siteHit;
+            _typeMark = 1;
+        }
+        else{
+            paint.setShader(sectionCallback.getSectionShader().getShaderG());
+            siteTarget = siteSpecial;
+            _typeMark = 2;
+        }
 
         //擦除自己画过的格子(每一层)
         cleanMarkMap();
-        int[][] markMap = sectionCallback.getSectionMap().markMap;
 
-        //遍历 siteMov 数组,画格子
-        for(int i = 0; i < siteMov.length; i++){
-            canvas.drawPath(siteMov[i].path, paintB);
-            //标记已画过
-            markMap[siteMov[i].yGrid][siteMov[i].xGrid] = id;
-        }
-
-        //遍历 siteHit 数组,画格子
-        if(typeMark == FeTypeMark.RED){
-            for(int i = 0; i < siteHit.length; i++){
-                //这个点刚才没有画过移动范围?
-                if(markMap[siteHit[i].yGrid][siteHit[i].xGrid] != id)
-                    canvas.drawPath(siteHit[i].path, paintR);
-            }
-        }
-        //遍历 siteSpecial 数组,画格子
-        else{
-            for(int i = 0; i < siteSpecial.length; i++){
-                //这个点刚才没有画过移动范围?
-                if(markMap[siteSpecial[i].yGrid][siteSpecial[i].xGrid] != id)
-                    canvas.drawPath(siteSpecial[i].path, paintR);
+        int[][][] markEnemyMap = sectionCallback.getSectionMap().markEnemyMap;
+        if(siteTarget != null){
+            //遍历 siteTarget 数组,画格子
+            for(int i = 0; i < siteTarget.length; i++){
+                //没有画过这个格子?
+                if(markEnemyMap[siteTarget[i].yGrid][siteTarget[i].xGrid][_typeMark] == 0){
+                    //标记格子
+                    markEnemyMap[siteTarget[i].yGrid][siteTarget[i].xGrid][_typeMark] = id;
+                    //画格子
+                    canvas.drawPath(siteTarget[i].path, paint);
+                }
             }
         }
     }

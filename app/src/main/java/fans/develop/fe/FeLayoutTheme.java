@@ -28,7 +28,7 @@ public class FeLayoutTheme extends FeLayout {
 
     public void reload(){
 
-        this.removeAllViews();
+        this._removeViewAll(this);
 
         /* ----- 数据初始化 -----*/
 
@@ -65,6 +65,8 @@ public class FeLayoutTheme extends FeLayout {
         return false;
     }
     public boolean onDestory(){
+        //释放子view
+        _removeViewAll(this);
         return true;
     }
     public void onReload(){
