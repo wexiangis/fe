@@ -23,14 +23,14 @@ public class FeMark {
     public FeMark(int xGrid, int yGrid, FeInfoMap mapInfo, int mov, int typeProfession, int hit, int hitSpace, int special){
         //范围初始化
         rangeMov = new Range(xGrid, yGrid, mov, mapInfo.width, mapInfo.height);
-        rangeMov.cut();
         //递归获得移动范围
         loopRangeMov(rangeMov.xGridCenter, rangeMov.yGridCenter, mapInfo, mov, typeProfession, rangeMov);
         //获得攻击范围
         rangeHit = getRangeHit(rangeMov, hit, hitSpace);
-        rangeHit.cut();
         //获得特效范围
         rangeSpecial = getRangeSpecial(rangeMov, special);
+        rangeHit.cut();
+        rangeMov.cut();
         rangeSpecial.cut();
     }
 
@@ -39,7 +39,7 @@ public class FeMark {
      */
     private void loopRangeMov(int xGrid, int yGrid, FeInfoMap mapInfo, int mov, int typeProfession, Range range){
         //移动力剩余不足?是则结束递归
-        if(mov < 0)
+        if(mov < 0 || xGrid < 0 || yGrid < 0 || xGrid >= range.array[0].length || yGrid >= range.array.length)
             return;
         //当前格子已标记?是则结束递归
         if(range.array[yGrid][xGrid])
@@ -96,6 +96,9 @@ public class FeMark {
         int xErr = hit, yErr = hit;
         //站在原地时的攻击范围
         Boolean[][] rangeStayHit = new Boolean[hit * 2 + 1][hit * 2 + 1];
+        for(int i = 0; i < rangeStayHit.length; i++)
+            for(int j = 0; j < rangeStayHit[0].length; j++)
+                rangeStayHit[i][j] = false;
         //画原地不动时的攻击范围
         loopMark(hit, hit, rangeStayHit, hit, true);
         //扣掉 hitSpace 范围
@@ -176,7 +179,10 @@ public class FeMark {
             xGridStart = xGrid - mov;
             yGridStart = yGrid - mov;
             //初始化范围
-            array = new Boolean[width][height];
+            array = new Boolean[height][width];
+            for(int i = 0; i < array.length; i++)
+                for(int j = 0; j < array[0].length; j++)
+                    array[i][j] = false;
         }
 
         /*
@@ -195,7 +201,10 @@ public class FeMark {
             xGridStart = rangeSrc.xGridStart - addRad;
             yGridStart = rangeSrc.yGridStart - addRad;
             //初始化范围
-            array = new Boolean[width][height];
+            array = new Boolean[height][width];
+            for(int i = 0; i < array.length; i++)
+                for(int j = 0; j < array[0].length; j++)
+                    array[i][j] = false;
         }
 
         /*
@@ -263,12 +272,12 @@ public class FeMark {
                 yGridCenter += yGridStart;
                 yGridStart = 0;
             }
-            //切掉超出屏幕右边沿部分
-            if(xGridStart >= mapWidth)
-                width -= xGridStart - mapWidth + 1;
-            //切掉超出屏幕下边沿部分
-            if(yGridStart >= mapHeight)
-                height -= yGridStart - mapHeight + 1;
+//            //切掉超出屏幕右边沿部分
+//            if(xGridStart + width > mapWidth)
+//                width = mapWidth - xGridStart;
+//            //切掉超出屏幕下边沿部分
+//            if(yGridStart + height > mapHeight)
+//                height = mapHeight - yGridStart;
             //还有剩余不?
             if(width < 1 || height < 1)
                 return;//实在不知道怎么处理...
@@ -287,10 +296,13 @@ public class FeMark {
                 || xGridStart != this.xGridStart
                 || yGridStart != this.yGridStart){
                 //重新生成并拷贝
-                Boolean[][] array = new Boolean[width][height];
+                Boolean[][] array = new Boolean[height][width];
+                for(int i = 0; i < array.length; i++)
+                    for(int j = 0; j < array[0].length; j++)
+                        array[i][j] = false;
                 //这里 array 必然小于 this.array
-                for(int xDist = 0, xSrc = this.xGridStart - xGridStart; xDist < width; xDist++, xSrc++)
-                    for(int yDist = 0, ySrc = this.yGridStart - yGridStart; yDist < width; xDist++, xSrc++)
+                for(int xDist = 0, xSrc = xGridStart - this.xGridStart; xDist < width; xDist++, xSrc++)
+                    for(int yDist = 0, ySrc = yGridStart - this.yGridStart; yDist < height; yDist++, ySrc++)
                         array[yDist][xDist] = this.array[ySrc][xSrc];
                 //参数转移
                 this.array = array;
