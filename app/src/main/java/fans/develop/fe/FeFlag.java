@@ -1,7 +1,5 @@
 package fans.develop.fe;
 
-import java.lang.reflect.Array;
-
 /*
     各种flag的父类,提供基本操作方法
  */
