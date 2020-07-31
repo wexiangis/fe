@@ -152,7 +152,7 @@ public class FeLayoutSection extends FeLayout{
                             //人物加载
                             for(int i = 0; i < sxData.saveCache.unit.total(); i++){
                                 layoutUnit.addUnit(
-                                    sxData.saveCache.unit.getId(i),
+                                    sxData.saveCache.unit.getOrder(i),
                                     sxData.saveCache.unit.getX(i),
                                     sxData.saveCache.unit.getY(i),
                                     FeTypeCamp.values()[sxData.saveCache.unit.getCamp(i)]);
@@ -312,6 +312,9 @@ public class FeLayoutSection extends FeLayout{
         public FeAssets getAssets(){
             return feData.assets;
         }
+				public FeAssetsSX getAssetsSX(){
+						return sxData;
+				}
         public Context getContext(){
             return feData.context;
         }
