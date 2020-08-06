@@ -125,15 +125,18 @@ public class FeViewMark extends FeView {
             mark = new FeMark(
                 siteUnit.xGrid, siteUnit.yGrid,
                 sectionCallback.getSectionMap().mapInfo,
-                mov,
-                sectionCallback.getAssets().unit.getProfessionType(id),
-                1, 0, 2);
+                sectionCallback.getLayoutUnit().getUnit(order));
         }
 
         //获取位置数组
         siteMov = mark.rangeMov.getGridInfo(sectionCallback.getSectionMap());
         siteHit = mark.rangeHit.getGridInfo(sectionCallback.getSectionMap());
         siteSpecial = mark.rangeSpecial.getGridInfo(sectionCallback.getSectionMap());
+
+        if(siteHit == null)
+            siteHit = siteMov;
+        if(siteSpecial == null)
+            siteSpecial = siteMov;
 
         //按颜色取渲染
         paintB.setShader(sectionCallback.getSectionShader().getShaderB());
