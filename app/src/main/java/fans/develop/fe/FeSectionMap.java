@@ -40,8 +40,9 @@ public class FeSectionMap {
     public int screenWidth = 1920, screenHeight = 1080;
     //地图实际显示区域
     public Rect mapDist = null;
-    //地图移动格子数
-    public int xGridErr = 0, yGridErr = 0;
+    //地图左上角偏移格子数,一般都为负值
+    public float xGridErr = 0.0f, yGridErr = 0.0f;
+		public float xGridErrRed = 0.0f, yGridErrRed = 0.0f;
     //地图实际显示宽高像素
     public int width = 1920, height = 1080;
     //屏幕横纵向格数
@@ -145,10 +146,51 @@ public class FeSectionMap {
             mapDist.bottom = height - mapDist.top;
         }
         //
-        xGridErr = yGridErr = 0;
+        xGridErr = yGridErr = 0.0f;
     }
 
     //----- 地图梯形变换 -----
+
+		//梯形区域网格信息
+    public class TrapeaoidGrid{
+
+        private float[][] grid;
+        //行高
+        public void ySize(int line, float value){
+            grid[line][0] = value;
+        }
+        public float ySize(int line){
+            return grid[line][0];
+        }
+        //行总高(相对于屏幕上边的y值)
+        public void ySizeTotal(int line, float value){
+            grid[line][1] = value;
+        }
+        public float ySizeTotal(int line){
+            return grid[line][1];
+        }
+        //横向左边offset
+        public void xOffset(int line, float value){
+            grid[line][2] = value;
+        }
+        public float xOffset(int line){
+            return grid[line][2];
+        }
+        //横向平均宽
+        public void xSize(int line, float value){
+            grid[line][3] = value;
+        }
+        public float xSize(int line){
+            return grid[line][3];
+        }
+
+        public TrapeaoidGrid(int height){
+            grid = new float[height][4];
+            for(int y = 0; y < grid.length; y++)
+                for(int x = 0; x < grid[0].length; x++)
+                    grid[y][x] = 0.0f;
+        }
+    }
 
     //梯形缩进的格数和像素
     public int reduceGrid = 0;
@@ -157,8 +199,8 @@ public class FeSectionMap {
     public int srcGridX = 0, srcGridY = 0, srcGridXStart = 0, srcGridYStart = 0;
     //中心甜区,用于判断是否需要挪动地图来让选中人物居中
     public Rect srcGridCenter = new Rect(0,0,0,0);
-    //[n][0]:行高, [n][1]:总行高, [n][2]:横向offset, [n][3]:平均宽
-    public float[][] srcGridLine = new float[64][4];
+    //梯形转换后,屏幕中的网格信息(一屏最多显示72行)
+    public TrapeaoidGrid trapGrid = new TrapeaoidGrid(72);
     //屏幕在地图上框了一个矩形,然后拉高拉宽上边两个点,框到一个倒梯形区域
     public float[] srcPoint = new float[8];
     //srcPoint的坐标数据按地图的实际分辨率转换之后的位置
@@ -171,6 +213,7 @@ public class FeSectionMap {
 
     //获取梯形转换矩阵,用于绘制
     public void upgradeMatrix(){
+        //mapDist为当前地图显示区域
         srcPoint[0] = -mapDist.left;
         srcPoint[1] = -mapDist.top;
         srcPoint[2] = -mapDist.left;
@@ -179,7 +222,7 @@ public class FeSectionMap {
         srcPoint[5] = -mapDist.top + screenHeight;
         srcPoint[6] = -mapDist.left + screenWidth;
         srcPoint[7] = -mapDist.top;
-        //梯形左右和上边缩进格数
+        //梯形左右和上边缩进格数*每格像素 = 缩进像素
         reduce = xGridPixel*transferGrid;
         //地图靠近边界时逐渐恢复比例
         if(reduce > width - srcPoint[6])
@@ -188,20 +231,20 @@ public class FeSectionMap {
             reduce = srcPoint[0];
         if(reduce > srcPoint[1])
             reduce = srcPoint[1];
-        //梯形变换
+        //把矩形的上边左右各拉宽reduce, 同时往上拉高reduce, 变成倒梯形
         srcPoint[0] -= reduce;
         srcPoint[6] += reduce;
         srcPoint[1] -= reduce;
         srcPoint[7] -= reduce;
         //防止梯形出屏
-//        if(srcPoint[0] < 0) srcPoint[0] = 0;
-//        if(srcPoint[6] > width) srcPoint[6] = width;
-//        if(srcPoint[1] < 0) srcPoint[1] = 0;
-//        if(srcPoint[7] < 0) srcPoint[7] = 0;
-        //
+        // if(srcPoint[0] < 0) srcPoint[0] = 0;
+        // if(srcPoint[6] > width) srcPoint[6] = width;
+        // if(srcPoint[1] < 0) srcPoint[1] = 0;
+        // if(srcPoint[7] < 0) srcPoint[7] = 0;
+        //bitmap像素坐标和屏幕像素坐标的比值
         float xPow = (float)bitmap.getWidth()/width;
         float yPow = (float)bitmap.getHeight()/height;
-        //
+        //把刚才算到的倒梯形坐标转换为bitmap上的坐标
         srcPointBitmap[0] = srcPoint[0]*xPow;
         srcPointBitmap[1] = srcPoint[1]*yPow;
         srcPointBitmap[2] = srcPoint[2]*xPow;
@@ -210,7 +253,7 @@ public class FeSectionMap {
         srcPointBitmap[5] = srcPoint[5]*yPow;
         srcPointBitmap[6] = srcPoint[6]*xPow;
         srcPointBitmap[7] = srcPoint[7]*yPow;
-        //
+        //输出范围为屏幕大小
         distPoint[0] = 0;
         distPoint[1] = 0;
         distPoint[2] = 0;
@@ -219,15 +262,19 @@ public class FeSectionMap {
         distPoint[5] = screenHeight;
         distPoint[6] = screenWidth;
         distPoint[7] = 0;
-        //梯形变换
+        //梯形变换: 在地图上抠出一块倒梯形区域,然后显示到矩形的屏幕上,就形成了近大远小的显示效果
         matrix.setPolyToPoly(srcPointBitmap, 0, distPoint, 0, 4);
 
         //关键参数提取
-        reduceGrid = Math.round(reduce/xGridPixel);
-        srcGridX = reduceGrid*2 + screenXGrid;
-        srcGridY = reduceGrid + screenYGrid;
-        srcGridXStart = Math.round(srcPoint[0]/xGridPixel);
-        srcGridYStart = Math.round(srcPoint[1]/yGridPixel);
+        reduceGrid = Math.round(reduce/xGridPixel);//实际缩进格子数
+        srcGridX = reduceGrid*2 + screenXGrid;//梯形区域内包含列数
+        srcGridY = reduceGrid + screenYGrid;//梯形区域内包含行数
+        srcGridXStart = (int)Math.floor(srcPoint[0]/xGridPixel);
+        srcGridYStart = (int)Math.floor(srcPoint[1]/yGridPixel);
+				//srcGridXStart = - (int)(Math.floor(xGridErr) + reduceGrid*2);
+				//srcGridYStart = - (int)(Math.floor(yGridErr) + reduceGrid);
+				xGridErrRed = srcPoint[0]/xGridPixel%1;
+				yGridErrRed = srcPoint[1]/yGridPixel%1;
 
         //中心甜区
         srcGridCenter.left = srcGridXStart + reduceGrid + 3;
@@ -236,17 +283,17 @@ public class FeSectionMap {
         srcGridCenter.bottom = srcGridCenter.top + (screenYGrid - 6) - 1;
 
         //第一行的高, 总高, 横向offset, 平均宽
-        srcGridLine[0][0] = yGridPixel - reduce*1.5f/srcGridY - reduceGrid*3.0f;
-        srcGridLine[0][1] = srcGridLine[0][0];
-        srcGridLine[0][2] = srcGridLine[0][1]/screenHeight*reduce;
-        srcGridLine[0][3] = (srcGridLine[0][2]*2 + screenWidth)/srcGridX;
+        trapGrid.ySize(0, yGridPixel - reduce*1.5f / srcGridY - reduceGrid * 3.0f);
+        trapGrid.ySizeTotal(0, trapGrid.ySize(0));
+        trapGrid.xOffset(0, trapGrid.ySizeTotal(0) / screenHeight * reduce);
+        trapGrid.xSize(0, (trapGrid.xOffset(0) * 2 + screenWidth) / srcGridX);
         //最后一行的高, 总高, 横向offset, 平均宽
-        srcGridLine[srcGridY-1][0] = yGridPixel + reduceGrid;
-        srcGridLine[srcGridY-1][1] = screenHeight;
-        srcGridLine[srcGridY-1][2] = srcGridLine[srcGridY-1][1]/screenHeight*reduce;
-        srcGridLine[srcGridY-1][3] = (srcGridLine[srcGridY-1][2]*2 + screenWidth)/srcGridX;
+        trapGrid.ySize(srcGridY - 1, yGridPixel + reduceGrid);
+        trapGrid.ySizeTotal(srcGridY - 1, screenHeight);
+        trapGrid.xOffset(srcGridY - 1, trapGrid.ySizeTotal(srcGridY - 1) / screenHeight * reduce);
+        trapGrid.xSize(srcGridY - 1, (trapGrid.xOffset(srcGridY - 1) * 2 + screenWidth) / srcGridX);
         //最后一行和第一行高的差值
-        float ySErr = srcGridLine[srcGridY-1][0]*srcGridY - screenHeight;
+        float ySErr = trapGrid.ySize(srcGridY - 1) * srcGridY - screenHeight;
         float n = 0;//分母
         float[] m = new float[srcGridY];//分子
         //把分子数组累加到分母n
@@ -264,11 +311,11 @@ public class FeSectionMap {
             }
         }
         //统计每行信息
-        for(int i = srcGridY-2; i >= 0; i--) {
-            srcGridLine[i][0] = srcGridLine[srcGridY-1][0] - m[srcGridY-1-i]/n*ySErr;
-            srcGridLine[i][1] = srcGridLine[i+1][1] - srcGridLine[i+1][0];
-            srcGridLine[i][2] = srcGridLine[i][1]/screenHeight*reduce;
-            srcGridLine[i][3] = (srcGridLine[i][2]*2 + screenWidth)/srcGridX;
+        for(int i = srcGridY - 2; i >= 0; i--) {
+            trapGrid.ySize(i, trapGrid.ySize(srcGridY - 1) - m[srcGridY - 1 - i] / n * ySErr);
+            trapGrid.ySizeTotal(i, trapGrid.ySizeTotal(i + 1) - trapGrid.ySize(i + 1));
+            trapGrid.xOffset(i, trapGrid.ySizeTotal(i) / screenHeight * reduce);
+            trapGrid.xSize(i, (trapGrid.xOffset(i) * 2 + screenWidth) / srcGridX);
         }
     }
 
@@ -293,25 +340,28 @@ public class FeSectionMap {
             //屏幕棋盘格子所在坐标
             int x = xG - srcGridXStart;
             int y = yG - srcGridYStart;
+						//偏移矫正,零头部分
+						int xC = - (int)(xGridErrRed * trapGrid.xSize(y));
+						int yC = - (int)(yGridErrRed * trapGrid.ySize(y));
             //取矩阵
-            fig.rect.top = (int)(srcGridLine[y][1] - srcGridLine[y][0]);
-            fig.rect.bottom = (int)(srcGridLine[y][1]);
-            fig.rect.left = (int)(x*srcGridLine[y][3] - srcGridLine[y][2]);
-            fig.rect.right = (int)(fig.rect.left + srcGridLine[y][3]);
+            fig.rect.top = (int)(trapGrid.ySizeTotal(y) - trapGrid.ySize(y)) + yC;
+            fig.rect.bottom = (int)trapGrid.ySizeTotal(y) + yC;
+            fig.rect.left = (int)(x * trapGrid.xSize(y) - trapGrid.xOffset(y)) + xC;
+            fig.rect.right = (int)(fig.rect.left + trapGrid.xSize(y));
             //取多边形路径
             if(y == 0){
-                fig.path.moveTo(x * screenWidth / srcGridX + edge, 0 + edge);
-                fig.path.lineTo((x + 1) * screenWidth / srcGridX - edge, 0 + edge);
+                fig.path.moveTo(x * screenWidth / srcGridX + edge + xC, 0 + edge + yC);
+                fig.path.lineTo((x + 1) * screenWidth / srcGridX - edge + xC, 0 + edge + yC);
             }else{
                 fig.path.moveTo(
-                        x * srcGridLine[y-1][3] - srcGridLine[y-1][2] + edge,
-                        srcGridLine[y-1][1] + edge);
+                        x * trapGrid.xSize(y - 1) - trapGrid.xOffset(y - 1) + edge + xC,
+                        trapGrid.ySizeTotal(y - 1) + edge + yC);
                 fig.path.lineTo(
-                        (x + 1) * srcGridLine[y-1][3] - srcGridLine[y-1][2] - edge,
-                        srcGridLine[y-1][1] + edge);
+                        (x + 1) * trapGrid.xSize(y - 1) - trapGrid.xOffset(y - 1) - edge + xC,
+                        trapGrid.ySizeTotal(y - 1) + edge + yC);
             }
-            fig.path.lineTo(fig.rect.right - 1, fig.rect.bottom - edge);
-            fig.path.lineTo(fig.rect.left + 1, fig.rect.bottom - edge);
+            fig.path.lineTo(fig.rect.right - 1 + xC, fig.rect.bottom - edge + yC);
+            fig.path.lineTo(fig.rect.left + 1 + xC, fig.rect.bottom - edge + yC);
             fig.path.close();
         }
         //不在屏幕范围内
@@ -332,9 +382,9 @@ public class FeSectionMap {
     //输入坐标求格子位置
     public void getRectByLocation(float x, float y, FeInfoSite fig) {
         for(int yCount = 0; yCount < srcGridY; yCount++){
-            if(y < srcGridLine[yCount][1]){
+            if(y < trapGrid.ySizeTotal(yCount)){
                 fig.yGrid = yCount + srcGridYStart;
-                fig.xGrid = (int)((x + srcGridLine[yCount][2])/srcGridLine[yCount][3]) + srcGridXStart;
+                fig.xGrid = (int)((x + trapGrid.xOffset(yCount)) / trapGrid.xSize(yCount)) + srcGridXStart;
                 //
                 getRectByGrid(fig.xGrid, fig.yGrid, fig);
                 return;

@@ -8,9 +8,7 @@ import android.view.MotionEvent;
 public class FeSectionOperation {
 
     private FeSectionCallback sectionCallback;
-
-    //用来松开时判断是不是拖动后的松开
-    private Boolean isMove = false;
+		
     //记住点击位置,和拖动后的位置进行比较
     private float tDownX, tDownY;
     //在触屏 down 事件时,标记谁需要拖动事件?
@@ -38,7 +36,7 @@ public class FeSectionOperation {
                 tDownY = event.getY();
 
                 //清标记
-                isMove = false;
+								sectionCallback.onTouchMov(false);
                 flagMove.cleanFlagAll();
 
                 //检查点击都命中了谁?
@@ -71,24 +69,24 @@ public class FeSectionOperation {
                 float tMoveY = event.getY();
                 float xErr = tMoveX - tDownX;
                 float yErr = tMoveY - tDownY;
-                //产生的拖动格数
-                int xGridErr = 0, yGridErr = 0;
-                //横向拖动是否满一格像素,是就拖动一格
-                if (Math.abs(xErr) > sectionCallback.getSectionMap().xGridPixel) {
-                    xGridErr = xErr < 0 ? (1) : (-1);
-                    //更新坐标
-                    tDownX = tMoveX;
+								//拖动是否满10像素,是就开始拖动
+								if(!sectionCallback.onTouchMov() && 
+										(Math.abs(xErr) > 10 || Math.abs(yErr) > 10)){
                     //置标记
-                    isMove = true;
-                }
-                //纵向拖动是否满一格像素,是就拖动一格
-                if (Math.abs(yErr) > sectionCallback.getSectionMap().yGridPixel) {
-                    yGridErr = yErr < 0 ? (1) : (-1);
-                    //更新坐标
-                    tDownY = tMoveY;
-                    //置标记
-                    isMove = true;
-                }
+										sectionCallback.onTouchMov(true);
+								}
+								//已经开始移动了？
+								if(sectionCallback.onTouchMov()){
+										//更新坐标
+										tDownX = tMoveX;
+										tDownY = tMoveY;
+										//置标志
+										sectionCallback.onTouchMov(true);
+								}
+								//否则无移动量
+								else{
+										xErr = yErr = 0;
+								}
                 //谁需要拖动事件?
                 if(flagMove.checkFlag(FeFlagHit.HIT_SYS_MENU)){
                     ;
@@ -112,7 +110,7 @@ public class FeSectionOperation {
                     ;
                 }
                 else if(flagMove.checkFlag(FeFlagHit.HIT_MAP)){
-                    sectionCallback.getLayoutMap().move(xGridErr, yGridErr);
+                    sectionCallback.getLayoutMap().move(xErr, yErr);
                 }
             }
             break;
@@ -126,7 +124,7 @@ public class FeSectionOperation {
                 sectionCallback.onMapHit(false);
 
                 //拖动结束
-                if(isMove){
+								if(sectionCallback.onTouchMov()){
                     ;
                 }
                 
@@ -158,7 +156,7 @@ public class FeSectionOperation {
                 }
 
                 //清标记
-                isMove = false;
+								sectionCallback.onTouchMov(false);
             }
             break;
         }
