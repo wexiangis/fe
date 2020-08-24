@@ -7,7 +7,7 @@ import android.graphics.Rect;
 
 /*
     加载地图、地图移动和变形后所产生的一系列关键参数, 各个
-    图层在绘图时获取某个方格位置、方格和地图长宽都从这里来.
+    图层在绘图时获取某个方格位置、方格和地图长宽都从这里拿.
  */
 public class FeSectionMap {
 
@@ -17,7 +17,7 @@ public class FeSectionMap {
     public int section;
     //地图缩放、梯形变换矩阵
     public Matrix matrix = new Matrix();
-    //地图信息
+    //地图详细信息
     public FeInfoMap mapInfo;
     //地图
     public Bitmap bitmap = null;
@@ -58,8 +58,8 @@ public class FeSectionMap {
         //屏幕长、高格子数适配屏幕分辨率,得到地图实际显示长高(width、height)
         init(screenWidth, screenHeight, mapInfo.width, mapInfo.height, mapInfo.pixelPerGrid);
         //xp、yp分别为xy缩放比例(原始长、高缩放到实际显示长、高)
-        float xp = (float) mapWidth / mapInfo.bitmap.getWidth();
-        float yp = (float) mapHeight / mapInfo.bitmap.getHeight();
+        float xp = mapWidth / mapInfo.bitmap.getWidth();
+        float yp = mapHeight / mapInfo.bitmap.getHeight();
         //用缩放后的矩阵初始化bitmap,缩放效果较好
         matrix.postScale(xp, yp);
         bitmap = Bitmap.createBitmap(mapInfo.bitmap, 0, 0,
@@ -145,6 +145,8 @@ public class FeSectionMap {
         public int width, height;
         //网格产生的交叉点的坐标
         public float[][][] grid;
+				
+				public float xErr = 999, yErr = 999;
 
         public Trapezoid(int mapXGrid, int mapYGrid){
             //WxH 矩阵网格会产生 (W+1)x(H+1) 个交叉点坐标
@@ -218,6 +220,11 @@ public class FeSectionMap {
 
     //获取梯形转换矩阵,用于绘制
     public void upgradeMatrix() {
+				//只在必要时更新矩阵
+				if(trap.xErr == xGridErr && trap.yErr == yGridErr)
+						return;
+				trap.xErr = xGridErr;
+				trap.yErr = yGridErr;
         //mapDist为当前地图显示区域 (点顺序左上、左下、右下、右上)
         srcPoint[0] = (- xGridErr) * xGridPixel;
         srcPoint[1] = (- yGridErr) * yGridPixel;
