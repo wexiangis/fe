@@ -20,7 +20,16 @@ public class FeAssetsUnit {
 
     // /head/xx.png
     public Bitmap getHead(int id) {
-        return getHeadBitmap(unit.getHead(id));
+				id = unit.getHead(id);
+        //先从缓冲区(链表)中找
+        Bitmap ret = headChain.find(id);
+        //没有再从assets中加载
+        if(ret == null){
+            ret = getHeadBitmap(id);
+            //缓存到链表,下次可以省去加载的时间
+            headChain.add(id, ret);
+        }
+        return ret;
     }
 
     // p_name.txt
@@ -441,6 +450,8 @@ public class FeAssetsUnit {
     public P_Grow p_grow = new P_Grow("/unit/", "p_grow.txt", ";");
     public P_Skill p_skill = new P_Skill("/unit/", "p_skill.txt", ";");
     public P_Special p_special = new P_Special("/unit/", "p_special.txt", ";");
+    // head bitmap chain
+    public FeChain2<Bitmap> headChain = new FeChain2<Bitmap>(-1, null);
 
     //----- 文件夹 -----
 
