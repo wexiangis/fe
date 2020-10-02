@@ -137,8 +137,8 @@ public class FeAssetsParam {
         return abilityLimit.getMde(id);
     }
 
-    public int getAbilityLimitWeig(int id) {
-        return abilityLimit.getWeig(id);
+    public int getAbilityLimitBody(int id) {
+        return abilityLimit.getBody(id);
     }
 
     public int getAbilityLimitMov(int id) {
@@ -166,7 +166,7 @@ public class FeAssetsParam {
     public SkillLevel skillLevel = new SkillLevel("/param/", "skill_level.txt", ";");
     public AbilityLimit abilityLimit = new AbilityLimit("/param/", "ability_limit.txt", ";");
 
-    //----- 文件夹 -----
+    //----- folder -----
 
     private FeReaderBitmap bitmapReader = new FeReaderBitmap();
 
@@ -350,7 +350,7 @@ public class FeAssetsParam {
             return getInt(line, 7);
         }
 
-        public int getWeig(int line) {
+        public int getBody(int line) {
             return getInt(line, 8);
         }
 

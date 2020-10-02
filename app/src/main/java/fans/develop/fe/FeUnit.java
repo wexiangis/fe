@@ -9,28 +9,28 @@ public class FeUnit {
 
     private FeAssets assets;
     private FeAssetsUnit assetsUnit;
-    private FeAssetsSX assetsSX;
+    private FeAssetsCamps assetsCamps;
 
-    public FeAssetsSaveCache.CampUnit campUnit;
+    public FeAssetsCamps.CampUnit campUnit;
 
-    public FeUnit(FeAssets assets, FeAssetsSX sX, int order) {
+    public FeUnit(FeAssets assets, FeAssetsCamps assetsCamps, int order) {
         this.assets = assets;
         this.assetsUnit = assets.unit;
-        this.assetsSX = sX;
-        this.campUnit = sX.saveCache.getCampUnit(order);
+        this.assetsCamps = assetsCamps;
+        this.campUnit = assetsCamps.getCampUnit(order);
     }
 
     //不可修改的参数
     public int order() {
-        return campUnit.order();
+        return campUnit.getOrder();
     }
 
     public int camp() {
-        return campUnit.camp();
+        return campUnit.getCamp();
     }
 
     public int id() {
-        return assetsSX.saveCache.unit.getId(campUnit.order());
+        return campUnit.getId();
     }
 
     public int professionType() {
@@ -39,33 +39,33 @@ public class FeUnit {
 
     //失能/使能/保存
     public void on() {
-        assetsSX.saveCache.unit.setDisable(campUnit.order(), 0);
+        campUnit.setDisable(0);
     }
 
     public void off() {
-        assetsSX.saveCache.unit.setDisable(campUnit.order(), 1);
+        campUnit.setDisable(1);
     }
 
     public void save() {
-        assetsSX.saveCache.unit.save();
+        // assetsCamps.camps.save();
         campUnit.save();
     }
 
     //位置参数
     public void x(int x) {
-        assetsSX.saveCache.unit.setX(campUnit.order(), x);
+        assetsCamps.camps.setX(campUnit.getOrder(), x);
     }
 
     public int x() {
-        return assetsSX.saveCache.unit.getX(campUnit.order());
+        return assetsCamps.camps.getX(campUnit.getOrder());
     }
 
     public void y(int y) {
-        assetsSX.saveCache.unit.setY(campUnit.order(), y);
+        assetsCamps.camps.setY(campUnit.getOrder(), y);
     }
 
     public int y() {
-        return assetsSX.saveCache.unit.getY(campUnit.order());
+        return assetsCamps.camps.getY(campUnit.getOrder());
     }
 
     //基本信息
@@ -136,7 +136,7 @@ public class FeUnit {
 
     // ability
     public int[] ability() {
-        return campUnit.getLineInt(1);
+        return campUnit.getLineInt(2);
     }
 
     public int hp() {
@@ -171,8 +171,8 @@ public class FeUnit {
         return campUnit.getMde();
     }
 
-    public int weig() {
-        return campUnit.getWeig();
+    public int body() {
+        return campUnit.getBody();
     }
 
     public int mov() {
@@ -181,7 +181,7 @@ public class FeUnit {
 
     // add
     public int[] add() {
-        return campUnit.getLineInt(2);
+        return campUnit.getLineInt(3);
     }
 
     public int addHp() {
@@ -216,8 +216,8 @@ public class FeUnit {
         return campUnit.getAddMde();
     }
 
-    public int addWeig() {
-        return campUnit.getAddWeig();
+    public int addBody() {
+        return campUnit.getAddBody();
     }
 
     public int addMov() {
@@ -226,7 +226,7 @@ public class FeUnit {
 
     // skillLevel
     public int[] skillLevel() {
-        return campUnit.getLineInt(3);
+        return campUnit.getLineInt(4);
     }
 
     public int sward() {
@@ -298,8 +298,8 @@ public class FeUnit {
         return assetsUnit.getProfessionUpgradeMde(id());
     }
 
-    public int upgradeWeig() {
-        return assetsUnit.getProfessionUpgradeWeig(id());
+    public int upgradeBody() {
+        return assetsUnit.getProfessionUpgradeBody(id());
     }
 
     public int upgradeMov() {
@@ -343,8 +343,8 @@ public class FeUnit {
         return assetsUnit.getProfessionGrowMde(id());
     }
 
-    public int growWeig() {
-        return assetsUnit.getProfessionGrowWeig(id());
+    public int growBody() {
+        return assetsUnit.getProfessionGrowBody(id());
     }
 
     public int growMov() {
@@ -353,7 +353,7 @@ public class FeUnit {
 
     // special
     public int[] special() {
-        return campUnit.getLineInt(5);
+        return campUnit.getLineInt(6);
     }
 
     public int special1() {
@@ -378,7 +378,7 @@ public class FeUnit {
 
     // items
     public int[] item() {
-        return campUnit.getLineInt(4);
+        return campUnit.getLineInt(5);
     }
 
     public int item1() {
@@ -407,5 +407,14 @@ public class FeUnit {
 
     public int equip() {
         return campUnit.getEquip();
+    }
+
+    //
+    public int trend() {
+        return campUnit.getTrend();
+    }
+
+    public int leader() {
+        return campUnit.getLeader();
     }
 }

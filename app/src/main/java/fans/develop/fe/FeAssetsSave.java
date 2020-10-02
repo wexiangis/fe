@@ -6,13 +6,13 @@ package fans.develop.fe;
  */
 public class FeAssetsSave {
 
-    private FeAssetsUnit unit;
+    private FeAssetsUnit assetsUnit;
     private int sXCurrent;//当前档位
     private int saveNum;//总存档槽数量
     private FeFile file;//文件操作工具
 
-    public FeAssetsSave(FeAssetsUnit unit) {
-        this.unit = unit;
+    public FeAssetsSave(FeAssetsUnit assetsUnit) {
+        this.assetsUnit = assetsUnit;
         file = new FeFile();
         //读取最后存档位置
         sXCurrent = FeFormat.StringToInt(file.readFile("/save/last.txt", "00", 2));
@@ -100,14 +100,14 @@ public class FeAssetsSave {
 
     //加载存档
     public FeAssetsSX loadSx(int sX) {
-        FeAssetsSX ret = new FeAssetsSX(unit, sX);
+        FeAssetsSX ret = new FeAssetsSX(assetsUnit, sX);
         ret.init();
         return ret;
     }
 
     //继续中断中的存档
     public FeAssetsSX recoverSx(int sX) {
-        FeAssetsSX ret = new FeAssetsSX(unit, sX);
+        FeAssetsSX ret = new FeAssetsSX(assetsUnit, sX);
         ret.recover();
         return ret;
     }

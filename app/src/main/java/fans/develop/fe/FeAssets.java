@@ -12,6 +12,7 @@ public class FeAssets {
     public FeAssetsUnit unit;
     public FeAssetsSave save;
     public FeAssetsEvent event;
+    public FeAssetsLabel label;
 
     public FeAssets() {
         map = new FeAssetsMap();
@@ -20,6 +21,7 @@ public class FeAssets {
         unit = new FeAssetsUnit();
         save = new FeAssetsSave(unit);
         event = new FeAssetsEvent();
+        label = new FeAssetsLabel();
     }
 
 }

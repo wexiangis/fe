@@ -46,6 +46,11 @@ public class FeLayoutSection extends FeLayout {
 
     /* ---------- abstract interface ---------- */
     public boolean onKeyBack() {
+        //子控件中,一般只有菜单用到返回键
+        if(layoutSysMenu.onKeyBack())
+            return true;
+        else if(layoutUnitMenu.onKeyBack())
+            return true;
         return false;
     }
 
@@ -149,11 +154,11 @@ public class FeLayoutSection extends FeLayout {
                             layoutLoading.setPercent(70);//百分比进度
 
                             //人物加载
-                            for (int i = 0; i < sxData.saveCache.unit.total(); i++) {
+                            for (int i = 0; i < sxData.saveCache.camps.total(); i++) {
                                 layoutUnit.addUnit(
-                                        sxData.saveCache.unit.getOrder(i),
-                                        sxData.saveCache.unit.getX(i),
-                                        sxData.saveCache.unit.getY(i));
+                                        sxData.saveCache.camps.getOrder(i),
+                                        sxData.saveCache.camps.getX(i),
+                                        sxData.saveCache.camps.getY(i));
                             }
 
                             layoutLoading.setPercent(75);//百分比进度

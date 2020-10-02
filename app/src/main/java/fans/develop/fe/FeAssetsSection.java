@@ -5,16 +5,16 @@ package fans.develop.fe;
  */
 public class FeAssetsSection {
 
-    private FeAssetsUnit _unit;
+    private FeAssetsUnit assetsUnit;
     private int section = 0;
 
-    public FeAssetsSection(FeAssetsUnit unit, int section) {
-        this._unit = unit;
+    public FeAssetsSection(FeAssetsUnit assetsUnit, int section) {
+        this.assetsUnit = assetsUnit;
         this.section = section;
         //section
         String sectionFolder = String.format("/section/section%02d/", section);
         //file
-        this.unit = new Unit(sectionFolder, "unit.txt", ";");
+        this.layout = new Layout(sectionFolder, "layout.txt", ";");
         this.site = new Site(sectionFolder, "site.txt", ";");
         this.target = new Target(sectionFolder, "target.txt", ";");
         this.talk = new Talk(sectionFolder, "talk.txt", ";");
@@ -23,7 +23,7 @@ public class FeAssetsSection {
 
     //----- file -----
 
-    public Unit unit;
+    public Layout layout;
     public Site site;
     public Target target;
     public Talk talk;
@@ -33,7 +33,7 @@ public class FeAssetsSection {
 
     //----- class -----
 
-    public class Unit extends FeReaderFile {
+    public class Layout extends FeReaderFile {
 
         public int getTrigger(int line) {
             return getInt(line, 0);
@@ -75,7 +75,7 @@ public class FeAssetsSection {
             return line();
         }
 
-        public Unit(String folder, String name, String split) {
+        public Layout(String folder, String name, String split) {
             super(folder, name, split);
         }
     }

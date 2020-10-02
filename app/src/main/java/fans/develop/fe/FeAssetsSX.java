@@ -5,36 +5,57 @@ package fans.develop.fe;
  */
 public class FeAssetsSX {
 
-    private FeAssetsUnit unit;
+    private FeAssetsUnit assetsUnit;
     private int sX;
 
     /*
         注意区别 sX 和 当前章节 不是一个东西
      */
-    public FeAssetsSX(FeAssetsUnit unit, int sX) {
-        this.unit = unit;
+    public FeAssetsSX(FeAssetsUnit assetsUnit, int sX) {
+        this.assetsUnit = assetsUnit;
         this.sX = sX;
         //sX
         String folder = String.format("/save/s%d/", sX);
         //file
-        this.info = new Info(folder, "info.txt", ";");
-        this.setting = new Setting(folder, "setting.txt", ";");
-        this.site = new Site(folder, "site.txt", ";");
+        info = new Info(folder, "info.txt", ";");
+        setting = new Setting(folder, "setting.txt", ";");
+        site = new Site(folder, "site.txt", ";");
         //布局文件不存在,则从section拷贝过来
-        if (this.site.line() < 1) {
-            this.site.reLoad(String.format("/section/section%02d/", this.info.getSection()), "site.txt");
-            this.site.rename(folder, "site.txt");
+        if (site.line() < 1) {
+            site.reLoad(String.format("/section/section%02d/", info.getSection()), "site.txt");
+            site.rename(folder, "site.txt");
         }
-        //子文件夹
-        this.section = new FeAssetsSection(unit, info.getSection());
-        this.saveUnit = new FeAssetsSaveUnit(unit, sX);
+        // 子文件夹
+        section = new FeAssetsSection(assetsUnit, info.getSection());
+        // 各阵营存档情况
+        campBlue = new FeAssetsCamps(assetsUnit, sX, FeTypeCamp.BLUE);
+        campGreen = new FeAssetsCamps(assetsUnit, sX, FeTypeCamp.GREEN);
+        campRed = new FeAssetsCamps(assetsUnit, sX, FeTypeCamp.RED);
+        campDark = new FeAssetsCamps(assetsUnit, sX, FeTypeCamp.DARK);
+        campOrange = new FeAssetsCamps(assetsUnit, sX, FeTypeCamp.ORANGE);
+        campPurple = new FeAssetsCamps(assetsUnit, sX, FeTypeCamp.PURPLE);
+        campBlueGreen = new FeAssetsCamps(assetsUnit, sX, FeTypeCamp.BLUE_GREEN);
     }
 
-    //----- 文件夹 -----
+    //----- file -----
+
+    public Info info;
+    public Setting setting;
+    public Site site;
+
+    //----- folder -----
 
     public FeAssetsSaveCache saveCache;
-    public FeAssetsSaveUnit saveUnit;
     public FeAssetsSection section;
+
+    // 各阵营存档情况
+    public FeAssetsCamps campBlue;
+    public FeAssetsCamps campGreen;
+    public FeAssetsCamps campRed;
+    public FeAssetsCamps campDark;
+    public FeAssetsCamps campOrange;
+    public FeAssetsCamps campPurple;
+    public FeAssetsCamps campBlueGreen;
 
     //----- api -----
 
@@ -43,9 +64,7 @@ public class FeAssetsSX {
      */
     public void recover() {
         //加载缓存
-        saveCache = new FeAssetsSaveCache(unit, saveUnit, sX);
-        //加载人物信息
-        saveCache.recoverUnit();
+        saveCache = new FeAssetsSaveCache(assetsUnit, sX);
     }
 
     /*
@@ -55,29 +74,27 @@ public class FeAssetsSX {
         //删空缓存
         new FeFile().delete(String.format("/save/s%d/cache", sX));
         //建立缓存
-        saveCache = new FeAssetsSaveCache(unit, saveUnit, sX);
+        saveCache = new FeAssetsSaveCache(assetsUnit, sX);
         //根据 section 的site加载 saveUnit 人物到 saveCache
-        for (int siteCount = 0, saveUnitCount = 0;
-             siteCount < section.site.total() && saveUnitCount < saveUnit.unit.total();
-             siteCount++) {
+        // for (int siteCount = 0, saveUnitCount = 0;
+        //      siteCount < section.site.total() && saveUnitCount < saveUnit.camps.total();
+        //      siteCount++) {
+        //     //触发方式为回合触发,且回合为0
+        //     if (section.site.getTrigger(siteCount) == 0 &&
+        //             section.site.getTurn(siteCount) == 0) {
+        //         //添加己方人物
+        //         saveCache.addUnit(0, saveUnitCount++, section.site.getXY(siteCount), 0);
+        //     }
+        // }
+        //根据 section 的assetsUnit加载人物到 saveCache
+        for (int i = 0; i < section.layout.total(); i++) {
             //触发方式为回合触发,且回合为0
-            if (section.site.getTrigger(siteCount) == 0 &&
-                    section.site.getTurn(siteCount) == 0) {
-                //添加己方人物
-                saveCache.addUnit(0, saveUnitCount++, section.site.getXY(siteCount), true);
+            if (section.layout.getTrigger(i) == 0 &&
+                    section.layout.getTurn(i) == 0) {
+                //添加assetsUnit人物
+                saveCache.addUnit(section.layout.getCamp(i), section.layout.getId(i), section.layout.getXY(i), -1);
             }
         }
-        //根据 section 的unit加载人物到 saveCache
-        for (int i = 0; i < section.unit.total(); i++) {
-            //触发方式为回合触发,且回合为0
-            if (section.unit.getTrigger(i) == 0 &&
-                    section.unit.getTurn(i) == 0) {
-                //添加unit人物
-                saveCache.addUnit(section.unit.getCamp(i), section.unit.getId(i), section.unit.getXY(i), false);
-            }
-        }
-        //
-        saveCache.unit.save();
     }
 
     /*
@@ -89,29 +106,29 @@ public class FeAssetsSX {
 
         //根据 section 的site加载 saveUnit 人物到 saveCache
         //为己方阵营
-        if (camp == 0) {
-            for (int siteCount = 0, saveUnitCount = 0;
-                 siteCount < section.site.total() &&
-                         saveUnitCount < saveUnit.unit.total();
-                 siteCount++) {
-                //触发方式为回合触发,且回合为turn
-                if (section.site.getTrigger(siteCount) == 0 &&
-                        section.site.getTurn(siteCount) == turn) {
-                    //添加己方人物
-                    saveCache.addUnit(0, saveUnit.unit.getId(saveUnitCount), section.site.getXY(siteCount), true);
-                    //计数,防止当前出击人数超过全部人数
-                    saveUnitCount++;
-                }
-            }
-        }
-        //根据 section 的unit加载人物到 saveCache
-        for (int i = 0; i < section.unit.total(); i++) {
+        // if (camp == 0) {
+        //     for (int siteCount = 0, saveUnitCount = 0;
+        //          siteCount < section.site.total() &&
+        //                  saveUnitCount < saveUnit.camps.total();
+        //          siteCount++) {
+        //         //触发方式为回合触发,且回合为turn
+        //         if (section.site.getTrigger(siteCount) == 0 &&
+        //                 section.site.getTurn(siteCount) == turn) {
+        //             //添加己方人物
+        //             saveCache.addUnit(0, saveUnit.capmps.getId(saveUnitCount), section.site.getXY(siteCount), true);
+        //             //计数,防止当前出击人数超过全部人数
+        //             saveUnitCount++;
+        //         }
+        //     }
+        // }
+        //根据 section 的assetsUnit加载人物到 saveCache
+        for (int i = 0; i < section.layout.total(); i++) {
             //触发方式为回合触发,且回合为turn,且为目标阵营
-            if (section.unit.getTrigger(i) == 0 &&
-                    section.unit.getTurn(i) == turn &&
-                    section.unit.getCamp(i) == camp) {
-                //添加unit人物
-                saveCache.addUnit(camp, section.unit.getId(i), section.unit.getXY(i), false);
+            if (section.layout.getTrigger(i) == 0 &&
+                    section.layout.getTurn(i) == turn &&
+                    section.layout.getCamp(i) == camp) {
+                //添加assetsUnit人物
+                saveCache.addUnit(camp, section.layout.getId(i), section.layout.getXY(i), -1);
             }
         }
 
@@ -128,12 +145,6 @@ public class FeAssetsSX {
     public void eventXXX(int camp, int order) {
         ;
     }
-
-    //----- file -----
-
-    public Info info;
-    public Setting setting;
-    public Site site;
 
     //----- class -----
 

@@ -8,7 +8,7 @@ public class FeTypeCamp {
     public static final int BLUE = 0;
     public static final int GREEN = 1;
     public static final int RED = 2;
-    public static final int GRAY = 3;
+    public static final int DARK = 3;
     public static final int ORANGE = 4;
     public static final int PURPLE = 5;
     public static final int BLUE_GREEN = 6;

@@ -20,7 +20,7 @@ public class FeAssetsUnit {
 
     // /head/xx.png
     public Bitmap getHead(int id) {
-				id = unit.getHead(id);
+        id = unit.getHead(id);
         //先从缓冲区(链表)中找
         Bitmap ret = headChain.find(id);
         //没有再从assets中加载
@@ -83,8 +83,8 @@ public class FeAssetsUnit {
         return p_ability.getMde(profession.getAbility(unit.getProfession(id))) + getAdditionAbilityMde(id);
     }
 
-    public int getProfessionAbilityWeig(int id) {
-        return p_ability.getWeig(profession.getAbility(unit.getProfession(id))) + getAdditionAbilityWeig(id);
+    public int getProfessionAbilityBody(int id) {
+        return p_ability.getBody(profession.getAbility(unit.getProfession(id))) + getAdditionAbilityBody(id);
     }
 
     public int getProfessionAbilityMov(int id) {
@@ -128,8 +128,8 @@ public class FeAssetsUnit {
         return p_upgrade.getMde(profession.getUpgrade(unit.getProfession(id)));
     }
 
-    public int getProfessionUpgradeWeig(int id) {
-        return p_upgrade.getWeig(profession.getUpgrade(unit.getProfession(id)));
+    public int getProfessionUpgradeBody(int id) {
+        return p_upgrade.getBody(profession.getUpgrade(unit.getProfession(id)));
     }
 
     public int getProfessionUpgradeMov(int id) {
@@ -173,8 +173,8 @@ public class FeAssetsUnit {
         return p_grow.getMde(profession.getGrow(unit.getProfession(id))) + getAdditionGrowMde(id);
     }
 
-    public int getProfessionGrowWeig(int id) {
-        return p_grow.getWeig(profession.getGrow(unit.getProfession(id))) + getAdditionGrowWeig(id);
+    public int getProfessionGrowBody(int id) {
+        return p_grow.getBody(profession.getGrow(unit.getProfession(id))) + getAdditionGrowBody(id);
     }
 
     public int getProfessionGrowMov(int id) {
@@ -281,8 +281,8 @@ public class FeAssetsUnit {
         return a_ability.getMde(addition.getAbility(unit.getAddition(id)));
     }
 
-    public int getAdditionAbilityWeig(int id) {
-        return a_ability.getWeig(addition.getAbility(unit.getAddition(id)));
+    public int getAdditionAbilityBody(int id) {
+        return a_ability.getBody(addition.getAbility(unit.getAddition(id)));
     }
 
     public int getAdditionAbilityMov(int id) {
@@ -326,8 +326,8 @@ public class FeAssetsUnit {
         return a_grow.getMde(addition.getGrow(unit.getAddition(id)));
     }
 
-    public int getAdditionGrowWeig(int id) {
-        return a_grow.getWeig(addition.getGrow(unit.getAddition(id)));
+    public int getAdditionGrowBody(int id) {
+        return a_grow.getBody(addition.getGrow(unit.getAddition(id)));
     }
 
     public int getAdditionGrowMov(int id) {
@@ -453,7 +453,7 @@ public class FeAssetsUnit {
     // head bitmap chain
     public FeChain2<Bitmap> headChain = new FeChain2<Bitmap>(-1, null);
 
-    //----- 文件夹 -----
+    //----- folder -----
 
     private FeReaderBitmap bitmapReader = new FeReaderBitmap();
 
@@ -681,7 +681,7 @@ public class FeAssetsUnit {
             return getInt(line, 7);
         }
 
-        public int getWeig(int line) {
+        public int getBody(int line) {
             return getInt(line, 8);
         }
 
@@ -721,8 +721,8 @@ public class FeAssetsUnit {
             setValue(mde, line, 7);
         }
 
-        public void setWeig(int line, int weig) {
-            setValue(weig, line, 8);
+        public void setBody(int line, int body) {
+            setValue(body, line, 8);
         }
 
         public void setMov(int line, int mov) {
@@ -768,7 +768,7 @@ public class FeAssetsUnit {
             return getInt(line, 7);
         }
 
-        public int getWeig(int line) {
+        public int getBody(int line) {
             return getInt(line, 8);
         }
 
@@ -808,8 +808,8 @@ public class FeAssetsUnit {
             setValue(mde, line, 7);
         }
 
-        public void setWeig(int line, int weig) {
-            setValue(weig, line, 8);
+        public void setBody(int line, int body) {
+            setValue(body, line, 8);
         }
 
         public void setMov(int line, int mov) {
@@ -1083,7 +1083,7 @@ public class FeAssetsUnit {
             return getInt(line, 7);
         }
 
-        public int getWeig(int line) {
+        public int getBody(int line) {
             return getInt(line, 8);
         }
 
@@ -1123,8 +1123,8 @@ public class FeAssetsUnit {
             setValue(mde, line, 7);
         }
 
-        public void setWeig(int line, int weig) {
-            setValue(weig, line, 8);
+        public void setBody(int line, int body) {
+            setValue(body, line, 8);
         }
 
         public void setMov(int line, int mov) {
@@ -1170,7 +1170,7 @@ public class FeAssetsUnit {
             return getInt(line, 7);
         }
 
-        public int getWeig(int line) {
+        public int getBody(int line) {
             return getInt(line, 8);
         }
 
@@ -1210,8 +1210,8 @@ public class FeAssetsUnit {
             setValue(mde, line, 7);
         }
 
-        public void setWeig(int line, int weig) {
-            setValue(weig, line, 8);
+        public void setBody(int line, int body) {
+            setValue(body, line, 8);
         }
 
         public void setMov(int line, int mov) {
@@ -1257,7 +1257,7 @@ public class FeAssetsUnit {
             return getInt(line, 7);
         }
 
-        public int getWeig(int line) {
+        public int getBody(int line) {
             return getInt(line, 8);
         }
 
@@ -1297,8 +1297,8 @@ public class FeAssetsUnit {
             setValue(mde, line, 7);
         }
 
-        public void setWeig(int line, int weig) {
-            setValue(weig, line, 8);
+        public void setBody(int line, int body) {
+            setValue(body, line, 8);
         }
 
         public void setMov(int line, int mov) {

@@ -48,7 +48,7 @@ public class FeSectionOperation {
                 } else if (flag.checkFlag(FeFlagHit.HIT_CHAT)) {
                     ;
                 } else if (flag.checkFlag(FeFlagHit.HIT_UNIT_MENU)) {
-                    ;
+                    flagMove.setFlag(FeFlagHit.HIT_UNIT_MENU);
                 } else if (flag.checkFlag(FeFlagHit.HIT_MAP_INFO)) {
                     ;
                 } else if (flag.checkFlag(FeFlagHit.HIT_UNIT)
@@ -80,7 +80,7 @@ public class FeSectionOperation {
                 //否则无移动量
                 else {
                     xErr = yErr = 0;
-					break;
+          break;
                 }
                 //谁需要拖动事件?
                 if (flagMove.checkFlag(FeFlagHit.HIT_SYS_MENU)) {
@@ -88,7 +88,7 @@ public class FeSectionOperation {
                 } else if (flagMove.checkFlag(FeFlagHit.HIT_CHAT)) {
                     ;
                 } else if (flagMove.checkFlag(FeFlagHit.HIT_UNIT_MENU)) {
-                    ;
+                    sectionCallback.getLayoutUnitMenu().move(xErr, yErr);
                 } else if (flagMove.checkFlag(FeFlagHit.HIT_MAP_INFO)) {
                     ;
                 } else if (flagMove.checkFlag(FeFlagHit.HIT_UNIT)) {
