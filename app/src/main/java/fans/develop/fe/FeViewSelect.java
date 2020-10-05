@@ -28,7 +28,7 @@ public class FeViewSelect extends FeView {
         super(context);
         this.sectionCallback = sectionCallback;
         //
-        bitmapSelect = sectionCallback.getAssets().menu.getMapSelect();
+        bitmapSelect = sectionCallback.getAssets().menu.getSrc("map", "select");
         bitmapSelectFrameHeight = bitmapSelect.getWidth();
         rectDistSelect = new Rect(0, 0, 0, 0);
         rectSrcSelect = new Rect(0, 0, bitmapSelect.getWidth(), bitmapSelect.getHeight());

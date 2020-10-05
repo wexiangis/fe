@@ -1,6 +1,7 @@
 package fans.develop.fe;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 /*
     /assets/menu 文件夹资源管理器
@@ -8,31 +9,29 @@ import android.graphics.Bitmap;
 public class FeAssetsMenu {
 
     private FeReaderBitmap bitmapReader = new FeReaderBitmap();
-    private static final String rootPath = "/menu/map/";
 
     void FeDataMenu() {
         //初始化一个图片读取工具
         bitmapReader = new FeReaderBitmap();
     }
 
-    public Bitmap getMapCompare() {
-        return bitmapReader.load_bitmap(rootPath, "compare.png");
-    }
+    // head bitmap chain
+    public FeChain2<Bitmap> bitmapChain = new FeChain2<Bitmap>(-1, null);
 
-    public Bitmap getMapHeader() {
-        return bitmapReader.load_bitmap(rootPath, "header.png");
+    public Bitmap getSrc(String path, String name) {
+        //把字符串转换为唯一id
+        int id = FeFormat.StringEncode(path + name);
+        //先从缓冲区(链表)中找
+        Bitmap ret = bitmapChain.find(id);
+        //没有再从assets中加载
+        if(ret == null){
+            ret = bitmapReader.load_bitmap(String.format("/menu/%s/", path), name + ".png");
+            //防止加载失败
+            if(ret == null)
+                ret = bitmapReader.load_bitmap("/menu/item/", "items.png");
+            //缓存到链表,下次可以省去加载的时间
+            bitmapChain.add(id, ret);
+        }
+        return ret;
     }
-
-    public Bitmap getMapInfo() {
-        return bitmapReader.load_bitmap(rootPath, "mapinfo.png");
-    }
-
-    public Bitmap getMapSelect() {
-        return bitmapReader.load_bitmap(rootPath, "select.png");
-    }
-
-    public Bitmap getMapTarget() {
-        return bitmapReader.load_bitmap(rootPath, "target.png");
-    }
-
 }

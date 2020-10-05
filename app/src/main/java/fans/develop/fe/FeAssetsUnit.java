@@ -26,6 +26,9 @@ public class FeAssetsUnit {
         //没有再从assets中加载
         if(ret == null){
             ret = getHeadBitmap(id);
+            //防止加载失败
+            if(ret == null)
+                ret = getHeadBitmap(0);
             //缓存到链表,下次可以省去加载的时间
             headChain.add(id, ret);
         }

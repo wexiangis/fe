@@ -35,7 +35,7 @@ public class FeViewMapInfo extends FeView {
         super(context);
         this.sectionCallback = sectionCallback;
         //
-        bitmapInfo = sectionCallback.getAssets().menu.getMapInfo();
+        bitmapInfo = sectionCallback.getAssets().menu.getSrc("map", "mapinfo");
         //
         pixelPowInfo = sectionCallback.getSectionMap().yGridPixel * 2 / bitmapInfo.getHeight();
         //

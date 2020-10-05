@@ -2,7 +2,6 @@ package fans.develop.fe;
 
 import android.content.*;
 import android.graphics.*;
-import android.service.quicksettings.*;
 
 /*
     地图上的人物头像等信息框
@@ -29,7 +28,8 @@ public class FeViewUnitMenu extends FeView {
     private Bitmap bitmapHead;
     //矩形代替进度条, B为背景(成长率
     private Rect rectPro, rectProB;
-    private Paint paintPro, paintProB;;
+    private Paint paintPro, paintProB;
+    private Rect rectSrcSkill, rectDistSkill;
 
     public FeViewUnitMenu(Context context, FeAssetsCamps assetsCamps, int order, FeSectionCallback sectionCallback) {
         super(context);
@@ -75,6 +75,8 @@ public class FeViewUnitMenu extends FeView {
 
         rectPro = new Rect(0, 0, 0, 0);
         rectProB = new Rect(0, 0, 0, 0);
+        rectSrcSkill = new Rect(0, 0, 15, 15);
+        rectDistSkill = new Rect(0, 0, 1, 1);
 
         //半透明背景
         paintBg = new Paint();
@@ -117,7 +119,10 @@ public class FeViewUnitMenu extends FeView {
 
         paintProB = new Paint();
         paintProB.setColor(0x80808080);
-        
+
+        //
+        rectDistSkill.right = (int)paintValue.getTextSize() * 2;
+        rectDistSkill.bottom = (int)paintValue.getTextSize() * 2;
     }
 
     public void move(float xErr, float yErr) {
@@ -141,7 +146,7 @@ public class FeViewUnitMenu extends FeView {
         alpha: 透明度0.0~1.0
         xErr: 左右偏移量
      */
-    public void drawPageBase(Canvas canvas, float alpha, int xErr) {
+    public void drawPageBase(Canvas canvas, float alpha, int xErr, int yErr) {
         paintLabel.setTextAlign(Paint.Align.CENTER);
         paintValue.setTextAlign(Paint.Align.CENTER);
 
@@ -179,11 +184,11 @@ public class FeViewUnitMenu extends FeView {
             canvas.drawRect(rectProB, paintProB);
             //group
             rectProB.top = y3 - (int)(pH * 0.75);
+            rectPro.left = rectProB.left = rectProB.left + pEdge;
+            rectPro.right = rectProB.right = rectProB.right - pEdge;
+            rectPro.bottom = rectProB.bottom = rectProB.bottom - pEdge;
             canvas.drawRect(rectProB, paintProB);
             //ability
-            rectPro.left = rectProB.left + pEdge;
-            rectPro.right = rectProB.right - pEdge;
-            rectPro.bottom = rectProB.bottom- pEdge;
             rectPro.top = y3 - (int)(pH * 0.5);
             canvas.drawRect(rectProB, paintProB);
             canvas.drawRect(rectPro, paintPro);
@@ -191,14 +196,54 @@ public class FeViewUnitMenu extends FeView {
             canvas.drawText(lab[i], x, y4, paintValue);
         }
     }
-    public void drawPageSkill(Canvas canvas, float alpha, int xErr) {
-        
+    public void drawPageSkill(Canvas canvas, float alpha, int xErr, int yErr) {
+        int y1 = rectMain.top + rectMain.height() / 5;
+        int yDiv = rectMain.height() / 5;
+        int x1 = rectMain.left + (int)(rectMain.width() * 1.25 / 5.5);
+        int xDiv = (int)(rectMain.width() / 5.5);
+        int xHalf = rectMain.left + rectMain.width() / 2;
+        int yHalf = rectMain.top + rectMain.height() / 2;
+        int xm1 = rectMain.left + (int)(xHalf - xDiv * 0.4);
+        int xm2 = rectMain.left + (int)(xHalf + xDiv * 0.4);
+
+        paintValue.setTextAlign(Paint.Align.CENTER);
+
+//        canvas.drawText("剑", x1 + xDiv * 1, y1 + yDiv * 0, paintValue);
+//        canvas.drawText("理", x1 + xDiv * 2, y1 + yDiv * 0, paintValue);
+//        canvas.drawText("枪", x1 + xDiv * 0, y1 + yDiv * 1, paintValue);
+//        canvas.drawText("光", x1 + xDiv * 3, y1 + yDiv * 1, paintValue);
+//        canvas.drawText("斧", x1 + xDiv * 0, y1 + yDiv * 2, paintValue);
+//        canvas.drawText("暗", x1 + xDiv * 3, y1 + yDiv * 2, paintValue);
+//        canvas.drawText("弓", x1 + xDiv * 1, y1 + yDiv * 3, paintValue);
+//        canvas.drawText("杖", x1 + xDiv * 2, y1 + yDiv * 3, paintValue);
+//        canvas.drawText("龙", xm1, yHalf, paintValue);
+//        canvas.drawText("械", xm2, yHalf, paintValue);
+
+        rectDistSkill.offsetTo(x1 + xDiv * 1, y1 + yDiv * 0);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "sward"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(x1 + xDiv * 2, y1 + yDiv * 0);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "phy"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(x1 + xDiv * 0, y1 + yDiv * 1);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "gun"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(x1 + xDiv * 3, y1 + yDiv * 1);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "light"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(x1 + xDiv * 0, y1 + yDiv * 2);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "axe"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(x1 + xDiv * 3, y1 + yDiv * 2);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "dark"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(x1 + xDiv * 1, y1 + yDiv * 3);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "arrow"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(x1 + xDiv * 2, y1 + yDiv * 3);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "stick"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(xm1, yHalf);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "items"), rectSrcSkill, rectDistSkill, paintValue);
+        rectDistSkill.offsetTo(xm2, yHalf);
+        canvas.drawBitmap(sectionCallback.getAssets().menu.getSrc("item", "items"), rectSrcSkill, rectDistSkill, paintValue);
+    }
+    public void drawPageSupport(Canvas canvas, float alpha, int xErr, int yErr) {
         ;
     }
-    public void drawPageSupport(Canvas canvas, float alpha, int xErr) {
-        ;
-    }
-    public void drawPageState(Canvas canvas, float alpha, int xErr) {
+    public void drawPageState(Canvas canvas, float alpha, int xErr, int yErr) {
         ;
     }
 
@@ -274,7 +319,8 @@ public class FeViewUnitMenu extends FeView {
         canvas.drawBitmap(bitmapHead, rectSrcHead, rectHead, paintValue);
     }
     private void drawMainFrame(Canvas canvas) {
-        drawPageBase(canvas, 1, 0);
+//        drawPageBase(canvas, 1, 0, 0);
+        drawPageSkill(canvas, 1, 0, 0);
     }
     private void drawRightFrame(Canvas canvas) {
         ;

@@ -48,7 +48,7 @@ public class FeViewUnitInfo extends FeView {
         super(context);
         this.sectionCallback = sectionCallback;
         //图片资源
-        bitmapHeadBg = sectionCallback.getAssets().menu.getMapHeader();
+        bitmapHeadBg = sectionCallback.getAssets().menu.getSrc("map", "header");
         bitmapHead = null;//等选中人物时再初始化
         //屏幕像素和图片像素比例
         pixelPowBitmap = sectionCallback.getSectionMap().yGridPixel * 2 / bitmapHeadBg.getHeight();
